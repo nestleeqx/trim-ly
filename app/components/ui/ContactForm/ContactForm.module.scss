@@ -1,0 +1,129 @@
+@import '../../../styles/variables';
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+
+	label {
+		font-size: $font-size-sm;
+		font-weight: $font-weight-medium;
+		color: var(--color-text-secondary);
+	}
+
+	input,
+	textarea {
+		padding: 10px 14px;
+		border-radius: $border-radius-md;
+		border: 1px solid var(--color-border);
+		background: var(--color-bg-secondary);
+		color: var(--color-text-primary);
+		font-size: $font-size-base;
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
+		font-family: inherit;
+
+		&:focus {
+			outline: none;
+			border-color: var(--color-primary);
+			box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.1);
+		}
+
+		&:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+	}
+
+	.inputError {
+		border-color: var(--color-error);
+		&:focus {
+			box-shadow: 0 0 0 2px rgba(var(--color-error-rgb), 0.1);
+		}
+	}
+}
+
+.errorMessage {
+	color: var(--color-error);
+	font-size: $font-size-xs;
+	margin-top: 2px;
+}
+
+.feedbackContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	padding: $spacing-xl 0;
+	animation: fadeIn 0.3s ease;
+
+	.successIcon {
+		color: var(--color-success);
+		margin-bottom: $spacing-md;
+	}
+
+	h3 {
+		font-size: $font-size-xl;
+		margin-bottom: $spacing-sm;
+	}
+
+	p {
+		color: var(--color-text-secondary);
+		margin-bottom: $spacing-lg;
+	}
+}
+
+.serverError {
+	display: flex;
+	align-items: center;
+	gap: $spacing-sm;
+	padding: $spacing-sm;
+	background-color: rgba(var(--color-error-rgb), 0.1);
+	border-radius: $border-radius-md;
+	color: var(--color-error);
+	font-size: $font-size-sm;
+}
+
+.actions {
+	margin-top: $spacing-sm;
+	button {
+		width: 100%;
+	}
+}
+
+.loadingInner {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.spinner {
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

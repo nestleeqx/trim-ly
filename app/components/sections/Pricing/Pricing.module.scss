@@ -1,0 +1,277 @@
+@import '../../../styles/variables';
+
+.pricing {
+	padding: $spacing-3xl 0;
+	margin-top: $spacing-section;
+}
+
+.header {
+	text-align: center;
+	margin-bottom: $spacing-3xl;
+
+	@media (max-width: $breakpoint-md) {
+		margin-bottom: $spacing-2xl;
+	}
+}
+
+.title {
+	font-size: $font-size-4xl;
+	font-weight: $font-weight-bold;
+	color: var(--color-text-primary);
+	margin: 0 0 $spacing-md 0;
+
+	@media (max-width: $breakpoint-md) {
+		font-size: $font-size-3xl;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-2xl;
+	}
+}
+
+.subtitle {
+	font-size: $font-size-lg;
+	color: var(--color-text-secondary);
+	margin: 0;
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-base;
+	}
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: $spacing-lg;
+	align-items: stretch;
+
+	@media (max-width: $breakpoint-lg) {
+		grid-template-columns: 1fr;
+		max-width: 450px;
+		margin: 0 auto;
+		gap: $spacing-xl;
+	}
+}
+
+.card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-xl;
+	padding: $spacing-xl;
+	transition: $transition-base;
+
+	&:hover {
+		box-shadow: var(--shadow-lg);
+	}
+
+	&.popular {
+		border-color: var(--color-primary);
+		border-width: 2px;
+		box-shadow: var(--shadow-lg);
+
+		@media (max-width: $breakpoint-lg) {
+			order: -1;
+		}
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		padding: $spacing-lg;
+	}
+}
+
+.badge {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: $spacing-xs $spacing-md;
+	background: var(--color-primary);
+	color: white;
+	font-size: $font-size-xs;
+	font-weight: $font-weight-bold;
+	border-radius: $border-radius-xl;
+	letter-spacing: 0.5px;
+	white-space: nowrap;
+}
+
+.cardHeader {
+	margin-bottom: $spacing-lg;
+}
+
+.planName {
+	font-size: $font-size-lg;
+	font-weight: $font-weight-bold;
+	color: var(--color-text-primary);
+	margin: 0 0 $spacing-sm 0;
+}
+
+.priceWrapper {
+	display: flex;
+	align-items: baseline;
+	margin-bottom: $spacing-sm;
+}
+
+.currency {
+	font-size: $font-size-xl;
+	font-weight: $font-weight-bold;
+	color: var(--color-text-primary);
+}
+
+.price {
+	font-size: $font-size-5xl;
+	font-weight: $font-weight-bold;
+	color: var(--color-text-primary);
+	line-height: 1;
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-4xl;
+	}
+}
+
+.period {
+	font-size: $font-size-base;
+	color: var(--color-text-secondary);
+	margin-left: 2px;
+}
+
+.planDescription {
+	font-size: $font-size-sm;
+	color: var(--color-text-secondary);
+	margin: 0;
+	line-height: 1.5;
+}
+
+.features {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 $spacing-xl 0;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-sm;
+}
+
+.feature {
+	display: flex;
+	align-items: center;
+	gap: $spacing-sm;
+	font-size: $font-size-sm;
+	color: var(--color-text-primary);
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-xs;
+	}
+}
+
+.checkIcon {
+	color: var(--color-success);
+	flex-shrink: 0;
+}
+
+.cardFooter {
+	margin-top: auto;
+}
+
+.buttonLink {
+	display: block;
+	width: 100%;
+
+	button {
+		width: 100%;
+		justify-content: center;
+	}
+}
+
+.toggleContainer {
+	display: flex;
+	flex-direction: column; // ← Изменено с row на column
+	align-items: center;
+	justify-content: center;
+	gap: $spacing-sm; // ← Уменьшенный gap для вертикального расположения
+	margin-top: $spacing-xl;
+}
+
+.toggleWrapper {
+	position: relative;
+	display: flex;
+	background: var(--color-bg-secondary);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-xl;
+	padding: 6px;
+	gap: 5px;
+}
+
+.toggleOption {
+	position: relative;
+	z-index: 2;
+	padding: $spacing-sm $spacing-lg;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+	color: var(--color-text-secondary);
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	transition: color 0.3s ease;
+	border-radius: $border-radius-lg;
+
+	&:hover {
+		color: var(--color-text-primary);
+	}
+
+	&.active {
+		color: var(--color-text-primary);
+	}
+}
+
+.toggleSlider {
+	position: absolute;
+	top: 6px;
+	bottom: 6px;
+	left: 6px;
+	right: calc(50% + 2px);
+	background: var(--color-bg);
+	border-radius: $border-radius-lg;
+	box-shadow: var(--shadow-sm);
+	border: 1px solid var(--color-border);
+	transition: all 0.3s ease;
+
+	&.right {
+		left: calc(50% + 2px);
+		right: 6px;
+	}
+}
+
+.saveBadge {
+	font-size: $font-size-xs;
+	font-weight: $font-weight-bold;
+	color: var(--color-success);
+	background: var(--color-bg);
+	border: 1px solid var(--color-success);
+	padding: $spacing-xs $spacing-md;
+	border-radius: $border-radius-xl;
+	animation: fadeIn 0.3s ease;
+	margin-top: $spacing-xs;
+}
+
+.discount {
+	display: block;
+	font-size: $font-size-xs;
+	font-weight: $font-weight-medium;
+	color: var(--color-success);
+	margin-top: -$spacing-xs;
+	margin-bottom: $spacing-sm;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-5px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

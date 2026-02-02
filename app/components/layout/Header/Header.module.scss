@@ -1,0 +1,106 @@
+@import '../../../styles/variables';
+
+.header {
+	position: sticky;
+	top: 0;
+	background-color: var(--color-bg);
+	border-bottom: 1px solid transparent;
+	z-index: 100;
+	padding: $spacing-md 0;
+	transition:
+		background-color 0.3s ease,
+		box-shadow 0.3s ease,
+		border-color 0.3s ease,
+		backdrop-filter 0.3s ease;
+	position: -webkit-sticky;
+
+	&.scrolled {
+		backdrop-filter: blur(12px);
+		box-shadow: var(--shadow-md);
+		border-bottom-color: var(--color-border);
+
+		@media (max-width: $breakpoint-md) {
+			backdrop-filter: none;
+			box-shadow: var(--shadow-md);
+		}
+	}
+}
+
+.content {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: $spacing-xl;
+}
+
+.nav {
+	display: flex;
+	align-items: center;
+	gap: $spacing-xl;
+
+	@media (max-width: $breakpoint-md) {
+		display: none;
+	}
+}
+
+.navLink {
+	font-size: $font-size-sm;
+	color: var(--color-text-secondary);
+	font-weight: $font-weight-medium;
+	transition: $transition-base;
+	position: relative;
+
+	&:hover {
+		color: var(--color-text-primary);
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: -4px;
+		left: 0;
+		width: 0;
+		height: 2px;
+		background-color: var(--color-primary);
+		transition: $transition-base;
+	}
+
+	&:hover::after {
+		width: 100%;
+	}
+}
+
+.actions {
+	display: flex;
+	align-items: center;
+	gap: $spacing-md;
+}
+
+.themeToggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border: none;
+	background-color: transparent;
+	color: var(--color-text-secondary);
+	border-radius: $border-radius-md;
+	transition: $transition-base;
+	cursor: pointer;
+
+	&:hover {
+		background-color: var(--color-bg-tertiary);
+		color: var(--color-text-primary);
+	}
+
+	@media (max-width: $breakpoint-md) {
+		display: none;
+	}
+}
+
+.desktopOnly {
+	@media (max-width: $breakpoint-md) {
+		display: none;
+	}
+}

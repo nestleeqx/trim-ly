@@ -1,0 +1,186 @@
+@import '../../../styles/variables';
+
+.mobileNav {
+	display: none;
+
+	@media (max-width: $breakpoint-md) {
+		display: block;
+		// Важно: не добавлять position: relative!
+	}
+}
+
+.burger {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background: transparent;
+	border: none;
+	color: var(--color-text-primary);
+	cursor: pointer;
+	border-radius: $border-radius-md;
+	transition: $transition-base;
+	position: relative;
+	z-index: 997;
+
+	&:hover {
+		background: var(--color-bg-tertiary);
+	}
+}
+
+.overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(4px);
+	z-index: 998;
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		opacity 0.3s ease,
+		visibility 0.3s ease;
+
+	&.open {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+.menu {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: min(85vw, 320px); // Современная запись для width + max-width
+	background: var(--color-bg);
+	z-index: 999;
+	display: flex;
+	flex-direction: column;
+	box-shadow: var(--shadow-lg);
+
+	// Ключевые исправления для скрытия:
+	transform: translate3d(
+		100%,
+		0,
+		0
+	); // Используем translate3d для аппаратного ускорения
+	visibility: hidden;
+	opacity: 0;
+	will-change: transform; // Оптимизация
+
+	transition:
+		transform 0.3s ease,
+		opacity 0.3s ease,
+		visibility 0.3s ease;
+
+	&.open {
+		transform: translate3d(0, 0, 0);
+		visibility: visible;
+		opacity: 1;
+	}
+}
+
+.menuHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: $spacing-md $spacing-lg;
+	border-bottom: 1px solid var(--color-border);
+	flex-shrink: 0; // Не сжиматься
+}
+
+.closeBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background: transparent;
+	border: none;
+	color: var(--color-text-primary);
+	cursor: pointer;
+	border-radius: $border-radius-md;
+	transition: $transition-base;
+
+	&:hover {
+		background: var(--color-bg-tertiary);
+	}
+}
+
+.menuContent {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	padding: $spacing-lg;
+	overflow-y: auto;
+	overflow-x: hidden; // Запрет горизонтального скролла внутри
+	-webkit-overflow-scrolling: touch; // Плавный скролл на iOS
+}
+
+.navList {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	flex: 1;
+
+	li {
+		margin-bottom: $spacing-xs;
+	}
+}
+
+.navLink {
+	display: block;
+	padding: $spacing-md;
+	color: var(--color-text-primary);
+	font-size: $font-size-lg;
+	font-weight: $font-weight-medium;
+	border-radius: $border-radius-md;
+	transition: $transition-base;
+	white-space: nowrap; // Запрет переноса текста
+
+	&:hover {
+		background: var(--color-bg-tertiary);
+		color: var(--color-primary);
+	}
+}
+
+.menuActions {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+	padding-top: $spacing-lg;
+	border-top: 1px solid var(--color-border);
+	flex-shrink: 0; // Не сжиматься
+}
+
+.themeToggle {
+	display: flex;
+	align-items: center;
+	gap: $spacing-md;
+	width: 100%;
+	padding: $spacing-md;
+	background: transparent;
+	border: 1px solid var(--color-border);
+	color: var(--color-text-primary);
+	font-size: $font-size-base;
+	font-weight: $font-weight-medium;
+	border-radius: $border-radius-md;
+	cursor: pointer;
+	transition: $transition-base;
+	white-space: nowrap;
+
+	&:hover {
+		background: var(--color-bg-tertiary);
+	}
+
+	svg {
+		color: var(--color-text-secondary);
+		flex-shrink: 0;
+	}
+}
+
+.fullWidth {
+	width: 100%;
+	justify-content: center;
+}
