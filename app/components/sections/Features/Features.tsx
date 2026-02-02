@@ -1,8 +1,9 @@
-'use client';
+'use client'
 
-import React from 'react';
-import { Link2, BarChart3, QrCode, User } from 'lucide-react';
-import styles from './Features.module.scss';
+import { motion } from 'framer-motion'
+import { BarChart3, Link2, QrCode, User } from 'lucide-react'
+import React from 'react'
+import styles from './Features.module.scss'
 
 const Features: React.FC = () => {
 	const features = [
@@ -12,7 +13,7 @@ const Features: React.FC = () => {
 			description:
 				'Кастомные алиасы, чистые URL и опциональные брендированные домены для доверия аудитории.',
 			href: '#links',
-			color: '#60a5fa',
+			color: '#60a5fa'
 		},
 		{
 			icon: BarChart3,
@@ -20,7 +21,7 @@ const Features: React.FC = () => {
 			description:
 				'Глубокая аналитика кликов, источников, стран и устройств для оптимизации эффективности.',
 			href: '#analytics',
-			color: '#818cf8',
+			color: '#818cf8'
 		},
 		{
 			icon: QrCode,
@@ -28,7 +29,7 @@ const Features: React.FC = () => {
 			description:
 				'Генерируйте настраиваемые QR-коды для любой ссылки. Скачивайте в форматах SVG/PNG.',
 			href: '#qr',
-			color: '#a78bfa',
+			color: '#a78bfa'
 		},
 		{
 			icon: User,
@@ -36,45 +37,90 @@ const Features: React.FC = () => {
 			description:
 				'Красивая мобильная страница для всех ваших ссылок. Полностью настраиваемая тема.',
 			href: '#bio',
-			color: '#c084fc',
-		},
-	];
+			color: '#c084fc'
+		}
+	]
+
+	const containerVariants = {
+		hidden: { opacity: 0 },
+		visible: {
+			opacity: 1,
+			transition: {
+				staggerChildren: 0.1
+			}
+		}
+	} as const
+
+	const cardVariants = {
+		hidden: { opacity: 0, y: 30 },
+		visible: {
+			opacity: 1,
+			y: 0,
+			transition: { duration: 0.5 }
+		}
+	} as const
 
 	return (
-		<section className={styles.features} id="features">
-			<div className="container">
-				<div className={styles.header}>
-					<h2 className={styles.title}>Всё для управления ссылками</h2>
+		<section
+			className={styles.features}
+			id='features'
+		>
+			<div className='container'>
+				<motion.div
+					className={styles.header}
+					initial={{ opacity: 0, y: 20 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true, amount: 0.5 }}
+					transition={{ duration: 0.5 }}
+				>
+					<h2 className={styles.title}>
+						Всё для управления ссылками
+					</h2>
 					<p className={styles.subtitle}>
-						Наша платформа сочетает простое сокращение с мощными инструментами роста.
+						Наша платформа сочетает простое сокращение с мощными
+						инструментами роста.
 					</p>
-				</div>
+				</motion.div>
 
-				<div className={styles.grid}>
-					{features.map((feature) => {
-						const IconComponent = feature.icon;
+				<motion.div
+					className={styles.grid}
+					variants={containerVariants}
+					initial="hidden"
+					whileInView="visible"
+					viewport={{ once: true, amount: 0.2 }}
+				>
+					{features.map(feature => {
+						const IconComponent = feature.icon
 						return (
-							<a
+							<motion.div
 								key={feature.title}
-								href={feature.href}
 								className={styles.card}
+								variants={cardVariants}
+								whileHover={{ y: -5, transition: { duration: 0.2 } }}
 							>
 								<div
 									className={styles.iconWrapper}
-									style={{ '--icon-color': feature.color } as React.CSSProperties}
+									style={
+										{
+											'--icon-color': feature.color
+										} as React.CSSProperties
+									}
 								>
 									<IconComponent size={24} />
 								</div>
-								<h3 className={styles.cardTitle}>{feature.title}</h3>
-								<p className={styles.cardDescription}>{feature.description}</p>
-								<span className={styles.learnMore}>Подробнее →</span>
-							</a>
-						);
+								<h3 className={styles.cardTitle}>
+									{feature.title}
+								</h3>
+								<p className={styles.cardDescription}>
+									{feature.description}
+								</p>
+							</motion.div>
+						)
 					})}
-				</div>
+				</motion.div>
 			</div>
 		</section>
-	);
-};
+	)
+}
 
-export default Features;
+export default Features

@@ -9,9 +9,49 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-	title: 'trim.ly - Сокращайте ссылки умнее',
+	title: 'Сокращайте ссылки умнее - trim.ly',
 	description:
-		'Создавайте брендированные короткие ссылки, генерируйте QR-коды и анализируйте эффективность с помощью аналитики в реальном времени.'
+		'Создавайте брендированные короткие ссылки, генерируйте QR-коды и анализируйте эффективность с помощью аналитики в реальном времени.',
+	keywords: [
+		'сокращение ссылок',
+		'короткие ссылки',
+		'QR-коды',
+		'аналитика ссылок',
+		'брендированные ссылки',
+		'link shortener',
+		'URL shortener'
+	],
+	authors: [{ name: 'trim.ly' }],
+	creator: 'trim.ly',
+	publisher: 'trim.ly',
+	robots: {
+		index: true,
+		follow: true
+	},
+	openGraph: {
+		type: 'website',
+		locale: 'ru_RU',
+		url: 'https://trim.ly',
+		siteName: 'trim.ly',
+		title: 'Сокращайте ссылки умнее - trim.ly',
+		description:
+			'Создавайте брендированные короткие ссылки, генерируйте QR-коды и анализируйте эффективность с помощью аналитики в реальном времени.'
+	},
+	twitter: {
+		card: 'summary_large_image',
+		title: 'Сокращайте ссылки умнее - trim.ly',
+		description:
+			'Создавайте брендированные короткие ссылки, генерируйте QR-коды и анализируйте эффективность с помощью аналитики в реальном времени.'
+	},
+	viewport: {
+		width: 'device-width',
+		initialScale: 1,
+		maximumScale: 5
+	},
+	themeColor: [
+		{ media: '(prefers-color-scheme: light)', color: '#ffffff' },
+		{ media: '(prefers-color-scheme: dark)', color: '#0a0a0a' }
+	]
 }
 
 export default function RootLayout({

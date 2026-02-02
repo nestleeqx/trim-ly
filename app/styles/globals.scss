@@ -41,6 +41,7 @@
 html {
 	overflow-x: hidden;
 	scroll-behavior: smooth;
+	scroll-padding-top: 90px; // Header height + extra offset
 }
 
 html,

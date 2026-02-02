@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import { X } from 'lucide-react';
 import styles from './Modal.module.scss';
 
@@ -12,6 +12,8 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
+	const mouseDownTarget = useRef<EventTarget | null>(null);
+
 	const handleEscapeKey = useCallback(
 		(event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
@@ -33,14 +35,29 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
 		};
 	}, [isOpen, handleEscapeKey]);
 
+	const handleMouseDown = (e: React.MouseEvent) => {
+		mouseDownTarget.current = e.target;
+	};
+
+	const handleMouseUp = (e: React.MouseEvent) => {
+		if (
+			mouseDownTarget.current === e.target &&
+			e.target === e.currentTarget
+		) {
+			onClose();
+		}
+		mouseDownTarget.current = null;
+	};
+
 	if (!isOpen) return null;
 
 	return (
-		<div className={styles.overlay} onClick={onClose}>
-			<div
-				className={styles.modal}
-				onClick={(e) => e.stopPropagation()}
-			>
+		<div
+			className={styles.overlay}
+			onMouseDown={handleMouseDown}
+			onMouseUp={handleMouseUp}
+		>
+			<div className={styles.modal}>
 				<div className={styles.header}>
 					{title && <h3 className={styles.title}>{title}</h3>}
 					<button

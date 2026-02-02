@@ -4,7 +4,13 @@ import styles from './Button.module.scss'
 
 interface ButtonProps {
 	children: React.ReactNode
-	variant?: 'primary' | 'secondary' | 'ghost' | 'outline'
+	variant?:
+		| 'primary'
+		| 'invertPrimary'
+		| 'secondary'
+		| 'ghost'
+		| 'outline'
+		| 'invertOutline'
 	size?: 'sm' | 'md' | 'lg'
 	onClick?: () => void
 	type?: 'button' | 'submit' | 'reset'

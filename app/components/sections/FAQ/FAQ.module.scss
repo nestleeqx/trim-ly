@@ -1,0 +1,203 @@
+@import '../../../styles/variables';
+
+.faq {
+	padding: $spacing-3xl 0;
+	background: var(--color-bg);
+	margin-top: $spacing-section;
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-2xl 0;
+		margin-top: $spacing-2xl;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		padding: $spacing-xl 0;
+		margin-top: $spacing-xl;
+	}
+}
+
+.header {
+	text-align: center;
+	margin-bottom: $spacing-2xl;
+
+	@media (max-width: $breakpoint-md) {
+		margin-bottom: $spacing-xl;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		margin-bottom: $spacing-lg;
+	}
+}
+
+.title {
+	font-size: $font-size-3xl;
+	font-weight: $font-weight-bold;
+	color: var(--color-text-primary);
+	margin: 0 0 $spacing-md 0;
+
+	@media (max-width: $breakpoint-md) {
+		font-size: $font-size-2xl;
+		margin-bottom: $spacing-sm;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-xl;
+	}
+}
+
+.subtitle {
+	font-size: $font-size-lg;
+	color: var(--color-text-secondary);
+	margin: 0;
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-base;
+	}
+}
+
+.accordion {
+	max-width: 800px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-md) {
+		gap: $spacing-sm;
+		padding: 0 $spacing-md; // Отступы по краям на мобильных
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		padding: 0 $spacing-sm;
+		gap: $spacing-xs;
+	}
+}
+
+.item {
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-lg;
+	overflow: hidden;
+	transition:
+		box-shadow 0.3s ease,
+		border-color 0.3s ease;
+
+	&.open {
+		box-shadow: var(--shadow-md);
+		border-color: var(--color-primary);
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		border-radius: $border-radius-md;
+	}
+}
+
+.question {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: $spacing-md;
+	padding: $spacing-lg;
+	background: none;
+	border: none;
+	text-align: left;
+	font-size: $font-size-lg;
+	font-weight: $font-weight-semibold;
+	color: var(--color-text-primary);
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+
+	&:hover {
+		background-color: var(--color-bg-secondary);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: -2px;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		font-size: $font-size-base;
+		padding: $spacing-md;
+		gap: $spacing-sm;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-sm;
+		padding: $spacing-sm $spacing-md;
+	}
+}
+
+.questionText {
+	line-height: 1.4;
+}
+
+.icon {
+	color: var(--color-text-secondary);
+	transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	flex-shrink: 0;
+
+	.open & {
+		transform: rotate(180deg);
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		width: 18px;
+		height: 18px;
+	}
+}
+
+// Исправление прыжка — padding всегда есть, но оборачивается
+.answer {
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+	.open & {
+		grid-template-rows: 1fr;
+	}
+}
+
+.answerInner {
+	overflow: hidden;
+	padding: 0 $spacing-lg;
+
+	@media (max-width: $breakpoint-md) {
+		padding: 0 $spacing-md;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		padding: 0 $spacing-sm;
+	}
+}
+
+.answerContent {
+	padding-bottom: 0;
+	color: var(--color-text-secondary);
+	line-height: 1.6;
+	font-size: $font-size-base;
+	transition: padding-bottom 0.3s ease;
+
+	.open & {
+		padding-bottom: $spacing-lg;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		font-size: $font-size-sm;
+		line-height: 1.5;
+
+		.open & {
+			padding-bottom: $spacing-md;
+		}
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-xs;
+
+		.open & {
+			padding: $spacing-sm;
+			padding-bottom: $spacing-md;
+		}
+	}
+}

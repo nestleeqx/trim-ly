@@ -17,7 +17,6 @@
 
 	@media (max-width: $breakpoint-sm) {
 		padding: $spacing-sm;
-		align-items: flex-end;
 	}
 }
 
@@ -34,7 +33,7 @@
 	background: var(--color-bg);
 	border-radius: $border-radius-xl;
 	box-shadow: $shadow-xl;
-	max-width: 600px;
+	max-width: 500px;
 	width: 100%;
 	max-height: 90vh;
 	overflow: hidden;
@@ -47,9 +46,7 @@
 	}
 
 	@media (max-width: $breakpoint-sm) {
-		border-radius: $border-radius-xl $border-radius-xl 0 0;
-		max-height: 80vh;
-		animation: slideUpMobile 0.3s ease-out;
+		max-height: 85vh;
 	}
 }
 

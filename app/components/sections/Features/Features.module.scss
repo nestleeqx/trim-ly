@@ -3,6 +3,16 @@
 .features {
 	padding: $spacing-3xl 0;
 	margin-top: $spacing-section;
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-2xl 0;
+		margin-top: $spacing-2xl;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		padding: $spacing-xl 0;
+		margin-top: $spacing-xl;
+	}
 }
 
 .header {

@@ -1,5 +1,6 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import { Check } from 'lucide-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
@@ -90,7 +91,13 @@ const Pricing: React.FC = () => {
 			id='pricing'
 		>
 			<div className='container'>
-				<div className={styles.header}>
+				<motion.div
+					className={styles.header}
+					initial={{ opacity: 0, y: 20 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true, amount: 0.5 }}
+					transition={{ duration: 0.5 }}
+				>
 					<h2 className={styles.title}>Простые тарифы</h2>
 					<p className={styles.subtitle}>
 						Выберите план, который подходит для вашего роста.
@@ -120,13 +127,18 @@ const Pricing: React.FC = () => {
 							</span>
 						)}
 					</div>
-				</div>
+				</motion.div>
 
 				<div className={styles.grid}>
-					{plans.map(plan => (
-						<div
+					{plans.map((plan, index) => (
+						<motion.div
 							key={plan.name}
 							className={`${styles.card} ${plan.popular ? styles.popular : ''}`}
+							initial={{ opacity: 0, y: 30 }}
+							whileInView={{ opacity: 1, y: 0 }}
+							viewport={{ once: true, amount: 0.2 }}
+							transition={{ duration: 0.5, delay: index * 0.1 }}
+							whileHover={{ y: -5, transition: { duration: 0.2 } }}
 						>
 							{plan.popular && (
 								<span className={styles.badge}>ПОПУЛЯРНЫЙ</span>
@@ -194,7 +206,7 @@ const Pricing: React.FC = () => {
 									</Link>
 								)}
 							</div>
-						</div>
+						</motion.div>
 					))}
 				</div>
 			</div>

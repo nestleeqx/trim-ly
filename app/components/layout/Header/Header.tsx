@@ -26,7 +26,6 @@ const Header: React.FC = () => {
 	const navItems = [
 		{ label: 'Возможности', href: '#features' },
 		{ label: 'Аналитика', href: '#analytics' },
-		{ label: 'QR-коды', href: '#qr' },
 		{ label: 'Тарифы', href: '#pricing' },
 		{ label: 'FAQ', href: '#faq' }
 	]

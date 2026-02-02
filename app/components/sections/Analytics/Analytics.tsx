@@ -1,5 +1,6 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import { ArrowRight, Check } from 'lucide-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
@@ -78,7 +79,13 @@ const Analytics: React.FC = () => {
 		>
 			<div className='container'>
 				<div className={styles.content}>
-					<div className={styles.left}>
+					<motion.div
+						className={styles.left}
+						initial={{ opacity: 0, x: -30 }}
+						whileInView={{ opacity: 1, x: 0 }}
+						viewport={{ once: true, amount: 0.3 }}
+						transition={{ duration: 0.6 }}
+					>
 						<div className={styles.dashboard}>
 							<div className={styles.dashboardHeader}>
 								<div>
@@ -220,9 +227,15 @@ const Analytics: React.FC = () => {
 								</span>
 							</div>
 						</div>
-					</div>
+					</motion.div>
 
-					<div className={styles.right}>
+					<motion.div
+						className={styles.right}
+						initial={{ opacity: 0, x: 30 }}
+						whileInView={{ opacity: 1, x: 0 }}
+						viewport={{ once: true, amount: 0.3 }}
+						transition={{ duration: 0.6, delay: 0.2 }}
+					>
 						<span className={styles.badge}>АНАЛИТИКА</span>
 						<h2 className={styles.title}>Узнайте, что работает</h2>
 						<p className={styles.description}>
@@ -257,7 +270,7 @@ const Analytics: React.FC = () => {
 								<ArrowRight size={20} />
 							</Button>
 						</Link>
-					</div>
+					</motion.div>
 				</div>
 			</div>
 		</section>
