@@ -1,0 +1,445 @@
+@import '../../../styles/variables';
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: $spacing-md $spacing-lg;
+	background: var(--color-bg);
+	border-bottom: 1px solid var(--color-border);
+	position: sticky;
+	top: 0;
+	z-index: 50;
+	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-sm $spacing-md;
+		gap: $spacing-sm;
+	}
+}
+
+.titleSection {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-xs;
+	flex-shrink: 0;
+	min-width: 0;
+
+	@media (max-width: $breakpoint-md) {
+		flex: 1;
+		min-width: 0;
+	}
+}
+
+.title {
+	font-size: $font-size-xl;
+	font-weight: $font-weight-semibold;
+	color: var(--color-text-primary);
+	margin: 0;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	@media (max-width: $breakpoint-lg) {
+		font-size: $font-size-lg;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-base;
+	}
+}
+
+.subtitle {
+	font-size: $font-size-sm;
+	color: var(--color-text-secondary);
+	margin: 0;
+
+	@media (max-width: $breakpoint-md) {
+		display: none;
+	}
+}
+
+.actions {
+	display: flex;
+	align-items: center;
+	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-lg) {
+		gap: $spacing-sm;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		gap: $spacing-xs;
+	}
+}
+
+// Desktop search - visible on tablet+
+.searchWrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 280px;
+
+	@media (max-width: $breakpoint-lg) {
+		width: 220px;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		display: none;
+	}
+}
+
+.searchIcon {
+	position: absolute;
+	left: $spacing-md;
+	color: var(--color-text-placeholder);
+	pointer-events: none;
+}
+
+.searchInput {
+	width: 100%;
+	padding: $spacing-sm $spacing-md $spacing-sm 44px;
+	background: var(--color-bg-secondary);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-lg;
+	font-size: $font-size-sm;
+	color: var(--color-text-primary);
+	transition: $transition-base;
+
+	&::placeholder {
+		color: var(--color-text-placeholder);
+	}
+
+	&:focus {
+		outline: none;
+		border-color: var(--color-primary);
+		box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+	}
+}
+
+// Mobile search toggle button
+.searchToggle {
+	display: none;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-md;
+	color: var(--color-text-secondary);
+	cursor: pointer;
+	transition: $transition-base;
+	flex-shrink: 0;
+
+	&:hover {
+		background: var(--color-bg-secondary);
+		color: var(--color-text-primary);
+	}
+
+	@media (max-width: $breakpoint-md) {
+		display: flex;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		width: 36px;
+		height: 36px;
+	}
+}
+
+// Mobile search overlay
+.mobileSearch {
+	display: none;
+
+	@media (max-width: $breakpoint-md) {
+		display: block;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		background: var(--color-bg);
+		padding: $spacing-md;
+		border-bottom: 1px solid var(--color-border);
+		transform: translateY(-100%);
+		transition: transform 0.3s ease;
+		z-index: 60;
+
+		&.open {
+			transform: translateY(0);
+		}
+	}
+}
+
+.mobileSearchInner {
+	display: flex;
+	align-items: center;
+	gap: $spacing-sm;
+}
+
+.mobileSearchInput {
+	flex: 1;
+	padding: $spacing-sm $spacing-md;
+	background: var(--color-bg-secondary);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-lg;
+	font-size: $font-size-base;
+	color: var(--color-text-primary);
+	transition: $transition-base;
+
+	&::placeholder {
+		color: var(--color-text-placeholder);
+	}
+
+	&:focus {
+		outline: none;
+		border-color: var(--color-primary);
+		box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+	}
+}
+
+.closeSearch {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-md;
+	color: var(--color-text-secondary);
+	cursor: pointer;
+	flex-shrink: 0;
+
+	&:hover {
+		background: var(--color-bg-secondary);
+		color: var(--color-text-primary);
+	}
+}
+
+.createBtn {
+	display: flex;
+	align-items: center;
+	gap: $spacing-sm;
+	padding: $spacing-sm $spacing-lg;
+	background: var(--color-primary);
+	color: white;
+	border: none;
+	border-radius: $border-radius-lg;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+	cursor: pointer;
+	transition: $transition-base;
+	text-decoration: none;
+	white-space: nowrap;
+	flex-shrink: 0;
+
+	&:hover {
+		background: var(--color-primary-hover);
+	}
+
+	@media (max-width: $breakpoint-lg) {
+		padding: $spacing-sm $spacing-md;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-sm;
+		border-radius: $border-radius-md;
+
+		span {
+			display: none;
+		}
+	}
+}
+
+.notificationBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-md;
+	color: var(--color-text-secondary);
+	cursor: pointer;
+	transition: $transition-base;
+	flex-shrink: 0;
+	position: relative;
+
+	&:hover {
+		background: var(--color-bg-secondary);
+		color: var(--color-text-primary);
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		width: 36px;
+		height: 36px;
+	}
+}
+
+.notificationBadge {
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	width: 8px;
+	height: 8px;
+	background: var(--color-error, #ef4444);
+	border-radius: 50%;
+	border: 2px solid var(--color-bg);
+
+	@media (max-width: $breakpoint-sm) {
+		top: 4px;
+		right: 4px;
+		width: 6px;
+		height: 6px;
+	}
+}
+
+.userWrapper {
+	position: relative;
+	flex-shrink: 0;
+}
+
+.userBtn {
+	display: flex;
+	align-items: center;
+	gap: $spacing-sm;
+	padding: $spacing-xs;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-md;
+	cursor: pointer;
+	transition: $transition-base;
+	color: var(--color-text-secondary);
+
+	&:hover {
+		background: var(--color-bg-secondary);
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		padding: 0;
+		gap: 0;
+	}
+}
+
+.avatar {
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	overflow: hidden;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	background-image: url('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face');
+	background-size: cover;
+	background-position: center;
+	flex-shrink: 0;
+
+	@media (max-width: $breakpoint-sm) {
+		width: 32px;
+		height: 32px;
+	}
+}
+
+.chevron {
+	transition: $transition-fast;
+
+	&.open {
+		transform: rotate(180deg);
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		display: none;
+	}
+}
+
+.overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 99;
+	background: rgba(0, 0, 0, 0.3);
+	animation: fadeIn 0.2s ease;
+
+	@media (min-width: $breakpoint-md) {
+		background: transparent;
+	}
+}
+
+.dropdown {
+	position: absolute;
+	top: calc(100% + $spacing-sm);
+	right: 0;
+	min-width: 200px;
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-lg;
+	box-shadow: $shadow-lg;
+	padding: $spacing-sm;
+	z-index: 100;
+	animation: fadeIn 0.15s ease;
+
+	@media (max-width: $breakpoint-md) {
+		position: fixed;
+		top: auto;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		min-width: auto;
+		border-radius: $border-radius-xl $border-radius-xl 0 0;
+		padding: $spacing-md;
+		padding-bottom: calc($spacing-md + env(safe-area-inset-bottom, 0));
+		animation: slideUp 0.3s ease-out;
+	}
+}
+
+.dropdownItem {
+	display: flex;
+	align-items: center;
+	gap: $spacing-sm;
+	width: 100%;
+	padding: $spacing-sm $spacing-md;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-md;
+	font-size: $font-size-sm;
+	color: var(--color-text-primary);
+	cursor: pointer;
+	transition: $transition-fast;
+	text-align: left;
+	text-decoration: none;
+
+	&:hover {
+		background: var(--color-bg-secondary);
+	}
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-md;
+		font-size: $font-size-base;
+	}
+}
+
+.dropdownDivider {
+	height: 1px;
+	background: var(--color-border);
+	margin: $spacing-sm 0;
+
+	@media (max-width: $breakpoint-md) {
+		margin: $spacing-md 0;
+	}
+}
+
+@keyframes slideUp {
+	from {
+		transform: translateY(100%);
+	}
+	to {
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}

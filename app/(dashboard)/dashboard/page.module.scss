@@ -1,0 +1,69 @@
+@import '../../styles/variables';
+
+.content {
+	max-width: $dashboard-max-width;
+	padding: $spacing-lg;
+	min-height: calc(100vh - 80px);
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-sm;
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-md;
+		gap: $spacing-md;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		padding: $spacing-sm;
+	}
+}
+
+.chartsGrid {
+	display: grid;
+	grid-template-columns: 2fr 1fr;
+	gap: $spacing-md;
+	align-items: start;
+
+	@media (max-width: $breakpoint-xl) {
+		grid-template-columns: 1fr;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		gap: $spacing-sm;
+	}
+}
+
+.chartsTop {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-md) {
+		gap: $spacing-md;
+	}
+}
+
+.sideCharts {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-xl) {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	@media (max-width: $breakpoint-lg) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	@media (max-width: $breakpoint-md) {
+		grid-template-columns: 1fr;
+	}
+}
+
+.emptyWrapper {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
