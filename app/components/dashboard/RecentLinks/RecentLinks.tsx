@@ -143,7 +143,6 @@ const RecentLinks: React.FC<RecentLinksProps> = ({
 
 	const handleRowClick = useCallback(
 		(linkId: string, e: React.MouseEvent) => {
-			// Don't navigate if clicking on action buttons
 			const target = e.target as HTMLElement
 			if (target.closest(`.${styles.actions}`)) return
 
@@ -249,7 +248,6 @@ const RecentLinks: React.FC<RecentLinksProps> = ({
 		}
 	}, [qrModalLink, showToastMessage])
 
-	// Empty state
 	if (isEmpty || (!isLoading && links.length === 0)) {
 		return (
 			<div className={styles.card}>
@@ -539,13 +537,9 @@ const RecentLinks: React.FC<RecentLinksProps> = ({
 					</tbody>
 				</table>
 			</div>
-
-			{/* Toast */}
 			<div className={`${styles.toast} ${showToast ? styles.show : ''}`}>
 				{toastMessage}
 			</div>
-
-			{/* QR Modal */}
 			{qrModalLink && (
 				<div
 					className={styles.qrOverlay}

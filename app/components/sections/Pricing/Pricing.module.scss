@@ -197,10 +197,10 @@
 
 .toggleContainer {
 	display: flex;
-	flex-direction: column; // ← Изменено с row на column
+	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	gap: $spacing-sm; // ← Уменьшенный gap для вертикального расположения
+	gap: $spacing-sm;
 	margin-top: $spacing-xl;
 }
 

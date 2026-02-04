@@ -50,7 +50,7 @@ export default function ProductPreview() {
 	const [toast, setToast] = useState({ show: false, message: '' })
 	const [showQrModal, setShowQrModal] = useState(false)
 	const [activeTab, setActiveTab] = useState('links')
-	const [inputValue, setInputValue] = useState('') // Состояние для input
+	const [inputValue, setInputValue] = useState('')
 
 	const showToast = (message: string) => {
 		setToast({ show: true, message })
@@ -72,9 +72,8 @@ export default function ProductPreview() {
 	const handleShorten = () => {
 		if (inputValue.trim()) {
 			showToast('Ссылка создана!')
-			setInputValue('') // Очищаем поле после успеха
+			setInputValue('')
 		}
-		// Если пустое — ничего не делаем (Toast не показывается)
 	}
 
 	return (
@@ -139,7 +138,6 @@ export default function ProductPreview() {
 						>
 							Аналитика
 						</button>
-						{/* Исправлено: Bio теперь активная вкладка */}
 						<button
 							className={classNames(styles.tab, {
 								[styles.active]: activeTab === 'bio'
@@ -150,8 +148,6 @@ export default function ProductPreview() {
 						</button>
 					</div>
 				</div>
-
-				{/* Контент для вкладки "Ссылки" */}
 				<div className={styles.urlInput}>
 					<input
 						type='text'
@@ -279,8 +275,6 @@ export default function ProductPreview() {
 						</LineChart>
 					</ResponsiveContainer>
 				</div>
-
-				{/* Кликабельный QR-badge (виден всегда) */}
 				<div
 					className={styles.qrBadge}
 					onClick={() => setShowQrModal(true)}

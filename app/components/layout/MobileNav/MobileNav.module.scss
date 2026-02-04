@@ -5,7 +5,6 @@
 
 	@media (max-width: $breakpoint-md) {
 		display: block;
-		// Важно: не добавлять position: relative!
 	}
 }
 
@@ -52,22 +51,17 @@
 	top: 0;
 	right: 0;
 	bottom: 0;
-	width: min(85vw, 320px); // Современная запись для width + max-width
+	width: min(85vw, 320px);
 	background: var(--color-bg);
 	z-index: 999;
 	display: flex;
 	flex-direction: column;
 	box-shadow: var(--shadow-lg);
 
-	// Ключевые исправления для скрытия:
-	transform: translate3d(
-		100%,
-		0,
-		0
-	); // Используем translate3d для аппаратного ускорения
+	transform: translate3d(100%, 0, 0);
 	visibility: hidden;
 	opacity: 0;
-	will-change: transform; // Оптимизация
+	will-change: transform;
 
 	transition:
 		transform 0.3s ease,
@@ -87,7 +81,7 @@
 	justify-content: space-between;
 	padding: $spacing-md $spacing-lg;
 	border-bottom: 1px solid var(--color-border);
-	flex-shrink: 0; // Не сжиматься
+	flex-shrink: 0;
 }
 
 .closeBtn {
@@ -114,8 +108,8 @@
 	flex-direction: column;
 	padding: $spacing-lg;
 	overflow-y: auto;
-	overflow-x: hidden; // Запрет горизонтального скролла внутри
-	-webkit-overflow-scrolling: touch; // Плавный скролл на iOS
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
 }
 
 .navList {
@@ -137,7 +131,7 @@
 	font-weight: $font-weight-medium;
 	border-radius: $border-radius-md;
 	transition: $transition-base;
-	white-space: nowrap; // Запрет переноса текста
+	white-space: nowrap;
 
 	&:hover {
 		background: var(--color-bg-tertiary);
@@ -151,7 +145,7 @@
 	gap: $spacing-md;
 	padding-top: $spacing-lg;
 	border-top: 1px solid var(--color-border);
-	flex-shrink: 0; // Не сжиматься
+	flex-shrink: 0;
 }
 
 .themeToggle {

@@ -1,0 +1,128 @@
+@import '../../../../styles/variables';
+
+.datePickerOverlay {
+	position: fixed;
+	inset: 0;
+	z-index: 100;
+	background-color: rgba(0, 0, 0, 0.3);
+	animation: fadeIn 0.15s ease;
+}
+
+.datePicker {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 101;
+	width: 100%;
+	max-width: 320px;
+	padding: $spacing-lg;
+	background-color: $color-bg-light;
+	border: 1px solid $color-border;
+	border-radius: $border-radius-xl;
+	box-shadow: $shadow-xl;
+	animation: scaleIn 0.2s ease;
+
+	@media (min-width: $breakpoint-sm) {
+		max-width: 360px;
+	}
+}
+
+.datePickerTitle {
+	font-size: $font-size-base;
+	font-weight: $font-weight-semibold;
+	color: $color-text-primary;
+	margin-bottom: $spacing-lg;
+}
+
+.dateInputs {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+
+	@media (min-width: $breakpoint-sm) {
+		flex-direction: row;
+	}
+}
+
+.dateField {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-xs;
+}
+
+.dateLabel {
+	font-size: $font-size-xs;
+	font-weight: $font-weight-medium;
+	color: $color-text-secondary;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.dateInput {
+	width: 100%;
+	padding: $spacing-sm $spacing-md;
+	font-family: $font-family-base;
+	font-size: $font-size-sm;
+	color: $color-text-primary;
+	background-color: $color-bg-dark;
+	border: 1px solid $color-border;
+	border-radius: $border-radius-md;
+	outline: none;
+	transition: $transition-fast;
+
+	&:hover {
+		border-color: $color-text-secondary;
+	}
+
+	&:focus {
+		border-color: $color-primary;
+		box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+	}
+}
+
+.datePickerActions {
+	display: flex;
+	justify-content: flex-end;
+	gap: $spacing-sm;
+	margin-top: $spacing-lg;
+}
+
+.datePickerBtn {
+	padding: $spacing-sm $spacing-md;
+	font-family: $font-family-base;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+	border-radius: $border-radius-md;
+	cursor: pointer;
+	transition: $transition-fast;
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+.datePickerBtnCancel {
+	color: $color-text-secondary;
+	background: transparent;
+	border: 1px solid $color-border;
+
+	&:hover:not(:disabled) {
+		color: $color-text-primary;
+		border-color: $color-text-secondary;
+	}
+}
+
+.datePickerBtnApply {
+	color: white;
+	background-color: $color-primary;
+	border: none;
+
+	&:hover:not(:disabled) {
+		background-color: $color-primary-hover;
+	}
+}
+
+

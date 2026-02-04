@@ -57,15 +57,12 @@ const Sidebar: React.FC = () => {
 
 	return (
 		<>
-			{/* Overlay для мобильных */}
 			<div
 				className={classNames(styles.overlay, {
 					[styles.visible]: isOpen
 				})}
 				onClick={closeSidebar}
 			/>
-
-			{/* Сам сайдбар */}
 			<aside
 				className={classNames(styles.sidebar, {
 					[styles.open]: isOpen
@@ -81,7 +78,6 @@ const Sidebar: React.FC = () => {
 							<X size={20} />
 						</button>
 					</div>
-
 					<nav className={styles.nav}>
 						{navItems.map(item => (
 							<Link
@@ -102,7 +98,6 @@ const Sidebar: React.FC = () => {
 						))}
 					</nav>
 				</div>
-
 				<div className={styles.bottom}>
 					<div className={styles.storage}>
 						<span className={styles.storageLabel}>ХРАНИЛИЩЕ</span>
@@ -126,8 +121,6 @@ const Sidebar: React.FC = () => {
 					<span className={styles.planText}>Бесплатный план</span>
 				</div>
 			</aside>
-
-			{/* Кнопка открытия на мобильных */}
 			<button
 				className={classNames(styles.mobileToggle, {
 					[styles.hidden]: isOpen

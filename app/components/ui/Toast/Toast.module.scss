@@ -16,10 +16,26 @@
 	font-weight: $font-weight-medium;
 	box-shadow: var(--shadow-lg);
 	z-index: 9999;
-	animation: slideUp 0.3s ease-out;
+	animation: toastSlideUp 0.3s ease-out;
 
-	svg {
-		color: var(--color-success);
+	&.success svg {
+		color: $color-success;
+	}
+
+	&.error {
+		background: $color-red;
+
+		svg {
+			color: white;
+		}
+	}
+
+	&.warning {
+		background: #f59e0b;
+
+		svg {
+			color: white;
+		}
 	}
 
 	@media (max-width: $breakpoint-sm) {
@@ -29,7 +45,7 @@
 	}
 }
 
-@keyframes slideUp {
+@keyframes toastSlideUp {
 	from {
 		opacity: 0;
 		transform: translateX(-50%) translateY(20px);

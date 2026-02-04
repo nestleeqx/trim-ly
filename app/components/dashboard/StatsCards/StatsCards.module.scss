@@ -48,7 +48,6 @@
 	}
 }
 
-// Skeleton loading state
 .skeleton {
 	background: var(--color-bg);
 	border-radius: $border-radius-xl;
@@ -147,7 +146,6 @@
 	}
 }
 
-// Empty state
 .emptyCard {
 	background: var(--color-bg);
 	border-radius: $border-radius-xl;
@@ -174,7 +172,6 @@
 	color: var(--color-text-secondary);
 }
 
-// Error state
 .errorCard {
 	background: var(--color-bg);
 	border-radius: $border-radius-xl;

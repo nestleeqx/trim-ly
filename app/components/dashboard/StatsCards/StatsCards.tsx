@@ -16,7 +16,7 @@ interface StatCard {
 	label: string
 	change: number
 	iconBgColor: string
-	filterKey: string // Ключ для фильтра в URL
+	filterKey: string
 }
 
 const stats: StatCard[] = [

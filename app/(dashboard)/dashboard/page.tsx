@@ -1,6 +1,7 @@
 'use client'
 
 import EmptyDashboard from '@/app/components/dashboard/EmptyDashboard/EmptyDashboard'
+import { useState } from 'react'
 import ClicksChart from '../../components/dashboard/ClicksChart'
 import DashboardHeader from '../../components/dashboard/DashboardHeader'
 import DevicesChart from '../../components/dashboard/DevicesChart'
@@ -13,6 +14,11 @@ import styles from './page.module.scss'
 const hasLinks = true
 
 export default function DashboardPage() {
+	const [searchQuery, setSearchQuery] = useState('')
+	const handleSearch = (value: string) => {
+		console.log(value)
+	}
+
 	if (!hasLinks) {
 		return (
 			<>
@@ -32,6 +38,12 @@ export default function DashboardPage() {
 			<DashboardHeader
 				title='Дашборд'
 				subtitle='С возвращением, вот что происходит.'
+				search={{
+					value: searchQuery,
+					onChange: setSearchQuery,
+					onSearch: handleSearch,
+					placeholder: 'Поиск...'
+				}}
 			/>
 			<div className={styles.content}>
 				<StatsCards />

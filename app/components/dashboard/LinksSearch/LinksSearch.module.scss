@@ -1,0 +1,74 @@
+@import '../../../styles/variables';
+
+.searchWrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	flex: 1;
+	max-width: 400px;
+
+	@media (max-width: $breakpoint-md) {
+		max-width: none;
+		width: 100%;
+	}
+}
+
+.searchIcon {
+	position: absolute;
+	left: $spacing-md;
+	color: var(--color-text-placeholder);
+	pointer-events: none;
+}
+
+.searchInput {
+	width: 100%;
+	padding: $spacing-sm $spacing-xl $spacing-sm 44px;
+	background: var(--color-bg-secondary);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-lg;
+	font-size: $font-size-sm;
+	color: var(--color-text-primary);
+	transition: $transition-base;
+
+	&::placeholder {
+		color: var(--color-text-placeholder);
+	}
+
+	&:focus {
+		outline: none;
+		border-color: var(--color-primary);
+		box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+	}
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-sm $spacing-xl $spacing-sm 40px;
+		font-size: $font-size-base;
+	}
+}
+
+.clearBtn {
+	position: absolute;
+	right: $spacing-sm;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-sm;
+	color: var(--color-text-secondary);
+	cursor: pointer;
+	transition: $transition-base;
+
+	&:hover {
+		background: var(--color-bg-secondary);
+		color: var(--color-text-primary);
+	}
+
+	&:focus-visible {
+		outline: none;
+		background: var(--color-bg-secondary);
+		color: var(--color-primary);
+	}
+}

@@ -1,6 +1,5 @@
 @import './variables';
 
-// CSS переменные для тем
 :root {
 	--color-primary: #{$color-primary};
 	--color-primary-hover: #{$color-primary-hover};
@@ -41,7 +40,7 @@
 html {
 	overflow-x: hidden;
 	scroll-behavior: smooth;
-	scroll-padding-top: 90px; // Header height + extra offset
+	scroll-padding-top: 90px;
 }
 
 html,

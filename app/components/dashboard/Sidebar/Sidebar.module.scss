@@ -1,6 +1,5 @@
 @import '../../../styles/variables';
 
-// Desktop sidebar
 .sidebar {
 	display: flex;
 	flex-direction: column;
@@ -164,7 +163,6 @@
 	color: var(--color-primary);
 }
 
-// Mobile overlay
 .overlay {
 	display: none;
 	position: fixed;
@@ -185,7 +183,6 @@
 	}
 }
 
-// Mobile toggle button (FAB)
 .mobileToggle {
 	display: none;
 	align-items: center;
@@ -231,7 +228,6 @@
 	}
 }
 
-// Close button for mobile sidebar
 .closeBtn {
 	display: none;
 	align-items: center;

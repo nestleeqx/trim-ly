@@ -106,7 +106,6 @@
 	color: var(--icon-color);
 	transition: $transition-base;
 
-	// Fallback and override with CSS custom property
 	background: color-mix(in srgb, var(--icon-color, #818cf8) 15%, transparent);
 	color: var(--icon-color, #818cf8);
 

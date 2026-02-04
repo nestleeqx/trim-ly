@@ -52,7 +52,6 @@ export default function Footer() {
 		<footer className={styles.footer}>
 			<div className='container'>
 				<div className={styles.content}>
-					{/* Левая колонка с логотипом */}
 					<div className={styles.brand}>
 						<div className={styles.logo}>
 							<Logo />
@@ -137,12 +136,7 @@ export default function Footer() {
 				onClose={() => setContactModalOpen(false)}
 				title='Связаться с нами'
 			>
-				<ContactForm
-					onSuccess={() => {
-						// Можно закрыть модалку автоматически через 3 секунды
-						// setTimeout(() => setContactModalOpen(false), 3000)
-					}}
-				/>
+				<ContactForm />
 			</Modal>
 		</footer>
 	)

@@ -57,7 +57,6 @@
 }
 
 .tableWrapper {
-	overflow-x: auto;
 	margin: 0 (-$spacing-lg);
 	padding: 0 $spacing-lg;
 
@@ -207,7 +206,6 @@
 	}
 }
 
-// Toast notification
 .toast {
 	position: fixed;
 	bottom: 100px;
@@ -234,7 +232,6 @@
 	}
 }
 
-// Kebab menu
 .kebabWrapper {
 	position: relative;
 }
@@ -313,7 +310,6 @@
 	}
 }
 
-// QR Modal
 .qrOverlay {
 	position: fixed;
 	inset: 0;
@@ -478,7 +474,6 @@
 	}
 }
 
-// Empty state
 .emptyState {
 	display: flex;
 	flex-direction: column;
@@ -543,7 +538,6 @@
 	}
 }
 
-// Loading skeleton
 .skeletonRow {
 	td {
 		padding: $spacing-md;

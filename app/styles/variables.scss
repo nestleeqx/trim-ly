@@ -9,6 +9,8 @@ $color-bg-dark: #f9fafb;
 $color-border: #e5e7eb;
 $color-success: #10b981;
 $color-active: #22c55e;
+$color-red: #ef4444;
+$color-red-opacity: #fef2f2;
 
 // Типографика
 $font-family-base:
@@ -78,3 +80,45 @@ $transition-slow: all 0.3s ease-in-out;
 // Container
 $container-max-width: 1280px;
 $dashboard-max-width: 1440px;
+
+// Animations
+@keyframes slideUp {
+	from {
+		transform: translateY(100%);
+	}
+	to {
+		transform: translateY(0);
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes scaleIn {
+	from {
+		opacity: 0;
+		transform: translate(-50%, -50%) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+}
+
+@keyframes toastSlideUp {
+	from {
+		opacity: 0;
+		transform: translateX(-50%) translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(-50%) translateY(0);
+	}
+}
+

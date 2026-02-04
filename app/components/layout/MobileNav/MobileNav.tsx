@@ -24,16 +24,14 @@ const MobileNav: React.FC<MobileNavProps> = ({ navItems }) => {
 
 	useEffect(() => {
 		if (isOpen) {
-			// Простая блокировка без padding-right (чтобы избежать сдвига)
 			document.body.style.overflow = 'hidden'
-			document.body.style.touchAction = 'none' // Запрет touch-событий на body
+			document.body.style.touchAction = 'none'
 		} else {
 			document.body.style.overflow = ''
 			document.body.style.touchAction = ''
 		}
 
 		return () => {
-			// Гарантированный сброс при размонтировании
 			document.body.style.overflow = ''
 			document.body.style.touchAction = ''
 		}

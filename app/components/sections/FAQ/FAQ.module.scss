@@ -64,7 +64,7 @@
 
 	@media (max-width: $breakpoint-md) {
 		gap: $spacing-sm;
-		padding: 0 $spacing-md; // Отступы по краям на мобильных
+		padding: 0 $spacing-md;
 	}
 
 	@media (max-width: $breakpoint-sm) {
@@ -148,7 +148,6 @@
 	}
 }
 
-// Исправление прыжка — padding всегда есть, но оборачивается
 .answer {
 	display: grid;
 	grid-template-rows: 0fr;

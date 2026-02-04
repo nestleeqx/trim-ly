@@ -68,8 +68,7 @@ const Analytics: React.FC = () => {
 		'Экспорт статистики в CSV'
 	]
 
-	// Calculate donut chart stroke values based on mobile percent
-	const circumference = 2 * Math.PI * 40 // 251.33
+	const circumference = 2 * Math.PI * 40
 	const mobileStroke = (currentData.mobilePercent / 100) * circumference
 
 	return (

@@ -1,0 +1,60 @@
+@import '../../../styles/variables';
+
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+	padding: $spacing-md $spacing-lg; // Desktop padding
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-md; // Medium screens
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		padding: $spacing-sm; // Small screens
+	}
+
+	@media (min-width: $breakpoint-lg) {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+}
+
+.filtersLeft {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: $spacing-md;
+	position: relative;
+}
+
+.filtersLabel {
+	display: flex;
+	align-items: center;
+	gap: $spacing-sm;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+	color: $color-text-secondary;
+}
+
+.clearBtn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: $spacing-xs;
+	padding: $spacing-sm $spacing-md;
+	font-family: $font-family-base;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+	color: $color-red;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-lg;
+	cursor: pointer;
+	transition: $transition-fast;
+
+	&:hover {
+		background: $color-red-opacity;
+	}
+}

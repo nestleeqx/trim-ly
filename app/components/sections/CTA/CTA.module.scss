@@ -35,7 +35,6 @@
 		border-radius: $border-radius-lg;
 	}
 
-	// Декоративный элемент (опционально)
 	&::before {
 		content: '';
 		position: absolute;
@@ -117,10 +116,10 @@
 }
 
 .actionLink {
-	display: inline-flex; // Для десктопа
+	display: inline-flex;
 
 	@media (max-width: $breakpoint-sm) {
-		display: block; // На мобильных — блочный, чтобы растягиваться
+		display: block;
 		width: 100%;
 	}
 }
@@ -163,8 +162,8 @@
 	transition: all 0.2s ease;
 
 	&:hover {
-		background: white; // Полностью белая заливка
-		color: var(--color-primary); // Синий текст на белом фоне
+		background: white;
+		color: var(--color-primary);
 		border-color: white;
 		box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 	}
