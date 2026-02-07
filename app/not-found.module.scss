@@ -1,0 +1,238 @@
+@import './styles/variables';
+
+.page {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: $color-bg-light;
+	padding: $spacing-2xl $spacing-md;
+}
+
+.logo {
+	margin-bottom: $spacing-section;
+}
+
+// Animated 404
+.illustration {
+	position: relative;
+	width: 340px;
+	height: 200px;
+	margin-bottom: $spacing-section;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	@media (max-width: $breakpoint-sm) {
+		width: 260px;
+		height: 160px;
+	}
+}
+
+.digits {
+	display: flex;
+	align-items: center;
+	gap: 0;
+	user-select: none;
+}
+
+.digit {
+	font-size: 9rem;
+	font-weight: $font-weight-bold;
+	color: $color-bg-dark;
+	line-height: 1;
+	position: relative;
+	z-index: 0;
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: 7rem;
+	}
+}
+
+.digitAnimated {
+	display: inline-block;
+	animation: digitFloat 3s ease-in-out infinite;
+
+	&:nth-child(1) {
+		animation-delay: 0s;
+	}
+
+	&:nth-child(3) {
+		animation-delay: 0.4s;
+	}
+}
+
+@keyframes digitFloat {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-12px);
+	}
+}
+
+// Center circle with search icon
+.centerOrb {
+	position: relative;
+	z-index: 1;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background: rgba($color-primary, 0.08);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: orbPulse 2.5s ease-in-out infinite;
+
+	@media (max-width: $breakpoint-sm) {
+		width: 64px;
+		height: 64px;
+	}
+}
+
+.searchIcon {
+	color: $color-primary;
+	animation: searchSpin 4s ease-in-out infinite;
+}
+
+@keyframes orbPulse {
+	0%,
+	100% {
+		box-shadow: 0 0 0 0 rgba($color-primary, 0.15);
+		transform: scale(1);
+	}
+	50% {
+		box-shadow: 0 0 0 20px rgba($color-primary, 0);
+		transform: scale(1.05);
+	}
+}
+
+@keyframes searchSpin {
+	0% {
+		transform: rotate(0deg);
+	}
+	25% {
+		transform: rotate(-15deg);
+	}
+	75% {
+		transform: rotate(15deg);
+	}
+	100% {
+		transform: rotate(0deg);
+	}
+}
+
+// Floating dots
+.dot {
+	position: absolute;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: $color-primary;
+
+	&.dot1 {
+		top: 10%;
+		left: 50%;
+		animation: dotFloat1 3s ease-in-out infinite;
+	}
+
+	&.dot2 {
+		bottom: 15%;
+		left: 42%;
+		width: 8px;
+		height: 8px;
+		animation: dotFloat2 3.5s ease-in-out infinite;
+	}
+
+	&.dot3 {
+		top: 30%;
+		right: 10%;
+		width: 6px;
+		height: 6px;
+		opacity: 0.5;
+		animation: dotFloat3 4s ease-in-out infinite;
+	}
+}
+
+@keyframes dotFloat1 {
+	0%,
+	100% {
+		transform: translate(0, 0);
+	}
+	50% {
+		transform: translate(8px, -10px);
+	}
+}
+
+@keyframes dotFloat2 {
+	0%,
+	100% {
+		transform: translate(0, 0);
+	}
+	50% {
+		transform: translate(-6px, 8px);
+	}
+}
+
+@keyframes dotFloat3 {
+	0%,
+	100% {
+		transform: translate(0, 0);
+	}
+	50% {
+		transform: translate(10px, 6px);
+	}
+}
+
+// Text content
+.textContent {
+	text-align: center;
+	max-width: 480px;
+	margin-bottom: $spacing-xl;
+}
+
+.title {
+	font-size: $font-size-3xl;
+	font-weight: $font-weight-bold;
+	color: $color-text-primary;
+	margin: 0 0 $spacing-md 0;
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-2xl;
+	}
+}
+
+.subtitle {
+	font-size: $font-size-base;
+	color: $color-text-secondary;
+	line-height: 1.6;
+	margin: 0;
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-sm;
+	}
+}
+
+// Actions
+.actions {
+	display: flex;
+	align-items: center;
+	gap: $spacing-md;
+	flex-wrap: wrap;
+	justify-content: center;
+
+	@media (max-width: $breakpoint-sm) {
+		flex-direction: column;
+		width: 100%;
+		max-width: 300px;
+	}
+}
+
+.actionBtn {
+	max-height: 53px;
+	@media (max-width: $breakpoint-sm) {
+		width: 100%;
+		justify-content: center;
+	}
+}
