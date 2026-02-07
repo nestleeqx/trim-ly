@@ -1,6 +1,11 @@
 'use client'
 
 import EmptyDashboard from '@/app/components/dashboard/EmptyDashboard/EmptyDashboard'
+import {
+	mockDeviceStats,
+	mockTopCountries,
+	mockTopReferrers
+} from '@/data/mockDashboardData'
 import { useState } from 'react'
 import ClicksChart from '../../components/dashboard/ClicksChart'
 import DashboardHeader from '../../components/dashboard/DashboardHeader'
@@ -53,9 +58,15 @@ export default function DashboardPage() {
 						<RecentLinks />
 					</div>
 					<div className={styles.sideCharts}>
-						<TopCountries />
-						<DevicesChart />
-						<TopReferrers />
+						<TopCountries countries={mockTopCountries} />
+						<DevicesChart
+							deviceStats={mockDeviceStats}
+							mainPercentage={mockDeviceStats[0]?.percentage ?? 0}
+							mainDeviceType={
+								mockDeviceStats[0]?.type ?? 'Mobile'
+							}
+						/>
+						<TopReferrers referrers={mockTopReferrers} />
 					</div>
 				</div>
 			</div>

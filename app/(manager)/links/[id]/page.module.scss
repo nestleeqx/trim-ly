@@ -1,0 +1,78 @@
+@import '../../../styles/variables';
+
+.content {
+	padding: $spacing-lg;
+	max-width: $dashboard-max-width;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-lg;
+}
+
+.sideCharts {
+	display: flex;
+	gap: $spacing-lg;
+
+	/* Make each child take full width so the three cards stack and stretch */
+	> * {
+		width: 100%;
+	}
+}
+
+.tabs {
+	display: flex;
+	gap: $spacing-md;
+	margin-top: $spacing-md;
+	border-bottom: 1px solid var(--color-border);
+	margin-bottom: $spacing-md;
+}
+
+.tab {
+	padding: 8px 12px;
+	background: transparent;
+	color: $color-text-secondary;
+	border: 1px solid transparent;
+	cursor: pointer;
+}
+
+.tab.active {
+	border-bottom: 1px solid $color-primary;
+	color: $color-primary;
+	padding-bottom: 10px;
+}
+
+.skeleton {
+	background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 37%, #f3f4f6 63%);
+	height: 260px;
+	border-radius: 8px;
+}
+
+.emptyState {
+	padding: $spacing-md;
+	color: $color-secondary;
+	background: #fff;
+	border-radius: 8px;
+}
+
+.errorState {
+	padding: $spacing-md;
+	color: $color-red;
+	background: #fff;
+	border-radius: 8px;
+}
+
+.editTabPlaceholder {
+	padding: $spacing-md;
+	background: #fff;
+	border-radius: 8px;
+}
+
+// Edit Layout
+.editLayout {
+	display: grid;
+	grid-template-columns: 800px 1fr;
+	gap: $spacing-lg;
+
+	@media (max-width: $breakpoint-lg) {
+		grid-template-columns: 1fr;
+	}
+}

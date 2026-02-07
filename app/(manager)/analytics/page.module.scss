@@ -1,0 +1,53 @@
+@import '../../styles/variables';
+
+.container {
+	max-width: $dashboard-max-width;
+	padding: $spacing-lg;
+}
+
+.topRow {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: $spacing-md;
+}
+
+.periods {
+	display: flex;
+	justify-content: space-around;
+	gap: $spacing-sm;
+}
+
+.periodBtn {
+	padding: 8px 12px;
+	border-radius: 8px;
+	background: $color-bg-light;
+	border: 1px solid $color-border;
+	color: $color-text-primary;
+	cursor: pointer;
+
+	&.active {
+		background: $color-primary;
+		color: white;
+		border-color: $color-primary;
+	}
+}
+
+.chartBlock {
+	margin-top: $spacing-xl;
+}
+
+.filtersBlock {
+	margin-top: $spacing-xl;
+}
+
+.sideCards {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: $spacing-lg;
+	margin-top: $spacing-md;
+}
+
+.topLinksBlock {
+	margin-top: $spacing-md;
+}

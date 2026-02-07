@@ -1,4 +1,4 @@
-@import '../../../styles/variables';
+@import '../../styles/variables';
 
 .content {
 	padding: $spacing-md $spacing-lg;
@@ -49,7 +49,11 @@
 	justify-content: center;
 	width: 80px;
 	height: 80px;
-	background: linear-gradient(135deg, rgba($color-primary, 0.1), rgba($color-primary, 0.05));
+	background: linear-gradient(
+		135deg,
+		rgba($color-primary, 0.1),
+		rgba($color-primary, 0.05)
+	);
 	border-radius: 50%;
 	margin-bottom: $spacing-lg;
 	color: $color-primary;

@@ -1,0 +1,19 @@
+@import '../../../styles/variables';
+
+.content {
+	padding: $spacing-lg;
+	max-width: $dashboard-max-width;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-lg;
+}
+
+.editLayout {
+	display: grid;
+	grid-template-columns: 800px 1fr;
+	gap: $spacing-lg;
+
+	@media (max-width: $breakpoint-lg) {
+		grid-template-columns: 1fr;
+	}
+}

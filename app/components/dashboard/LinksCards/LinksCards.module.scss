@@ -14,13 +14,13 @@
 .card {
 	background: var(--color-bg);
 	border-radius: $border-radius-xl;
+	border: 1px solid $color-border;
 	padding: $spacing-lg;
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-md;
 	cursor: pointer;
 	transition: $transition-fast;
-	border: 1px solid transparent;
 
 	&:hover {
 		box-shadow: $shadow-md;
