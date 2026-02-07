@@ -1,5 +1,6 @@
 'use client'
 
+import Button from '@/app/components/ui/Button'
 import { Calendar } from 'lucide-react'
 import commonStyles from '../filterCommon.module.scss'
 import FilterDropdown from '../FilterDropdown/FilterDropdown'
@@ -148,19 +149,23 @@ const DateFilter: React.FC<DateFilterProps> = ({
 							</div>
 						</div>
 						<div className={styles.datePickerActions}>
-							<button
-								className={`${styles.datePickerBtn} ${styles.datePickerBtnCancel}`}
+							<Button
+								variant='outline'
+								size='sm'
+								className={`${styles.datePickerBtn}`}
 								onClick={handleCancelDatePicker}
 							>
 								Отмена
-							</button>
-							<button
-								className={`${styles.datePickerBtn} ${styles.datePickerBtnApply}`}
+							</Button>
+							<Button
+								variant='primary'
+								size='sm'
+								className={`${styles.datePickerBtn}`}
 								onClick={handleApplyCustomRange}
 								disabled={!startDate || !endDate}
 							>
 								Применить
-							</button>
+							</Button>
 						</div>
 					</div>
 				</>

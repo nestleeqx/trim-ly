@@ -8,6 +8,21 @@ export interface LinkItem {
 	tags: string[]
 	createdAt: Date
 	expirationDate?: Date
+	hasPassword?: boolean
+}
+
+export interface ClickEvent {
+	time: string // e.g., "2 mins ago" - using string for simplicity based on screenshot
+	country: {
+		code: string // e.g., "US"
+		name: string // e.g., "United States"
+	}
+	device: {
+		type: string // e.g., "iPhone", "Windows PC", "Android", "MacBook Pro"
+		name: string // e.g., "iPhone 15" - can be the model
+	}
+	browser: string // e.g., "Safari", "Chrome"
+	referrer: string // e.g., "instagram.com", "direct", "google.com", "t.co"
 }
 
 export type LinkStatus = 'active' | 'paused' | 'expired' | 'deleted'
@@ -53,7 +68,12 @@ export const VALID_SORT_FIELDS: SortField[] = [
 	'status',
 	'expiration_date'
 ]
-export const VALID_STATUSES: LinkStatus[] = ['active', 'paused', 'expired', 'deleted']
+export const VALID_STATUSES: LinkStatus[] = [
+	'active',
+	'paused',
+	'expired',
+	'deleted'
+]
 
 export interface ModalConfig {
 	title: string

@@ -16,7 +16,37 @@
 }
 
 .titleSection {
+	display: flex;
+	align-items: center;
+	gap: $spacing-md;
 	flex-shrink: 0;
+}
+
+.backButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	color: $color-text-secondary;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-lg;
+	cursor: pointer;
+	transition: $transition-fast;
+	text-decoration: none;
+	flex-shrink: 0;
+
+	&:hover {
+		color: $color-text-primary;
+		background-color: $color-bg-dark;
+	}
+
+	&:focus-visible {
+		outline: 2px solid $color-primary;
+		outline-offset: 2px;
+	}
 }
 
 .title {
@@ -86,34 +116,8 @@
 }
 
 .createBtn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: $spacing-sm;
-	padding: $spacing-sm $spacing-md;
-	font-family: $font-family-base;
-	font-size: $font-size-sm;
-	font-weight: $font-weight-medium;
-	color: white;
-	background-color: $color-primary;
-	border: none;
-	border-radius: $border-radius-lg;
-	cursor: pointer;
-	text-decoration: none;
-	transition: $transition-fast;
-
-	&:hover {
-		background-color: $color-primary-hover;
-	}
-
-	&:focus-visible {
-		outline: 2px solid $color-primary;
-		outline-offset: 2px;
-	}
-
 	span {
 		display: none;
-
 		@media (min-width: $breakpoint-sm) {
 			display: inline;
 		}

@@ -9,6 +9,7 @@ interface ButtonProps {
 		| 'invertPrimary'
 		| 'secondary'
 		| 'ghost'
+		| 'invertGhost'
 		| 'outline'
 		| 'invertOutline'
 	size?: 'sm' | 'md' | 'lg'

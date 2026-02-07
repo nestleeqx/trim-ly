@@ -3,6 +3,7 @@
 .tableWrapper {
 	background: var(--color-bg);
 	border-radius: $border-radius-xl;
+	border: 1px solid $color-border;
 	overflow-x: auto;
 	-webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
 
@@ -114,4 +115,41 @@
 			color: var(--color-primary);
 		}
 	}
+}
+
+.tableHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: $spacing-lg;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.allLinks {
+	color: var(--color-text-secondary);
+	text-decoration: none;
+	font-size: $font-size-sm;
+
+	&:hover {
+		color: var(--color-primary);
+	}
+}
+
+.tableTitle {
+	justify-self: center;
+	font-weight: $font-weight-semibold;
+	font-size: $font-size-sm;
+	color: var(--color-text-primary);
+}
+
+.trend {
+	font-weight: $font-weight-semibold;
+}
+
+.trendPositive {
+	color: $color-success;
+}
+
+.trendNegative {
+	color: $color-red;
 }

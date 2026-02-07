@@ -55,7 +55,7 @@
 
 .grid {
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: repeat(3, 1fr);
 	gap: $spacing-lg;
 
 	@media (max-width: $breakpoint-lg) {
@@ -71,7 +71,7 @@
 .card {
 	display: flex;
 	flex-direction: column;
-	padding: $spacing-lg;
+	padding: $spacing-lg $spacing-lg 0 $spacing-lg;
 	background: var(--color-bg);
 	border: 1px solid var(--color-border);
 	border-radius: $border-radius-xl;
@@ -82,14 +82,10 @@
 	&:hover {
 		border-color: var(--color-primary);
 		box-shadow: var(--shadow-lg);
-		transform: translateY(-4px);
+		transform: translateY(-5px);
 
 		.iconWrapper {
 			transform: scale(1.1);
-		}
-
-		.learnMore {
-			color: var(--color-primary);
 		}
 	}
 }
@@ -102,12 +98,9 @@
 	align-items: center;
 	justify-content: center;
 	margin-bottom: $spacing-lg;
-	background: rgba(var(--icon-color), 0.1);
-	color: var(--icon-color);
-	transition: $transition-base;
-
 	background: color-mix(in srgb, var(--icon-color, #818cf8) 15%, transparent);
 	color: var(--icon-color, #818cf8);
+	transition: $transition-base;
 
 	@media (max-width: $breakpoint-sm) {
 		width: 44px;
@@ -142,16 +135,5 @@
 	@media (max-width: $breakpoint-sm) {
 		font-size: $font-size-xs;
 		margin-bottom: $spacing-md;
-	}
-}
-
-.learnMore {
-	font-size: $font-size-sm;
-	font-weight: $font-weight-medium;
-	color: var(--color-primary);
-	transition: $transition-base;
-
-	@media (max-width: $breakpoint-sm) {
-		font-size: $font-size-xs;
 	}
 }

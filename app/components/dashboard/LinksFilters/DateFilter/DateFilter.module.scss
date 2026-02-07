@@ -90,39 +90,8 @@
 }
 
 .datePickerBtn {
-	padding: $spacing-sm $spacing-md;
-	font-family: $font-family-base;
-	font-size: $font-size-sm;
-	font-weight: $font-weight-medium;
-	border-radius: $border-radius-md;
-	cursor: pointer;
-	transition: $transition-fast;
-
 	&:disabled {
 		opacity: 0.5;
 		cursor: not-allowed;
 	}
 }
-
-.datePickerBtnCancel {
-	color: $color-text-secondary;
-	background: transparent;
-	border: 1px solid $color-border;
-
-	&:hover:not(:disabled) {
-		color: $color-text-primary;
-		border-color: $color-text-secondary;
-	}
-}
-
-.datePickerBtnApply {
-	color: white;
-	background-color: $color-primary;
-	border: none;
-
-	&:hover:not(:disabled) {
-		background-color: $color-primary-hover;
-	}
-}
-
-

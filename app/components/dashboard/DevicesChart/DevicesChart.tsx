@@ -1,21 +1,20 @@
 'use client'
 
+import { DeviceStats } from '@/types/charts'
 import React, { useState } from 'react'
 import styles from './DevicesChart.module.scss'
 
-interface Device {
-	name: string
-	percentage: number
-	color: string
+interface DevicesChartProps {
+	deviceStats: DeviceStats[]
+	mainPercentage: number
+	mainDeviceType: string
 }
 
-const devices: Device[] = [
-	{ name: 'Мобильные', percentage: 62, color: '#4f46e5' },
-	{ name: 'Десктоп', percentage: 34, color: '#a5b4fc' },
-	{ name: 'Планшет', percentage: 4, color: '#e0e7ff' }
-]
-
-const DevicesChart: React.FC = () => {
+const DevicesChart: React.FC<DevicesChartProps> = ({
+	deviceStats,
+	mainPercentage,
+	mainDeviceType
+}) => {
 	const [hoveredSegment, setHoveredSegment] = useState<number | null>(null)
 
 	const radius = 80
@@ -23,7 +22,7 @@ const DevicesChart: React.FC = () => {
 	const circumference = 2 * Math.PI * radius
 	let cumulativePercentage = 0
 
-	const segments = devices.map((device, index) => {
+	const segments = deviceStats.map((device, index) => {
 		const strokeDasharray = `${(device.percentage / 100) * circumference} ${circumference}`
 		const strokeDashoffset = -((cumulativePercentage / 100) * circumference)
 		cumulativePercentage += device.percentage
@@ -36,7 +35,7 @@ const DevicesChart: React.FC = () => {
 	})
 
 	const hoveredDevice =
-		hoveredSegment !== null ? devices[hoveredSegment] : null
+		hoveredSegment !== null ? deviceStats[hoveredSegment] : null
 
 	return (
 		<div className={styles.card}>
@@ -65,7 +64,7 @@ const DevicesChart: React.FC = () => {
 								className={styles.segment}
 								tabIndex={0}
 								role='button'
-								aria-label={`${segment.name}: ${segment.percentage}%`}
+								aria-label={`${segment.type}: ${segment.percentage}%`}
 								onMouseEnter={() =>
 									setHoveredSegment(segment.index)
 								}
@@ -81,12 +80,15 @@ const DevicesChart: React.FC = () => {
 						aria-live='polite'
 					>
 						<span className={styles.mainPercentage}>
-							{hoveredDevice ? hoveredDevice.percentage : 62}%
+							{hoveredDevice
+								? hoveredDevice.percentage
+								: mainPercentage}
+							%
 						</span>
 						<span className={styles.deviceType}>
 							{hoveredDevice
-								? hoveredDevice.name.toUpperCase()
-								: 'МОБИЛЬНЫЕ'}
+								? hoveredDevice.type.toUpperCase()
+								: mainDeviceType.toUpperCase()}
 						</span>
 					</div>
 				</div>
@@ -97,9 +99,9 @@ const DevicesChart: React.FC = () => {
 				role='list'
 				aria-label='Легенда устройств'
 			>
-				{devices.map((device, index) => (
+				{deviceStats.map((device, index) => (
 					<div
-						key={device.name}
+						key={device.type}
 						className={`${styles.legendItem} ${
 							hoveredSegment === index ? styles.active : ''
 						}`}
@@ -115,7 +117,7 @@ const DevicesChart: React.FC = () => {
 							style={{ backgroundColor: device.color }}
 							aria-hidden='true'
 						/>
-						<span className={styles.legendName}>{device.name}</span>
+						<span className={styles.legendName}>{device.type}</span>
 						<span className={styles.legendPercentage}>
 							{device.percentage}%
 						</span>

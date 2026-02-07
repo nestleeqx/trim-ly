@@ -49,7 +49,7 @@ const UserMenu: React.FC = () => {
 					/>
 					<div className={styles.dropdown}>
 						<Link
-							href='/dashboard/profile'
+							href='/profile'
 							className={styles.dropdownItem}
 							onClick={() => setIsDropdownOpen(false)}
 						>
@@ -57,7 +57,7 @@ const UserMenu: React.FC = () => {
 							<span>Профиль</span>
 						</Link>
 						<Link
-							href='/dashboard/settings'
+							href='/settings'
 							className={styles.dropdownItem}
 							onClick={() => setIsDropdownOpen(false)}
 						>

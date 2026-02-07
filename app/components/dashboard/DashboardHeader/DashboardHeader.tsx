@@ -1,8 +1,9 @@
 'use client'
 
-import { Bell, Plus, Search as SearchIcon } from 'lucide-react'
+import { ArrowLeft, Bell, Plus, Search as SearchIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import Button from '../../ui/Button'
 import { Search } from '../../ui/Search/Search'
 import styles from './DashboardHeader.module.scss'
 import MobileSearchOverlay from './MobileSearchOverlay/MobileSearchOverlay'
@@ -21,13 +22,17 @@ interface DashboardHeaderProps {
 	subtitle?: string
 	search?: SearchConfig
 	actions?: React.ReactNode
+	backHref?: string
+	showCreateButton?: boolean
 }
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 	title,
 	subtitle,
 	search,
-	actions
+	actions,
+	backHref,
+	showCreateButton = true
 }) => {
 	const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
 
@@ -46,8 +51,20 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 		<>
 			<header className={styles.header}>
 				<div className={styles.titleSection}>
-					<h1 className={styles.title}>{title}</h1>
-					{subtitle && <p className={styles.subtitle}>{subtitle}</p>}
+					{backHref && (
+						<Link
+							href={backHref}
+							className={styles.backButton}
+						>
+							<ArrowLeft size={20} />
+						</Link>
+					)}
+					<div>
+						<h1 className={styles.title}>{title}</h1>
+						{subtitle && (
+							<p className={styles.subtitle}>{subtitle}</p>
+						)}
+					</div>
 				</div>
 
 				<div className={styles.actions}>
@@ -72,13 +89,20 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 						</button>
 					)}
 					{actions}
-					<Link
-						href='/links/new'
-						className={styles.createBtn}
-					>
-						<Plus size={18} />
-						<span>Создать ссылку</span>
-					</Link>
+					{showCreateButton && (
+						<Link
+							href='/links/new'
+							className={styles.createBtn}
+						>
+							<Button
+								variant='primary'
+								size='sm'
+							>
+								<Plus size={18} />
+								<span>Создать ссылку</span>
+							</Button>
+						</Link>
+					)}
 					<button
 						className={styles.iconBtn}
 						aria-label='Уведомления'

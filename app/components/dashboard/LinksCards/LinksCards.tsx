@@ -3,7 +3,7 @@
 import { useLinkActions } from '@/hooks/useLinkActions'
 import { LinkItem as LinkItemType } from '@/types/links'
 import React from 'react'
-import { QrCodeModal } from '../QrCodeModal/QrCodeModal'
+import QrCodeModal from '../QrCodeModal'
 import { LinkCard } from './LinkCard'
 import styles from './LinksCards.module.scss'
 

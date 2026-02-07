@@ -35,7 +35,7 @@ export const useLinkActions = ({
 	const handleTitleClick = useCallback(
 		(linkId: string, e: React.MouseEvent) => {
 			e.stopPropagation()
-			router.push(`/dashboard/links/${linkId}`)
+			router.push(`/links/${linkId}`)
 		},
 		[router]
 	)
@@ -57,7 +57,7 @@ export const useLinkActions = ({
 	const handleAnalyticsClick = useCallback(
 		(linkId: string, e: React.MouseEvent) => {
 			e.stopPropagation()
-			router.push(`/dashboard/analytics?link=${linkId}`)
+			router.push(`/analytics?link=${linkId}`)
 		},
 		[router]
 	)
@@ -73,7 +73,7 @@ export const useLinkActions = ({
 	const handleEdit = useCallback(
 		(linkId: string) => {
 			setOpenKebabId(null)
-			router.push(`/dashboard/links/${linkId}/edit`)
+			router.push(`/links/${linkId}/edit`)
 		},
 		[router]
 	)

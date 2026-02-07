@@ -1,62 +1,5 @@
 @import '../../../styles/variables';
 
-.qrOverlay {
-	position: fixed;
-	inset: 0;
-	background: rgba(0, 0, 0, 0.5);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 200;
-	padding: $spacing-md;
-}
-
-.qrModal {
-	background: var(--color-bg);
-	border-radius: $border-radius-xl;
-	padding: $spacing-xl;
-	width: 100%;
-	max-width: 360px;
-	box-shadow: $shadow-xl;
-
-	@media (max-width: $breakpoint-sm) {
-		padding: $spacing-lg;
-	}
-}
-
-.qrHeader {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: $spacing-lg;
-}
-
-.qrTitle {
-	font-size: $font-size-lg;
-	font-weight: $font-weight-semibold;
-	color: var(--color-text-primary);
-	margin: 0;
-}
-
-.qrClose {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 32px;
-	height: 32px;
-	background: transparent;
-	border: none;
-	border-radius: $border-radius-md;
-	color: var(--color-text-secondary);
-	cursor: pointer;
-	transition: $transition-fast;
-
-	&:hover {
-		background: var(--color-bg-secondary);
-		color: var(--color-text-primary);
-	}
-}
-
 .qrContent {
 	display: flex;
 	flex-direction: column;
@@ -128,29 +71,8 @@
 
 .qrBtn {
 	flex: 1;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: $spacing-xs;
-	padding: $spacing-sm $spacing-md;
-	border-radius: $border-radius-md;
-	font-size: $font-size-sm;
-	font-weight: $font-weight-medium;
-	cursor: pointer;
-	transition: $transition-fast;
-
 	@media (max-width: $breakpoint-sm) {
 		padding: $spacing-md;
-	}
-}
-
-.qrBtnPrimary {
-	background: var(--color-primary);
-	border: none;
-	color: white;
-
-	&:hover {
-		background: var(--color-primary-hover);
 	}
 }
 

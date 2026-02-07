@@ -3,6 +3,7 @@
 .card {
 	background: var(--color-bg);
 	border-radius: $border-radius-xl;
+	border: 1px solid $color-border;
 	padding: $spacing-lg;
 	display: flex;
 	flex-direction: column;
@@ -42,7 +43,6 @@
 	margin: 0 (-$spacing-sm);
 	padding-left: $spacing-sm;
 	padding-right: $spacing-sm;
-	border-radius: $border-radius-sm;
 
 	&:last-child {
 		border-bottom: none;

@@ -4,7 +4,7 @@ export const mockLinks: LinkItem[] = [
 	{
 		id: '1',
 		title: 'Акция Чёрная пятница',
-		shortUrl: 's.io/bf-2026',
+		shortUrl: 't.ly/bf-2026',
 		destination: 'shop.com/sales/black-friday',
 		clicks: 2314,
 		status: 'active',
@@ -15,8 +15,8 @@ export const mockLinks: LinkItem[] = [
 	{
 		id: '2',
 		title: 'Ссылка в Instagram',
-		shortUrl: 's.io/insta',
-		destination: 'instagram.com/shortstack_',
+		shortUrl: 't.ly/insta',
+		destination: 'instagram.com/trimly',
 		clicks: 832,
 		status: 'deleted',
 		tags: ['СОЦСЕТИ'],
@@ -26,7 +26,7 @@ export const mockLinks: LinkItem[] = [
 	{
 		id: '3',
 		title: 'Запуск на Product Hunt',
-		shortUrl: 's.io/ph-launch',
+		shortUrl: 't.ly/ph-launch',
 		destination: 'producthunt.com/posts/sho',
 		clicks: 1105,
 		status: 'paused',
@@ -37,8 +37,8 @@ export const mockLinks: LinkItem[] = [
 	{
 		id: '4',
 		title: 'Осенний реферал',
-		shortUrl: 's.io/fall-ref',
-		destination: 'shortstack.io/referral-autumn',
+		shortUrl: 't.ly/fall-ref',
+		destination: 'trim.ly/referral-autumn',
 		clicks: 42,
 		status: 'expired',
 		tags: ['АКЦИЯ'],
@@ -48,7 +48,7 @@ export const mockLinks: LinkItem[] = [
 	{
 		id: '5',
 		title: 'Акция Чёрная пятница',
-		shortUrl: 's.io/bf-2026',
+		shortUrl: 't.ly/bf-2026',
 		destination: 'shop.com/sales/black-friday',
 		clicks: 2314,
 		status: 'active',
@@ -59,8 +59,8 @@ export const mockLinks: LinkItem[] = [
 	{
 		id: '6',
 		title: 'Ссылка в Instagram',
-		shortUrl: 's.io/insta',
-		destination: 'instagram.com/shortstack_',
+		shortUrl: 't.ly/insta',
+		destination: 'instagram.com/trimly_',
 		clicks: 832,
 		status: 'deleted',
 		tags: ['СОЦСЕТИ'],
@@ -70,7 +70,7 @@ export const mockLinks: LinkItem[] = [
 	{
 		id: '7',
 		title: 'Запуск на Product Hunt',
-		shortUrl: 's.io/ph-launch',
+		shortUrl: 't.ly/ph-launch',
 		destination: 'producthunt.com/posts/sho',
 		clicks: 1105,
 		status: 'paused',
@@ -81,8 +81,8 @@ export const mockLinks: LinkItem[] = [
 	{
 		id: '8',
 		title: 'Осенний реферал',
-		shortUrl: 's.io/fall-ref',
-		destination: 'shortstack.io/referral-autumn',
+		shortUrl: 't.ly/fall-ref',
+		destination: 'trim.ly/referral-autumn',
 		clicks: 42,
 		status: 'expired',
 		tags: ['АКЦИЯ'],
@@ -92,7 +92,7 @@ export const mockLinks: LinkItem[] = [
 	{
 		id: '9',
 		title: 'Запуск на Product Hunt',
-		shortUrl: 's.io/ph-launch',
+		shortUrl: 't.ly/ph-launch',
 		destination: 'producthunt.com/posts/sho',
 		clicks: 1105,
 		status: 'paused',
@@ -103,8 +103,8 @@ export const mockLinks: LinkItem[] = [
 	{
 		id: '10',
 		title: 'Осенний реферал',
-		shortUrl: 's.io/fall-ref',
-		destination: 'shortstack.io/referral-autumn',
+		shortUrl: 't.ly/fall-ref',
+		destination: 'trim.ly/referral-autumn',
 		clicks: 42,
 		status: 'expired',
 		tags: ['АКЦИЯ'],
@@ -114,7 +114,7 @@ export const mockLinks: LinkItem[] = [
 	{
 		id: '11',
 		title: 'Акция Чёрная пятница',
-		shortUrl: 's.io/bf-2026',
+		shortUrl: 't.ly/bf-2026',
 		destination: 'shop.com/sales/black-friday',
 		clicks: 2314,
 		status: 'active',

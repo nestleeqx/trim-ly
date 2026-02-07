@@ -16,8 +16,10 @@ import styles from './LinksTable.module.scss'
 
 interface LinkTableRowProps {
 	link: LinkItemType
-	isSelected: boolean
-	onSelectLink: (id: string, checked: boolean) => void
+	isSelected?: boolean
+	onSelectLink?: (id: string, checked: boolean) => void
+	allowSelection?: boolean
+	showActions?: boolean
 	openKebabId: string | null
 	actions: {
 		handleItemClick: (e: React.MouseEvent) => void
@@ -37,6 +39,8 @@ export const LinkTableRow: React.FC<LinkTableRowProps> = ({
 	link,
 	isSelected,
 	onSelectLink,
+	allowSelection = true,
+	showActions = true,
 	openKebabId,
 	actions
 }) => {
@@ -55,15 +59,20 @@ export const LinkTableRow: React.FC<LinkTableRowProps> = ({
 			className={`${styles.row} ${isSelected ? styles.selected : ''}`}
 			onClick={e => actions.handleItemClick(e)}
 		>
-			<td className={styles.checkboxCell}>
-				<input
-					type='checkbox'
-					checked={isSelected}
-					onChange={e => onSelectLink(link.id, e.target.checked)}
-					className={sharedStyles.checkbox}
-					aria-label={`Выбрать ${link.title}`}
-				/>
-			</td>
+			{allowSelection ? (
+				<td className={styles.checkboxCell}>
+					<input
+						type='checkbox'
+						checked={!!isSelected}
+						onChange={e =>
+							onSelectLink?.(link.id, e.target.checked)
+						}
+						className={sharedStyles.checkbox}
+						aria-label={`Выбрать ${link.title}`}
+					/>
+				</td>
+			) : null}
+
 			<td>
 				<div className={styles.titleCell}>
 					<span
@@ -96,6 +105,21 @@ export const LinkTableRow: React.FC<LinkTableRowProps> = ({
 				</span>
 			</td>
 			<td>
+				{(() => {
+					const trend = (link.clicks % 21) - 10 // -10..10
+					const cls =
+						trend > 0
+							? styles.trendPositive
+							: trend < 0
+								? styles.trendNegative
+								: ''
+					const text = `${trend > 0 ? '+' : ''}${trend}%`
+					return (
+						<span className={`${styles.trend} ${cls}`}>{text}</span>
+					)
+				})()}
+			</td>
+			<td>
 				<span
 					className={`${sharedStyles.status} ${getStatusClass(link.status)}`}
 				>
@@ -107,50 +131,57 @@ export const LinkTableRow: React.FC<LinkTableRowProps> = ({
 					{formatDate(link.createdAt)}
 				</span>
 			</td>
-			<td>
-				<div className={styles.actions}>
-					<button
-						className={sharedStyles.actionBtn}
-						onClick={e => actions.handleCopy(link.shortUrl, e)}
-						title='Копировать'
-					>
-						<Copy size={16} />
-					</button>
-					<button
-						className={sharedStyles.actionBtn}
-						onClick={e => actions.handleQrClick(link, e)}
-						title='QR код'
-					>
-						<QrCode size={16} />
-					</button>
-					<button
-						className={sharedStyles.actionBtn}
-						onClick={e => actions.handleAnalyticsClick(link.id, e)}
-						title='Аналитика'
-					>
-						<BarChart3 size={16} />
-					</button>
-					<div className={sharedStyles.kebabWrapper}>
+			{showActions ? (
+				<td>
+					<div className={styles.actions}>
 						<button
 							className={sharedStyles.actionBtn}
-							onClick={e => actions.handleKebabClick(link.id, e)}
-							title='Ещё'
+							onClick={e => actions.handleCopy(link.shortUrl, e)}
+							title='Копировать'
 						>
-							<MoreVertical size={16} />
+							<Copy size={16} />
 						</button>
-						<KebabMenuActions
-							link={link}
-							openKebabId={openKebabId}
-							actions={{
-								closeKebabMenu: actions.closeKebabMenu,
-								handleEdit: actions.handleEdit,
-								handleToggleStatus: actions.handleToggleStatus,
-								handleDelete: actions.handleDelete
-							}}
-						/>
+						<button
+							className={sharedStyles.actionBtn}
+							onClick={e => actions.handleQrClick(link, e)}
+							title='QR код'
+						>
+							<QrCode size={16} />
+						</button>
+						<button
+							className={sharedStyles.actionBtn}
+							onClick={e =>
+								actions.handleAnalyticsClick(link.id, e)
+							}
+							title='Аналитика'
+						>
+							<BarChart3 size={16} />
+						</button>
+						<div className={sharedStyles.kebabWrapper}>
+							<button
+								className={sharedStyles.actionBtn}
+								onClick={e =>
+									actions.handleKebabClick(link.id, e)
+								}
+								title='Ещё'
+							>
+								<MoreVertical size={16} />
+							</button>
+							<KebabMenuActions
+								link={link}
+								openKebabId={openKebabId}
+								actions={{
+									closeKebabMenu: actions.closeKebabMenu,
+									handleEdit: actions.handleEdit,
+									handleToggleStatus:
+										actions.handleToggleStatus,
+									handleDelete: actions.handleDelete
+								}}
+							/>
+						</div>
 					</div>
-				</div>
-			</td>
+				</td>
+			) : null}
 		</tr>
 	)
 }
