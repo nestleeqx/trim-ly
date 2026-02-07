@@ -1,0 +1,61 @@
+@import '../../../styles/variables';
+
+// Avatar
+.avatarRow {
+	display: flex;
+	gap: $spacing-md;
+	align-items: center;
+	margin-top: $spacing-lg;
+	margin-bottom: $spacing-lg;
+}
+
+.avatarCircle {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	border: 3px solid var(--color-border);
+	flex-shrink: 0;
+
+	@media (max-width: $breakpoint-sm) {
+		width: 60px;
+		height: 60px;
+	}
+}
+
+.avatarHints {
+	font-size: $font-size-sm;
+	color: var(--color-text-secondary);
+	margin-bottom: $spacing-sm;
+
+	& > p {
+		font-weight: 600;
+		color: $color-text-primary;
+	}
+
+	& > span {
+		font-size: $font-size-xs;
+	}
+}
+
+.avatarLinks {
+	display: flex;
+	gap: $spacing-md;
+}
+
+.linkBtn {
+	background: none;
+	border: none;
+	color: var(--color-primary);
+	cursor: pointer;
+	font-size: $font-size-sm;
+	padding: 0;
+
+	&:hover {
+		text-decoration: underline;
+	}
+
+	&.remove {
+		color: #dc2626;
+	}
+}
