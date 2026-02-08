@@ -65,7 +65,10 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 
 	const paginatedLinks = useMemo(() => {
 		const startIndex = (currentPage - 1) * itemsPerPage
-		return filteredAndSortedLinks.slice(startIndex, startIndex + itemsPerPage)
+		return filteredAndSortedLinks.slice(
+			startIndex,
+			startIndex + itemsPerPage
+		)
 	}, [filteredAndSortedLinks, currentPage, itemsPerPage])
 
 	const {
@@ -160,7 +163,10 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 				includeHeaders: true
 			})
 
-			showToast(`Экспортировано ${filteredAndSortedLinks.length} ссылок`, 'success')
+			showToast(
+				`Экспортировано ${filteredAndSortedLinks.length} ссылок`,
+				'success'
+			)
 		} catch {
 			showToast('Ошибка при экспорте', 'error')
 		} finally {
@@ -169,52 +175,65 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 	}, [filteredAndSortedLinks, downloadCsv, showToast])
 
 	return {
-		// State
-		links,
-		paginatedLinks,
-		selectedLinks,
-		currentPage,
-		totalPages,
-		totalItems,
-		itemsPerPage,
-		viewMode,
-		searchQuery,
-		appliedSearch,
-		filters,
-		exportLoading,
-		confirmModal,
-		actionLoading,
-		toast,
-		filteredAndSortedLinks,
-		hasActiveFilters,
+		// State + Data
+		state: {
+			links,
+			paginatedLinks,
+			selectedLinks,
+			currentPage,
+			totalPages,
+			totalItems,
+			itemsPerPage,
+			viewMode,
+			searchQuery,
+			appliedSearch,
+			filters,
+			hasActiveFilters,
+			filteredAndSortedLinks
+		},
 
-		// Setters
-		setSearchQuery,
-		setViewMode,
+		// UI State
+		ui: {
+			exportLoading,
+			confirmModal,
+			actionLoading,
+			toast
+		},
 
-		// Selection handlers
-		handleSelectAll,
-		handleSelectLink,
-		handleClearSelection,
+		// All Handlers (state + operations)
+		handlers: {
+			// View & Search
+			setSearchQuery,
+			setViewMode,
+			handleSearch,
 
-		// Pagination & filters
-		handleSearch,
-		handlePageChange,
-		handleItemsPerPageChange,
-		handleFiltersChange,
-		handleClearFilters,
+			// Selection
+			handleSelectAll,
+			handleSelectLink,
+			handleClearSelection,
 
-		// Operations
-		handleCopyLink,
-		handleDeleteItem,
-		handlePauseItem,
-		handleResumeItem,
-		handleBulkPause,
-		handleBulkResume,
-		handleBulkDelete,
-		handleCloseModal,
-		handleConfirmAction,
-		handleExport,
-		hideToast
+			// Pagination & Filters
+			handlePageChange,
+			handleItemsPerPageChange,
+			handleFiltersChange,
+			handleClearFilters,
+
+			// Item Operations
+			handleCopyLink,
+			handleDeleteItem,
+			handlePauseItem,
+			handleResumeItem,
+
+			// Bulk Operations
+			handleBulkPause,
+			handleBulkResume,
+			handleBulkDelete,
+
+			// Modal & Toast
+			handleCloseModal,
+			handleConfirmAction,
+			hideToast,
+			handleExport
+		}
 	}
 }

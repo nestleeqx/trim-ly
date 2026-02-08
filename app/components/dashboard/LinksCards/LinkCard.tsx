@@ -10,8 +10,9 @@ import {
 	MoreVertical,
 	QrCode
 } from 'lucide-react'
-import { KebabMenuActions } from '../LinksPage/KebabMenuActions/KebabMenuActions'
-import sharedStyles from '../LinksPage/shared.module.scss'
+import KebabMenuActions from '../../ui/KebabMenuActions/KebabMenuActions'
+import { getStatusClass } from '../../ui/LinksTable/shared'
+import sharedStyles from '../../ui/LinksTable/shared.module.scss'
 import styles from './LinksCards.module.scss'
 
 interface LinkCardProps {
@@ -40,16 +41,6 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 	openKebabId,
 	actions
 }) => {
-	const getStatusClass = (status: LinkItemType['status']) => {
-		const classes: Record<LinkItemType['status'], string> = {
-			active: sharedStyles.active,
-			paused: sharedStyles.paused,
-			expired: sharedStyles.expired,
-			deleted: sharedStyles.deleted
-		}
-		return classes[status]
-	}
-
 	return (
 		<div
 			className={`${styles.card} ${isSelected ? styles.selected : ''}`}

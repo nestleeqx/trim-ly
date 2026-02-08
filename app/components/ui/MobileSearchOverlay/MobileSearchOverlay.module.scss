@@ -1,0 +1,61 @@
+@import '../../../styles/variables';
+
+.mobileSearch {
+	position: fixed;
+	inset: 0;
+	z-index: 200;
+	display: flex;
+	align-items: flex-start;
+	padding: $spacing-md;
+	padding-top: $spacing-lg;
+	background-color: rgba(0, 0, 0, 0.5);
+	animation: fadeIn 0.15s ease;
+
+	@media (min-width: $breakpoint-md) {
+		display: none;
+	}
+}
+
+.mobileSearchInner {
+	display: flex;
+	align-items: center;
+	gap: $spacing-sm;
+	width: 100%;
+	padding: $spacing-md;
+	background-color: $color-bg-light;
+	border-radius: $border-radius-xl;
+	box-shadow: $shadow-xl;
+
+	> div {
+		max-width: none;
+	}
+}
+
+.closeSearch {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	color: $color-text-secondary;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-lg;
+	cursor: pointer;
+
+	&:hover {
+		color: $color-text-primary;
+		background-color: $color-bg-dark;
+	}
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}

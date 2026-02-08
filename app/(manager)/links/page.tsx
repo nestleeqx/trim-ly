@@ -1,76 +1,44 @@
 'use client'
 
-import BulkActionsBar from '@/app/components/dashboard/BulkActionsBar'
-import DashboardHeader from '@/app/components/dashboard/DashboardHeader'
-import LinksCards from '@/app/components/dashboard/LinksCards/LinksCards'
 import LinksFilters from '@/app/components/dashboard/LinksFilters/LinksFilters'
-import { LinksEmptyState } from '@/app/components/dashboard/LinksPage/LinksEmptyState'
-import LinksTable from '@/app/components/dashboard/LinksTable/LinksTable'
-import Pagination from '@/app/components/dashboard/Pagination/Pagination'
+import BulkActionsBar from '@/app/components/ui/BulkActionsBar'
 import ConfirmModal from '@/app/components/ui/ConfirmModal'
+import DashboardHeader from '@/app/components/ui/DashboardHeader'
+import { LinksEmptyState } from '@/app/components/ui/LinksEmpyState/LinksEmptyState'
 import Toast from '@/app/components/ui/Toast/Toast'
+import {
+	calculateBulkCapabilities,
+	getConfirmModalConfig,
+	getEmptyStateData,
+	getResultsInfo,
+	getSelectedLinkItems
+} from '@/app/utils/link-helpers'
 import { mockLinks } from '@/data/mockLinks'
 import { useLinksManager } from '@/hooks/useLinksManager'
-import { getModalConfig } from '@/types/links'
+import LinksResultsInfo from '../../components/ui/LinksResultsInfo'
+import LinksViewContent from '../../components/ui/LinksViewContent'
 import styles from './page.module.scss'
 
 export default function LinksPage() {
-	const {
-		links,
-		paginatedLinks,
-		selectedLinks,
-		currentPage,
-		totalPages,
-		totalItems,
-		itemsPerPage,
-		viewMode,
-		searchQuery,
-		appliedSearch,
-		exportLoading,
-		confirmModal,
-		actionLoading,
-		toast,
-		filteredAndSortedLinks,
-		hasActiveFilters,
-		setSearchQuery,
-		setViewMode,
-		handleSelectAll,
-		handleSelectLink,
-		handleClearSelection,
-		handleSearch,
-		handlePageChange,
-		handleItemsPerPageChange,
-		handleFiltersChange,
-		handleClearFilters,
-		handleCopyLink,
-		handleDeleteItem,
-		handlePauseItem,
-		handleResumeItem,
-		handleBulkPause,
-		handleBulkResume,
-		handleBulkDelete,
-		handleCloseModal,
-		handleConfirmAction,
-		handleExport,
-		hideToast
-	} = useLinksManager(mockLinks)
+	const manager = useLinksManager(mockLinks)
+	const { state, ui, handlers } = manager
 
-	const selectedLinkItems = links.filter(link =>
-		selectedLinks.includes(link.id)
+	const selectedItems = getSelectedLinkItems(state.links, state.selectedLinks)
+	const { canPauseBulk, canResumeBulk } =
+		calculateBulkCapabilities(selectedItems)
+	const emptyState = getEmptyStateData(
+		state.links.length,
+		state.filteredAndSortedLinks.length
 	)
-
-	const canPauseBulk =
-		selectedLinkItems.length > 0 &&
-		selectedLinkItems.every(link => link.status === 'active')
-
-	const canResumeBulk =
-		selectedLinkItems.length > 0 &&
-		selectedLinkItems.every(link => link.status === 'paused')
-
-	const modalConfig = getModalConfig(
-		confirmModal.action,
-		selectedLinks.length,
-		confirmModal.itemTitle
+	const resultsInfo = getResultsInfo(
+		state.filteredAndSortedLinks.length,
+		state.selectedLinks.length,
+		state.appliedSearch
+	)
+	const modalConfig = getConfirmModalConfig(
+		ui.confirmModal.action as string,
+		state.selectedLinks.length,
+		ui.confirmModal.itemTitle
 	)
 
 	return (
@@ -79,9 +47,9 @@ export default function LinksPage() {
 				title='Ссылки'
 				subtitle='Управляйте и организуйте ваши короткие ссылки.'
 				search={{
-					value: searchQuery,
-					onChange: setSearchQuery,
-					onSearch: handleSearch,
+					value: state.searchQuery,
+					onChange: handlers.setSearchQuery,
+					onSearch: handlers.handleSearch,
 					placeholder: 'Поиск по ссылкам...',
 					autoSubmit: true
 				}}
@@ -89,97 +57,74 @@ export default function LinksPage() {
 
 			<div className={styles.content}>
 				<LinksFilters
-					onFiltersChange={handleFiltersChange}
-					viewMode={viewMode}
-					onViewModeChange={setViewMode}
-					onExport={handleExport}
-					exportLoading={exportLoading}
+					onFiltersChange={handlers.handleFiltersChange}
+					viewMode={state.viewMode}
+					onViewModeChange={handlers.setViewMode}
+					onExport={handlers.handleExport}
+					exportLoading={ui.exportLoading}
 				/>
 
 				<BulkActionsBar
-					selectedCount={selectedLinks.length}
-					onClearSelection={handleClearSelection}
-					onPause={handleBulkPause}
-					onResume={handleBulkResume}
-					onDelete={handleBulkDelete}
+					selectedCount={state.selectedLinks.length}
+					onClearSelection={handlers.handleClearSelection}
+					onPause={handlers.handleBulkPause}
+					onResume={handlers.handleBulkResume}
+					onDelete={handlers.handleBulkDelete}
 					canPauseBulk={canPauseBulk}
 					canResumeBulk={canResumeBulk}
 				/>
 
-				{filteredAndSortedLinks.length > 0 &&
-					selectedLinks.length === 0 && (
-						<div className={styles.resultsInfo}>
-							<span>
-								Найдено ссылок: {filteredAndSortedLinks.length}
-							</span>
-							{appliedSearch && (
-								<span className={styles.searchInfo}>
-									По запросу: &ldquo;{appliedSearch}&rdquo;
-								</span>
-							)}
-						</div>
-					)}
+				{resultsInfo.show && (
+					<LinksResultsInfo
+						totalFound={resultsInfo.totalFound}
+						searchQuery={resultsInfo.searchQuery}
+					/>
+				)}
 
-				{links.length === 0 || filteredAndSortedLinks.length === 0 ? (
+				{emptyState.show ? (
 					<LinksEmptyState
-						hasLinks={links.length > 0}
-						hasFilteredLinks={filteredAndSortedLinks.length > 0}
-						hasActiveFilters={hasActiveFilters}
-						onClearFilters={handleClearFilters}
+						hasLinks={emptyState.hasLinks}
+						hasFilteredLinks={emptyState.hasFilteredLinks}
+						hasActiveFilters={state.hasActiveFilters}
+						onClearFilters={handlers.handleClearFilters}
 					/>
 				) : (
-					<>
-						{viewMode === 'list' ? (
-							<LinksTable
-								links={paginatedLinks}
-								selectedLinks={selectedLinks}
-								onSelectAll={handleSelectAll}
-								onSelectLink={handleSelectLink}
-								onCopy={handleCopyLink}
-								onDelete={handleDeleteItem}
-								onPause={handlePauseItem}
-								onResume={handleResumeItem}
-							/>
-						) : (
-							<LinksCards
-								links={paginatedLinks}
-								selectedLinks={selectedLinks}
-								onSelectLink={handleSelectLink}
-								onCopy={handleCopyLink}
-								onDelete={handleDeleteItem}
-								onPause={handlePauseItem}
-								onResume={handleResumeItem}
-							/>
-						)}
-
-						<Pagination
-							currentPage={currentPage}
-							totalPages={totalPages}
-							totalItems={totalItems}
-							itemsPerPage={itemsPerPage}
-							onPageChange={handlePageChange}
-							onItemsPerPageChange={handleItemsPerPageChange}
-						/>
-					</>
+					<LinksViewContent
+						viewMode={state.viewMode}
+						links={state.paginatedLinks}
+						selectedLinks={state.selectedLinks}
+						currentPage={state.currentPage}
+						totalPages={state.totalPages}
+						totalItems={state.totalItems}
+						itemsPerPage={state.itemsPerPage}
+						onSelectAll={handlers.handleSelectAll}
+						onSelectLink={handlers.handleSelectLink}
+						onCopy={handlers.handleCopyLink}
+						onDelete={handlers.handleDeleteItem}
+						onPause={handlers.handlePauseItem}
+						onResume={handlers.handleResumeItem}
+						onPageChange={handlers.handlePageChange}
+						onItemsPerPageChange={handlers.handleItemsPerPageChange}
+					/>
 				)}
 			</div>
 
 			<ConfirmModal
-				isOpen={confirmModal.isOpen}
-				onClose={handleCloseModal}
-				onConfirm={handleConfirmAction}
+				isOpen={ui.confirmModal.isOpen}
+				onClose={handlers.handleCloseModal}
+				onConfirm={handlers.handleConfirmAction}
 				title={modalConfig.title}
 				message={modalConfig.message}
 				confirmText={modalConfig.confirmText}
 				variant={modalConfig.variant}
-				loading={actionLoading}
+				loading={ui.actionLoading}
 			/>
 
 			<Toast
-				message={toast.message}
-				isVisible={toast.isVisible}
-				onClose={hideToast}
-				variant={toast.variant}
+				message={ui.toast.message}
+				isVisible={ui.toast.isVisible}
+				onClose={handlers.hideToast}
+				variant={ui.toast.variant}
 			/>
 		</>
 	)

@@ -8,7 +8,6 @@ import commonStyles from '../filterCommon.module.scss'
 interface CountryFilterProps {
 	selectedCountry?: string | null
 	onCountryChange?: (countryCode: string | null) => void
-	/** Provide explicit list of countries as [{code,name}] */
 	countries?: { code: string; name: string }[]
 }
 

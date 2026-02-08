@@ -17,6 +17,7 @@ interface ButtonProps {
 	type?: 'button' | 'submit' | 'reset'
 	disabled?: boolean
 	className?: string
+	title?: string
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -26,6 +27,7 @@ const Button: React.FC<ButtonProps> = ({
 	onClick,
 	type = 'button',
 	disabled = false,
+	title,
 	className
 }) => {
 	return (
@@ -39,6 +41,7 @@ const Button: React.FC<ButtonProps> = ({
 				className
 			)}
 			disabled={disabled}
+			aria-label={title}
 		>
 			{children}
 		</button>

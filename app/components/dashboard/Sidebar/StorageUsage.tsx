@@ -18,7 +18,7 @@ export const StorageUsage: React.FC<StorageUsageProps> = ({
 	max,
 	label = 'ХРАНИЛИЩЕ'
 }) => {
-	const usagePercent = (used / max) * 100
+	const usagePercent = max > 0 ? Math.min((used / max) * 100, 100) : 0
 
 	return (
 		<div className={styles.storage}>

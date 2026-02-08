@@ -1,16 +1,12 @@
 'use client'
 
-import {
-	LinksFiltersProps,
-	SortState,
-	StatusFilter as StatusFilterType
-} from '@/types/filterLinks'
+import { LinksFiltersProps } from '@/types/filterLinks'
 import { Filter, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import FiltersRight from '../../ui/FiltersRight/FiltersRight'
 import CountryFilter from './CountryFilter/CountryFilter'
 import DateFilter from './DateFilter/DateFilter'
 import DeviceFilter from './DeviceFilter/DeviceFilter'
-import FiltersRight from './FiltersRight/FiltersRight'
+import { useFiltersState } from './hooks/useFiltersState'
 import styles from './LinksFilters.module.scss'
 import StatusFilter from './StatusFilter/StatusFilter'
 import TagsFilter from './TagsFilter/TagsFilter'
@@ -37,63 +33,34 @@ const LinksFilters: React.FC<EnhancedLinksFiltersProps> = ({
 	showDevice = false,
 	showDate = true
 }) => {
-	const [sort, setSort] = useState<SortState>({
-		field: 'created_date',
-		order: 'desc'
-	})
-	const [selectedStatuses, setSelectedStatuses] = useState<
-		StatusFilterType[]
-	>([])
-	const [selectedTags, setSelectedTags] = useState<string[]>([])
-	const [datePreset, setDatePreset] = useState<
-		'7d' | '30d' | 'custom' | null
-	>(null)
-	const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
-	const [selectedDevice, setSelectedDevice] = useState<string | null>(null)
-	const [startDate, setStartDate] = useState('')
-	const [endDate, setEndDate] = useState('')
-	const [customDateLabel, setCustomDateLabel] = useState('')
-	const [showDatePicker, setShowDatePicker] = useState(false)
+	const filtersState = useFiltersState()
+	const { handlers, hasActiveFilters } = filtersState
 
-	const hasActiveFilters =
-		selectedStatuses.length > 0 ||
-		selectedTags.length > 0 ||
-		datePreset !== null ||
-		!!selectedCountry ||
-		!!selectedDevice
+	// Синхронизировать фильтры при изменении
+	// useEffect(() => {
+	// 	onFiltersChange?.({
+	// 		statuses: filtersState.selectedStatuses,
+	// 		tags: filtersState.selectedTags,
+	// 		datePreset: filtersState.datePreset,
+	// 		country: filtersState.selectedCountry,
+	// 		device: filtersState.selectedDevice,
+	// 		sort: filtersState.sort,
+	// 		viewMode
+	// 	})
+	// }, [
+	// 	filtersState.selectedStatuses,
+	// 	filtersState.selectedTags,
+	// 	filtersState.datePreset,
+	// 	filtersState.selectedCountry,
+	// 	filtersState.selectedDevice,
+	// 	filtersState.sort,
+	// 	viewMode,
+	// 	onFiltersChange
+	// ])
 
-	const clearFilters = () => {
-		setSelectedStatuses([])
-		setSelectedTags([])
-		setDatePreset(null)
-		setSelectedCountry(null)
-		setSelectedDevice(null)
-		setStartDate('')
-		setEndDate('')
-		setCustomDateLabel('')
-		setSort({ field: 'created_date', order: 'desc' })
-		setShowDatePicker(false)
+	const handleViewModeChange = (mode: 'list' | 'grid') => {
+		onViewModeChange?.(mode)
 	}
-
-	useEffect(() => {
-		onFiltersChange?.({
-			statuses: selectedStatuses,
-			tags: selectedTags,
-			datePreset,
-			country: selectedCountry,
-			device: selectedDevice,
-			sort,
-			viewMode
-		})
-	}, [
-		selectedStatuses,
-		selectedTags,
-		datePreset,
-		selectedCountry,
-		selectedDevice,
-		sort,
-		viewMode
-	])
 
 	return (
 		<div className={styles.container}>
@@ -104,48 +71,48 @@ const LinksFilters: React.FC<EnhancedLinksFiltersProps> = ({
 				</span>
 
 				<TagsFilter
-					selectedTags={selectedTags}
-					onTagsChange={setSelectedTags}
+					selectedTags={filtersState.selectedTags}
+					onTagsChange={handlers.setSelectedTags}
 				/>
 
 				<StatusFilter
-					selectedStatuses={selectedStatuses}
-					onStatusChange={setSelectedStatuses}
+					selectedStatuses={filtersState.selectedStatuses}
+					onStatusChange={handlers.setSelectedStatuses}
 				/>
 
 				{showCountry && (
 					<CountryFilter
-						selectedCountry={selectedCountry}
-						onCountryChange={setSelectedCountry}
+						selectedCountry={filtersState.selectedCountry}
+						onCountryChange={handlers.setSelectedCountry}
 					/>
 				)}
 
 				{showDevice && (
 					<DeviceFilter
-						selectedDevice={selectedDevice}
-						onDeviceChange={setSelectedDevice}
+						selectedDevice={filtersState.selectedDevice}
+						onDeviceChange={handlers.setSelectedDevice}
 					/>
 				)}
 
 				{showDate && (
 					<DateFilter
-						datePreset={datePreset}
-						onDatePresetChange={setDatePreset}
-						startDate={startDate}
-						endDate={endDate}
-						customDateLabel={customDateLabel}
-						onStartDateChange={setStartDate}
-						onEndDateChange={setEndDate}
-						onCustomDateLabelChange={setCustomDateLabel}
-						showDatePicker={showDatePicker}
-						onShowDatePickerChange={setShowDatePicker}
+						datePreset={filtersState.datePreset}
+						onDatePresetChange={handlers.setDatePreset}
+						startDate={filtersState.startDate}
+						endDate={filtersState.endDate}
+						customDateLabel={filtersState.customDateLabel}
+						onStartDateChange={handlers.setStartDate}
+						onEndDateChange={handlers.setEndDate}
+						onCustomDateLabelChange={handlers.setCustomDateLabel}
+						showDatePicker={filtersState.showDatePicker}
+						onShowDatePickerChange={handlers.setShowDatePicker}
 					/>
 				)}
 
 				{hasActiveFilters && (
 					<button
 						className={styles.clearBtn}
-						onClick={clearFilters}
+						onClick={handlers.clearFilters}
 					>
 						<X size={14} />
 						Сбросить
@@ -155,10 +122,10 @@ const LinksFilters: React.FC<EnhancedLinksFiltersProps> = ({
 
 			{!hideRight && (
 				<FiltersRight
-					sort={sort}
-					onSortChange={setSort}
+					sort={filtersState.sort}
+					onSortChange={handlers.setSort}
 					viewMode={viewMode}
-					onViewModeChange={onViewModeChange}
+					onViewModeChange={handleViewModeChange}
 					onExport={onExport}
 					exportLoading={exportLoading}
 				/>

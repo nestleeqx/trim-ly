@@ -1,7 +1,7 @@
 'use client'
 
 import { Search as SearchIcon, X } from 'lucide-react'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import styles from './Search.module.scss'
 
 interface SearchProps {
@@ -23,6 +23,12 @@ export const Search = ({
 }: SearchProps) => {
 	const [isFocused, setIsFocused] = useState(false)
 	const debounceRef = useRef<NodeJS.Timeout | null>(null)
+
+	useEffect(() => {
+		return () => {
+			if (debounceRef.current) clearTimeout(debounceRef.current)
+		}
+	}, [])
 
 	const handleChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {

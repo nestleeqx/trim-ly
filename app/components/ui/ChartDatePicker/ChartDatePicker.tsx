@@ -1,14 +1,6 @@
 import styles from './ChartDatePicker.module.scss'
 
-const ChartDatePicker = ({
-	show,
-	startDate,
-	endDate,
-	onStartDateChange,
-	onEndDateChange,
-	onApply,
-	onCancel
-}: {
+interface ChartDatePickerProps {
 	show: boolean
 	startDate: string
 	endDate: string
@@ -16,6 +8,16 @@ const ChartDatePicker = ({
 	onEndDateChange: (date: string) => void
 	onApply: () => void
 	onCancel: () => void
+}
+
+const ChartDatePicker: React.FC<ChartDatePickerProps> = ({
+	show,
+	startDate,
+	endDate,
+	onStartDateChange,
+	onEndDateChange,
+	onApply,
+	onCancel
 }) => {
 	if (!show) return null
 

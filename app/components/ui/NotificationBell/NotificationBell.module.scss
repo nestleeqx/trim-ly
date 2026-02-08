@@ -1,0 +1,59 @@
+@import '../../../styles/variables';
+
+.wrapper {
+	position: relative;
+}
+
+.bellBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	color: $color-text-secondary;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-lg;
+	cursor: pointer;
+	transition: $transition-fast;
+
+	&:hover {
+		color: $color-text-primary;
+		background-color: $color-bg-dark;
+	}
+
+	&:focus-visible {
+		outline: 2px solid $color-primary;
+		outline-offset: 2px;
+	}
+}
+
+.dropdown {
+	position: absolute;
+	top: calc(100% + $spacing-sm);
+	right: 0;
+	background-color: $color-bg-light;
+	border-radius: $border-radius-xl;
+	box-shadow: $shadow-lg;
+	min-width: 220px;
+	z-index: 100;
+	padding: $spacing-lg;
+	border: 1px solid $color-border;
+}
+
+.empty {
+	margin: 0;
+	font-size: $font-size-sm;
+	color: $color-text-secondary;
+	text-align: center;
+}
+
+.overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 99;
+}

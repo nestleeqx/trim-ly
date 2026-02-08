@@ -184,22 +184,6 @@
 	flex: 1;
 }
 
-// Stats Grid
-.statsGrid {
-	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	gap: $spacing-md;
-
-	@media (max-width: $breakpoint-xl) {
-		grid-template-columns: repeat(2, 1fr);
-	}
-
-	@media (max-width: $breakpoint-sm) {
-		grid-template-columns: repeat(2, 1fr);
-		gap: $spacing-sm;
-	}
-}
-
 // Chart Section
 .chartSection {
 	margin-top: $spacing-md;

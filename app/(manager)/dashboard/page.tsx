@@ -6,24 +6,18 @@ import {
 	mockTopCountries,
 	mockTopReferrers
 } from '@/data/mockDashboardData'
-import { useState } from 'react'
-import ClicksChart from '../../components/dashboard/ClicksChart'
-import DashboardHeader from '../../components/dashboard/DashboardHeader'
 import DevicesChart from '../../components/dashboard/DevicesChart'
 import RecentLinks from '../../components/dashboard/RecentLinks'
-import StatsCards from '../../components/dashboard/StatsCards'
-import TopCountries from '../../components/dashboard/TopCountries'
-import TopReferrers from '../../components/dashboard/TopReferrers'
+import ClicksChart from '../../components/ui/ClicksChart'
+import DashboardHeader from '../../components/ui/DashboardHeader'
+import StatsCards from '../../components/ui/StatsCards'
+import TopCountries from '../../components/ui/TopCountries'
+import TopReferrers from '../../components/ui/TopReferrers'
 import styles from './page.module.scss'
 
 const hasLinks = true
 
 export default function DashboardPage() {
-	const [searchQuery, setSearchQuery] = useState('')
-	const handleSearch = (value: string) => {
-		console.log(value)
-	}
-
 	if (!hasLinks) {
 		return (
 			<>
@@ -43,12 +37,6 @@ export default function DashboardPage() {
 			<DashboardHeader
 				title='Дашборд'
 				subtitle='С возвращением, вот что происходит.'
-				search={{
-					value: searchQuery,
-					onChange: setSearchQuery,
-					onSearch: handleSearch,
-					placeholder: 'Поиск...'
-				}}
 			/>
 			<div className={styles.content}>
 				<StatsCards />

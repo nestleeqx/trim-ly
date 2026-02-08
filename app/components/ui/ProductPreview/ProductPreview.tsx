@@ -1,29 +1,30 @@
 'use client'
 
+import { useToast } from '@/hooks/useToast'
 import { useCallback, useState } from 'react'
-import QrCodeModal from '../../dashboard/QrCodeModal'
+import QrCodeModal from '../QrCodeModal'
 import Toast from '../Toast'
 import { ActivityChart } from './ActivityChart'
 import { LinksTable } from './LinksTable'
+import { mockChartData, mockLinks, PreviewTab } from './preview.config'
 import { PreviewTabs } from './PreviewTabs'
 import styles from './ProductPreview.module.scss'
-import { mockChartData, mockLinks, PreviewTab } from './preview.config'
 import { QrBadge } from './QrBadge'
 import { UrlInput } from './UrlInput'
 
 const QR_SLUG = 'trim.ly/launch-v2'
 
 export default function ProductPreview() {
-	const [toast, setToast] = useState({ show: false, message: '' })
+	const { toast, showToast, hideToast } = useToast()
 	const [showQrModal, setShowQrModal] = useState(false)
 	const [activeTab, setActiveTab] = useState<PreviewTab>('links')
 
-	const showToast = useCallback((message: string) => {
-		setToast({ show: true, message })
-	}, [])
-
-	const closeToast = useCallback(() => {
-		setToast(prev => ({ ...prev, show: false }))
+	const scrollToAnalytics = useCallback(() => {
+		const element = document.getElementById('analytics')
+		if (element) {
+			element.scrollIntoView({ behavior: 'smooth' })
+		}
+		setActiveTab('analytics')
 	}, [])
 
 	const handleCopy = useCallback(
@@ -33,14 +34,6 @@ export default function ProductPreview() {
 		},
 		[showToast]
 	)
-
-	const scrollToAnalytics = useCallback(() => {
-		const element = document.getElementById('analytics')
-		if (element) {
-			element.scrollIntoView({ behavior: 'smooth' })
-		}
-		setActiveTab('analytics')
-	}, [])
 
 	const handleShorten = useCallback(() => {
 		showToast('Ссылка создана!')
@@ -56,7 +49,11 @@ export default function ProductPreview() {
 
 	return (
 		<div className={styles.right}>
-			<Toast message={toast.message} isVisible={toast.show} onClose={closeToast} />
+			<Toast
+				message={toast.message}
+				isVisible={toast.isVisible}
+				onClose={hideToast}
+			/>
 
 			{showQrModal && (
 				<QrCodeModal

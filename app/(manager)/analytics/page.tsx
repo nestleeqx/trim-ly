@@ -1,15 +1,15 @@
 'use client'
 
-import ClicksChart from '@/app/components/dashboard/ClicksChart'
-import DashboardHeader from '@/app/components/dashboard/DashboardHeader'
 import DevicesChart from '@/app/components/dashboard/DevicesChart'
 import LinksFilters from '@/app/components/dashboard/LinksFilters/LinksFilters'
-import LinksTable from '@/app/components/dashboard/LinksTable/LinksTable'
-import StatsCards from '@/app/components/dashboard/StatsCards'
-import { defaultStatsData } from '@/app/components/dashboard/StatsCards/stats.config'
-import TopCountries from '@/app/components/dashboard/TopCountries'
-import TopReferrers from '@/app/components/dashboard/TopReferrers'
 import Button from '@/app/components/ui/Button'
+import ClicksChart from '@/app/components/ui/ClicksChart'
+import DashboardHeader from '@/app/components/ui/DashboardHeader'
+import LinksTable from '@/app/components/ui/LinksTable/LinksTable'
+import StatsCards from '@/app/components/ui/StatsCards'
+import { defaultStatsData } from '@/app/components/ui/StatsCards/stats.config'
+import TopCountries from '@/app/components/ui/TopCountries'
+import TopReferrers from '@/app/components/ui/TopReferrers'
 import {
 	mockDeviceStats,
 	mockTopCountries,

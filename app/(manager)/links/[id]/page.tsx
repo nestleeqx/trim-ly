@@ -1,24 +1,22 @@
 'use client'
 
-import ClicksChart from '@/app/components/dashboard/ClicksChart'
-import DashboardHeader from '@/app/components/dashboard/DashboardHeader'
 import DevicesChart from '@/app/components/dashboard/DevicesChart'
-import {
-	LinkInfoCard,
-	LinkStatsCards
-} from '@/app/components/dashboard/LinkDetails'
+import { LinkInfoCard } from '@/app/components/dashboard/LinkDetails'
 import {
 	LinkEditForm,
 	LinkEditFormData,
 	LinkPreview,
 	SHORT_LINK_DOMAIN
 } from '@/app/components/dashboard/LinkEdit'
-import QrCodeModal from '@/app/components/dashboard/QrCodeModal'
 import RawClickEvents from '@/app/components/dashboard/RawClickEvents'
-import TopCountries from '@/app/components/dashboard/TopCountries'
-import TopReferrers from '@/app/components/dashboard/TopReferrers'
+import ClicksChart from '@/app/components/ui/ClicksChart'
 import ConfirmModal from '@/app/components/ui/ConfirmModal'
+import DashboardHeader from '@/app/components/ui/DashboardHeader'
+import LinkStatsCards from '@/app/components/ui/LinkStatsCards'
+import QrCodeModal from '@/app/components/ui/QrCodeModal'
 import Toast from '@/app/components/ui/Toast/Toast'
+import TopCountries from '@/app/components/ui/TopCountries'
+import TopReferrers from '@/app/components/ui/TopReferrers'
 import { mockClickEvents } from '@/data/mockClickEvents'
 import {
 	mockDeviceStats,

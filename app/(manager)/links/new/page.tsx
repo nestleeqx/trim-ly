@@ -1,12 +1,12 @@
 'use client'
 
-import DashboardHeader from '@/app/components/dashboard/DashboardHeader'
 import {
 	LinkEditForm,
 	LinkEditFormData,
 	LinkPreview,
 	SHORT_LINK_DOMAIN
 } from '@/app/components/dashboard/LinkEdit'
+import DashboardHeader from '@/app/components/ui/DashboardHeader'
 import { LinkItem } from '@/types/links'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'

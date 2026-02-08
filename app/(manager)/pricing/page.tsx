@@ -1,8 +1,8 @@
 'use client'
 
-import DashboardHeader from '@/app/components/dashboard/DashboardHeader'
 import BillingToggle from '@/app/components/ui/BillingToggle/BillingToggle'
 import ContactForm from '@/app/components/ui/ContactForm'
+import DashboardHeader from '@/app/components/ui/DashboardHeader'
 
 import FAQList from '@/app/components/ui/FAQ/FAQList'
 import Modal from '@/app/components/ui/Modal'

@@ -3,7 +3,7 @@
 import classNames from 'classnames'
 import { Menu, X } from 'lucide-react'
 import { useSidebar } from '../../../../hooks/useSidebar'
-import Logo from '../../ui/Logo/Logo'
+import Logo from '../../ui/Logo'
 import styles from './Sidebar.module.scss'
 import { SidebarNav } from './SidebarNav'
 import { StorageUsage } from './StorageUsage'

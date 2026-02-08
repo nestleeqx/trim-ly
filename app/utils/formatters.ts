@@ -1,6 +1,7 @@
-export const formatDate = (date: Date): string => {
+export const formatDate = (date: Date | string): string => {
+	const dateObj = typeof date === 'string' ? new Date(date) : date
 	const now = new Date()
-	const diff = now.getTime() - date.getTime()
+	const diff = now.getTime() - dateObj.getTime()
 	const days = Math.floor(diff / (1000 * 60 * 60 * 24))
 
 	if (days === 0) return 'Сегодня'
@@ -8,5 +9,5 @@ export const formatDate = (date: Date): string => {
 	if (days < 7) return `${days} дн. назад`
 	if (days < 30) return `${Math.floor(days / 7)} нед. назад`
 	if (days < 365) return `${Math.floor(days / 30)} мес. назад`
-	return date.toLocaleDateString('ru-RU')
+	return dateObj.toLocaleDateString('ru-RU')
 }

@@ -5,23 +5,13 @@
 // ===================================
 
 .card {
-	background: var(--color-bg);
-	border-radius: $border-radius-xl;
-	padding: $spacing-lg;
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-lg;
-	border: 1px solid $color-border;
 
 	@media (max-width: $breakpoint-md) {
-		padding: $spacing-md;
 		gap: $spacing-md;
-		border-radius: $border-radius-lg;
 		margin-top: $spacing-md;
-	}
-
-	@media (max-width: $breakpoint-sm) {
-		padding: $spacing-sm;
 	}
 }
 
@@ -66,18 +56,18 @@
 // ===================================
 
 .tableWrapper {
-	margin: 0 (-$spacing-lg);
-	padding: 0 $spacing-lg;
+	margin: 0;
+	padding: 0;
 	overflow-x: auto;
 
 	@media (max-width: $breakpoint-md) {
-		margin: 0 (-$spacing-md);
-		padding: 0 $spacing-md;
+		margin: 0;
+		padding: 0;
 	}
 
 	@media (max-width: $breakpoint-sm) {
-		margin: 0 (-$spacing-sm);
-		padding: 0 $spacing-sm;
+		margin: 0;
+		padding: 0;
 	}
 }
 
