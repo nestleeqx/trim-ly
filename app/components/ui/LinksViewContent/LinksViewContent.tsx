@@ -1,9 +1,9 @@
 'use client'
 
-import LinksCards from '@/app/components/dashboard/LinksCards/LinksCards'
-import Pagination from '@/app/components/dashboard/Pagination/Pagination'
 import LinksTable from '@/app/components/ui/LinksTable/LinksTable'
+import Pagination from '@/app/components/ui/Pagination/Pagination'
 import { LinkItem } from '@/types/links'
+import LinksCards from '../LinksCards'
 import styles from './LinksViewContent.module.scss'
 
 interface LinksViewContentProps {

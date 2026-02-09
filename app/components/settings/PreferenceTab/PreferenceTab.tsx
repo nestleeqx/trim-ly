@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Button from '../../ui/Button'
-import stylesCommon from '../settingsCommon.module.scss'
+import stylesCommon from '../SettingsCommon.module.scss'
 import TabCard from '../TabCard/TabCard'
 import styles from './Preference.module.scss'
 

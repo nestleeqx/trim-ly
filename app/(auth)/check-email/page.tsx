@@ -8,7 +8,6 @@ import styles from './page.module.scss'
 export default function CheckEmailPage() {
 	return (
 		<div className={styles.page}>
-			{/* Logo */}
 			<div className={styles.logo}>
 				<div className={styles.logoIcon}>
 					<LinkIcon size={24} />
@@ -16,7 +15,6 @@ export default function CheckEmailPage() {
 				<span className={styles.logoText}>trim.ly</span>
 			</div>
 
-			{/* Card */}
 			<div className={styles.card}>
 				<div className={styles.iconWrapper}>
 					<Mail size={32} />
@@ -55,7 +53,6 @@ export default function CheckEmailPage() {
 				</div>
 			</div>
 
-			{/* Back */}
 			<Link
 				href='/'
 				className={styles.backLink}

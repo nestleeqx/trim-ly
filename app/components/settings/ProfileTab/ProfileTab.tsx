@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import stylesCommon from '../../settings/settingsCommon.module.scss'
+import stylesCommon from '../../settings/SettingsCommon.module.scss'
 import Button from '../../ui/Button'
 import TabCard from '../TabCard/TabCard'
 import styles from './ProfileTab.module.scss'

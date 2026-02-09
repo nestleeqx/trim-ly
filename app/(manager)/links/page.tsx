@@ -1,20 +1,20 @@
 'use client'
 
-import LinksFilters from '@/app/components/dashboard/LinksFilters/LinksFilters'
 import BulkActionsBar from '@/app/components/ui/BulkActionsBar'
 import ConfirmModal from '@/app/components/ui/ConfirmModal'
 import DashboardHeader from '@/app/components/ui/DashboardHeader'
-import { LinksEmptyState } from '@/app/components/ui/LinksEmpyState/LinksEmptyState'
+import LinksEmptyState from '@/app/components/ui/LinksEmpyState/LinksEmptyState'
+import LinksFilters from '@/app/components/ui/LinksFilters/LinksFilters'
 import Toast from '@/app/components/ui/Toast/Toast'
+import { mockLinks } from '@/data/mockLinks'
+import { useLinksManager } from '@/hooks/useLinksManager'
 import {
 	calculateBulkCapabilities,
 	getConfirmModalConfig,
 	getEmptyStateData,
 	getResultsInfo,
 	getSelectedLinkItems
-} from '@/app/utils/link-helpers'
-import { mockLinks } from '@/data/mockLinks'
-import { useLinksManager } from '@/hooks/useLinksManager'
+} from '@/utils/link-helpers'
 import LinksResultsInfo from '../../components/ui/LinksResultsInfo'
 import LinksViewContent from '../../components/ui/LinksViewContent'
 import styles from './page.module.scss'

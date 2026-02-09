@@ -5,7 +5,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '2 mins ago',
 		country: {
 			code: 'US',
-			name: 'United States'
+			name: 'США'
 		},
 		device: {
 			type: 'iPhone',
@@ -18,7 +18,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '5 mins ago',
 		country: {
 			code: 'GB',
-			name: 'United Kingdom'
+			name: 'Великобритания'
 		},
 		device: {
 			type: 'Windows PC',
@@ -31,7 +31,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '12 mins ago',
 		country: {
 			code: 'DE',
-			name: 'Germany'
+			name: 'Германия'
 		},
 		device: {
 			type: 'Android',
@@ -44,7 +44,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '15 mins ago',
 		country: {
 			code: 'FR',
-			name: 'France'
+			name: 'Франция'
 		},
 		device: {
 			type: 'MacBook Pro',
@@ -57,7 +57,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '21 mins ago',
 		country: {
 			code: 'US',
-			name: 'United States'
+			name: 'США'
 		},
 		device: {
 			type: 'iPhone',
@@ -70,7 +70,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '2 mins ago',
 		country: {
 			code: 'US',
-			name: 'United States'
+			name: 'США'
 		},
 		device: {
 			type: 'iPhone',
@@ -83,7 +83,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '5 mins ago',
 		country: {
 			code: 'GB',
-			name: 'United Kingdom'
+			name: 'Великобритания'
 		},
 		device: {
 			type: 'Windows PC',
@@ -96,7 +96,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '12 mins ago',
 		country: {
 			code: 'DE',
-			name: 'Germany'
+			name: 'Германия'
 		},
 		device: {
 			type: 'Android',
@@ -108,8 +108,8 @@ export const mockClickEvents: ClickEvent[] = [
 	{
 		time: '15 mins ago',
 		country: {
-			code: 'FR',
-			name: 'France'
+			code: 'RU',
+			name: 'Россия'
 		},
 		device: {
 			type: 'MacBook Pro',
@@ -122,7 +122,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '21 mins ago',
 		country: {
 			code: 'US',
-			name: 'United States'
+			name: 'США'
 		},
 		device: {
 			type: 'iPhone',
@@ -134,8 +134,8 @@ export const mockClickEvents: ClickEvent[] = [
 	{
 		time: '2 mins ago',
 		country: {
-			code: 'US',
-			name: 'United States'
+			code: 'RU',
+			name: 'Россия'
 		},
 		device: {
 			type: 'iPhone',
@@ -148,7 +148,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '5 mins ago',
 		country: {
 			code: 'GB',
-			name: 'United Kingdom'
+			name: 'Великобритания'
 		},
 		device: {
 			type: 'Windows PC',
@@ -161,7 +161,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '12 mins ago',
 		country: {
 			code: 'DE',
-			name: 'Germany'
+			name: 'Германия'
 		},
 		device: {
 			type: 'Android',
@@ -174,7 +174,7 @@ export const mockClickEvents: ClickEvent[] = [
 		time: '15 mins ago',
 		country: {
 			code: 'FR',
-			name: 'France'
+			name: 'Франция'
 		},
 		device: {
 			type: 'MacBook Pro',
@@ -186,8 +186,8 @@ export const mockClickEvents: ClickEvent[] = [
 	{
 		time: '21 mins ago',
 		country: {
-			code: 'US',
-			name: 'United States'
+			code: 'BY',
+			name: 'Беларусь'
 		},
 		device: {
 			type: 'iPhone',

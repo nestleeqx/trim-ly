@@ -15,7 +15,6 @@ export default function ForgotPasswordPage() {
 
 	return (
 		<div className={styles.page}>
-			{/* Logo */}
 			<div className={styles.logo}>
 				<div className={styles.logoIcon}>
 					<LinkIcon size={24} />
@@ -23,7 +22,6 @@ export default function ForgotPasswordPage() {
 				<span className={styles.logoText}>trim.ly</span>
 			</div>
 
-			{/* Card */}
 			<div className={styles.card}>
 				<div className={styles.cardHeader}>
 					<h1 className={styles.cardTitle}>Сбросить пароль</h1>
@@ -36,7 +34,6 @@ export default function ForgotPasswordPage() {
 					className={styles.form}
 					onSubmit={handleSubmit}
 				>
-					{/* Email */}
 					<div className={styles.formGroup}>
 						<label
 							className={styles.label}
@@ -55,7 +52,6 @@ export default function ForgotPasswordPage() {
 						/>
 					</div>
 
-					{/* Submit */}
 					<Button
 						variant='primary'
 						size='lg'
@@ -64,7 +60,6 @@ export default function ForgotPasswordPage() {
 						Отправить ссылку
 					</Button>
 
-					{/* Login link */}
 					<p className={styles.footerText}>
 						Вспомнили пароль?{' '}
 						<Link
@@ -77,7 +72,6 @@ export default function ForgotPasswordPage() {
 				</form>
 			</div>
 
-			{/* Back */}
 			<Link
 				href='/'
 				className={styles.backLink}

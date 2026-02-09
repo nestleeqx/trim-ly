@@ -175,7 +175,6 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 	}, [filteredAndSortedLinks, downloadCsv, showToast])
 
 	return {
-		// State + Data
 		state: {
 			links,
 			paginatedLinks,
@@ -192,7 +191,6 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 			filteredAndSortedLinks
 		},
 
-		// UI State
 		ui: {
 			exportLoading,
 			confirmModal,
@@ -200,36 +198,29 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 			toast
 		},
 
-		// All Handlers (state + operations)
 		handlers: {
-			// View & Search
 			setSearchQuery,
 			setViewMode,
 			handleSearch,
 
-			// Selection
 			handleSelectAll,
 			handleSelectLink,
 			handleClearSelection,
 
-			// Pagination & Filters
 			handlePageChange,
 			handleItemsPerPageChange,
 			handleFiltersChange,
 			handleClearFilters,
 
-			// Item Operations
 			handleCopyLink,
 			handleDeleteItem,
 			handlePauseItem,
 			handleResumeItem,
 
-			// Bulk Operations
 			handleBulkPause,
 			handleBulkResume,
 			handleBulkDelete,
 
-			// Modal & Toast
 			handleCloseModal,
 			handleConfirmAction,
 			hideToast,

@@ -11,9 +11,6 @@ interface ActionButtonsProps {
 	onDownload: () => void
 }
 
-/**
- * ActionButtons - кнопки действий в QR модали (Копировать URL, Скачать)
- */
 export const ActionButtons: React.FC<ActionButtonsProps> = ({
 	showCopyButton,
 	onCopy,

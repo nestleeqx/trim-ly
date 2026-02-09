@@ -1,0 +1,114 @@
+@import '../../../styles/variables';
+
+.pagination {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: $spacing-md $spacing-lg;
+	background: var(--color-bg);
+	border-radius: $border-radius-xl;
+	border: 1px solid var(--color-border);
+	gap: $spacing-md;
+	margin-top: $spacing-md;
+
+	@media (max-width: $breakpoint-md) {
+		flex-direction: column;
+		padding: $spacing-md;
+		border-radius: $border-radius-lg;
+		gap: $spacing-md;
+	}
+}
+
+.info {
+	display: flex;
+	align-items: center;
+	gap: $spacing-lg;
+
+	@media (max-width: $breakpoint-md) {
+		flex-direction: column;
+		gap: $spacing-sm;
+		width: 100%;
+	}
+}
+
+.showing {
+	font-size: $font-size-sm;
+	color: var(--color-text-secondary);
+
+	strong {
+		color: var(--color-text-primary);
+		font-weight: $font-weight-semibold;
+	}
+}
+
+.controls {
+	display: flex;
+	align-items: center;
+	gap: $spacing-xs;
+}
+
+.navBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	background: var(--color-bg-secondary);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-md;
+	color: var(--color-text-secondary);
+	cursor: pointer;
+	transition: $transition-base;
+
+	&:hover:not(:disabled) {
+		border-color: var(--color-primary);
+		color: var(--color-primary);
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+.pages {
+	display: flex;
+	align-items: center;
+	gap: $spacing-xs;
+}
+
+.pageBtn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 36px;
+	height: 36px;
+	padding: 0 $spacing-sm;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-md;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+	color: var(--color-text-secondary);
+	cursor: pointer;
+
+	&:hover {
+		background: var(--color-bg-secondary);
+		color: var(--color-text-primary);
+	}
+
+	&.active {
+		background: var(--color-primary);
+		color: white;
+	}
+}
+
+.ellipsis {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 36px;
+	height: 36px;
+	font-size: $font-size-sm;
+	color: var(--color-text-secondary);
+}

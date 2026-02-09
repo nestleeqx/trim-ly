@@ -12,6 +12,10 @@
 	--color-border: #e5e7eb;
 	--color-success: #{$color-success};
 	--color-active: #{$color-active};
+	--color-warning: #{$color-warning};
+	--color-warning-bg: #{$color-warning-opacity};
+	--color-danger: #{$color-red};
+	--color-danger-bg: #{$color-red-opacity};
 	--shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 	--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 	--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);

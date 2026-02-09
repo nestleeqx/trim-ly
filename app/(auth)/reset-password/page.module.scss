@@ -9,7 +9,6 @@
 	padding: $spacing-2xl $spacing-md $spacing-xl;
 }
 
-// Logo
 .logo {
 	display: flex;
 	flex-direction: column;
@@ -35,7 +34,6 @@
 	color: $color-text-primary;
 }
 
-// Card
 .card {
 	width: 100%;
 	max-width: 500px;
@@ -68,7 +66,6 @@
 	margin: 0;
 }
 
-// Form
 .form {
 	display: flex;
 	flex-direction: column;
@@ -133,7 +130,6 @@
 	}
 }
 
-// Footer link
 .footerText {
 	font-size: $font-size-sm;
 	color: $color-text-secondary;
@@ -150,7 +146,6 @@
 	}
 }
 
-// Back
 .backLink {
 	display: flex;
 	align-items: center;

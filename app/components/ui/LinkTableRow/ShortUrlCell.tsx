@@ -8,9 +8,6 @@ interface ShortUrlCellProps {
 	shortUrl: string
 }
 
-/**
- * ShortUrlCell - рендерит ячейку с коротким URL и ссылкой
- */
 export const ShortUrlCell: React.FC<ShortUrlCellProps> = ({ shortUrl }) => {
 	return (
 		<td>

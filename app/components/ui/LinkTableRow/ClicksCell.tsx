@@ -7,9 +7,6 @@ interface ClicksCellProps {
 	clicks: number
 }
 
-/**
- * ClicksCell - рендерит ячейку количества кликов с форматированием
- */
 export const ClicksCell: React.FC<ClicksCellProps> = ({ clicks }) => {
 	return (
 		<td>

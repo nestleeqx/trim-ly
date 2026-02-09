@@ -6,9 +6,13 @@ import styles from './StatsCards.module.scss'
 
 interface StatsCardsProps {
 	data?: StatData[]
+	clickable?: boolean
 }
 
-const StatsCards: React.FC<StatsCardsProps> = ({ data = defaultStatsData }) => {
+const StatsCards: React.FC<StatsCardsProps> = ({
+	data = defaultStatsData,
+	clickable = true
+}) => {
 	return (
 		<div className={styles.grid}>
 			{statsConfig.map(config => {
@@ -24,6 +28,7 @@ const StatsCards: React.FC<StatsCardsProps> = ({ data = defaultStatsData }) => {
 						change={statData.change}
 						iconBgColor={config.iconBgColor}
 						filterKey={config.filterKey}
+						clickable={clickable}
 					/>
 				)
 			})}

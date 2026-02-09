@@ -8,9 +8,6 @@ interface TrendCellProps {
 	clicks: number
 }
 
-/**
- * TrendCell - рендерит ячейку тренда с цветовым индикатором
- */
 export const TrendCell: React.FC<TrendCellProps> = ({ clicks }) => {
 	const trend = calculateTrend(clicks)
 	const trendStyleClass =

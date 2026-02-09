@@ -6,19 +6,19 @@ export interface ChartDataPoint {
 }
 
 export interface TopCountry {
-  code: string;
-  name: string;
-  clicks: number;
-  percentage: number;
+	code: string
+	name: string
+	clicks: number
+	percentage: number
 }
 
 export interface TopReferrer {
-  name: string;
-  clicks: number;
+	name: string
+	clicks: number
 }
 
 export interface DeviceStats {
-  type: string; // e.g., 'Mobile', 'Desktop', 'Tablet'
-  percentage: number;
-  color: string; // Added color
+	type: string
+	percentage: number
+	color: string
 }

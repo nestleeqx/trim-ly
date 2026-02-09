@@ -2,6 +2,8 @@
 
 .wrapper {
 	position: relative;
+	border-right: 1px solid $color-border;
+	padding-right: $spacing-md;
 }
 
 .bellBtn {

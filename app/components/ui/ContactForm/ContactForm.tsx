@@ -2,16 +2,16 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, XCircle } from 'lucide-react'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import Button from '../Button'
-import styles from './ContactForm.module.scss'
 import {
 	ContactFormData,
 	contactSchema,
 	formFields,
 	FormStatus
 } from './contactForm.config'
+import styles from './ContactForm.module.scss'
 import { SuccessMessage } from './SuccessMessage'
 
 interface ContactFormProps {
@@ -25,33 +25,28 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSuccess }) => {
 		register,
 		handleSubmit,
 		reset,
-		formState: { errors, isValid }
+		formState: { errors, isValid, isSubmitting }
 	} = useForm<ContactFormData>({
 		resolver: zodResolver(contactSchema),
 		mode: 'onChange'
 	})
 
-	const onSubmit = useCallback(async () => {
-		setStatus('submitting')
+	if (status === 'success') {
+		return <SuccessMessage onReset={() => setStatus('idle')} />
+	}
 
+	const onSubmit = async () => {
+		setStatus('idle')
 		try {
 			await new Promise(resolve => setTimeout(resolve, 1500))
 			setStatus('success')
 			reset()
 			onSuccess?.()
-		} catch (error) {
-			console.error('Ошибка отправки:', error)
+		} catch (e) {
+			console.error('Ошибка отправки:', e)
 			setStatus('error')
 		}
-	}, [reset, onSuccess])
-
-	const resetForm = useCallback(() => setStatus('idle'), [])
-
-	if (status === 'success') {
-		return <SuccessMessage onReset={resetForm} />
 	}
-
-	const isSubmitting = status === 'submitting'
 
 	return (
 		<form
@@ -59,40 +54,50 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSuccess }) => {
 			onSubmit={handleSubmit(onSubmit)}
 			noValidate
 		>
-			{formFields.map(field => (
-				<div key={field.id} className={styles.field}>
-					<label htmlFor={field.id}>{field.label}</label>
-					{field.type === 'textarea' ? (
-						<textarea
-							id={field.id}
-							placeholder={field.placeholder}
-							rows={field.rows}
-							className={errors[field.id] ? styles.inputError : ''}
-							disabled={isSubmitting}
-							{...register(field.id)}
-						/>
-					) : (
-						<input
-							id={field.id}
-							type={field.type}
-							placeholder={field.placeholder}
-							className={errors[field.id] ? styles.inputError : ''}
-							disabled={isSubmitting}
-							{...register(field.id)}
-						/>
-					)}
-					{errors[field.id] && (
-						<span className={styles.errorMessage}>
-							{errors[field.id]?.message}
-						</span>
-					)}
-				</div>
-			))}
+			{formFields.map(field => {
+				const hasError = !!errors[field.id]
+				const commonProps = {
+					id: field.id,
+					placeholder: field.placeholder,
+					disabled: isSubmitting,
+					className: hasError ? styles.inputError : '',
+					...register(field.id)
+				}
+
+				return (
+					<div
+						key={field.id}
+						className={styles.field}
+					>
+						<label htmlFor={field.id}>{field.label}</label>
+
+						{field.type === 'textarea' ? (
+							<textarea
+								{...commonProps}
+								rows={field.rows}
+							/>
+						) : (
+							<input
+								{...commonProps}
+								type={field.type}
+							/>
+						)}
+
+						{hasError && (
+							<span className={styles.errorMessage}>
+								{errors[field.id]?.message}
+							</span>
+						)}
+					</div>
+				)
+			})}
 
 			{status === 'error' && (
 				<div className={styles.serverError}>
 					<XCircle size={20} />
-					<span>Произошла ошибка при отправке. Попробуйте позже.</span>
+					<span>
+						Произошла ошибка при отправке. Попробуйте позже.
+					</span>
 				</div>
 			)}
 
@@ -105,7 +110,10 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSuccess }) => {
 				>
 					{isSubmitting ? (
 						<span className={styles.loadingInner}>
-							<Loader2 className={styles.spinner} size={20} />
+							<Loader2
+								className={styles.spinner}
+								size={20}
+							/>
 							Отправка...
 						</span>
 					) : (

@@ -12,6 +12,7 @@ interface StatCardProps {
 	change: number
 	iconBgColor: string
 	filterKey: string
+	clickable?: boolean
 }
 
 export const StatCard: React.FC<StatCardProps> = ({
@@ -20,33 +21,40 @@ export const StatCard: React.FC<StatCardProps> = ({
 	label,
 	change,
 	iconBgColor,
-	filterKey
+	filterKey,
+	clickable = true
 }) => {
 	const router = useRouter()
 
 	const handleClick = useCallback(() => {
-		router.push(`/analytics?filter=${filterKey}`)
-	}, [router, filterKey])
+		if (clickable) {
+			router.push(`/analytics?filter=${filterKey}`)
+		}
+	}, [router, filterKey, clickable])
 
 	const handleKeyDown = useCallback(
 		(e: React.KeyboardEvent) => {
-			if (e.key === 'Enter' || e.key === ' ') {
+			if (clickable && (e.key === 'Enter' || e.key === ' ')) {
 				handleClick()
 			}
 		},
-		[handleClick]
+		[handleClick, clickable]
 	)
 
 	const isPositive = change >= 0
 
 	return (
 		<div
-			className={styles.card}
-			onClick={handleClick}
-			role='button'
-			tabIndex={0}
-			onKeyDown={handleKeyDown}
-			aria-label={`${label}: ${value}. Нажмите для просмотра деталей`}
+			className={`${styles.card} ${clickable ? styles.clickable : ''}`}
+			onClick={clickable ? handleClick : undefined}
+			role={clickable ? 'button' : undefined}
+			tabIndex={clickable ? 0 : undefined}
+			onKeyDown={clickable ? handleKeyDown : undefined}
+			aria-label={
+				clickable
+					? `${label}: ${value}. Нажмите для просмотра деталей`
+					: `${label}: ${value}`
+			}
 		>
 			<div className={styles.header}>
 				<div

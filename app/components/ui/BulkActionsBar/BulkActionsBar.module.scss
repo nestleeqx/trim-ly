@@ -15,24 +15,23 @@
 		flex-direction: column;
 		align-items: stretch;
 		gap: $spacing-md;
-		
-		/* Fixed positioning for mobile */
+
 		position: fixed;
 		bottom: 0;
 		left: 0;
 		width: 100%;
 		border-radius: $border-radius-xl $border-radius-xl 0 0;
 		padding: $spacing-md;
-		padding-bottom: calc($spacing-md + env(safe-area-inset-bottom, 0)); // Account for safe area
+		padding-bottom: calc($spacing-md + env(safe-area-inset-bottom, 0));
 		z-index: 1000;
-		box-shadow: $shadow-lg; // Add shadow for better visibility
+		box-shadow: $shadow-lg;
 	}
 }
 
 @keyframes slideDown {
 	from {
 		opacity: 0;
-		transform: translateY(100%); /* Slide from bottom */
+		transform: translateY(100%);
 	}
 	to {
 		opacity: 1;

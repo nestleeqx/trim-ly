@@ -54,7 +54,6 @@ export default function SettingsPage() {
 
 			<div className={styles.page}>
 				<div className={styles.layout}>
-					{/* Desktop Sidebar */}
 					<aside className={styles.sidebar}>
 						<ul>
 							{tabs.map(tab => {
@@ -84,8 +83,6 @@ export default function SettingsPage() {
 							})}
 						</ul>
 					</aside>
-
-					{/* Mobile Tabs */}
 					<div className={styles.mobileTabs}>
 						<select
 							value={activeTab}

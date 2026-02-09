@@ -123,3 +123,41 @@ export const mockLinks: LinkItem[] = [
 		expirationDate: new Date('2026-02-15')
 	}
 ]
+
+export type LinkState =
+	| 'redirecting'
+	| 'password'
+	| 'paused'
+	| 'expired'
+	| 'not-found'
+	| 'error'
+
+export const MOCK_LINKS: Record<
+	string,
+	{ state: LinkState; destination: string }
+> = {
+	'demo-redirect': {
+		state: 'redirecting',
+		destination: 'https://store.apple.com/shop/goto/iphone15pro'
+	},
+	'demo-password': {
+		state: 'password',
+		destination: 'https://example.com/secret'
+	},
+	'demo-paused': {
+		state: 'paused',
+		destination: 'https://example.com/paused'
+	},
+	'demo-expired': {
+		state: 'expired',
+		destination: 'https://example.com/expired'
+	},
+	'demo-not-found': {
+		state: 'not-found',
+		destination: ''
+	},
+	'demo-error': {
+		state: 'error',
+		destination: 'https://example.com/error'
+	}
+}

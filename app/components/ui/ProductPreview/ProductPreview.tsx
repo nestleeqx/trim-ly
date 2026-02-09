@@ -14,7 +14,7 @@ import { UrlInput } from './UrlInput'
 
 const QR_SLUG = 'trim.ly/launch-v2'
 
-export default function ProductPreview() {
+const ProductPreview: React.FC = () => {
 	const { toast, showToast, hideToast } = useToast()
 	const [showQrModal, setShowQrModal] = useState(false)
 	const [activeTab, setActiveTab] = useState<PreviewTab>('links')
@@ -90,3 +90,5 @@ export default function ProductPreview() {
 		</div>
 	)
 }
+
+export default ProductPreview

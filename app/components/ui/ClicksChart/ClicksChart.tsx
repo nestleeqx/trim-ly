@@ -1,44 +1,24 @@
 'use client'
 
-import { Period } from '@/data/mockCharts'
 import useChartManager from '@/hooks/useChartManager'
 import { Calendar } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import React from 'react'
+import React, { useMemo } from 'react'
 import ChartDatePicker from '../ChartDatePicker'
-import CustomTooltip from '../CustomTooltip'
 import styles from './ClicksChart.module.scss'
+import type { RechartsAreaBundleProps } from './RechartsAreaBundle'
 
-const AreaChart = dynamic(() => import('recharts').then(mod => mod.AreaChart), {
-	ssr: false
-})
-const Area = dynamic(() => import('recharts').then(mod => mod.Area), {
-	ssr: false
-})
-const XAxis = dynamic(() => import('recharts').then(mod => mod.XAxis), {
-	ssr: false
-})
-const YAxis = dynamic(() => import('recharts').then(mod => mod.YAxis), {
-	ssr: false
-})
-const CartesianGrid = dynamic(
-	() => import('recharts').then(mod => mod.CartesianGrid),
-	{ ssr: false }
-)
-const Tooltip = dynamic(() => import('recharts').then(mod => mod.Tooltip), {
-	ssr: false
-})
-const ResponsiveContainer = dynamic(
-	() => import('recharts').then(mod => mod.ResponsiveContainer),
+const RechartsAreaBundle = dynamic<RechartsAreaBundleProps>(
+	() => import('./RechartsAreaBundle').then(m => m.RechartsAreaBundle),
 	{ ssr: false }
 )
 
-const periods: { key: Period; label: string }[] = [
+const periods = [
 	{ key: '7d', label: '7д' },
 	{ key: '30d', label: '30д' },
 	{ key: '90d', label: '90д' },
 	{ key: 'custom', label: 'Период' }
-]
+] as const
 
 const ClicksChart: React.FC = () => {
 	const {
@@ -57,11 +37,16 @@ const ClicksChart: React.FC = () => {
 		setEndDate
 	} = useChartManager('7d')
 
-	const maxValue = Math.max(...chartData.map(d => d.value))
-	const yAxisMax = Math.ceil(maxValue / 500) * 500 + 200
-	const yAxisTicks = Array.from({ length: 5 }, (_, i) =>
-		Math.round((yAxisMax / 4) * i)
-	)
+	const { yAxisMax, yAxisTicks } = useMemo(() => {
+		const maxValue = Math.max(0, ...chartData.map(d => d.value))
+		const max = Math.ceil(maxValue / 500) * 500 + 200
+		return {
+			yAxisMax: max,
+			yAxisTicks: Array.from({ length: 5 }, (_, i) =>
+				Math.round((max / 4) * i)
+			)
+		}
+	}, [chartData])
 
 	return (
 		<div className={styles.card}>
@@ -73,17 +58,15 @@ const ClicksChart: React.FC = () => {
 					</p>
 				</div>
 				<div className={styles.periods}>
-					{periods.map(period => (
+					{periods.map(({ key, label }) => (
 						<button
-							key={period.key}
-							className={`${styles.periodBtn} ${activePeriod === period.key ? styles.active : ''}`}
-							onClick={() => handlePeriodChange(period.key)}
+							key={key}
+							className={`${styles.periodBtn} ${activePeriod === key ? styles.active : ''}`}
+							onClick={() => handlePeriodChange(key)}
 							disabled={isLoading}
 						>
-							{period.key === 'custom' && <Calendar size={14} />}
-							{period.key === 'custom'
-								? getCustomLabel()
-								: period.label}
+							{key === 'custom' && <Calendar size={14} />}
+							{key === 'custom' ? getCustomLabel() : label}
 						</button>
 					))}
 				</div>
@@ -105,77 +88,11 @@ const ClicksChart: React.FC = () => {
 						<div className={styles.spinner} />
 					</div>
 				)}
-				<ResponsiveContainer
-					width='100%'
-					height='100%'
-				>
-					<AreaChart
-						data={chartData}
-						margin={{ top: 10, right: 5, left: -20, bottom: 0 }}
-					>
-						<defs>
-							<linearGradient
-								id='colorValue'
-								x1='0'
-								y1='0'
-								x2='0'
-								y2='1'
-							>
-								<stop
-									offset='5%'
-									stopColor='#4f46e5'
-									stopOpacity={0.3}
-								/>
-								<stop
-									offset='95%'
-									stopColor='#4f46e5'
-									stopOpacity={0.02}
-								/>
-							</linearGradient>
-						</defs>
-						<CartesianGrid
-							strokeDasharray='3 3'
-							vertical={false}
-							stroke='#e5e7eb'
-						/>
-						<XAxis
-							dataKey='day'
-							axisLine={false}
-							tickLine={false}
-							tick={{ fill: '#6b7280', fontSize: 12 }}
-							dy={10}
-						/>
-						<YAxis
-							axisLine={false}
-							tickLine={false}
-							tick={{ fill: '#6b7280', fontSize: 12 }}
-							dx={-10}
-							domain={[0, yAxisMax]}
-							ticks={yAxisTicks}
-						/>
-						<Tooltip content={<CustomTooltip />} />
-						<Area
-							type='monotone'
-							dataKey='value'
-							stroke='#4f46e5'
-							strokeWidth={2}
-							fillOpacity={1}
-							fill='url(#colorValue)'
-							dot={{
-								r: 4,
-								fill: '#fff',
-								stroke: '#4f46e5',
-								strokeWidth: 2
-							}}
-							activeDot={{
-								r: 6,
-								fill: '#4f46e5',
-								stroke: '#fff',
-								strokeWidth: 2
-							}}
-						/>
-					</AreaChart>
-				</ResponsiveContainer>
+				<RechartsAreaBundle
+					data={chartData}
+					yAxisMax={yAxisMax}
+					yAxisTicks={yAxisTicks}
+				/>
 			</div>
 
 			<div className={styles.stats}>

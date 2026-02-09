@@ -1,6 +1,7 @@
 'use client'
 
 import { Link2, Plus, Search, X } from 'lucide-react'
+import Button from '../Button'
 import styles from './LinksEmptyState.module.scss'
 
 interface LinksEmptyStateProps {
@@ -10,7 +11,7 @@ interface LinksEmptyStateProps {
 	onClearFilters: () => void
 }
 
-export const LinksEmptyState = ({
+const LinksEmptyState = ({
 	hasLinks,
 	hasFilteredLinks,
 	hasActiveFilters,
@@ -47,13 +48,13 @@ export const LinksEmptyState = ({
 					параметры поиска.
 				</p>
 				{hasActiveFilters && (
-					<button
-						className={styles.emptyStateButtonSecondary}
+					<Button
+						variant='primary'
 						onClick={onClearFilters}
 					>
 						<X size={16} />
 						Сбросить фильтры
-					</button>
+					</Button>
 				)}
 				<p className={styles.emptyStateHint}>
 					Попробуйте другой поисковый запрос
@@ -64,3 +65,5 @@ export const LinksEmptyState = ({
 
 	return null
 }
+
+export default LinksEmptyState

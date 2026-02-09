@@ -1,8 +1,3 @@
-/**
- * Helper для расчета тренда на основе количества кликов
- * Использует простую формулу: (clicks % 21) - 10
- * Результат: от -10 до +10 процентов
- */
 export interface TrendData {
 	value: number
 	text: string
@@ -10,7 +5,7 @@ export interface TrendData {
 }
 
 export const calculateTrend = (clicks: number): TrendData => {
-	const trend = (clicks % 21) - 10 // диапазон: -10..+10
+	const trend = (clicks % 21) - 10
 
 	let className: 'positive' | 'negative' | 'neutral' = 'neutral'
 	if (trend > 0) className = 'positive'

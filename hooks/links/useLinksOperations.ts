@@ -100,7 +100,10 @@ export const useLinksOperations = ({
 								: link
 						)
 					)
-					showToast(`Приостановлено ссылок: ${selectedLinks.length}`, 'success')
+					showToast(
+						`Приостановлено ссылок: ${selectedLinks.length}`,
+						'success'
+					)
 					clearSelection()
 					break
 
@@ -112,13 +115,21 @@ export const useLinksOperations = ({
 								: link
 						)
 					)
-					showToast(`Возобновлено ссылок: ${selectedLinks.length}`, 'success')
+					showToast(
+						`Возобновлено ссылок: ${selectedLinks.length}`,
+						'success'
+					)
 					clearSelection()
 					break
 
 				case 'delete':
-					setLinks(prev => prev.filter(link => !selectedLinks.includes(link.id)))
-					showToast(`Удалено ссылок: ${selectedLinks.length}`, 'success')
+					setLinks(prev =>
+						prev.filter(link => !selectedLinks.includes(link.id))
+					)
+					showToast(
+						`Удалено ссылок: ${selectedLinks.length}`,
+						'success'
+					)
 					clearSelection()
 					break
 

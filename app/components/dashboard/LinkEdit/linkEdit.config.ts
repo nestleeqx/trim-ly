@@ -20,7 +20,6 @@ export const defaultFormData: LinkEditFormData = {
 	password: ''
 }
 
-// Mock existing tags for autocomplete
 export const existingTags = [
 	'marketing',
 	'social',
@@ -32,7 +31,6 @@ export const existingTags = [
 	'referral'
 ]
 
-// Reserved/taken aliases for demo
 export const takenAliases = ['demo', 'test', 'admin', 'api', 'app']
 
 export const folderOptions = [
@@ -43,3 +41,10 @@ export const folderOptions = [
 ]
 
 export const SHORT_LINK_DOMAIN = 't.ly/'
+
+export const statusLabels = {
+	active: 'Активна',
+	paused: 'На паузе',
+	expired: 'Истекла',
+	deleted: 'Удалена'
+} as const

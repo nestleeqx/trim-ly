@@ -42,3 +42,11 @@
 	align-items: center;
 	gap: $spacing-xs;
 }
+
+.trendPositive {
+	color: $color-success;
+}
+
+.trendNegative {
+	color: $color-red;
+}

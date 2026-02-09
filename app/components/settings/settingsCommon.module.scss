@@ -87,14 +87,12 @@ select.select {
 	}
 }
 
-// Actions
 .divider {
 	height: 1px;
 	background: var(--color-border);
 	margin: $spacing-lg 0;
 }
 
-// Toggle
 .toggleRow {
 	display: flex;
 	align-items: center;

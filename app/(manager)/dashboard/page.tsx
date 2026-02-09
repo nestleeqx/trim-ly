@@ -1,15 +1,15 @@
 'use client'
 
-import EmptyDashboard from '@/app/components/dashboard/EmptyDashboard/EmptyDashboard'
+import EmptyDashboard from '@/app/components/ui/EmptyDashboard/EmptyDashboard'
 import {
 	mockDeviceStats,
 	mockTopCountries,
 	mockTopReferrers
 } from '@/data/mockDashboardData'
-import DevicesChart from '../../components/dashboard/DevicesChart'
-import RecentLinks from '../../components/dashboard/RecentLinks'
 import ClicksChart from '../../components/ui/ClicksChart'
 import DashboardHeader from '../../components/ui/DashboardHeader'
+import DevicesChart from '../../components/ui/DevicesChart'
+import RecentLinks from '../../components/ui/RecentLinks'
 import StatsCards from '../../components/ui/StatsCards'
 import TopCountries from '../../components/ui/TopCountries'
 import TopReferrers from '../../components/ui/TopReferrers'

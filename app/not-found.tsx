@@ -13,7 +13,6 @@ export default function NotFound() {
 				<Logo />
 			</div>
 
-			{/* Animated 404 Illustration */}
 			<div className={styles.illustration}>
 				<div className={styles.dot + ' ' + styles.dot1} />
 				<div className={styles.dot + ' ' + styles.dot2} />
@@ -37,7 +36,6 @@ export default function NotFound() {
 				</div>
 			</div>
 
-			{/* Text */}
 			<div className={styles.textContent}>
 				<h1 className={styles.title}>404 — Страница не найдена</h1>
 				<p className={styles.subtitle}>
@@ -46,7 +44,6 @@ export default function NotFound() {
 				</p>
 			</div>
 
-			{/* Actions */}
 			<div className={styles.actions}>
 				<Link
 					href='/dashboard'

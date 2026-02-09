@@ -63,7 +63,6 @@ export const dashboardPlans: DashboardPlan[] = [
 	}
 ]
 
-// Comparison table data
 export interface ComparisonFeature {
 	name: string
 	free: string | boolean
@@ -122,7 +121,6 @@ export const comparisonFeatures: ComparisonFeature[] = [
 	}
 ]
 
-// Testimonials
 export interface Testimonial {
 	quote: string
 	author: string
@@ -151,7 +149,6 @@ export const testimonials: Testimonial[] = [
 	}
 ]
 
-// FAQ
 export interface FAQItem {
 	question: string
 	answer: string

@@ -1,6 +1,5 @@
 @import '../../../styles/variables';
 
-// Layout
 .editLayout {
 	display: grid;
 	grid-template-columns: 1fr 380px;
@@ -11,7 +10,6 @@
 	}
 }
 
-// Form
 .form {
 	background: $color-bg-light;
 	border: 1px solid $color-border;
@@ -74,7 +72,6 @@
 	color: #f59e0b;
 }
 
-// Dirty indicator
 .dirtyIndicator {
 	display: inline-flex;
 	align-items: center;
@@ -86,7 +83,6 @@
 	border-radius: $border-radius-sm;
 }
 
-// Status in form
 .formStatus {
 	display: flex;
 	align-items: center;
@@ -108,7 +104,6 @@
 	gap: $spacing-sm;
 }
 
-// Inputs
 .inputWrapper {
 	position: relative;
 	display: flex;
@@ -179,7 +174,6 @@
 	}
 }
 
-// Short link
 .shortLinkWrapper {
 	display: flex;
 	align-items: center;
@@ -262,7 +256,6 @@
 	}
 }
 
-// Tags
 .tagsContainer {
 	position: relative;
 }
@@ -362,48 +355,6 @@
 	}
 }
 
-// Accordion
-.accordion {
-	border: 1px solid $color-border;
-	border-radius: $border-radius-lg;
-	overflow: hidden;
-}
-
-.accordionHeader {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	width: 100%;
-	padding: $spacing-md;
-	font-size: $font-size-sm;
-	font-weight: $font-weight-medium;
-	color: $color-text-primary;
-	background: $color-bg-light;
-	border: none;
-	cursor: pointer;
-	transition: $transition-fast;
-
-	&:hover {
-		background: $color-bg-dark;
-	}
-}
-
-.accordionTitle {
-	display: flex;
-	align-items: center;
-	gap: $spacing-sm;
-}
-
-.accordionContent {
-	padding: $spacing-lg;
-	background: $color-bg-light;
-	border-top: 1px solid $color-border;
-	display: flex;
-	flex-direction: column;
-	gap: $spacing-lg;
-}
-
-// Date Input
 .dateInputWrapper {
 	position: relative;
 	display: flex;
@@ -432,109 +383,18 @@
 	}
 }
 
-// Password Section
 .passwordSection {
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-sm;
 }
 
-// Toggle Switch
-.toggle {
-	display: flex;
-	align-items: center;
-	gap: $spacing-sm;
-	cursor: pointer;
-}
-
-.toggleInput {
-	position: absolute;
-	opacity: 0;
-	width: 0;
-	height: 0;
-}
-
-.toggleSlider {
-	position: relative;
-	width: 44px;
-	height: 24px;
-	background: $color-border;
-	border-radius: 12px;
-	transition: $transition-fast;
-
-	&::before {
-		content: '';
-		position: absolute;
-		top: 2px;
-		left: 2px;
-		width: 20px;
-		height: 20px;
-		background: white;
-		border-radius: 50%;
-		transition: $transition-fast;
-	}
-
-	.toggleInput:checked + & {
-		background: $color-primary;
-
-		&::before {
-			transform: translateX(20px);
-		}
-	}
-
-	.toggleInput:focus + & {
-		box-shadow: 0 0 0 3px rgba($color-primary, 0.2);
-	}
-}
-
-.toggleLabel {
-	font-size: $font-size-sm;
-	color: $color-text-secondary;
-}
-
-// Form Actions
 .formActions {
 	display: flex;
 	justify-content: flex-start;
 	gap: $spacing-md;
 	padding-top: $spacing-md;
 	border-top: 1px solid $color-border;
-}
-
-// Preview
-.preview {
-	background: $color-bg-light;
-	border: 1px solid $color-border;
-	border-radius: $border-radius-xl;
-	padding: $spacing-xl;
-	display: flex;
-	flex-direction: column;
-	gap: $spacing-lg;
-	height: fit-content;
-	position: sticky;
-	top: $spacing-lg;
-}
-
-.previewHeader {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.previewTitle {
-	font-size: $font-size-lg;
-	font-weight: $font-weight-semibold;
-	color: $color-text-primary;
-	margin: 0;
-}
-
-.previewContent {
-	display: flex;
-	flex-direction: column;
-	gap: $spacing-lg;
-	border: 1px solid $color-border;
-	border-radius: $border-radius-xl;
-	padding: $spacing-lg;
 }
 
 .statusBadge {
@@ -568,62 +428,6 @@
 	}
 }
 
-.previewSection {
-	display: flex;
-	flex-direction: column;
-	gap: $spacing-sm;
-}
-
-.previewLabel {
-	font-size: $font-size-xs;
-	font-weight: $font-weight-semibold;
-	color: $color-text-secondary;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-}
-
-.shortLinkDisplay {
-	display: flex;
-	align-items: center;
-	gap: $spacing-sm;
-	justify-content: space-between;
-}
-
-.shortLinkText {
-	font-size: $font-size-xl;
-	font-weight: $font-weight-semibold;
-	color: $color-primary;
-}
-
-.copyBtn {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: $spacing-sm;
-	background: transparent;
-	border: 1px solid $color-border;
-	border-radius: $border-radius-md;
-	color: $color-text-secondary;
-	cursor: pointer;
-	transition: $transition-fast;
-
-	&:hover {
-		color: $color-text-primary;
-		background: $color-bg-dark;
-	}
-}
-
-.copiedText {
-	font-size: $font-size-xs;
-	color: $color-success;
-}
-
-.originalUrl {
-	display: flex;
-	align-items: center;
-	gap: $spacing-sm;
-}
-
 .urlIcon {
 	color: $color-primary;
 	flex-shrink: 0;
@@ -633,74 +437,4 @@
 	font-size: $font-size-sm;
 	color: $color-primary;
 	word-break: break-all;
-}
-
-// QR Section
-.qrSection {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: $spacing-lg 0 0 0;
-	border-top: 1px solid $color-border;
-}
-
-.qrInfo {
-	display: flex;
-	align-items: center;
-	gap: $spacing-md;
-}
-
-.qrIcon {
-	color: $color-primary;
-}
-
-.qrText {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-}
-
-.qrTitle {
-	font-size: $font-size-sm;
-	font-weight: $font-weight-medium;
-	color: $color-text-primary;
-}
-
-.qrSubtitle {
-	font-size: $font-size-xs;
-	color: $color-text-secondary;
-}
-
-// Preview Row
-.previewRow {
-	display: flex;
-	align-items: center;
-	gap: $spacing-md;
-	padding: $spacing-md 0;
-	background: $color-bg-dark;
-	border-radius: $border-radius-lg;
-	padding: $spacing-md;
-}
-
-.previewRowIcon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 36px;
-	height: 36px;
-	background: $color-bg-dark;
-	border-radius: $border-radius-md;
-	color: $color-text-secondary;
-}
-
-.previewRowLabel {
-	flex: 1;
-	font-size: $font-size-sm;
-	font-weight: $font-weight-medium;
-	color: $color-text-primary;
-}
-
-.previewRowValue {
-	font-size: $font-size-sm;
-	color: $color-text-secondary;
 }

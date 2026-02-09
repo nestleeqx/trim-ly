@@ -4,27 +4,26 @@
 	background: var(--color-bg);
 	border-radius: $border-radius-xl;
 	border: 1px solid $color-border;
-	-webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
+	-webkit-overflow-scrolling: touch;
 
 	@media (max-width: $breakpoint-md) {
 		border-radius: $border-radius-lg;
 	}
 
-	/* Custom Scrollbar Styling */
 	&::-webkit-scrollbar {
-		height: 8px; /* height of horizontal scrollbar */
+		height: 8px;
 	}
 
 	&::-webkit-scrollbar-track {
-		background: var(--color-bg-dark); /* Color of the tracking area */
+		background: var(--color-bg-dark);
 		border-radius: 10px;
 	}
 
 	&::-webkit-scrollbar-thumb {
-		background: var(--color-border); /* Color of the scroll thumb */
+		background: var(--color-border);
 		border-radius: 10px;
 		&:hover {
-			background: var(--color-text-secondary); /* Color on hover */
+			background: var(--color-text-secondary);
 		}
 	}
 }
@@ -106,12 +105,4 @@
 	font-weight: $font-weight-semibold;
 	font-size: $font-size-base;
 	color: var(--color-text-primary);
-}
-
-.trendPositive {
-	color: $color-success;
-}
-
-.trendNegative {
-	color: $color-red;
 }

@@ -22,9 +22,6 @@ interface ActionsCellProps {
 	}
 }
 
-/**
- * ActionsCell - рендерит ячейку с кнопками действий (Copy, QR, Analytics, Kebab menu)
- */
 export const ActionsCell: React.FC<ActionsCellProps> = ({
 	link,
 	openKebabId,

@@ -43,7 +43,6 @@
 	line-height: 1.6;
 }
 
-// Grid
 .grid {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
@@ -59,7 +58,6 @@
 	}
 }
 
-// Card - larger like main page
 .card {
 	position: relative;
 	display: flex;
@@ -152,7 +150,6 @@
 	margin-left: 2px;
 }
 
-// Features
 .features {
 	list-style: none;
 	padding: 0;
@@ -180,7 +177,6 @@
 	flex-shrink: 0;
 }
 
-// Footer
 .cardFooter {
 	margin-top: auto;
 }
@@ -194,7 +190,6 @@
 	}
 }
 
-// Comparison section
 .comparisonSection {
 	width: 100%;
 	max-width: 1100px;
@@ -223,7 +218,6 @@
 	margin: 0;
 }
 
-// Comparison Table
 .comparisonTable {
 	width: 100%;
 	border: 1px solid $color-border;
@@ -310,7 +304,6 @@
 	font-size: $font-size-lg;
 }
 
-// Testimonials Section
 .testimonialsSection {
 	width: 100%;
 	max-width: 1100px;
@@ -399,7 +392,6 @@
 	color: $color-primary;
 }
 
-// FAQ Section
 .faqSection {
 	width: 100%;
 	max-width: 900px;

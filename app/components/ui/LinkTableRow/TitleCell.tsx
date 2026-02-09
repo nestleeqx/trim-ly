@@ -8,9 +8,6 @@ interface TitleCellProps {
 	onTitleClick: (e: React.MouseEvent) => void
 }
 
-/**
- * TitleCell - рендерит ячейку названия ссылки
- */
 export const TitleCell: React.FC<TitleCellProps> = ({
 	title,
 	onTitleClick

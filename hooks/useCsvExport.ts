@@ -4,11 +4,10 @@ interface ExportOptions {
 	delimiter?: string
 }
 
-// Make the hook generic
 const useCsvExport = <T extends unknown>(
 	data: T[],
 	defaultFilename: string,
-	converter: (data: T[]) => string // Generic converter function
+	converter: (data: T[]) => string
 ) => {
 	const downloadCsv = (options: ExportOptions = {}) => {
 		const {

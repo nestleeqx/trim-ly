@@ -1,11 +1,11 @@
 'use client'
 
+import { TopReferrer } from '@/types/charts'
 import React from 'react'
 import styles from './TopReferrers.module.scss'
-import { TopReferrer } from '@/types/charts' // Import TopReferrer
 
 interface TopReferrersProps {
-  referrers: TopReferrer[];
+	referrers: TopReferrer[]
 }
 
 const TopReferrers: React.FC<TopReferrersProps> = ({ referrers }) => {
@@ -15,7 +15,7 @@ const TopReferrers: React.FC<TopReferrersProps> = ({ referrers }) => {
 			<div className={styles.list}>
 				{referrers.map(referrer => (
 					<div
-						key={referrer.name} // Use name as key
+						key={referrer.name}
 						className={styles.item}
 					>
 						<span className={styles.domain}>{referrer.name}</span>

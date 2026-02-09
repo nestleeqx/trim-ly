@@ -1,0 +1,48 @@
+@import '../../../styles/variables';
+
+.statusBadge {
+	display: inline-flex;
+	align-items: center;
+	padding: $spacing-xs $spacing-sm;
+	font-size: $font-size-xs;
+	font-weight: $font-weight-semibold;
+	text-transform: uppercase;
+	border-radius: $border-radius-sm;
+	letter-spacing: 0.5px;
+
+	&.active {
+		background-color: color-mix(
+			in srgb,
+			var(--color-active) 15%,
+			transparent
+		);
+		color: var(--color-active);
+	}
+
+	&.paused {
+		background-color: color-mix(
+			in srgb,
+			var(--color-warning) 15%,
+			transparent
+		);
+		color: var(--color-warning);
+	}
+
+	&.expired {
+		background-color: color-mix(
+			in srgb,
+			var(--color-text-secondary) 15%,
+			transparent
+		);
+		color: var(--color-text-secondary);
+	}
+
+	&.deleted {
+		background-color: color-mix(
+			in srgb,
+			var(--color-danger) 12%,
+			transparent
+		);
+		color: var(--color-danger);
+	}
+}

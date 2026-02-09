@@ -54,6 +54,10 @@ export const useLinkActions = ({
 		setQrModalLink(link)
 	}, [])
 
+	const openQrModal = useCallback((link: LinkItem) => {
+		setQrModalLink(link)
+	}, [])
+
 	const handleAnalyticsClick = useCallback(
 		(linkId: string, e: React.MouseEvent) => {
 			e.stopPropagation()
@@ -126,6 +130,7 @@ export const useLinkActions = ({
 		handleItemClick,
 		handleCopy,
 		handleQrClick,
+		openQrModal,
 		handleAnalyticsClick,
 		handleKebabClick,
 		handleEdit,

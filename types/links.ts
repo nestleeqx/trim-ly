@@ -1,4 +1,4 @@
-export interface LinkItem {
+﻿export interface LinkItem {
 	id: string
 	title: string
 	shortUrl: string
@@ -12,17 +12,17 @@ export interface LinkItem {
 }
 
 export interface ClickEvent {
-	time: string // e.g., "2 mins ago" - using string for simplicity based on screenshot
+	time: string
 	country: {
-		code: string // e.g., "US"
-		name: string // e.g., "United States"
+		code: string
+		name: string
 	}
 	device: {
-		type: string // e.g., "iPhone", "Windows PC", "Android", "MacBook Pro"
-		name: string // e.g., "iPhone 15" - can be the model
+		type: string
+		name: string
 	}
-	browser: string // e.g., "Safari", "Chrome"
-	referrer: string // e.g., "instagram.com", "direct", "google.com", "t.co"
+	browser: string
+	referrer: string
 }
 
 export type LinkStatus = 'active' | 'paused' | 'expired' | 'deleted'

@@ -8,24 +8,18 @@ export interface LinkTableRowProps {
 	showActions?: boolean
 	showTrend?: boolean
 	openKebabId: string | null
-	actions: LinkTableRowActions
+	actions: LinkActions
 }
 
-/**
- * Основные действия строки таблицы
- */
-export interface LinkTableRowActions {
-	// Действия строки
+export interface LinkActions {
 	handleItemClick: (e: React.MouseEvent) => void
 	handleTitleClick: (linkId: string, e: React.MouseEvent) => void
 
-	// Действия в ячейке действий
 	handleCopy: (url: string, e?: React.MouseEvent) => void
 	handleQrClick: (link: LinkItemType, e: React.MouseEvent) => void
 	handleAnalyticsClick: (linkId: string, e: React.MouseEvent) => void
 	handleKebabClick: (linkId: string, e: React.MouseEvent) => void
 
-	// Действия в kebab меню
 	closeKebabMenu: (e: React.MouseEvent) => void
 	handleEdit: (linkId: string) => void
 	handleToggleStatus: (link: LinkItemType) => void

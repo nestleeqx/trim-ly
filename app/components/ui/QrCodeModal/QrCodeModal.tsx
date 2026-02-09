@@ -27,28 +27,6 @@ interface QrCodeModalWithUrlProps extends QrCodeModalBaseProps {
 
 type QrCodeModalProps = QrCodeModalWithLinkProps | QrCodeModalWithUrlProps
 
-/**
- * QrCodeModal - модаль отображения QR-кода с кнопками download и copy
- *
- * Использование с Link:
- * ```tsx
- * <QrCodeModal
- *   link={linkItem}
- *   onClose={handleClose}
- *   onDownload={handleDownload}
- *   onCopyUrl={handleCopy}
- * />
- * ```
- *
- * Использование с URL:
- * ```tsx
- * <QrCodeModal
- *   url="trim.ly/launch"
- *   onClose={handleClose}
- *   onDownload={handleDownload}
- * />
- * ```
- */
 const QrCodeModal: React.FC<QrCodeModalProps> = ({
 	link,
 	url,

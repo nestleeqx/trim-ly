@@ -19,7 +19,6 @@
 	}
 }
 
-// Desktop Sidebar
 .sidebar {
 	width: 240px;
 	flex-shrink: 0;
@@ -79,7 +78,6 @@
 	}
 }
 
-// Mobile Tabs
 .mobileTabs {
 	display: none;
 
@@ -109,7 +107,6 @@
 	min-width: 0;
 }
 
-// Toggle Switch
 .switch {
 	position: relative;
 	display: inline-block;
@@ -156,7 +153,6 @@
 	}
 }
 
-// Plan Card
 .planCard {
 	display: flex;
 	align-items: center;
@@ -197,7 +193,6 @@
 	font-size: $font-size-sm;
 }
 
-// Danger Zone
 .dangerCard {
 	border-color: #fecaca;
 	background: #fef2f2;
