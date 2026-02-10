@@ -1,10 +1,10 @@
 'use client'
 
+import Button from '@/app/components/ui/Button/Button'
+import DemoModal from '@/app/components/ui/DemoModal/DemoModal'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useState } from 'react'
-import Button from '../../ui/Button'
-import DemoModal from '../../ui/DemoModal'
 import styles from './CTA.module.scss'
 
 export default function CTASection() {

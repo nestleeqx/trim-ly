@@ -1,0 +1,66 @@
+@use 'variables' as *;
+
+.comparisonSection {
+	width: 100%;
+	max-width: 1100px;
+	margin-top: $spacing-xl;
+}
+
+.comparisonHeader {
+	text-align: center;
+	margin-bottom: $spacing-2xl;
+}
+
+.comparisonTitle {
+	font-size: $font-size-3xl;
+	font-weight: $font-weight-bold;
+	color: $color-text-primary;
+	margin: 0 0 $spacing-sm 0;
+
+	@media (max-width: $breakpoint-md) {
+		font-size: $font-size-2xl;
+	}
+}
+
+.comparisonSubtitle {
+	font-size: $font-size-base;
+	color: $color-text-secondary;
+	margin: 0;
+}
+
+.comparisonTable {
+	width: 100%;
+	border: 1px solid $color-border;
+	border-radius: $border-radius-xl;
+	overflow: hidden;
+	background: $color-bg-light;
+}
+
+.tableHeader {
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr 1fr;
+	background: $color-bg-dark;
+	border-bottom: 1px solid $color-border;
+
+	@media (max-width: $breakpoint-md) {
+		grid-template-columns: 1.5fr 1fr 1fr 1fr;
+	}
+}
+
+.tableHeaderCell {
+	padding: $spacing-lg $spacing-xl;
+	font-size: $font-size-xs;
+	font-weight: $font-weight-bold;
+	color: $color-text-secondary;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+
+	&.highlight {
+		color: $color-primary;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-md;
+		font-size: 10px;
+	}
+}

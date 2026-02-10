@@ -1,7 +1,7 @@
+import '@/app/styles/globals.scss'
+import { ThemeProvider } from '@/context/ThemeContext'
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
-import { ThemeProvider } from '../context/ThemeContext'
-import './styles/globals.scss'
 
 const inter = Inter({
 	subsets: ['latin', 'cyrillic'],

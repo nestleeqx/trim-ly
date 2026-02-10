@@ -1,15 +1,15 @@
 'use client'
 
-import ContactForm from '@/app/components/ui/ContactForm'
-import DashboardHeader from '@/app/components/ui/DashboardHeader'
-import Modal from '@/app/components/ui/Modal'
+import styles from '@/app/(manager)/pricing/page.module.scss'
+import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
+import Modal from '@/app/components/ui/Modal/Modal'
+import ComparisonTable from '@/app/features/pricing/components/ComparisonTable/ComparisonTable'
+import ContactForm from '@/app/features/pricing/components/ContactForm/ContactForm'
+import FAQSection from '@/app/features/pricing/components/FAQSection/FAQSection'
+import PlanCardsGrid from '@/app/features/pricing/components/PlanCardsGrid/PlanCardsGrid'
+import PricingHeader from '@/app/features/pricing/components/PricingHeader/PricingHeader'
+import TestimonialsGrid from '@/app/features/pricing/components/TestimonialsGrid/TestimonialsGrid'
 import { useCallback, useState } from 'react'
-import { ComparisonTable } from './ComparisonTable'
-import { FAQSection } from './FAQSection'
-import styles from './page.module.scss'
-import { PlanCardsGrid } from './PlanCardsGrid'
-import { PricingHeader } from './PricingHeader'
-import { TestimonialsGrid } from './TestimonialsGrid'
 
 export default function PricingPage() {
 	const [isYearly, setIsYearly] = useState(false)

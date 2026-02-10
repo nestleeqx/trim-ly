@@ -20,7 +20,7 @@ interface ButtonProps {
 	title?: string
 }
 
-const Button: React.FC<ButtonProps> = ({
+export default function Button({
 	children,
 	variant = 'primary',
 	size = 'md',
@@ -29,7 +29,7 @@ const Button: React.FC<ButtonProps> = ({
 	disabled = false,
 	title,
 	className
-}) => {
+}: ButtonProps) {
 	return (
 		<button
 			type={type}
@@ -47,5 +47,3 @@ const Button: React.FC<ButtonProps> = ({
 		</button>
 	)
 }
-
-export default Button

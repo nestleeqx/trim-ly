@@ -1,15 +1,15 @@
 'use client'
 
-import { AuthCard } from '@/app/components/auth/AuthCard'
-import { AuthDivider } from '@/app/components/auth/AuthDivider'
-import { AuthPageLayout } from '@/app/components/auth/AuthPageLayout'
-import { FormField } from '@/app/components/auth/FormField'
-import { PasswordInput } from '@/app/components/auth/PasswordInput'
-import { SocialAuthButtons } from '@/app/components/auth/SocialAuthButtons'
-import Button from '@/app/components/ui/Button'
+import styles from '@/app/(auth)/signup/page.module.scss'
+import AuthPageLayout from '@/app/components/layout/AuthPageLayout/AuthPageLayout'
+import Button from '@/app/components/ui/Button/Button'
+import AuthCard from '@/app/features/auth/components/AuthCard/AuthCard'
+import AuthDivider from '@/app/features/auth/components/AuthDivider/AuthDivider'
+import FormField from '@/app/features/auth/components/FormContent/FormField'
+import PasswordInput from '@/app/features/auth/components/FormContent/PasswordInput'
+import SocialAuthButtons from '@/app/features/auth/components/SocialAuthButtons/SocialAuthButtons'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
-import styles from './page.module.scss'
 
 export default function SignupPage() {
 	const [fullName, setFullName] = useState('')
@@ -57,7 +57,7 @@ export default function SignupPage() {
 						onChange={e => setPassword(e.target.value)}
 						autoComplete='new-password'
 					/>
-					<div className={styles.termsRow}>
+					<div className={styles.row}>
 						<input
 							id='terms'
 							type='checkbox'
@@ -72,14 +72,14 @@ export default function SignupPage() {
 							Я согласен с{' '}
 							<Link
 								href='/terms'
-								className={styles.termsLink}
+								className={styles.link}
 							>
 								Условиями использования
 							</Link>{' '}
 							и{' '}
 							<Link
 								href='/privacy'
-								className={styles.termsLink}
+								className={styles.link}
 							>
 								Политикой конфиденциальности
 							</Link>
@@ -99,7 +99,7 @@ export default function SignupPage() {
 						Уже есть аккаунт?{' '}
 						<Link
 							href='/login'
-							className={styles.loginLink}
+							className={styles.link}
 						>
 							Войти
 						</Link>

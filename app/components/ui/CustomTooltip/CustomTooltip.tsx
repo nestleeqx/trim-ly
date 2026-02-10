@@ -7,7 +7,7 @@ interface CustomTooltipProps {
 	label?: string
 }
 
-const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
+export default function CustomTooltip({ active, payload }: CustomTooltipProps) {
 	if (!active || !payload || !payload.length) return null
 
 	const data = payload[0].payload
@@ -32,5 +32,3 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload }) => {
 		</div>
 	)
 }
-
-export default CustomTooltip

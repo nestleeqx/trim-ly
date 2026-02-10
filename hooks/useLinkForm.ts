@@ -1,10 +1,9 @@
 'use client'
-
 import {
 	defaultFormData,
 	LinkEditFormData,
 	SHORT_LINK_DOMAIN
-} from '@/app/components/dashboard/LinkEdit'
+} from '@/app/features/links/components/LinkEdit/linkEdit.config'
 import { useAliasCheck } from '@/hooks/useAliasCheck'
 import { LinkItem } from '@/types/links'
 import {

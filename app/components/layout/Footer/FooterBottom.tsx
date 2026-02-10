@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { bottomLinks } from './footer.config'
 import styles from './Footer.module.scss'
 
-export const FooterBottom: React.FC = () => {
+export default function FooterBottom() {
 	const currentYear = new Date().getFullYear()
 
 	return (

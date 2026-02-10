@@ -1,4 +1,4 @@
-@import '../../../styles/variables';
+@use 'variables' as *;
 
 .accordion {
 	border: 1px solid $color-border;

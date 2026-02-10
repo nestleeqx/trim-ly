@@ -1,19 +1,19 @@
 'use client'
 
-import EmptyDashboard from '@/app/components/ui/EmptyDashboard/EmptyDashboard'
+import styles from '@/app/(manager)/dashboard/page.module.scss'
+import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
+import ClicksChart from '@/app/features/analytics/components/ClicksChart/ClicksChart'
+import DevicesChart from '@/app/features/analytics/components/DevicesChart/DevicesChart'
+import StatsCards from '@/app/features/analytics/components/StatsCards/StatsCards'
+import TopCountries from '@/app/features/analytics/components/TopCountries/TopCountries'
+import TopReferrers from '@/app/features/analytics/components/TopReferrers/TopReferrers'
+import EmptyDashboard from '@/app/features/dashboard/components/EmptyDashboard/EmptyDashboard'
+import RecentLinks from '@/app/features/dashboard/components/RecentLinks/RecentLinks'
 import {
 	mockDeviceStats,
 	mockTopCountries,
 	mockTopReferrers
 } from '@/data/mockDashboardData'
-import ClicksChart from '../../components/ui/ClicksChart'
-import DashboardHeader from '../../components/ui/DashboardHeader'
-import DevicesChart from '../../components/ui/DevicesChart'
-import RecentLinks from '../../components/ui/RecentLinks'
-import StatsCards from '../../components/ui/StatsCards'
-import TopCountries from '../../components/ui/TopCountries'
-import TopReferrers from '../../components/ui/TopReferrers'
-import styles from './page.module.scss'
 
 const hasLinks = true
 

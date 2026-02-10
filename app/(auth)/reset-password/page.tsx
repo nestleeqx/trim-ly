@@ -1,12 +1,12 @@
 'use client'
 
-import { AuthLogo } from '@/app/components/auth/AuthLogo'
-import { BackToHomeLink } from '@/app/components/auth/BackToHomeLink'
-import { PasswordInput } from '@/app/components/auth/PasswordInput'
-import Button from '@/app/components/ui/Button'
+import styles from '@/app/(auth)/AuthShared.module.scss'
+import AuthPageLayout from '@/app/components/layout/AuthPageLayout/AuthPageLayout'
+import Button from '@/app/components/ui/Button/Button'
+import AuthCard from '@/app/features/auth/components/AuthCard/AuthCard'
+import PasswordInput from '@/app/features/auth/components/FormContent/PasswordInput'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
-import styles from './page.module.scss'
 
 export default function ResetPasswordPage() {
 	const [password, setPassword] = useState('')
@@ -17,16 +17,11 @@ export default function ResetPasswordPage() {
 	}, [])
 
 	return (
-		<div className={styles.page}>
-			<AuthLogo />
-			<div className={styles.card}>
-				<div className={styles.cardHeader}>
-					<h1 className={styles.cardTitle}>Новый пароль</h1>
-					<p className={styles.cardSubtitle}>
-						Введите новый пароль для вашего аккаунта.
-					</p>
-				</div>
-
+		<AuthPageLayout>
+			<AuthCard
+				title='С возвращением'
+				subtitle='Войдите, чтобы управлять ссылками и аналитикой.'
+			>
 				<form
 					className={styles.form}
 					onSubmit={handleSubmit}
@@ -58,14 +53,13 @@ export default function ResetPasswordPage() {
 						Вспомнили пароль?{' '}
 						<Link
 							href='/login'
-							className={styles.loginLink}
+							className={styles.link}
 						>
 							Вернуться ко входу
 						</Link>
 					</p>
 				</form>
-			</div>
-			<BackToHomeLink />
-		</div>
+			</AuthCard>
+		</AuthPageLayout>
 	)
 }

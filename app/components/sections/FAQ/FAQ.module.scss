@@ -1,4 +1,4 @@
-@import '../../../styles/variables';
+@use 'variables' as *;
 
 .faq {
 	padding: $spacing-3xl 0;

@@ -4,6 +4,7 @@ import { useCallback } from 'react'
 
 interface ActionMessages {
 	copy?: string
+	create?: string
 	delete?: string
 	pause?: string
 	resume?: string
@@ -11,6 +12,7 @@ interface ActionMessages {
 
 const DEFAULT_MESSAGES: ActionMessages = {
 	copy: 'Скопировано!',
+	create: 'Ссылка создана',
 	delete: 'Ссылка удалена',
 	pause: 'Ссылка приостановлена',
 	resume: 'Ссылка возобновлена'
@@ -30,6 +32,12 @@ export const useActionCallbacks = ({
 			showToast(messages.copy)
 		}
 	}, [showToast, messages.copy])
+
+	const handleCreate = useCallback(() => {
+		if (messages.create) {
+			showToast(messages.create)
+		}
+	}, [showToast, messages.create])
 
 	const handleDelete = useCallback(() => {
 		if (messages.delete) {
@@ -51,6 +59,7 @@ export const useActionCallbacks = ({
 
 	return {
 		handleCopy,
+		handleCreate,
 		handleDelete,
 		handlePause,
 		handleResume

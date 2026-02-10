@@ -1,0 +1,104 @@
+@use 'variables' as *;
+
+.card {
+	background: var(--color-bg);
+	border-radius: $border-radius-xl;
+	border: 1px solid $color-border;
+	padding: $spacing-lg;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-md;
+		border-radius: $border-radius-lg;
+		margin-top: $spacing-md;
+	}
+}
+
+.title {
+	font-size: $font-size-lg;
+	font-weight: $font-weight-semibold;
+	color: var(--color-text-primary);
+	margin: 0;
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-base;
+	}
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+}
+
+.item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: $spacing-md 0;
+	border-bottom: 1px solid var(--color-border);
+	cursor: pointer;
+	transition: $transition-base;
+	margin: 0 (-$spacing-sm);
+	padding-left: $spacing-sm;
+	padding-right: $spacing-sm;
+
+	&:last-child {
+		border-bottom: none;
+		padding-bottom: $spacing-sm;
+	}
+
+	&:first-child {
+		padding-top: $spacing-sm;
+	}
+
+	&:hover {
+		background-color: var(--color-bg-secondary);
+
+		.domain {
+			color: var(--color-primary);
+		}
+	}
+
+	&:active {
+		transform: scale(0.99);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-sm 0;
+		padding-left: $spacing-sm;
+		padding-right: $spacing-sm;
+	}
+}
+
+.domain {
+	font-size: $font-size-sm;
+	color: var(--color-text-primary);
+	transition: color 0.2s ease;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	min-width: 0;
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-xs;
+	}
+}
+
+.clicks {
+	font-size: $font-size-sm;
+	font-weight: $font-weight-semibold;
+	color: var(--color-text-secondary);
+	flex-shrink: 0;
+	margin-left: $spacing-sm;
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-xs;
+	}
+}

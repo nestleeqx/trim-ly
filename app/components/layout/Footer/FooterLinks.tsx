@@ -6,21 +6,30 @@ interface FooterLinksProps {
 	onContactClick?: () => void
 }
 
-export const FooterLinks: React.FC<FooterLinksProps> = ({ onContactClick }) => {
+export default function FooterLinks({ onContactClick }: FooterLinksProps) {
 	return (
 		<div className={styles.links}>
 			{Object.entries(footerSections).map(([key, section]) => (
-				<div key={key} className={styles.column}>
+				<div
+					key={key}
+					className={styles.column}
+				>
 					<h3 className={styles.columnTitle}>{section.title}</h3>
 					<ul>
 						{section.links.map(link => (
 							<li key={link.label}>
 								{link.isModal ? (
-									<button className={styles.linkButton} onClick={onContactClick}>
+									<button
+										className={styles.linkButton}
+										onClick={onContactClick}
+									>
 										{link.label}
 									</button>
 								) : (
-									<Link href={link.href} className={styles.link}>
+									<Link
+										href={link.href}
+										className={styles.link}
+									>
 										{link.label}
 									</Link>
 								)}

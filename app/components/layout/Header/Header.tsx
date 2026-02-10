@@ -1,16 +1,16 @@
 'use client'
 
+import Button from '@/app/components/ui/Button/Button'
+import Logo from '@/app/components/ui/Logo/Logo'
+import { useTheme } from '@/context/ThemeContext'
 import classNames from 'classnames'
 import { Moon, Sun } from 'lucide-react'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { useTheme } from '../../../../context/ThemeContext'
-import Button from '../../ui/Button'
-import Logo from '../../ui/Logo'
-import MobileNav from '../MobileNav'
+import { useEffect, useState } from 'react'
 import styles from './Header.module.scss'
+import MobileNav from './MobileNav/MobileNav'
 
-const Header: React.FC = () => {
+export default function Header() {
 	const { theme, toggleTheme } = useTheme()
 	const [scrolled, setScrolled] = useState(false)
 
@@ -96,5 +96,3 @@ const Header: React.FC = () => {
 		</header>
 	)
 }
-
-export default Header

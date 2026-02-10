@@ -1,4 +1,4 @@
-@import '../../../styles/variables';
+@use 'variables' as *;
 
 .cta {
 	padding: $spacing-3xl 0;

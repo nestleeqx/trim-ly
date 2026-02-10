@@ -1,0 +1,16 @@
+@use 'variables' as *;
+
+.grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: $spacing-md;
+	margin-bottom: $spacing-md;
+
+	@media (max-width: $breakpoint-xl) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		gap: $spacing-sm;
+	}
+}

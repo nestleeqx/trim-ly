@@ -1,15 +1,15 @@
 'use client'
 
+import styles from '@/app/[slug]/page.module.scss'
+import ErrorState from '@/app/features/slug/components/ErrorState'
+import ExpiredState from '@/app/features/slug/components/ExpiredState'
+import NotFoundState from '@/app/features/slug/components/NotFoundState'
+import PasswordState from '@/app/features/slug/components/PasswordState'
+import PausedState from '@/app/features/slug/components/PausedState'
+import RedirectingState from '@/app/features/slug/components/RedirectingState'
 import { LinkState, MOCK_LINKS } from '@/data/mockLinks'
 import { Link as LinkIcon, ShieldCheck } from 'lucide-react'
 import { useParams } from 'next/navigation'
-import ErrorState from './ErrorState'
-import ExpiredState from './ExpiredState'
-import NotFoundState from './NotFoundState'
-import styles from './page.module.scss'
-import PasswordState from './PasswordState'
-import PausedState from './PausedState'
-import RedirectingState from './RedirectingState'
 
 export default function SlugPage() {
 	const params = useParams()

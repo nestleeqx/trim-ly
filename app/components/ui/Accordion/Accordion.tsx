@@ -11,12 +11,12 @@ interface AccordionProps {
 	initialOpen?: boolean
 }
 
-const Accordion: React.FC<AccordionProps> = ({
+export default function Accordion({
 	title,
 	icon,
 	children,
 	initialOpen = false
-}) => {
+}: AccordionProps) {
 	const [isOpen, setIsOpen] = useState(initialOpen)
 
 	const handleToggle = () => {
@@ -44,5 +44,3 @@ const Accordion: React.FC<AccordionProps> = ({
 		</div>
 	)
 }
-
-export default Accordion

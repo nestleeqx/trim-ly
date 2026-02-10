@@ -1,11 +1,14 @@
 'use client'
 
-import BulkActionsBar from '@/app/components/ui/BulkActionsBar'
-import ConfirmModal from '@/app/components/ui/ConfirmModal'
-import DashboardHeader from '@/app/components/ui/DashboardHeader'
-import LinksEmptyState from '@/app/components/ui/LinksEmpyState/LinksEmptyState'
-import LinksFilters from '@/app/components/ui/LinksFilters/LinksFilters'
+import styles from '@/app/(manager)/links/page.module.scss'
+import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
 import Toast from '@/app/components/ui/Toast/Toast'
+import BulkActionsBar from '@/app/features/links/components/BulkActionsBar/BulkActionsBar'
+import ConfirmModal from '@/app/features/links/components/ConfirmModal/ConfirmModal'
+import LinksEmptyState from '@/app/features/links/components/LinksEmptyState/LinksEmptyState'
+import LinksFilters from '@/app/features/links/components/LinksFilters/LinksFilters'
+import LinksResultsInfo from '@/app/features/links/components/LinksResultsInfo/LinksResultsInfo'
+import LinksViewContent from '@/app/features/links/components/LinksViewContent/LinksViewContent'
 import { mockLinks } from '@/data/mockLinks'
 import { useLinksManager } from '@/hooks/useLinksManager'
 import {
@@ -15,9 +18,6 @@ import {
 	getResultsInfo,
 	getSelectedLinkItems
 } from '@/utils/link-helpers'
-import LinksResultsInfo from '../../components/ui/LinksResultsInfo'
-import LinksViewContent from '../../components/ui/LinksViewContent'
-import styles from './page.module.scss'
 
 export default function LinksPage() {
 	const manager = useLinksManager(mockLinks)

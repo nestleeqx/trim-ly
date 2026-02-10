@@ -1,15 +1,15 @@
 'use client'
 
+import Modal from '@/app/components/ui/Modal/Modal'
+import BillingToggle from '@/app/features/pricing/components/BillingToggle/BillingToggle'
+import ContactForm from '@/app/features/pricing/components/ContactForm/ContactForm'
 import { motion } from 'framer-motion'
 import { useCallback, useState } from 'react'
-import BillingToggle from '../../ui/BillingToggle/BillingToggle'
-import ContactForm from '../../ui/ContactForm'
-import Modal from '../../ui/Modal'
-import PlanCard from '../../ui/PlanCard/PlanCard'
+import PlanCard from '../../../features/pricing/components/PlanCard/PlanCard'
 import styles from './Pricing.module.scss'
 import { plans } from './pricing.config'
 
-const Pricing: React.FC = () => {
+export default function Pricing() {
 	const [isContactModalOpen, setContactModalOpen] = useState(false)
 	const [isYearly, setIsYearly] = useState(false)
 
@@ -68,5 +68,3 @@ const Pricing: React.FC = () => {
 		</section>
 	)
 }
-
-export default Pricing

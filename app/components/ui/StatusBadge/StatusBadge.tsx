@@ -6,7 +6,7 @@ interface StatusBadgeProps {
 	status: LinkStatus
 }
 
-const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
+export default function StatusBadge({ status }: StatusBadgeProps) {
 	const config = statusConfig[status]
 
 	return (
@@ -15,5 +15,3 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
 		</span>
 	)
 }
-
-export default StatusBadge

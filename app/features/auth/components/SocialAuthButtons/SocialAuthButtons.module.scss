@@ -1,0 +1,18 @@
+@use 'variables' as *;
+
+.socialButtons {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: $spacing-md;
+}
+
+.socialBtn {
+	padding: 12px;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+}
+
+.socialIcon {
+	width: 18px;
+	height: 18px;
+}

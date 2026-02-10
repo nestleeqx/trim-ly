@@ -1,0 +1,33 @@
+@use 'variables' as *;
+
+.card {
+	width: 100%;
+	max-width: 500px;
+	background: $color-bg-light;
+	border: 1px solid $color-border;
+	border-radius: $border-radius-xl;
+	padding: $spacing-2xl;
+	margin-bottom: $spacing-xl;
+
+	@media (max-width: $breakpoint-sm) {
+		padding: $spacing-xl;
+	}
+}
+
+.cardHeader {
+	text-align: center;
+	margin-bottom: $spacing-2xl;
+}
+
+.cardTitle {
+	font-size: $font-size-2xl;
+	font-weight: $font-weight-bold;
+	color: $color-text-primary;
+	margin: 0 0 $spacing-sm 0;
+}
+
+.cardSubtitle {
+	font-size: $font-size-sm;
+	color: $color-text-secondary;
+	margin: 0;
+}

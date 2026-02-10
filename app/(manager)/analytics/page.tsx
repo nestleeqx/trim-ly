@@ -1,15 +1,17 @@
 'use client'
 
-import Button from '@/app/components/ui/Button'
-import ClicksChart from '@/app/components/ui/ClicksChart'
-import DashboardHeader from '@/app/components/ui/DashboardHeader'
-import DevicesChart from '@/app/components/ui/DevicesChart'
-import LinksFilters from '@/app/components/ui/LinksFilters/LinksFilters'
-import LinksTable from '@/app/components/ui/LinksTable/LinksTable'
-import StatsCards from '@/app/components/ui/StatsCards'
-import { defaultStatsData } from '@/app/components/ui/StatsCards/stats.config'
-import TopCountries from '@/app/components/ui/TopCountries'
-import TopReferrers from '@/app/components/ui/TopReferrers'
+import styles from '@/app/(manager)/analytics/page.module.scss'
+import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
+import Button from '@/app/components/ui/Button/Button'
+import { periods } from '@/app/features/analytics/analytics.config'
+import ClicksChart from '@/app/features/analytics/components/ClicksChart/ClicksChart'
+import DevicesChart from '@/app/features/analytics/components/DevicesChart/DevicesChart'
+import StatsCards from '@/app/features/analytics/components/StatsCards/StatsCards'
+import { defaultStatsData } from '@/app/features/analytics/components/StatsCards/stats.config'
+import TopCountries from '@/app/features/analytics/components/TopCountries/TopCountries'
+import TopReferrers from '@/app/features/analytics/components/TopReferrers/TopReferrers'
+import LinksFilters from '@/app/features/links/components/LinksFilters/LinksFilters'
+import LinksTable from '@/app/features/links/components/LinksTable/LinksTable'
 import {
 	mockDeviceStats,
 	mockTopCountries,
@@ -19,8 +21,6 @@ import { mockLinks } from '@/data/mockLinks'
 import useCsvExport from '@/hooks/useCsvExport'
 import { convertStatsDataToCsv } from '@/utils/csvConverters'
 import { useState } from 'react'
-import { periods } from './analytics.config'
-import styles from './page.module.scss'
 
 export default function AnalyticsPage() {
 	const [activePeriod, setActivePeriod] = useState('24h')

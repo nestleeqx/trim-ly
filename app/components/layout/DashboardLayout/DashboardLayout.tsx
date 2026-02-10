@@ -1,7 +1,7 @@
 'use client'
 
+import Sidebar from '@/app/components/layout/DashboardLayout/Sidebar/Sidebar'
 import React from 'react'
-import Sidebar from '../Sidebar'
 import styles from './DashboardLayout.module.scss'
 
 interface DashboardLayoutProps {

@@ -1,16 +1,16 @@
 'use client'
 
+import Button from '@/app/components/ui/Button/Button'
+import DemoModal from '@/app/components/ui/DemoModal/DemoModal'
 import { motion } from 'framer-motion'
 import { Zap } from 'lucide-react'
 import Link from 'next/link'
-import React, { useState } from 'react'
-import Button from '../../ui/Button'
-import DemoModal from '../../ui/DemoModal'
-import ProductPreview from '../../ui/ProductPreview/ProductPreview'
-import styles from './Hero.module.scss'
+import { useState } from 'react'
 import { containerVariants, heroFeatures, itemVariants } from './hero.config'
+import styles from './Hero.module.scss'
+import ProductPreview from './ProductPreview/ProductPreview'
 
-const Hero: React.FC = () => {
+export default function Hero() {
 	const [isDemoModalOpen, setIsDemoModalOpen] = useState(false)
 
 	return (
@@ -111,5 +111,3 @@ const Hero: React.FC = () => {
 		</section>
 	)
 }
-
-export default Hero

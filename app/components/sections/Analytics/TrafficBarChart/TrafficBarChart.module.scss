@@ -1,0 +1,42 @@
+@use 'variables' as *;
+
+.barChart {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+}
+
+.barRow {
+	display: flex;
+	align-items: center;
+	gap: $spacing-md;
+}
+
+.barLabel {
+	font-size: $font-size-sm;
+	color: var(--color-text-secondary);
+	min-width: 70px;
+
+	@media (max-width: $breakpoint-sm) {
+		min-width: 60px;
+		font-size: $font-size-xs;
+	}
+}
+
+.barTrack {
+	flex: 1;
+	height: 24px;
+	background: var(--color-bg-secondary);
+	border-radius: $border-radius-sm;
+	overflow: hidden;
+
+	@media (max-width: $breakpoint-sm) {
+		height: 20px;
+	}
+}
+
+.barFill {
+	height: 100%;
+	border-radius: $border-radius-sm;
+	transition: width 0.5s ease-out;
+}

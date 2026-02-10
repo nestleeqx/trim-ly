@@ -1,0 +1,155 @@
+@use 'variables' as *;
+
+.topGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: $spacing-md;
+	margin-bottom: $spacing-lg;
+}
+
+.planCard {
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-lg;
+	padding: $spacing-md;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.planHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: $spacing-md;
+}
+
+.planLabel {
+	font-size: $font-size-xs;
+	color: var(--color-text-secondary);
+	letter-spacing: 0.08em;
+}
+
+.planTitle {
+	margin: $spacing-xs 0 $spacing-sm 0;
+}
+
+.badge {
+	background: #f0f0ff;
+	color: var(--color-primary);
+	padding: 6px 10px;
+	border-radius: 999px;
+	font-size: $font-size-xs;
+	font-weight: $font-weight-medium;
+}
+
+.planDesc {
+	color: var(--color-text-secondary);
+	font-size: $font-size-sm;
+	margin-top: $spacing-sm;
+}
+
+.planAction {
+	margin-top: $spacing-md;
+}
+
+.usageCard {
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-lg;
+	padding: $spacing-md;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-sm;
+}
+
+.usageRow {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.usageLabel {
+	font-size: $font-size-sm;
+	color: var(--color-text-secondary);
+}
+
+.usageValue {
+	font-size: $font-size-sm;
+	color: var(--color-text-primary);
+}
+
+.progressBar {
+	height: 8px;
+	background: var(--color-bg-secondary);
+	border-radius: 999px;
+	overflow: hidden;
+}
+
+.progressFill {
+	height: 100%;
+	background: linear-gradient(90deg, #4f46e5, #6366f1);
+	width: 0%;
+}
+
+.progressAlt {
+	margin-bottom: 0;
+}
+
+.progressFillAlt {
+	height: 100%;
+	background: linear-gradient(90deg, #f59e0b, #f97316);
+	width: 0%;
+}
+
+.historyCard {
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-lg;
+	padding: $spacing-md;
+}
+
+.historyTitle {
+	margin: 0 0 $spacing-md 0;
+}
+
+.invoiceTable {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.invoiceTable thead th {
+	text-align: left;
+	font-size: $font-size-xs;
+	color: var(--color-text-secondary);
+	padding: $spacing-sm 0;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.invoiceTable tbody td {
+	padding: $spacing-md 0;
+	border-bottom: 1px solid var(--color-border);
+}
+
+.colId {
+	font-weight: $font-weight-medium;
+}
+
+.colAmount {
+	font-weight: $font-weight-semibold;
+}
+
+.colStatus .paid {
+	color: #16a34a;
+}
+
+.download {
+	color: var(--color-primary);
+	text-decoration: none;
+}
+
+@media (max-width: $breakpoint-sm) {
+	.topGrid {
+		grid-template-columns: 1fr;
+	}
+}

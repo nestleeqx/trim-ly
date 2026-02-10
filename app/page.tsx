@@ -1,13 +1,13 @@
-import Footer from './components/layout/Footer/Footer'
-import Header from './components/layout/Header'
-import Analytics from './components/sections/Analytics'
-import CTA from './components/sections/CTA/CTA'
-import FAQ from './components/sections/FAQ/FAQ'
-import Features from './components/sections/Features'
-import Hero from './components/sections/Hero'
-import Pricing from './components/sections/Pricing'
-import TrustedBy from './components/sections/TrustedBy'
-import ScrollToTop from './components/ui/ScrollToTop'
+import Footer from '@/app/components/layout/Footer/Footer'
+import Header from '@/app/components/layout/Header/Header'
+import Analytics from '@/app/components/sections/Analytics/Analytics'
+import CTA from '@/app/components/sections/CTA/CTA'
+import FAQ from '@/app/components/sections/FAQ/FAQ'
+import Features from '@/app/components/sections/Features/Features'
+import Hero from '@/app/components/sections/Hero/Hero'
+import Pricing from '@/app/components/sections/Pricing/Pricing'
+import TrustedBy from '@/app/components/sections/TrustedBy/TrustedBy'
+import ScrollToTop from '@/app/components/ui/ScrollToTop/ScrollToTop'
 
 export default function Home() {
 	return (

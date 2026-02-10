@@ -1,0 +1,52 @@
+@use 'variables' as *;
+
+.row {
+	&.selected {
+		background: rgba($color-primary, 0.05);
+	}
+}
+
+.checkboxCell {
+	width: 48px;
+	text-align: center;
+}
+
+.linkTitle {
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+	color: var(--color-text-primary);
+	text-decoration: none;
+
+	&.clickableTitle {
+		cursor: pointer;
+		transition: color 0.2s ease-in-out;
+
+		&:hover {
+			color: var(--color-primary);
+		}
+	}
+}
+
+.clicks {
+	font-size: $font-size-sm;
+	font-weight: $font-weight-semibold;
+	color: var(--color-text-primary);
+}
+
+.trend {
+	font-weight: $font-weight-semibold;
+}
+
+.actions {
+	display: flex;
+	align-items: center;
+	gap: $spacing-xs;
+}
+
+.trendPositive {
+	color: $color-success;
+}
+
+.trendNegative {
+	color: $color-red;
+}

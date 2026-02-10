@@ -1,15 +1,15 @@
 'use client'
 
-import { AuthCard } from '@/app/components/auth/AuthCard'
-import { AuthDivider } from '@/app/components/auth/AuthDivider'
-import { AuthPageLayout } from '@/app/components/auth/AuthPageLayout'
-import { FormField } from '@/app/components/auth/FormField'
-import { PasswordInput } from '@/app/components/auth/PasswordInput'
-import { SocialAuthButtons } from '@/app/components/auth/SocialAuthButtons'
-import Button from '@/app/components/ui/Button'
+import styles from '@/app/(auth)/login/page.module.scss'
+import AuthPageLayout from '@/app/components/layout/AuthPageLayout/AuthPageLayout'
+import Button from '@/app/components/ui/Button/Button'
+import AuthCard from '@/app/features/auth/components/AuthCard/AuthCard'
+import AuthDivider from '@/app/features/auth/components/AuthDivider/AuthDivider'
+import FormField from '@/app/features/auth/components/FormContent/FormField'
+import PasswordInput from '@/app/features/auth/components/FormContent/PasswordInput'
+import SocialAuthButtons from '@/app/features/auth/components/SocialAuthButtons/SocialAuthButtons'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
-import styles from './page.module.scss'
 
 export default function LoginPage() {
 	const [email, setEmail] = useState('')
@@ -49,7 +49,7 @@ export default function LoginPage() {
 						showForgotLink={true}
 						forgotLinkClassName={styles.forgotLink}
 					/>
-					<div className={styles.rememberRow}>
+					<div className={styles.row}>
 						<input
 							id='remember'
 							type='checkbox'
@@ -77,7 +77,7 @@ export default function LoginPage() {
 						Нет аккаунта?{' '}
 						<Link
 							href='/signup'
-							className={styles.signupLink}
+							className={styles.link}
 						>
 							Зарегистрироваться
 						</Link>

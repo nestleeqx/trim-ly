@@ -11,13 +11,13 @@ interface ToggleSwitchProps {
 	offLabel?: string
 }
 
-const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
+export default function ToggleSwitch({
 	checked,
 	onChange,
 	label,
 	onLabel = 'Включена',
 	offLabel = 'Отключена'
-}) => {
+}: ToggleSwitchProps) {
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		onChange(e.target.checked)
 	}
@@ -38,5 +38,3 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
 		</label>
 	)
 }
-
-export default ToggleSwitch

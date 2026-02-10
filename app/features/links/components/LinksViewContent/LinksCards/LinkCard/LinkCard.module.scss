@@ -1,0 +1,111 @@
+@use 'variables' as *;
+
+.card {
+	background: var(--color-bg);
+	border-radius: $border-radius-xl;
+	border: 1px solid var(--color-border);
+	padding: $spacing-lg;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+	cursor: pointer;
+	transition: $transition-fast;
+
+	&:hover {
+		box-shadow: $shadow-md;
+	}
+
+	&.selected {
+		border-color: $color-primary;
+		background: rgba($color-primary, 0.02);
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		padding: $spacing-md;
+		border-radius: $border-radius-lg;
+	}
+}
+
+.cardHeader {
+	display: flex;
+	align-items: center;
+	gap: $spacing-sm;
+}
+
+.checkboxWrapper {
+	flex-shrink: 0;
+}
+
+.kebabActions {
+	margin-left: auto;
+}
+
+.cardTitle {
+	font-size: $font-size-base;
+	font-weight: $font-weight-semibold;
+	color: var(--color-text-primary);
+	margin: 0;
+	line-height: 1.4;
+	cursor: pointer;
+	transition: $transition-fast;
+	max-width: max-content;
+
+	&:hover {
+		color: var(--color-primary);
+	}
+}
+
+.stats {
+	display: flex;
+	gap: $spacing-lg;
+	padding: $spacing-md 0;
+	border-top: 1px solid var(--color-border);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.statItem {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-xs;
+}
+
+.statLabel {
+	font-size: $font-size-xs;
+	color: var(--color-text-secondary);
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.statValue {
+	font-size: $font-size-sm;
+	font-weight: $font-weight-semibold;
+	color: var(--color-text-primary);
+}
+
+.quickActions {
+	display: flex;
+	gap: $spacing-sm;
+	position: relative;
+}
+
+.quickActionBtn {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: $spacing-xs;
+	padding: $spacing-sm;
+	background: var(--color-bg-secondary);
+	border: none;
+	border-radius: $border-radius-md;
+	font-size: $font-size-xs;
+	font-weight: $font-weight-medium;
+	color: var(--color-text-secondary);
+	cursor: pointer;
+	transition: $transition-fast;
+
+	&:hover {
+		background: var(--color-bg-tertiary);
+		color: var(--color-text-primary);
+	}
+}

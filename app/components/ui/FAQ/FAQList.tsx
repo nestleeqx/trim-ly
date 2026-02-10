@@ -16,11 +16,11 @@ interface FAQListProps {
 	useMotion?: boolean
 }
 
-const FAQList: React.FC<FAQListProps> = ({
+export default function FAQList({
 	items,
 	initialOpenIndex = 0,
 	useMotion = false
-}) => {
+}: FAQListProps) {
 	const [openIndex, setOpenIndex] = useState<number | null>(initialOpenIndex)
 
 	const toggle = (index: number) => {
@@ -117,5 +117,3 @@ const FAQList: React.FC<FAQListProps> = ({
 		</div>
 	)
 }
-
-export default FAQList

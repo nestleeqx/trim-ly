@@ -1,14 +1,14 @@
 'use client'
 
-import BillingTab from '@/app/components/settings/BillingTab/BillingTab'
-import DangerTab from '@/app/components/settings/DangerTab/DangerTab'
-import SecurityTab from '@/app/components/settings/SecurityTab/SecurityTab'
+import styles from '@/app/(manager)/settings/page.module.scss'
+import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
+import BillingTab from '@/app/features/settings/components/BillingTab/BillingTab'
+import DangerTab from '@/app/features/settings/components/TabCard/DangerTab/DangerTab'
+import PreferenceTab from '@/app/features/settings/components/TabCard/PreferenceTab/PreferenceTab'
+import ProfileTab from '@/app/features/settings/components/TabCard/ProfileTab/ProfileTab'
+import SecurityTab from '@/app/features/settings/components/TabCard/SecurityTab/SecurityTab'
 import { AlertTriangle, CreditCard, Palette, Shield, User } from 'lucide-react'
 import { useState } from 'react'
-import PreferenceTab from '../../components/settings/PreferenceTab/PreferenceTab'
-import ProfileTab from '../../components/settings/ProfileTab/ProfileTab'
-import DashboardHeader from '../../components/ui/DashboardHeader'
-import styles from './page.module.scss'
 
 type Tab = 'profile' | 'security' | 'preferences' | 'billing' | 'danger'
 

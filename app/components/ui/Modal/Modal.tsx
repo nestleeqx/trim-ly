@@ -1,55 +1,60 @@
-'use client';
+'use client'
 
-import React, { useEffect, useCallback, useRef } from 'react';
-import { X } from 'lucide-react';
-import styles from './Modal.module.scss';
+import { X } from 'lucide-react'
+import React, { useCallback, useEffect, useRef } from 'react'
+import styles from './Modal.module.scss'
 
 interface ModalProps {
-	isOpen: boolean;
-	onClose: () => void;
-	children: React.ReactNode;
-	title?: string;
+	isOpen: boolean
+	onClose: () => void
+	children: React.ReactNode
+	title?: string
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
-	const mouseDownTarget = useRef<EventTarget | null>(null);
+export default function Modal({
+	isOpen,
+	onClose,
+	children,
+	title
+}: ModalProps) {
+	const mouseDownTarget = useRef<EventTarget | null>(null)
 
 	const handleEscapeKey = useCallback(
 		(event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
-				onClose();
+				onClose()
 			}
 		},
 		[onClose]
-	);
+	)
 
 	useEffect(() => {
 		if (isOpen) {
-			document.addEventListener('keydown', handleEscapeKey);
-			document.body.style.overflow = 'hidden';
+			document.addEventListener('keydown', handleEscapeKey)
+			document.body.style.overflow = 'hidden'
 		}
 
 		return () => {
-			document.removeEventListener('keydown', handleEscapeKey);
-			document.body.style.overflow = 'unset';
-		};
-	}, [isOpen, handleEscapeKey]);
+			document.removeEventListener('keydown', handleEscapeKey)
+			document.body.style.overflow = 'unset'
+		}
+	}, [isOpen, handleEscapeKey])
 
 	const handleMouseDown = (e: React.MouseEvent) => {
-		mouseDownTarget.current = e.target;
-	};
+		mouseDownTarget.current = e.target
+	}
 
 	const handleMouseUp = (e: React.MouseEvent) => {
 		if (
 			mouseDownTarget.current === e.target &&
 			e.target === e.currentTarget
 		) {
-			onClose();
+			onClose()
 		}
-		mouseDownTarget.current = null;
-	};
+		mouseDownTarget.current = null
+	}
 
-	if (!isOpen) return null;
+	if (!isOpen) return null
 
 	return (
 		<div
@@ -63,7 +68,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
 					<button
 						className={styles.closeButton}
 						onClick={onClose}
-						aria-label="Закрыть"
+						aria-label='Закрыть'
 					>
 						<X size={24} />
 					</button>
@@ -71,7 +76,5 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children, title }) => {
 				<div className={styles.content}>{children}</div>
 			</div>
 		</div>
-	);
-};
-
-export default Modal;
+	)
+}

@@ -1,0 +1,18 @@
+@use 'variables' as *;
+
+.resultsInfo {
+	display: flex;
+	align-items: center;
+	gap: $spacing-md;
+	margin-bottom: $spacing-md;
+	padding: $spacing-sm $spacing-md;
+	background-color: $color-bg-dark;
+	border-radius: $border-radius-lg;
+	font-size: $font-size-sm;
+	color: $color-text-secondary;
+}
+
+.searchInfo {
+	color: $color-primary;
+	font-weight: $font-weight-medium;
+}

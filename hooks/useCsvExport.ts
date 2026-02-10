@@ -1,3 +1,5 @@
+import { LinkItem } from '@/types/links'
+
 interface ExportOptions {
 	includeHeaders?: boolean
 	filename?: string
@@ -9,7 +11,10 @@ const useCsvExport = <T extends unknown>(
 	defaultFilename: string,
 	converter: (data: T[]) => string
 ) => {
-	const downloadCsv = (options: ExportOptions = {}) => {
+	const downloadCsv = (
+		filteredAndSortedLinks: LinkItem[],
+		options: ExportOptions = {}
+	) => {
 		const {
 			filename = `${defaultFilename}_${new Date().toISOString().split('T')[0]}.csv`
 		} = options

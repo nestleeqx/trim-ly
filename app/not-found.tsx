@@ -1,10 +1,10 @@
 'use client'
 
+import Button from '@/app/components/ui/Button/Button'
+import Logo from '@/app/components/ui/Logo/Logo'
+import styles from '@/app/not-found.module.scss'
 import { CreditCard, Home, Search, Zap } from 'lucide-react'
 import Link from 'next/link'
-import Button from './components/ui/Button'
-import Logo from './components/ui/Logo'
-import styles from './not-found.module.scss'
 
 export default function NotFound() {
 	return (

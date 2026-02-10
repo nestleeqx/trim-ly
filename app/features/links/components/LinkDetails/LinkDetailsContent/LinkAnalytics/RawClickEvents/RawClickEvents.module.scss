@@ -1,0 +1,59 @@
+@use 'variables' as *;
+
+.card {
+	background: var(--color-bg);
+	border-radius: $border-radius-xl;
+	border: 1px solid var(--color-border);
+	padding: $spacing-md;
+	box-shadow: var(--card-shadow, 0 1px 2px rgba(0, 0, 0, 0.04));
+}
+
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: $spacing-sm;
+}
+
+.title {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.tableWrapper {
+	overflow: auto;
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 14px;
+
+	thead th {
+		text-align: left;
+		padding: $spacing-sm 8px;
+		color: var(--color-text-secondary);
+		border-bottom: 1px solid var(--color-border);
+	}
+
+	tbody td {
+		padding: 14px 8px;
+	}
+
+	tbody tr:not(:last-child) {
+		border-bottom: 1px solid var(--color-border);
+	}
+}
+
+.countryName {
+	font-weight: 600;
+}
+
+.referrer {
+	color: var(--color-primary);
+	text-decoration: none;
+}
+
+.paginationWrapper {
+	margin-top: $spacing-sm;
+}

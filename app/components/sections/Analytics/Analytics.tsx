@@ -1,17 +1,17 @@
 'use client'
 
+import Button from '@/app/components/ui/Button/Button'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check } from 'lucide-react'
 import Link from 'next/link'
 import { useState } from 'react'
-import Button from '../../ui/Button'
-import DonutChart from '../../ui/DonutChart/DonutChart'
-import PeriodTabs from '../../ui/PeriodTabs/PeriodTabs'
-import TrafficBarChart from '../../ui/TrafficBarChart/TrafficBarChart'
 import { checklistItems, Period, periodData } from './analytics.config'
 import styles from './Analytics.module.scss'
+import DonutChart from './DonutChart/DonutChart'
+import PeriodTabs from './PeriodTabs/PeriodTabs'
+import TrafficBarChart from './TrafficBarChart/TrafficBarChart'
 
-const Analytics: React.FC = () => {
+export default function Analytics() {
 	const [activePeriod, setActivePeriod] = useState<Period>('30d')
 	const currentData = periodData[activePeriod]
 
@@ -114,5 +114,3 @@ const Analytics: React.FC = () => {
 		</section>
 	)
 }
-
-export default Analytics

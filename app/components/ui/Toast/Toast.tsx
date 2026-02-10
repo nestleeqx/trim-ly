@@ -17,12 +17,12 @@ const icons = {
 	warning: AlertTriangle
 }
 
-const Toast: React.FC<ToastProps> = ({
+export default function Toast({
 	message,
 	isVisible,
 	onClose,
 	variant = 'success'
-}) => {
+}: ToastProps) {
 	useEffect(() => {
 		if (isVisible) {
 			const timer = setTimeout(onClose, 3000)
@@ -41,5 +41,3 @@ const Toast: React.FC<ToastProps> = ({
 		</div>
 	)
 }
-
-export default Toast

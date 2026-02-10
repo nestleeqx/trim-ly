@@ -2,12 +2,10 @@ import { ToastVariant } from '@/app/components/ui/Toast/Toast'
 import useCsvExport from '@/hooks/useCsvExport'
 import { LinkItem, LinksFiltersState } from '@/types/links'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import {
-	useLinksFiltering,
-	useLinksOperations,
-	useLinksSelection,
-	useUrlParamsSync
-} from './links'
+import { useLinksFiltering } from './links/useLinksFiltering'
+import { useLinksOperations } from './links/useLinksOperations'
+import { useLinksSelection } from './links/useLinksSelection'
+import { useUrlParamsSync } from './links/useUrlParamsSync'
 
 export const useLinksManager = (initialLinks: LinkItem[]) => {
 	const {

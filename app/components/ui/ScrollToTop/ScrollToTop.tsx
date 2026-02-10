@@ -1,11 +1,11 @@
 'use client'
 
-import { ArrowUp } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ArrowUp } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import styles from './ScrollToTop.module.scss'
 
-const ScrollToTop: React.FC = () => {
+export default function ScrollToTop() {
 	const [isVisible, setIsVisible] = useState(false)
 
 	useEffect(() => {
@@ -30,7 +30,7 @@ const ScrollToTop: React.FC = () => {
 				<motion.button
 					className={styles.scrollToTop}
 					onClick={scrollToTop}
-					aria-label="Наверх"
+					aria-label='Наверх'
 					initial={{ opacity: 0, scale: 0.8 }}
 					animate={{ opacity: 1, scale: 1 }}
 					exit={{ opacity: 0, scale: 0.8 }}
@@ -44,5 +44,3 @@ const ScrollToTop: React.FC = () => {
 		</AnimatePresence>
 	)
 }
-
-export default ScrollToTop

@@ -1,19 +1,19 @@
 ﻿'use client'
 
-import { LinkDetailsContent } from '@/app/components/dashboard/LinkDetails/LinkDetailsContent'
-import { LinkDetailsHeader } from '@/app/components/dashboard/LinkDetails/LinkDetailsHeader'
-import { LinkDetailsModals } from '@/app/components/dashboard/LinkDetails/LinkDetailsModals'
-import LinkNotFound from '@/app/components/dashboard/LinkNotFound/LinkNotFound'
-import DashboardHeader from '@/app/components/ui/DashboardHeader'
+import styles from '@/app/(manager)/links/[id]/page.module.scss'
+import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
+import LinkDetailsContent from '@/app/features/links/components/LinkDetails/LinkDetailsContent/LinkDetailsContent'
+import LinkDetailsHeader from '@/app/features/links/components/LinkDetails/LinkDetailsHeader'
+import LinkDetailsModals from '@/app/features/links/components/LinkDetails/LinkDetailsModals/LinkDetailsModals'
+import LinkNotFound from '@/app/features/links/components/LinkNotFound/LinkNotFound'
 import { mockLinks } from '@/data/mockLinks'
-import { useLinksOperations } from '@/hooks/links'
+import { useLinksOperations } from '@/hooks/links/useLinksOperations'
 import { useLinkEdit } from '@/hooks/useLinkEdit'
 import { useQrModal } from '@/hooks/useQrModal'
 import { useToast } from '@/hooks/useToast'
 import { LinkItem } from '@/types/links'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useMemo, useState } from 'react'
-import styles from './page.module.scss'
 
 export default function LinkDetailsPage() {
 	const { id } = useParams<{ id: string }>()

@@ -1,10 +1,10 @@
 'use client'
 
+import { ToastVariant } from '@/app/components/ui/Toast/Toast'
 import {
 	LinkEditFormData,
 	SHORT_LINK_DOMAIN
-} from '@/app/components/dashboard/LinkEdit'
-import { ToastVariant } from '@/app/components/ui/Toast/Toast'
+} from '@/app/features/links/components/LinkEdit/linkEdit.config'
 import { LinkItem } from '@/types/links'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'

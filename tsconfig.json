@@ -29,7 +29,7 @@
 		".next/types/**/*.ts",
 		".next/dev/types/**/*.ts",
 		"**/*.mts",
-		"app/components/ui/SortDropdown/sortConfig.tsx"
+		"next.config.js"
 	],
 	"exclude": ["node_modules"]
 }

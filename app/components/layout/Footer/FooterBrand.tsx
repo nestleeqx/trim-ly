@@ -1,8 +1,8 @@
+import Logo from '@/app/components/ui/Logo/Logo'
 import Link from 'next/link'
-import Logo from '../../ui/Logo'
 import styles from './Footer.module.scss'
 
-export const FooterBrand: React.FC = () => {
+export default function FooterBrand() {
 	return (
 		<div className={styles.brand}>
 			<div className={styles.logo}>

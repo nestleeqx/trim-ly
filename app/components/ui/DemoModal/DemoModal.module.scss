@@ -1,4 +1,4 @@
-@import '../../../styles/variables';
+@use 'variables' as *;
 
 .videoWrapper {
 	aspect-ratio: 16 / 9;

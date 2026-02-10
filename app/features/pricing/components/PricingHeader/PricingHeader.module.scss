@@ -1,0 +1,33 @@
+@use 'variables' as *;
+
+.header {
+	text-align: center;
+	margin-bottom: $spacing-3xl;
+	max-width: 700px;
+
+	@media (max-width: $breakpoint-md) {
+		margin-bottom: $spacing-2xl;
+	}
+}
+
+.title {
+	font-size: $font-size-4xl;
+	font-weight: $font-weight-bold;
+	color: $color-text-primary;
+	margin: 0 0 $spacing-md 0;
+
+	@media (max-width: $breakpoint-md) {
+		font-size: $font-size-3xl;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-2xl;
+	}
+}
+
+.subtitle {
+	font-size: $font-size-base;
+	color: $color-text-secondary;
+	margin: 0 0 $spacing-xl 0;
+	line-height: 1.6;
+}

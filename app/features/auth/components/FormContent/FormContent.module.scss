@@ -1,0 +1,65 @@
+@use 'variables' as *;
+
+.formGroup {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-sm;
+}
+
+.label {
+	font-size: $font-size-xs;
+	font-weight: $font-weight-semibold;
+	color: $color-text-primary;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.input {
+	width: 100%;
+	padding: 12px $spacing-md;
+	border: 1px solid $color-border;
+	border-radius: $border-radius-md;
+	font-size: $font-size-sm;
+	color: $color-text-primary;
+	background: $color-bg-light;
+	outline: none;
+	transition: $transition-fast;
+
+	&::placeholder {
+		color: darken($color-border, 10%);
+	}
+
+	&:focus {
+		border-color: $color-primary;
+		box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+	}
+}
+
+.labelRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.inputWrapper {
+	position: relative;
+}
+
+.passwordToggle {
+	position: absolute;
+	right: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: none;
+	color: $color-text-secondary;
+	cursor: pointer;
+	padding: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&:hover {
+		color: $color-text-primary;
+	}
+}

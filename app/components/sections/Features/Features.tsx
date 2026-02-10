@@ -5,7 +5,7 @@ import React from 'react'
 import styles from './Features.module.scss'
 import { cardVariants, containerVariants, features } from './features.config'
 
-const Features: React.FC = () => {
+export default function Features() {
 	return (
 		<section
 			className={styles.features}
@@ -67,5 +67,3 @@ const Features: React.FC = () => {
 		</section>
 	)
 }
-
-export default Features

@@ -3,7 +3,7 @@
 import { getPageNumbers } from '@/utils/pagination'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useMemo } from 'react'
-import ItemsPerPageDropdown from '../ItemsPerPageDropdown/ItemsPerPageDropdown'
+import ItemsPerPageDropdown from './ItemsPerPageDropdown/ItemsPerPageDropdown'
 import styles from './Pagination.module.scss'
 
 interface PaginationProps {
@@ -15,14 +15,14 @@ interface PaginationProps {
 	onItemsPerPageChange: (count: number) => void
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+export default function Pagination({
 	currentPage,
 	totalPages,
 	totalItems,
 	itemsPerPage,
 	onPageChange,
 	onItemsPerPageChange
-}) => {
+}: PaginationProps) {
 	const startItem = (currentPage - 1) * itemsPerPage + 1
 	const endItem = Math.min(currentPage * itemsPerPage, totalItems)
 	const pages = useMemo(
@@ -88,5 +88,3 @@ const Pagination: React.FC<PaginationProps> = ({
 		</div>
 	)
 }
-
-export default Pagination

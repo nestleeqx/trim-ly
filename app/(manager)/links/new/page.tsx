@@ -1,18 +1,18 @@
 'use client'
 
+import styles from '@/app/(manager)/links/new/page.module.scss'
+import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
+import Toast from '@/app/components/ui/Toast/Toast'
+import LinkEditForm from '@/app/features/links/components/LinkDetails/LinkDetailsContent/LinkEditView/LinkEditForm/LinkEditForm'
 import {
-	LinkEditForm,
 	LinkEditFormData,
 	SHORT_LINK_DOMAIN
-} from '@/app/components/dashboard/LinkEdit'
-import DashboardHeader from '@/app/components/ui/DashboardHeader'
-import LinkPreview from '@/app/components/ui/LinkPreview'
-import Toast from '@/app/components/ui/Toast/Toast'
+} from '@/app/features/links/components/LinkEdit/linkEdit.config'
+import LinkPreview from '@/app/features/links/components/LinkPreview/LinkPreview'
 import { useToast } from '@/hooks/useToast'
 import { LinkItem } from '@/types/links'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
-import styles from './page.module.scss'
 
 const emptyLink: LinkItem = {
 	id: 'new',

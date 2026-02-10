@@ -1,0 +1,15 @@
+@use 'variables' as *;
+
+.backLink {
+	display: flex;
+	align-items: center;
+	gap: $spacing-sm;
+	font-size: $font-size-sm;
+	color: $color-text-secondary;
+	text-decoration: none;
+	transition: $transition-fast;
+
+	&:hover {
+		color: $color-text-primary;
+	}
+}

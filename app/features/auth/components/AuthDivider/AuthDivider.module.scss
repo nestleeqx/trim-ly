@@ -1,0 +1,22 @@
+@use 'variables' as *;
+
+.divider {
+	display: flex;
+	align-items: center;
+	gap: $spacing-md;
+	margin: $spacing-xs 0;
+}
+
+.dividerLine {
+	flex: 1;
+	height: 1px;
+	background: $color-border;
+}
+
+.dividerText {
+	font-size: $font-size-xs;
+	color: $color-text-secondary;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	white-space: nowrap;
+}

@@ -1,0 +1,10 @@
+@use 'variables' as *;
+
+.sideCharts {
+	display: flex;
+	gap: $spacing-lg;
+
+	> * {
+		width: 100%;
+	}
+}

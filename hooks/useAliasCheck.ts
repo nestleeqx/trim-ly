@@ -1,6 +1,6 @@
 'use client'
 
-import { takenAliases } from '@/app/components/dashboard/LinkEdit/linkEdit.config'
+import { takenAliases } from '@/app/features/links/components/LinkEdit/linkEdit.config'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface AliasCheckState {

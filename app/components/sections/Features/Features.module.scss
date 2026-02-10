@@ -1,4 +1,4 @@
-@import '../../../styles/variables';
+@use 'variables' as *;
 
 .features {
 	padding: $spacing-3xl 0;
