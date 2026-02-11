@@ -5,12 +5,14 @@ import DemoModal from '@/app/components/ui/DemoModal/DemoModal'
 import { motion } from 'framer-motion'
 import { Zap } from 'lucide-react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import { containerVariants, heroFeatures, itemVariants } from './hero.config'
 import styles from './Hero.module.scss'
 import ProductPreview from './ProductPreview/ProductPreview'
 
 export default function Hero() {
+	const { status } = useSession()
 	const [isDemoModalOpen, setIsDemoModalOpen] = useState(false)
 
 	return (
@@ -52,14 +54,14 @@ export default function Hero() {
 							className={styles.actions}
 							variants={itemVariants}
 						>
-							<Link href='/signup'>
+							{status !== 'authenticated' && <Link href='/signup'>
 								<Button
 									variant='primary'
 									size='lg'
 								>
 									Создать аккаунт
 								</Button>
-							</Link>
+							</Link>}
 							<Button
 								variant='ghost'
 								size='lg'

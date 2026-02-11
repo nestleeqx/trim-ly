@@ -1,20 +1,18 @@
 'use client'
 
 import styles from '@/app/(auth)/check-email/page.module.scss'
+import AuthPageLayout from '@/app/components/layout/AuthPageLayout/AuthPageLayout'
 import Button from '@/app/components/ui/Button/Button'
 import AuthCard from '@/app/features/auth/components/AuthCard/AuthCard'
-import AuthLogo from '@/app/features/auth/components/AuthLogo/AuthLogo'
-import BackToHomeLink from '@/app/features/auth/components/BackToHomeLink/BackToHomeLink'
 import { Mail } from 'lucide-react'
 import Link from 'next/link'
 
 export default function CheckEmailPage() {
 	return (
-		<div className={styles.page}>
-			<AuthLogo />
+		<AuthPageLayout isBackButton={false}>
 			<AuthCard
 				title='Проверьте почту'
-				subtitle='Мы отправили ссылку для сброса пароля на ваш email. Перейдите по ней, чтобы создать новый пароль.'
+				subtitle='Если email существует, мы отправили ссылку для сброса пароля.'
 			>
 				<div className={styles.iconWrapper}>
 					<Mail size={32} />
@@ -41,9 +39,17 @@ export default function CheckEmailPage() {
 							Отправить повторно
 						</Link>
 					</p>
+					<p className={styles.footerText}>
+						Вспомнили пароль?{' '}
+						<Link
+							href='/login'
+							className={styles.link}
+						>
+							Вернуться ко входу
+						</Link>
+					</p>
 				</div>
 			</AuthCard>
-			<BackToHomeLink />
-		</div>
+		</AuthPageLayout>
 	)
 }

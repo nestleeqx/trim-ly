@@ -5,6 +5,7 @@ import Logo from '@/app/components/ui/Logo/Logo'
 import classNames from 'classnames'
 import { Menu, Moon, Sun, X } from 'lucide-react'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { useTheme } from '../../../../../context/ThemeContext'
 import styles from './MobileNav.module.scss'
@@ -20,6 +21,7 @@ interface MobileNavProps {
 
 export default function MobileNav({ navItems }: MobileNavProps) {
 	const { theme, toggleTheme } = useTheme()
+	const { status } = useSession()
 	const [isOpen, setIsOpen] = useState(false)
 
 	useEffect(() => {
@@ -111,7 +113,7 @@ export default function MobileNav({ navItems }: MobileNavProps) {
 							</span>
 						</button>
 
-						<Link
+						{status !== 'authenticated' && <Link
 							href='/login'
 							onClick={handleNavClick}
 						>
@@ -122,9 +124,9 @@ export default function MobileNav({ navItems }: MobileNavProps) {
 							>
 								Войти
 							</Button>
-						</Link>
+						</Link>}
 
-						<Link
+						{status !== 'authenticated' && <Link
 							href='/signup'
 							onClick={handleNavClick}
 						>
@@ -135,7 +137,7 @@ export default function MobileNav({ navItems }: MobileNavProps) {
 							>
 								Начать бесплатно
 							</Button>
-						</Link>
+						</Link>}
 					</div>
 				</div>
 			</nav>

@@ -5,20 +5,74 @@ import AuthPageLayout from '@/app/components/layout/AuthPageLayout/AuthPageLayou
 import Button from '@/app/components/ui/Button/Button'
 import AuthCard from '@/app/features/auth/components/AuthCard/AuthCard'
 import AuthDivider from '@/app/features/auth/components/AuthDivider/AuthDivider'
+import AuthErrorBanner from '@/app/features/auth/components/AuthErrorBanner/AuthErrorBanner'
+import AuthNoticeBanner from '@/app/features/auth/components/AuthNoticeBanner/AuthNoticeBanner'
 import FormField from '@/app/features/auth/components/FormContent/FormField'
 import PasswordInput from '@/app/features/auth/components/FormContent/PasswordInput'
 import SocialAuthButtons from '@/app/features/auth/components/SocialAuthButtons/SocialAuthButtons'
+import { useLogin } from '@/app/features/auth/hooks/useLogin'
+import {
+	hasErrors,
+	LoginErrors,
+	validateLogin
+} from '@/app/features/auth/validation/loginValidation'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
 export default function LoginPage() {
+	const router = useRouter()
+	const params = useSearchParams()
+	const callbackUrl = params.get('callbackUrl') || '/dashboard'
+
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
-	const [remember, setRemember] = useState(false)
+	const [fieldErrors, setFieldErrors] = useState<LoginErrors>({})
+	const [remember, setRemember] = useState(true)
 
-	const handleSubmit = useCallback((e: React.FormEvent) => {
-		e.preventDefault()
+	const { submit, isLoading, error, setError } = useLogin()
+
+	const clearFieldError = useCallback((field: keyof LoginErrors) => {
+		setFieldErrors(prev => {
+			if (!prev[field]) return prev
+			const next = { ...prev }
+			delete next[field]
+			return next
+		})
 	}, [])
+
+	const handleSubmit = useCallback(
+		async (e: React.FormEvent<HTMLFormElement>) => {
+			e.preventDefault()
+			setError(null)
+
+			// ВАЖНО: читаем из формы, чтобы autofill не ломал state
+			const fd = new FormData(e.currentTarget)
+			const emailFromForm = String(fd.get('email') ?? '')
+			const passwordFromForm = String(fd.get('password') ?? '')
+			const rememberFromForm = fd.get('remember') === 'on'
+
+			const validation = validateLogin({
+				email: emailFromForm,
+				password: passwordFromForm
+			})
+
+			setFieldErrors(validation)
+			if (hasErrors(validation)) return
+
+			setEmail(emailFromForm)
+			setPassword(passwordFromForm)
+
+			const result = await submit({
+				email: emailFromForm,
+				password: passwordFromForm,
+				remember: rememberFromForm
+			})
+
+			if (result.ok) router.push(callbackUrl)
+		},
+		[submit, router, callbackUrl, setError]
+	)
 
 	return (
 		<AuthPageLayout>
@@ -36,22 +90,31 @@ export default function LoginPage() {
 						type='email'
 						placeholder='name@company.com'
 						value={email}
-						onChange={e => setEmail(e.target.value)}
+						onChange={e => {
+							setEmail(e.target.value)
+							clearFieldError('email')
+						}}
 						autoComplete='email'
+						error={fieldErrors.email}
 					/>
 					<PasswordInput
 						id='password'
 						label='Пароль'
 						placeholder='••••••••'
 						value={password}
-						onChange={e => setPassword(e.target.value)}
+						onChange={e => {
+							setPassword(e.target.value)
+							clearFieldError('password')
+						}}
 						autoComplete='current-password'
 						showForgotLink={true}
 						forgotLinkClassName={styles.forgotLink}
+						error={fieldErrors.password}
 					/>
 					<div className={styles.row}>
 						<input
 							id='remember'
+							name='remember'
 							type='checkbox'
 							className={styles.checkbox}
 							checked={remember}
@@ -64,19 +127,22 @@ export default function LoginPage() {
 							Запомнить меня
 						</label>
 					</div>
+					<AuthNoticeBanner className={styles.noticeText} />
+					<AuthErrorBanner className={styles.errorText} />
+					{error && <p className={styles.errorText}>{error}</p>}
 					<Button
 						variant='primary'
 						size='lg'
 						type='submit'
 					>
-						Войти
+						{isLoading ? 'Входим…' : 'Войти'}
 					</Button>
 					<AuthDivider text='Или продолжить с' />
 					<SocialAuthButtons />
 					<p className={styles.footerText}>
 						Нет аккаунта?{' '}
 						<Link
-							href='/signup'
+							href={`/signup?callbackUrl=${encodeURIComponent(callbackUrl)}`}
 							className={styles.link}
 						>
 							Зарегистрироваться

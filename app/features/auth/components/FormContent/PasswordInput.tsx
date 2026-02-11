@@ -1,3 +1,4 @@
+import authSharedStyles from '@/app/(auth)/AuthShared.module.scss'
 import { usePasswordToggle } from '@/hooks/usePasswordToggle'
 import { Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
@@ -14,6 +15,7 @@ interface PasswordInputProps {
 	forgotLinkHref?: string
 	forgotLinkText?: string
 	forgotLinkClassName?: string
+	error?: string
 }
 
 export default function PasswordInput({
@@ -26,7 +28,8 @@ export default function PasswordInput({
 	showForgotLink = false,
 	forgotLinkHref = '/forgot-password',
 	forgotLinkText = 'Забыли пароль?',
-	forgotLinkClassName
+	forgotLinkClassName,
+	error
 }: PasswordInputProps) {
 	const { showPassword, togglePassword } = usePasswordToggle()
 
@@ -55,15 +58,19 @@ export default function PasswordInput({
 					{label}
 				</label>
 			)}
+
 			<div className={styles.inputWrapper}>
 				<input
 					id={id}
+					name={id}
 					type={showPassword ? 'text' : 'password'}
-					className={styles.input}
+					className={`${styles.input} ${error ? authSharedStyles.inputError : ''}`}
 					placeholder={placeholder}
 					value={value}
 					onChange={onChange}
 					autoComplete={autoComplete}
+					aria-invalid={!!error}
+					aria-describedby={error ? `${id}-error` : undefined}
 				/>
 				<button
 					type='button'
@@ -76,6 +83,15 @@ export default function PasswordInput({
 					{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
 				</button>
 			</div>
+
+			{error && (
+				<p
+					id={`${id}-error`}
+					className={authSharedStyles.errorText}
+				>
+					{error}
+				</p>
+			)}
 		</div>
 	)
 }

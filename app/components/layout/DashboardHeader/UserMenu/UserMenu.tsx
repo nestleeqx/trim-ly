@@ -1,3 +1,4 @@
+import { useLogout } from '@/app/features/auth/hooks/useLogout'
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { ChevronDown, LogOut, Settings, User } from 'lucide-react'
 import Link from 'next/link'
@@ -5,6 +6,7 @@ import { useCallback, useState } from 'react'
 import styles from './UserMenu.module.scss'
 
 export default function UserMenu() {
+	const { logout, isLoading } = useLogout()
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 	const dropdownRef = useClickOutside(
 		useCallback(() => setIsDropdownOpen(false), [])
@@ -54,10 +56,11 @@ export default function UserMenu() {
 						<div className={styles.dropdownDivider} />
 						<button
 							className={styles.dropdownItem}
-							onClick={() => setIsDropdownOpen(false)}
+							onClick={logout}
+							disabled={isLoading}
 						>
 							<LogOut size={16} />
-							<span>Выйти</span>
+							<span>{isLoading ? 'Выходим…' : 'Выйти'}</span>
 						</button>
 					</div>
 				</>

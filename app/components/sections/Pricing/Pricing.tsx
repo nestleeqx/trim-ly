@@ -4,17 +4,37 @@ import Modal from '@/app/components/ui/Modal/Modal'
 import BillingToggle from '@/app/features/pricing/components/BillingToggle/BillingToggle'
 import ContactForm from '@/app/features/pricing/components/ContactForm/ContactForm'
 import { motion } from 'framer-motion'
+import { useSession } from 'next-auth/react'
 import { useCallback, useState } from 'react'
 import PlanCard from '../../../features/pricing/components/PlanCard/PlanCard'
 import styles from './Pricing.module.scss'
 import { plans } from './pricing.config'
 
 export default function Pricing() {
+	const { status } = useSession()
+	const isAuthenticated = status === 'authenticated'
 	const [isContactModalOpen, setContactModalOpen] = useState(false)
 	const [isYearly, setIsYearly] = useState(false)
 
 	const openContactModal = useCallback(() => setContactModalOpen(true), [])
 	const closeContactModal = useCallback(() => setContactModalOpen(false), [])
+
+	const resolvedPlans = plans.map(plan => {
+		if (!isAuthenticated) {
+			if (plan.href === '/signup?plan=pro') {
+				return {
+					...plan,
+					href: '/signup?plan=pro&callbackUrl=/pricing'
+				}
+			}
+			return plan
+		}
+		if (plan.isContact) return plan
+		if (plan.href === '/signup') return { ...plan, href: '/dashboard' }
+		if (plan.href === '/signup?plan=pro')
+			return { ...plan, href: '/pricing' }
+		return plan
+	})
 
 	return (
 		<section
@@ -40,7 +60,7 @@ export default function Pricing() {
 				</motion.div>
 
 				<div className={styles.grid}>
-					{plans.map((plan, index) => (
+					{resolvedPlans.map((plan, index) => (
 						<motion.div
 							key={plan.name}
 							initial={{ opacity: 0, y: 30 }}

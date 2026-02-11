@@ -1,24 +1,44 @@
 'use client'
 
 import styles from '@/app/(auth)/AuthShared.module.scss'
+import AuthPageLayout from '@/app/components/layout/AuthPageLayout/AuthPageLayout'
 import Button from '@/app/components/ui/Button/Button'
 import AuthCard from '@/app/features/auth/components/AuthCard/AuthCard'
-import AuthLogo from '@/app/features/auth/components/AuthLogo/AuthLogo'
-import BackToHomeLink from '@/app/features/auth/components/BackToHomeLink/BackToHomeLink'
+import AuthErrorBanner from '@/app/features/auth/components/AuthErrorBanner/AuthErrorBanner'
 import FormField from '@/app/features/auth/components/FormContent/FormField'
+import { useForgotPassword } from '@/app/features/auth/hooks/useForgotPassword'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
 export default function ForgotPasswordPage() {
+	const router = useRouter()
+
 	const [email, setEmail] = useState('')
 
-	const handleSubmit = useCallback((e: React.FormEvent) => {
-		e.preventDefault()
-	}, [])
+	const { submit, isLoading, error } = useForgotPassword()
+
+	const handleSubmit = useCallback(
+		async (e: React.FormEvent<HTMLFormElement>) => {
+			e.preventDefault()
+
+			const fd = new FormData(e.currentTarget)
+			const emailFromForm = String(fd.get('email') ?? '')
+
+			const result = await submit(emailFromForm)
+
+			if (result.ok) {
+				const normalizedEmail = emailFromForm.trim().toLowerCase()
+				router.push(
+					`/check-email?flow=forgot&email=${encodeURIComponent(normalizedEmail)}`
+				)
+			}
+		},
+		[submit, router]
+	)
 
 	return (
-		<div className={styles.page}>
-			<AuthLogo />
+		<AuthPageLayout isBackButton={false}>
 			<AuthCard
 				title='Сбросить пароль'
 				subtitle='Введите email и мы отправим вам ссылку для сброса.'
@@ -36,12 +56,14 @@ export default function ForgotPasswordPage() {
 						onChange={e => setEmail(e.target.value)}
 						autoComplete='email'
 					/>
+					<AuthErrorBanner className={styles.errorText} />
+					{error && <p className={styles.errorText}>{error}</p>}
 					<Button
 						variant='primary'
 						size='lg'
 						type='submit'
 					>
-						Отправить ссылку
+						{isLoading ? 'Отправляем…' : 'Отправить ссылку'}
 					</Button>
 
 					<p className={styles.footerText}>
@@ -55,7 +77,6 @@ export default function ForgotPasswordPage() {
 					</p>
 				</form>
 			</AuthCard>
-			<BackToHomeLink />
-		</div>
+		</AuthPageLayout>
 	)
 }

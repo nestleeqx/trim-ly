@@ -4,10 +4,12 @@ import Button from '@/app/components/ui/Button/Button'
 import DemoModal from '@/app/components/ui/DemoModal/DemoModal'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import styles from './CTA.module.scss'
 
 export default function CTASection() {
+	const { status } = useSession()
 	const [isDemoModalOpen, setIsDemoModalOpen] = useState(false)
 
 	return (
@@ -29,7 +31,7 @@ export default function CTASection() {
 							небольшим командам.
 						</p>
 						<div className={styles.actions}>
-							<Link
+							{status !== 'authenticated' && <Link
 								href='/signup'
 								className={styles.actionLink}
 							>
@@ -40,7 +42,7 @@ export default function CTASection() {
 								>
 									Создать бесплатный аккаунт
 								</Button>
-							</Link>
+							</Link>}
 							<Button
 								variant='invertOutline'
 								size='lg'

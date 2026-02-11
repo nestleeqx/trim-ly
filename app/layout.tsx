@@ -1,5 +1,6 @@
 import '@/app/styles/globals.scss'
 import { ThemeProvider } from '@/context/ThemeContext'
+import AuthProvider from '@/providers/AuthProvider'
 import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 
@@ -66,7 +67,9 @@ export default function RootLayout({
 			suppressHydrationWarning
 		>
 			<body className={inter.variable}>
-				<ThemeProvider>{children}</ThemeProvider>
+				<AuthProvider>
+					<ThemeProvider>{children}</ThemeProvider>
+				</AuthProvider>
 			</body>
 		</html>
 	)

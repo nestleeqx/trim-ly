@@ -4,15 +4,21 @@ import BackToHomeLink from '@/app/features/auth/components/BackToHomeLink/BackTo
 import { ReactNode } from 'react'
 
 interface AuthPageLayoutProps {
+	isBackButton?: boolean
 	children: ReactNode
 }
 
-export default function AuthPageLayout({ children }: AuthPageLayoutProps) {
+export default function AuthPageLayout({
+	isBackButton = true,
+	children
+}: AuthPageLayoutProps) {
 	return (
 		<div className={styles.page}>
-			<AuthLogo />
-			{children}
-			<BackToHomeLink />
+			<div className={styles.pageContent}>
+				<AuthLogo />
+				{isBackButton && <BackToHomeLink />}
+				{children}
+			</div>
 		</div>
 	)
 }

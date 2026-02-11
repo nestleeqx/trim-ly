@@ -8,6 +8,7 @@
 	color: $color-text-secondary;
 	text-decoration: none;
 	transition: $transition-fast;
+	margin-bottom: $spacing-md;
 
 	&:hover {
 		color: $color-text-primary;

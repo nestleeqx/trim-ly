@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum SubscriptionStatus {
+  active
+  canceled
+  past_due
+}
+
+model Plan {
+  id          String @id
+  name        String @unique
+  linksLimit  Int
+  clicksLimit Int
+
+  users User[]
+}
+
+model User {
+  id           String  @id @default(cuid())
+  email        String  @unique
+  passwordHash String?
+  name         String?
+  username     String? @unique
+  avatarURL    String?
+
+  planId             String              @default("free")
+  plan               Plan                @relation(fields: [planId], references: [id])
+  subscriptionStatus SubscriptionStatus?
+
+  emailVerified DateTime?
+  provider      String?
+  providerId    String?
+
+  usage UserUsage?
+
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  passwordResetTokens PasswordResetToken[]
+
+  @@unique([provider, providerId])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+model UserUsage {
+  userId       String @id
+  linksCreated Int    @default(0)
+  clicksTotal  Int    @default(0)
+  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

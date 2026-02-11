@@ -5,6 +5,7 @@ import Logo from '@/app/components/ui/Logo/Logo'
 import { useTheme } from '@/context/ThemeContext'
 import classNames from 'classnames'
 import { Moon, Sun } from 'lucide-react'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import styles from './Header.module.scss'
@@ -12,6 +13,7 @@ import MobileNav from './MobileNav/MobileNav'
 
 export default function Header() {
 	const { theme, toggleTheme } = useTheme()
+	const { status } = useSession()
 	const [scrolled, setScrolled] = useState(false)
 
 	useEffect(() => {
@@ -65,30 +67,44 @@ export default function Header() {
 							)}
 						</button>
 
-						<Link
-							href='/login'
-							className={styles.desktopOnly}
-						>
-							<Button
-								variant='ghost'
-								size='sm'
+						{status !== 'authenticated' ? (
+							<>
+								<Link
+									href='/login'
+									className={styles.desktopOnly}
+								>
+									<Button
+										variant='ghost'
+										size='sm'
+									>
+										Войти
+									</Button>
+								</Link>
+								<Link
+									href='/signup'
+									className={styles.desktopOnly}
+								>
+									<Button
+										variant='primary'
+										size='sm'
+									>
+										Начать бесплатно
+									</Button>
+								</Link>
+							</>
+						) : (
+							<Link
+								href='/dashboard'
+								className={styles.desktopOnly}
 							>
-								Войти
-							</Button>
-						</Link>
-
-						<Link
-							href='/signup'
-							className={styles.desktopOnly}
-						>
-							<Button
-								variant='primary'
-								size='sm'
-							>
-								Начать бесплатно
-							</Button>
-						</Link>
-
+								<Button
+									variant='primary'
+									size='sm'
+								>
+									Личный кабинет
+								</Button>
+							</Link>
+						)}
 						<MobileNav navItems={navItems} />
 					</div>
 				</div>

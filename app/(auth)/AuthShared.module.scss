@@ -4,9 +4,12 @@
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 	background: $color-bg-dark;
 	padding: $spacing-2xl $spacing-md $spacing-xl;
+}
+
+.pageContent {
+	margin: 0 auto;
 }
 
 .form {
@@ -42,4 +45,22 @@
 	&:hover {
 		text-decoration: underline;
 	}
+}
+
+.inputError {
+	border-color: $color-red;
+}
+
+.errorText,
+.noticeText {
+	font-size: $font-size-sm;
+	line-height: 1.2;
+}
+
+.errorText {
+	color: $color-red;
+}
+
+.noticeText {
+	color: $color-active;
 }
