@@ -1,0 +1,27 @@
+@use 'variables' as *;
+
+.banner {
+	padding: $spacing-sm $spacing-md;
+	border-radius: $border-radius-lg;
+	font-size: $font-size-sm;
+	line-height: 1.4;
+	border: 1px solid transparent;
+}
+
+.success {
+	background: rgba($color-success, 0.1);
+	border-color: rgba($color-success, 0.25);
+	color: $color-success;
+}
+
+.error {
+	background: rgba($color-red, 0.08);
+	border-color: rgba($color-red, 0.24);
+	color: $color-red;
+}
+
+.info {
+	background: rgba($color-primary, 0.08);
+	border-color: rgba($color-primary, 0.24);
+	color: $color-primary;
+}

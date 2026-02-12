@@ -1,6 +1,7 @@
 import { signIn } from 'next-auth/react'
 import { useCallback, useState } from 'react'
 import { signup, type SignupPayload } from '../api/authApi'
+import { mapAuthApiError } from '../utils/authErrorMap'
 
 export function useSignup() {
 	const [isLoading, setIsLoading] = useState(false)
@@ -20,9 +21,11 @@ export function useSignup() {
 			})
 
 			if (signInRes?.error) {
-				throw new Error(
+				const mapped = mapAuthApiError(
+					String(signInRes.error),
 					'Аккаунт создан, но не удалось войти. Попробуйте логин.'
 				)
+				throw new Error(mapped.message)
 			}
 
 			return { ok: true as const }

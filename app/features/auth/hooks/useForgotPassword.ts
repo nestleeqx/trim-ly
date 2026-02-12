@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { mapAuthApiError } from '../utils/authErrorMap'
 
 export function useForgotPassword() {
 	const [isLoading, setIsLoading] = useState(false)
@@ -14,13 +15,20 @@ export function useForgotPassword() {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ email })
 			})
+			const data = await res.json().catch(() => ({}))
 
-			if (!res.ok) throw new Error()
+			if (!res.ok) {
+				const mapped = mapAuthApiError(
+					String((data as any)?.error ?? ''),
+					'Не удалось отправить письмо. Попробуйте позже.'
+				)
+				throw new Error(mapped.message)
+			}
 
-			return { ok: true }
-		} catch {
-			setError('Не удалось отправить письмо. Попробуйте позже.')
-			return { ok: false }
+			return { ok: true as const }
+		} catch (e: any) {
+			setError(e?.message ?? 'Не удалось отправить письмо. Попробуйте позже.')
+			return { ok: false as const }
 		} finally {
 			setIsLoading(false)
 		}

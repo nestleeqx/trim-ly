@@ -1,16 +1,25 @@
 import { useLogout } from '@/app/features/auth/hooks/useLogout'
 import { useClickOutside } from '@/hooks/useClickOutside'
-import { ChevronDown, LogOut, Settings, User } from 'lucide-react'
+import { ChevronDown, LogOut, User } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import styles from './UserMenu.module.scss'
 
 export default function UserMenu() {
+	const { data: session } = useSession()
 	const { logout, isLoading } = useLogout()
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 	const dropdownRef = useClickOutside(
 		useCallback(() => setIsDropdownOpen(false), [])
 	)
+
+	const avatarUrl = session?.user?.image ?? ''
+	const fallbackInitial = useMemo(() => {
+		const source = session?.user?.name || session?.user?.email || 'U'
+		return source.charAt(0).toUpperCase()
+	}, [session?.user?.email, session?.user?.name])
 
 	return (
 		<div
@@ -23,7 +32,21 @@ export default function UserMenu() {
 				aria-label='Меню пользователя'
 				aria-expanded={isDropdownOpen}
 			>
-				<div className={styles.avatar} />
+				<div className={styles.avatar}>
+					{avatarUrl ? (
+						<Image
+							src={avatarUrl}
+							alt='User avatar'
+							width={32}
+							height={32}
+							className={styles.avatarImage}
+						/>
+					) : (
+						<span className={styles.avatarFallback}>
+							{fallbackInitial}
+						</span>
+					)}
+				</div>
 				<ChevronDown
 					size={16}
 					className={`${styles.chevron} ${isDropdownOpen ? styles.open : ''}`}
@@ -44,14 +67,6 @@ export default function UserMenu() {
 						>
 							<User size={16} />
 							<span>Профиль</span>
-						</Link>
-						<Link
-							href='/settings'
-							className={styles.dropdownItem}
-							onClick={() => setIsDropdownOpen(false)}
-						>
-							<Settings size={16} />
-							<span>Настройки</span>
 						</Link>
 						<div className={styles.dropdownDivider} />
 						<button

@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { mapAuthApiError } from '../utils/authErrorMap'
 
 export function useResetPassword() {
 	const [isLoading, setIsLoading] = useState(false)
@@ -14,10 +15,14 @@ export function useResetPassword() {
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ token, password })
 			})
+			const data = await res.json().catch(() => ({}))
 
 			if (!res.ok) {
-				const data = await res.json().catch(() => null)
-				throw new Error(data?.error ?? 'Не удалось сбросить пароль.')
+				const mapped = mapAuthApiError(
+					String((data as any)?.error ?? ''),
+					'Не удалось сбросить пароль.'
+				)
+				throw new Error(mapped.message)
 			}
 
 			return { ok: true as const }

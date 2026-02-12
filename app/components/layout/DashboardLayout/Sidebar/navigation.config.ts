@@ -30,7 +30,7 @@ export const navItems: NavItem[] = [
 		icon: BarChart3
 	},
 	{
-		href: '/settings',
+		href: '/profile',
 		label: 'Настройки',
 		icon: Settings
 	}

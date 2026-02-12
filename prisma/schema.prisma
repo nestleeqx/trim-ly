@@ -19,6 +19,12 @@ enum SubscriptionStatus {
   past_due
 }
 
+enum Theme {
+  light
+  dark
+  system
+}
+
 model Plan {
   id          String @id
   name        String @unique
@@ -35,6 +41,8 @@ model User {
   name         String?
   username     String? @unique
   avatarURL    String?
+
+  theme Theme @default(system)
 
   planId             String              @default("free")
   plan               Plan                @relation(fields: [planId], references: [id])

@@ -3,10 +3,9 @@
 import styles from '@/app/(auth)/login/page.module.scss'
 import AuthPageLayout from '@/app/components/layout/AuthPageLayout/AuthPageLayout'
 import Button from '@/app/components/ui/Button/Button'
+import NoticeBanner from '@/app/components/ui/NoticeBanner/NoticeBanner'
 import AuthCard from '@/app/features/auth/components/AuthCard/AuthCard'
 import AuthDivider from '@/app/features/auth/components/AuthDivider/AuthDivider'
-import AuthErrorBanner from '@/app/features/auth/components/AuthErrorBanner/AuthErrorBanner'
-import AuthNoticeBanner from '@/app/features/auth/components/AuthNoticeBanner/AuthNoticeBanner'
 import FormField from '@/app/features/auth/components/FormContent/FormField'
 import PasswordInput from '@/app/features/auth/components/FormContent/PasswordInput'
 import SocialAuthButtons from '@/app/features/auth/components/SocialAuthButtons/SocialAuthButtons'
@@ -127,9 +126,13 @@ export default function LoginPage() {
 							Запомнить меня
 						</label>
 					</div>
-					<AuthNoticeBanner className={styles.noticeText} />
-					<AuthErrorBanner className={styles.errorText} />
-					{error && <p className={styles.errorText}>{error}</p>}
+					<NoticeBanner />
+					{error && (
+						<NoticeBanner
+							type='error'
+							message={error}
+						/>
+					)}
 					<Button
 						variant='primary'
 						size='lg'

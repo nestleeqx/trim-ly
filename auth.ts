@@ -141,7 +141,7 @@ export const authOptions: NextAuthOptions = {
 			return true
 		},
 
-		async jwt({ token, user }) {
+		async jwt({ token, user, trigger, session }) {
 			const now = Math.floor(Date.now() / 1000)
 
 			if (user) {
@@ -150,6 +150,13 @@ export const authOptions: NextAuthOptions = {
 				token.exp =
 					now + ((token as any).remember ? THIRTY_DAYS : ONE_DAY)
 				return token
+			}
+
+			if (trigger === 'update' && session) {
+				if (typeof session.name === 'string') token.name = session.name
+				if (typeof session.image === 'string')
+					token.picture = session.image
+				if (session.image === null) delete token.picture
 			}
 
 			if (typeof token.exp === 'number' && token.exp < now) {
@@ -167,6 +174,15 @@ export const authOptions: NextAuthOptions = {
 			if (session.user) {
 				// @ts-expect-error расширяем тип
 				session.user.id = token.userId as string
+				if (typeof token.name === 'string')
+					session.user.name = token.name
+				if (typeof token.email === 'string')
+					session.user.email = token.email
+				if (typeof token.picture === 'string') {
+					session.user.image = token.picture
+				} else {
+					session.user.image = null
+				}
 			}
 
 			if (typeof token.exp === 'number') {

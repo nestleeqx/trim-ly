@@ -12,7 +12,7 @@ import styles from './Header.module.scss'
 import MobileNav from './MobileNav/MobileNav'
 
 export default function Header() {
-	const { theme, toggleTheme } = useTheme()
+	const { resolvedTheme, toggleTheme } = useTheme()
 	const { status } = useSession()
 	const [scrolled, setScrolled] = useState(false)
 
@@ -60,7 +60,7 @@ export default function Header() {
 							onClick={toggleTheme}
 							aria-label='Переключить тему'
 						>
-							{theme === 'light' ? (
+							{resolvedTheme === 'light' ? (
 								<Moon size={20} />
 							) : (
 								<Sun size={20} />

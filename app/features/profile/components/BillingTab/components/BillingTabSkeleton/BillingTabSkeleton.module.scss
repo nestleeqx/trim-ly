@@ -1,0 +1,58 @@
+@use 'variables' as *;
+
+.root {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-lg;
+}
+
+.topGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: $spacing-md;
+}
+
+.card {
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-lg;
+	padding: $spacing-md;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+
+	.cardHeader {
+		display: flex;
+		justify-content: space-between;
+		.cardHeaderLeft {
+			display: flex;
+			flex-direction: column;
+			gap: $spacing-md;
+		}
+	}
+}
+
+.metric {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-xs;
+
+	.metricHeader {
+		display: flex;
+		justify-content: space-between;
+	}
+}
+
+.history {
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-lg;
+	padding: $spacing-md;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+}
+
+@media (max-width: $breakpoint-sm) {
+	.topGrid {
+		grid-template-columns: 1fr;
+	}
+}

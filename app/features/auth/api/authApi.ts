@@ -1,3 +1,5 @@
+import { mapAuthApiError } from '../utils/authErrorMap'
+
 export type SignupPayload = {
 	email: string
 	password: string
@@ -24,14 +26,15 @@ export async function signup(payload: SignupPayload): Promise<SignupResponse> {
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify(payload)
 	})
+	const data = await res.json().catch(() => ({}))
 
 	if (!res.ok) {
-		const data = await res.json().catch(() => null)
-		throw new ApiError(
-			data?.error ?? 'Не удалось создать аккаунт.',
-			res.status
+		const mapped = mapAuthApiError(
+			String((data as any)?.error ?? ''),
+			'Не удалось создать аккаунт.'
 		)
+		throw new Error(mapped.message)
 	}
 
-	return res.json()
+	return data as SignupResponse
 }

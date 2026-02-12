@@ -9,9 +9,16 @@
 .label {
 	font-size: $font-size-xs;
 	font-weight: $font-weight-semibold;
-	color: $color-text-primary;
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
+}
+
+.labelPrimary {
+	color: $color-text-primary;
+}
+
+.labelSecondary {
+	color: $color-text-secondary;
 }
 
 .input {
@@ -32,6 +39,12 @@
 	&:focus {
 		border-color: $color-primary;
 		box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+	}
+
+	&:disabled {
+		background: var(--color-bg-secondary);
+		color: var(--color-text-secondary);
+		cursor: not-allowed;
 	}
 }
 

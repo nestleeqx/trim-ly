@@ -1,5 +1,6 @@
 import authSharedStyles from '@/app/(auth)/AuthShared.module.scss'
 import { usePasswordToggle } from '@/hooks/usePasswordToggle'
+import cn from 'classnames'
 import { Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 import styles from './FormContent.module.scss'
@@ -7,6 +8,7 @@ import styles from './FormContent.module.scss'
 interface PasswordInputProps {
 	id: string
 	label: string
+	labelStyle?: 'primary' | 'secondary'
 	placeholder: string
 	value: string
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -21,6 +23,7 @@ interface PasswordInputProps {
 export default function PasswordInput({
 	id,
 	label,
+	labelStyle = 'primary',
 	placeholder,
 	value,
 	onChange,
@@ -52,7 +55,10 @@ export default function PasswordInput({
 				</div>
 			) : (
 				<label
-					className={styles.label}
+					className={cn(styles.label, {
+						[styles.labelPrimary]: labelStyle === 'primary',
+						[styles.labelSecondary]: labelStyle === 'secondary'
+					})}
 					htmlFor={id}
 				>
 					{label}

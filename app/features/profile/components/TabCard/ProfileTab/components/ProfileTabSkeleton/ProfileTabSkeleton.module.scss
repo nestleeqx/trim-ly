@@ -1,0 +1,64 @@
+@use 'variables' as *;
+
+.root {
+	margin-top: $spacing-lg;
+}
+
+.avatarRow {
+	display: flex;
+	align-items: center;
+	gap: $spacing-md;
+	margin-bottom: $spacing-lg;
+}
+
+.avatarMeta {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-xs;
+}
+
+.fields {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+}
+
+.fieldsWrapper {
+	display: flex;
+	gap: $spacing-lg;
+
+	& > div {
+		flex-grow: 1;
+	}
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-xs;
+}
+
+.notice {
+	margin-top: $spacing-sm;
+}
+
+.actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: $spacing-xl;
+}
+
+@media (max-width: $breakpoint-sm) {
+	.avatarRow {
+		align-items: flex-start;
+	}
+
+	.actions {
+		justify-content: stretch;
+	}
+
+	.actions :global(*) {
+		width: 100%;
+	}
+}

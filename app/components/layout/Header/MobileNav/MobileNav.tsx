@@ -4,8 +4,8 @@ import Button from '@/app/components/ui/Button/Button'
 import Logo from '@/app/components/ui/Logo/Logo'
 import classNames from 'classnames'
 import { Menu, Moon, Sun, X } from 'lucide-react'
-import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { useTheme } from '../../../../../context/ThemeContext'
 import styles from './MobileNav.module.scss'
@@ -20,7 +20,7 @@ interface MobileNavProps {
 }
 
 export default function MobileNav({ navItems }: MobileNavProps) {
-	const { theme, toggleTheme } = useTheme()
+	const { resolvedTheme, toggleTheme } = useTheme()
 	const { status } = useSession()
 	const [isOpen, setIsOpen] = useState(false)
 
@@ -101,43 +101,47 @@ export default function MobileNav({ navItems }: MobileNavProps) {
 							onClick={toggleTheme}
 							aria-label='Переключить тему'
 						>
-							{theme === 'light' ? (
+							{resolvedTheme === 'light' ? (
 								<Moon size={20} />
 							) : (
 								<Sun size={20} />
 							)}
 							<span>
-								{theme === 'light'
-									? 'Темная тема'
+								{resolvedTheme === 'light'
+									? 'Тёмная тема'
 									: 'Светлая тема'}
 							</span>
 						</button>
 
-						{status !== 'authenticated' && <Link
-							href='/login'
-							onClick={handleNavClick}
-						>
-							<Button
-								variant='ghost'
-								size='lg'
-								className={styles.fullWidth}
+						{status !== 'authenticated' && (
+							<Link
+								href='/login'
+								onClick={handleNavClick}
 							>
-								Войти
-							</Button>
-						</Link>}
+								<Button
+									variant='ghost'
+									size='lg'
+									className={styles.fullWidth}
+								>
+									Войти
+								</Button>
+							</Link>
+						)}
 
-						{status !== 'authenticated' && <Link
-							href='/signup'
-							onClick={handleNavClick}
-						>
-							<Button
-								variant='primary'
-								size='lg'
-								className={styles.fullWidth}
+						{status !== 'authenticated' && (
+							<Link
+								href='/signup'
+								onClick={handleNavClick}
 							>
-								Начать бесплатно
-							</Button>
-						</Link>}
+								<Button
+									variant='primary'
+									size='lg'
+									className={styles.fullWidth}
+								>
+									Начать бесплатно
+								</Button>
+							</Link>
+						)}
 					</div>
 				</div>
 			</nav>

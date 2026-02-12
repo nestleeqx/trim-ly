@@ -1,5 +1,6 @@
 import { signIn } from 'next-auth/react'
 import { useCallback, useState } from 'react'
+import { mapAuthApiError } from '../utils/authErrorMap'
 
 type LoginPayload = { email: string; password: string; remember: boolean }
 
@@ -19,7 +20,8 @@ export function useLogin() {
 			})
 
 			if (res?.error) {
-				throw new Error('Неверный email или пароль.')
+				const mapped = mapAuthApiError(String(res.error), 'Ошибка входа.')
+				throw new Error(mapped.message)
 			}
 
 			return { ok: true as const }

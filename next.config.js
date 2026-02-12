@@ -6,5 +6,15 @@ module.exports = {
 	sassOptions: {
 		includePaths: [stylesPath],
 		loadPaths: [stylesPath]
+	},
+	images: {
+		remotePatterns: [
+			{
+				protocol: 'https',
+				hostname: 'avatars.yandex.net'
+			},
+			{ protocol: 'https', hostname: 'lh3.googleusercontent.com' },
+			{ protocol: 'https', hostname: 'cdn2.iconfinder.com' }
+		]
 	}
 }
