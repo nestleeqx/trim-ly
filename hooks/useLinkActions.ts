@@ -9,13 +9,15 @@ interface UseLinkActionsProps {
 	onDelete?: (id: string) => void
 	onPause?: (id: string) => void
 	onResume?: (id: string) => void
+	onRestore?: (id: string) => void
 }
 
 export const useLinkActions = ({
 	onCopy,
 	onDelete,
 	onPause,
-	onResume
+	onResume,
+	onRestore
 }: UseLinkActionsProps) => {
 	const router = useRouter()
 	const [openKebabId, setOpenKebabId] = useState<string | null>(null)
@@ -77,7 +79,7 @@ export const useLinkActions = ({
 	const handleEdit = useCallback(
 		(linkId: string) => {
 			setOpenKebabId(null)
-			router.push(`/links/${linkId}/edit`)
+			router.push(`/links/${linkId}`)
 		},
 		[router]
 	)
@@ -102,6 +104,14 @@ export const useLinkActions = ({
 			onDelete?.(linkId)
 		},
 		[onDelete]
+	)
+
+	const handleRestore = useCallback(
+		(linkId: string) => {
+			setOpenKebabId(null)
+			onRestore?.(linkId)
+		},
+		[onRestore]
 	)
 
 	const handleDownloadQr = useCallback(() => {
@@ -140,6 +150,7 @@ export const useLinkActions = ({
 		handleCopyQrUrl,
 		closeQrModal,
 		closeKebabMenu,
-		handleTitleClick
+		handleTitleClick,
+		handleRestore
 	}
 }

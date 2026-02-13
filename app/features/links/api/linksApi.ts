@@ -31,7 +31,23 @@ export type LinkListItemDto = {
 	hasPassword: boolean
 }
 
-export type LinkAction = 'pause' | 'resume'
+export type GetLinkByIdResponse = {
+	link: LinkListItemDto
+}
+
+export type GetLinksResponse = {
+	links: LinkListItemDto[]
+	meta: {
+		totalAll: number
+		totalFiltered: number
+		page: number
+		pageSize: number
+		totalPages: number
+	}
+}
+
+export type LinkAction = 'pause' | 'resume' | 'restore'
+export type BulkLinkAction = 'pause' | 'resume' | 'delete' | 'restore'
 
 export function mapCreateLinkError(raw: string): string {
 	switch (raw) {
@@ -59,15 +75,53 @@ export function mapCreateLinkError(raw: string): string {
 			return 'Нельзя возобновить истекшую ссылку.'
 		case 'Invalid link id':
 			return 'Некорректный идентификатор ссылки.'
+		case 'Invalid ids':
+			return 'Некорректный список ссылок.'
+		case 'Some links are invalid':
+			return 'Часть ссылок недоступна для этого действия.'
 		default:
 			return raw || 'Не удалось выполнить операцию.'
 	}
 }
 
-export async function getLinks(): Promise<LinkListItemDto[]> {
-	const res = await fetch('/api/links', {
+export async function getLinks(params?: {
+	search?: string
+	page?: number
+	pageSize?: number
+	sort?: 'created_date' | 'clicks' | 'title' | 'status' | 'expiration_date'
+	order?: 'asc' | 'desc'
+	tags?: string[]
+	statuses?: Array<'active' | 'paused' | 'expired' | 'deleted'>
+	datePreset?: '7d' | '30d' | 'custom' | null
+	createdFrom?: string | null
+	createdTo?: string | null
+	signal?: AbortSignal
+}): Promise<GetLinksResponse> {
+	const searchParams = new URLSearchParams()
+	if (params?.search?.trim()) searchParams.set('search', params.search.trim())
+	if (params?.page) searchParams.set('page', String(params.page))
+	if (params?.pageSize) searchParams.set('pageSize', String(params.pageSize))
+	if (params?.sort) searchParams.set('sort', params.sort)
+	if (params?.order) searchParams.set('order', params.order)
+	for (const tag of params?.tags || []) {
+		const value = tag.trim()
+		if (value) searchParams.append('tags', value)
+	}
+	for (const status of params?.statuses || []) {
+		searchParams.append('status', status)
+	}
+	if (params?.datePreset === '7d' || params?.datePreset === '30d') {
+		searchParams.set('datePreset', params.datePreset)
+	}
+	if (params?.createdFrom) searchParams.set('createdFrom', params.createdFrom)
+	if (params?.createdTo) searchParams.set('createdTo', params.createdTo)
+	const qs = searchParams.toString()
+	const url = qs ? `/api/links?${qs}` : '/api/links'
+
+	const res = await fetch(url, {
 		method: 'GET',
-		cache: 'no-store'
+		cache: 'no-store',
+		signal: params?.signal
 	})
 
 	const data = await res.json().catch(() => ({}))
@@ -75,10 +129,22 @@ export async function getLinks(): Promise<LinkListItemDto[]> {
 		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
 	}
 
-	return ((data as { links?: LinkListItemDto[] }).links || []).map(link => ({
+	const response = data as Partial<GetLinksResponse>
+	const links = (response.links || []).map(link => ({
 		...link,
 		tags: Array.isArray(link.tags) ? link.tags : []
 	}))
+
+	return {
+		links,
+		meta: {
+			totalAll: Number(response.meta?.totalAll ?? links.length),
+			totalFiltered: Number(response.meta?.totalFiltered ?? links.length),
+			page: Number(response.meta?.page ?? 1),
+			pageSize: Number(response.meta?.pageSize ?? 10),
+			totalPages: Number(response.meta?.totalPages ?? 1)
+		}
+	}
 }
 
 export async function createLink(
@@ -96,6 +162,24 @@ export async function createLink(
 	}
 
 	return data as CreateLinkResponse
+}
+
+export async function getLinkById(
+	id: string,
+	signal?: AbortSignal
+): Promise<GetLinkByIdResponse> {
+	const res = await fetch(`/api/links/${id}`, {
+		method: 'GET',
+		cache: 'no-store',
+		signal
+	})
+
+	const data = await res.json().catch(() => ({}))
+	if (!res.ok) {
+		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+	}
+
+	return data as GetLinkByIdResponse
 }
 
 export async function patchLinkStatus(
@@ -120,5 +204,25 @@ export async function deleteLink(id: string): Promise<void> {
 
 	if (!res.ok) {
 		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+	}
+}
+
+export async function bulkLinkAction(
+	ids: string[],
+	action: BulkLinkAction
+): Promise<{ affected: number }> {
+	const res = await fetch('/api/links/bulk', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ ids, action })
+	})
+
+	const data = await res.json().catch(() => ({}))
+	if (!res.ok) {
+		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+	}
+
+	return {
+		affected: Number((data as any)?.affected ?? 0)
 	}
 }

@@ -12,6 +12,7 @@ interface LinkDetailsHeaderProps {
 
 	handlePauseItem: (id: string) => void
 	handleResumeItem: (id: string) => void
+	handleRestoreItem: (id: string) => void
 	handleDeleteItem: (id: string) => void
 
 	setShowQrModal: (show: boolean) => void
@@ -26,6 +27,7 @@ export default function LinkDetailsHeader({
 	safeNavigate,
 	handlePauseItem,
 	handleResumeItem,
+	handleRestoreItem,
 	handleDeleteItem,
 	setShowQrModal,
 	handleCopy,
@@ -38,6 +40,7 @@ export default function LinkDetailsHeader({
 				onEdit={() => safeNavigate(`/links/${linkId}?tab=edit`)}
 				onPause={() => handlePauseItem(linkId)}
 				onResume={() => handleResumeItem(linkId)}
+				onRestore={() => handleRestoreItem(linkId)}
 				onDelete={() => handleDeleteItem(linkId)}
 				onDownloadQr={() => setShowQrModal(true)}
 				onCopy={handleCopy}

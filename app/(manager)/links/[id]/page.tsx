@@ -2,29 +2,65 @@
 
 import styles from '@/app/(manager)/links/[id]/page.module.scss'
 import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
+import { getLinkById } from '@/app/features/links/api/linksApi'
 import LinkDetailsContent from '@/app/features/links/components/LinkDetails/LinkDetailsContent/LinkDetailsContent'
 import LinkDetailsHeader from '@/app/features/links/components/LinkDetails/LinkDetailsHeader'
 import LinkDetailsModals from '@/app/features/links/components/LinkDetails/LinkDetailsModals/LinkDetailsModals'
 import LinkNotFound from '@/app/features/links/components/LinkNotFound/LinkNotFound'
-import { mockLinks } from '@/data/mockLinks'
+import { mapLinkDtoToItem } from '@/app/features/links/mappers/linkMappers'
 import { useLinksOperations } from '@/hooks/links/useLinksOperations'
 import { useLinkEdit } from '@/hooks/useLinkEdit'
 import { useQrModal } from '@/hooks/useQrModal'
 import { useToast } from '@/hooks/useToast'
 import { LinkItem } from '@/types/links'
 import { useParams, useRouter } from 'next/navigation'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export default function LinkDetailsPage() {
 	const { id } = useParams<{ id: string }>()
 	const router = useRouter()
 	const linkId = id
 
-	const [links, setLinks] = useState<LinkItem[]>(mockLinks)
+	const [links, setLinks] = useState<LinkItem[]>([])
+	const [isLoading, setIsLoading] = useState(true)
 	const link = useMemo(
 		() => links.find(l => l.id === linkId),
 		[links, linkId]
 	)
+
+	useEffect(() => {
+		if (!linkId) return
+
+		const controller = new AbortController()
+		let active = true
+
+		const loadLink = async () => {
+			setIsLoading(true)
+
+			try {
+				const response = await getLinkById(linkId, controller.signal)
+				if (!active) return
+				setLinks([mapLinkDtoToItem(response.link)])
+			} catch (error) {
+				if (
+					error instanceof DOMException &&
+					error.name === 'AbortError'
+				) {
+					return
+				}
+				if (!active) return
+				setLinks([])
+			} finally {
+				if (active) setIsLoading(false)
+			}
+		}
+
+		void loadLink()
+		return () => {
+			active = false
+			controller.abort()
+		}
+	}, [linkId])
 
 	const { toast, showToast, hideToast } = useToast()
 
@@ -34,6 +70,7 @@ export default function LinkDetailsPage() {
 		handleDeleteItem,
 		handlePauseItem,
 		handleResumeItem,
+		handleRestoreItem,
 		handleCloseModal,
 		handleConfirmAction: baseConfirmAction
 	} = useLinksOperations({
@@ -81,6 +118,7 @@ export default function LinkDetailsPage() {
 	const openQr = useCallback(() => setShowQrModal(true), [setShowQrModal])
 	const closeQr = useCallback(() => setShowQrModal(false), [setShowQrModal])
 
+	if (isLoading) return null
 	if (!link) return <LinkNotFound />
 
 	return (
@@ -100,6 +138,7 @@ export default function LinkDetailsPage() {
 					safeNavigate={safeNavigate}
 					handlePauseItem={handlePauseItem}
 					handleResumeItem={handleResumeItem}
+					handleRestoreItem={handleRestoreItem}
 					handleDeleteItem={handleDeleteItem}
 					setShowQrModal={setShowQrModal}
 					handleCopy={handleCopy}

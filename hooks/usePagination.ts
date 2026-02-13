@@ -31,7 +31,8 @@ export const usePagination = <T>({
 	}, [data, currentPage, itemsPerPage])
 
 	const handlePageChange = (page: number) => {
-		setCurrentPage(page)
+		const safePage = Math.min(Math.max(page, 1), totalPages)
+		setCurrentPage(safePage)
 	}
 
 	const handleItemsPerPageChange = (count: number) => {

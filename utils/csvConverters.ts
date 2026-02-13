@@ -1,4 +1,4 @@
-import { ClickEvent } from '@/types/links'
+import { ClickEvent, LinkItem } from '@/types/links'
 
 const escapeCsvValue = (value: any): string => {
 	if (value === null || value === undefined) return ''
@@ -44,6 +44,39 @@ export const convertStatsDataToCsv = <
 	const headers = ['id', 'value', 'change']
 
 	const rows = data.map(d => [d.id, d.value, d.change])
+
+	return [
+		headers.map(escapeCsvValue).join(','),
+		...rows.map(row => row.map(escapeCsvValue).join(','))
+	].join('\n')
+}
+
+export const convertLinksToCsv = (data: LinkItem[]): string => {
+	const headers = [
+		'id',
+		'title',
+		'short_url',
+		'destination',
+		'clicks',
+		'status',
+		'tags',
+		'created_at',
+		'expiration_date',
+		'has_password'
+	]
+
+	const rows = data.map(link => [
+		link.id,
+		link.title,
+		link.shortUrl,
+		link.destination,
+		link.clicks,
+		link.status,
+		link.tags.join('|'),
+		link.createdAt.toISOString(),
+		link.expirationDate ? link.expirationDate.toISOString() : '',
+		link.hasPassword ? 'true' : 'false'
+	])
 
 	return [
 		headers.map(escapeCsvValue).join(','),

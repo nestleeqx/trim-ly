@@ -29,7 +29,13 @@ export const calculateBulkCapabilities = (selectedItems: LinkItem[]) => {
 			selectedItems.every(link => link.status === 'active'),
 		canResumeBulk:
 			selectedItems.length > 0 &&
-			selectedItems.every(link => link.status === 'paused')
+			selectedItems.every(link => link.status === 'paused'),
+		canRestoreBulk:
+			selectedItems.length > 0 &&
+			selectedItems.every(link => link.status === 'deleted'),
+		canDeleteBulk:
+			selectedItems.length > 0 &&
+			selectedItems.every(link => link.status !== 'deleted')
 	}
 }
 

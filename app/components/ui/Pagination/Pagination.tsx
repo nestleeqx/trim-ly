@@ -23,11 +23,14 @@ export default function Pagination({
 	onPageChange,
 	onItemsPerPageChange
 }: PaginationProps) {
-	const startItem = (currentPage - 1) * itemsPerPage + 1
-	const endItem = Math.min(currentPage * itemsPerPage, totalItems)
+	if (totalItems === 0) return null
+
+	const safeCurrentPage = Math.min(Math.max(currentPage, 1), totalPages)
+	const startItem = (safeCurrentPage - 1) * itemsPerPage + 1
+	const endItem = Math.min(safeCurrentPage * itemsPerPage, totalItems)
 	const pages = useMemo(
-		() => getPageNumbers(currentPage, totalPages),
-		[currentPage, totalPages]
+		() => getPageNumbers(safeCurrentPage, totalPages),
+		[safeCurrentPage, totalPages]
 	)
 
 	return (
@@ -47,9 +50,10 @@ export default function Pagination({
 
 			<div className={styles.controls}>
 				<button
+					type='button'
 					className={styles.navBtn}
-					onClick={() => onPageChange(currentPage - 1)}
-					disabled={currentPage === 1}
+					onClick={() => onPageChange(Math.max(safeCurrentPage - 1, 1))}
+					disabled={safeCurrentPage === 1}
 					aria-label='Предыдущая страница'
 				>
 					<ChevronLeft size={18} />
@@ -59,8 +63,9 @@ export default function Pagination({
 					{pages.map((page, index) =>
 						typeof page === 'number' ? (
 							<button
+								type='button'
 								key={index}
-								className={`${styles.pageBtn} ${currentPage === page ? styles.active : ''}`}
+								className={`${styles.pageBtn} ${safeCurrentPage === page ? styles.active : ''}`}
 								onClick={() => onPageChange(page)}
 							>
 								{page}
@@ -77,9 +82,12 @@ export default function Pagination({
 				</div>
 
 				<button
+					type='button'
 					className={styles.navBtn}
-					onClick={() => onPageChange(currentPage + 1)}
-					disabled={currentPage === totalPages}
+					onClick={() =>
+						onPageChange(Math.min(safeCurrentPage + 1, totalPages))
+					}
+					disabled={safeCurrentPage === totalPages}
 					aria-label='Следующая страница'
 				>
 					<ChevronRight size={18} />

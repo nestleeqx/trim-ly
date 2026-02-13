@@ -1,13 +1,21 @@
 import { ToastVariant } from '@/app/components/ui/Toast/Toast'
 import useCsvExport from '@/hooks/useCsvExport'
 import { LinkItem, LinksFiltersState } from '@/types/links'
+import { convertLinksToCsv } from '@/utils/csvConverters'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useLinksFiltering } from './links/useLinksFiltering'
 import { useLinksOperations } from './links/useLinksOperations'
 import { useLinksSelection } from './links/useLinksSelection'
 import { useUrlParamsSync } from './links/useUrlParamsSync'
 
-export const useLinksManager = (initialLinks: LinkItem[]) => {
+type ServerMeta = {
+	totalFiltered: number
+}
+
+export const useLinksManager = (
+	initialLinks: LinkItem[],
+	serverMeta?: ServerMeta,
+	onOperationsSuccess?: () => void
+) => {
 	const {
 		getInitialPage,
 		getInitialPageSize,
@@ -49,29 +57,36 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 		setToast(prev => ({ ...prev, isVisible: false }))
 	}, [])
 
-	const { filteredAndSortedLinks, hasActiveFilters } = useLinksFiltering(
-		links,
-		appliedSearch,
-		filters
+	const hasActiveFilters = useMemo(
+		() =>
+			appliedSearch.trim() !== '' ||
+			filters.statuses.length > 0 ||
+			filters.tags.length > 0 ||
+			filters.datePreset !== null ||
+			!!filters.createdFrom ||
+			!!filters.createdTo,
+		[
+			appliedSearch,
+			filters.statuses,
+			filters.tags,
+			filters.datePreset,
+			filters.createdFrom,
+			filters.createdTo
+		]
 	)
 
-	const totalItems = filteredAndSortedLinks.length
+	const filteredAndSortedLinks = links
+	const totalItems = serverMeta?.totalFiltered ?? links.length
 	const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage))
 
 	useEffect(() => {
 		if (currentPage > totalPages) {
-			setCurrentPage(1)
-			updateUrl({ page: 1 })
+			setCurrentPage(totalPages)
+			updateUrl({ page: totalPages })
 		}
 	}, [currentPage, totalPages, updateUrl])
 
-	const paginatedLinks = useMemo(() => {
-		const startIndex = (currentPage - 1) * itemsPerPage
-		return filteredAndSortedLinks.slice(
-			startIndex,
-			startIndex + itemsPerPage
-		)
-	}, [filteredAndSortedLinks, currentPage, itemsPerPage])
+	const paginatedLinks = useMemo(() => links, [links])
 
 	const {
 		selectedLinks,
@@ -88,8 +103,10 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 		handleDeleteItem,
 		handlePauseItem,
 		handleResumeItem,
+		handleRestoreItem,
 		handleBulkPause,
 		handleBulkResume,
+		handleBulkRestore,
 		handleBulkDelete,
 		handleCloseModal,
 		handleConfirmAction
@@ -98,7 +115,8 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 		setLinks,
 		selectedLinks,
 		clearSelection: () => setSelectedLinks([]),
-		showToast
+		showToast,
+		onSuccess: onOperationsSuccess
 	})
 
 	const handleSearch = useCallback(
@@ -112,10 +130,11 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 
 	const handlePageChange = useCallback(
 		(page: number) => {
-			setCurrentPage(page)
-			updateUrl({ page })
+			const safePage = Math.min(Math.max(page, 1), totalPages)
+			setCurrentPage(safePage)
+			updateUrl({ page: safePage })
 		},
-		[updateUrl]
+		[totalPages, updateUrl]
 	)
 
 	const handleItemsPerPageChange = useCallback(
@@ -134,6 +153,9 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 			updateUrl({
 				statuses: newFilters.statuses,
 				tags: newFilters.tags,
+				datePreset: newFilters.datePreset || null,
+				createdFrom: newFilters.createdFrom || null,
+				createdTo: newFilters.createdTo || null,
 				sort: newFilters.sort,
 				page: 1
 			})
@@ -148,6 +170,8 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 			statuses: [],
 			tags: [],
 			datePreset: null,
+			createdFrom: null,
+			createdTo: null,
 			sort: { field: 'created_date', order: 'desc' }
 		})
 		setCurrentPage(1)
@@ -160,15 +184,13 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 		try {
 			await new Promise(resolve => setTimeout(resolve, 500))
 
-			downloadCsv(filteredAndSortedLinks, {
+			downloadCsv({
+				data: filteredAndSortedLinks,
 				filename: `shortlinks_export_${new Date().toISOString().slice(0, 10)}.csv`,
-				includeHeaders: true
+				converter: convertLinksToCsv
 			})
 
-			showToast(
-				`Экспортировано ${filteredAndSortedLinks.length} ссылок`,
-				'success'
-			)
+			showToast(`Экспортировано ${filteredAndSortedLinks.length} ссылок`, 'success')
 		} catch {
 			showToast('Ошибка при экспорте', 'error')
 		} finally {
@@ -218,9 +240,11 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 			handleDeleteItem,
 			handlePauseItem,
 			handleResumeItem,
+			handleRestoreItem,
 
 			handleBulkPause,
 			handleBulkResume,
+			handleBulkRestore,
 			handleBulkDelete,
 
 			handleCloseModal,

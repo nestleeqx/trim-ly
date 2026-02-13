@@ -5,7 +5,7 @@ import NotificationBell from '@/app/components/layout/DashboardHeader/Notificati
 import Search from '@/app/components/layout/DashboardHeader/Search/Search'
 import UserMenu from '@/app/components/layout/DashboardHeader/UserMenu/UserMenu'
 import Button from '@/app/components/ui/Button/Button'
-import { ArrowLeft, Plus } from 'lucide-react'
+import { ArrowLeft, Plus, Search as SearchIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import styles from './DashboardHeader.module.scss'
@@ -43,6 +43,15 @@ export default function DashboardHeader({
 		}
 	}, [])
 
+	useEffect(() => {
+		if (!isMobileSearchOpen) return
+		const prevOverflow = document.body.style.overflow
+		document.body.style.overflow = 'hidden'
+		return () => {
+			document.body.style.overflow = prevOverflow
+		}
+	}, [isMobileSearchOpen])
+
 	return (
 		<>
 			<header className={styles.header}>
@@ -71,8 +80,19 @@ export default function DashboardHeader({
 								onSearch={search.onSearch}
 								placeholder={search.placeholder}
 								autoSubmit={search.autoSubmit}
+								debounceMs={search.debounceMs}
 							/>
 						</div>
+					)}
+					{search && (
+						<button
+							type='button'
+							className={styles.searchMobileBtn}
+							onClick={() => setIsMobileSearchOpen(true)}
+							aria-label='Открыть поиск'
+						>
+							<SearchIcon size={18} />
+						</button>
 					)}
 					{actions}
 					{showCreateButton && (

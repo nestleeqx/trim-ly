@@ -16,6 +16,7 @@ export default function LinksTable({
 	onDelete,
 	onPause,
 	onResume,
+	onRestore,
 	title,
 	allLinksHref,
 	allowSelection = true,
@@ -25,7 +26,13 @@ export default function LinksTable({
 	const allSelected =
 		links.length > 0 && selectedLinks.length === links.length
 
-	const actions = useLinkActions({ onCopy, onDelete, onPause, onResume })
+	const actions = useLinkActions({
+		onCopy,
+		onDelete,
+		onPause,
+		onResume,
+		onRestore
+	})
 
 	return (
 		<div className={styles.tableWrapper}>

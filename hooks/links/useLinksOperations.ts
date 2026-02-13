@@ -1,4 +1,5 @@
-import {
+﻿import {
+	bulkLinkAction,
 	deleteLink,
 	mapCreateLinkError,
 	patchLinkStatus
@@ -13,6 +14,7 @@ interface UseLinksOperationsProps {
 	selectedLinks: string[]
 	clearSelection: () => void
 	showToast: (message: string, variant?: ToastVariant) => void
+	onSuccess?: () => void
 }
 
 export const useLinksOperations = ({
@@ -20,7 +22,8 @@ export const useLinksOperations = ({
 	setLinks,
 	selectedLinks,
 	clearSelection,
-	showToast
+	showToast,
+	onSuccess
 }: UseLinksOperationsProps) => {
 	const [confirmModal, setConfirmModal] = useState<ConfirmModalState>({
 		isOpen: false,
@@ -74,12 +77,29 @@ export const useLinksOperations = ({
 		[links]
 	)
 
+	const handleRestoreItem = useCallback(
+		(id: string) => {
+			const link = links.find(l => l.id === id)
+			setConfirmModal({
+				isOpen: true,
+				action: 'restore-single',
+				itemId: id,
+				itemTitle: link?.title || ''
+			})
+		},
+		[links]
+	)
+
 	const handleBulkPause = useCallback(() => {
 		setConfirmModal({ isOpen: true, action: 'pause' })
 	}, [])
 
 	const handleBulkResume = useCallback(() => {
 		setConfirmModal({ isOpen: true, action: 'resume' })
+	}, [])
+
+	const handleBulkRestore = useCallback(() => {
+		setConfirmModal({ isOpen: true, action: 'restore' })
 	}, [])
 
 	const handleBulkDelete = useCallback(() => {
@@ -96,9 +116,7 @@ export const useLinksOperations = ({
 		try {
 			switch (confirmModal.action) {
 				case 'pause':
-					await Promise.all(
-						selectedLinks.map(id => patchLinkStatus(id, 'pause'))
-					)
+					await bulkLinkAction(selectedLinks, 'pause')
 					setLinks(prev =>
 						prev.map(link =>
 							selectedLinks.includes(link.id)
@@ -106,17 +124,12 @@ export const useLinksOperations = ({
 								: link
 						)
 					)
-					showToast(
-						`Приостановлено ссылок: ${selectedLinks.length}`,
-						'success'
-					)
+					showToast(`Приостановлено ссылок: ${selectedLinks.length}`, 'success')
 					clearSelection()
 					break
 
 				case 'resume':
-					await Promise.all(
-						selectedLinks.map(id => patchLinkStatus(id, 'resume'))
-					)
+					await bulkLinkAction(selectedLinks, 'resume')
 					setLinks(prev =>
 						prev.map(link =>
 							selectedLinks.includes(link.id)
@@ -124,15 +137,25 @@ export const useLinksOperations = ({
 								: link
 						)
 					)
-					showToast(
-						`Возобновлено ссылок: ${selectedLinks.length}`,
-						'success'
+					showToast(`Возобновлено ссылок: ${selectedLinks.length}`, 'success')
+					clearSelection()
+					break
+
+				case 'restore':
+					await bulkLinkAction(selectedLinks, 'restore')
+					setLinks(prev =>
+						prev.map(link =>
+							selectedLinks.includes(link.id)
+								? { ...link, status: 'active' as const }
+								: link
+						)
 					)
+					showToast(`Восстановлено ссылок: ${selectedLinks.length}`, 'success')
 					clearSelection()
 					break
 
 				case 'delete':
-					await Promise.all(selectedLinks.map(id => deleteLink(id)))
+					await bulkLinkAction(selectedLinks, 'delete')
 					setLinks(prev =>
 						prev.filter(link => !selectedLinks.includes(link.id))
 					)
@@ -177,8 +200,23 @@ export const useLinksOperations = ({
 						showToast('Ссылка возобновлена', 'success')
 					}
 					break
+
+				case 'restore-single':
+					if (confirmModal.itemId) {
+						await patchLinkStatus(confirmModal.itemId, 'restore')
+						setLinks(prev =>
+							prev.map(link =>
+								link.id === confirmModal.itemId
+									? { ...link, status: 'active' as const }
+									: link
+							)
+						)
+						showToast('Ссылка восстановлена', 'success')
+					}
+					break
 			}
 
+			onSuccess?.()
 			handleCloseModal()
 		} catch (error) {
 			const message =
@@ -196,7 +234,8 @@ export const useLinksOperations = ({
 		setLinks,
 		clearSelection,
 		showToast,
-		handleCloseModal
+		handleCloseModal,
+		onSuccess
 	])
 
 	return {
@@ -206,8 +245,10 @@ export const useLinksOperations = ({
 		handleDeleteItem,
 		handlePauseItem,
 		handleResumeItem,
+		handleRestoreItem,
 		handleBulkPause,
 		handleBulkResume,
+		handleBulkRestore,
 		handleBulkDelete,
 		handleCloseModal,
 		handleConfirmAction

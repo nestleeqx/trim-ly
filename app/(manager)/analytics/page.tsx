@@ -25,11 +25,7 @@ import { useState } from 'react'
 export default function AnalyticsPage() {
 	const [activePeriod, setActivePeriod] = useState('24h')
 
-	const { downloadCsv } = useCsvExport(
-		defaultStatsData,
-		'analytics_stats',
-		convertStatsDataToCsv
-	)
+	const { downloadCsv } = useCsvExport()
 
 	return (
 		<>
@@ -56,7 +52,13 @@ export default function AnalyticsPage() {
 					<Button
 						variant='invertGhost'
 						size='md'
-						onClick={() => downloadCsv()}
+						onClick={() =>
+							downloadCsv({
+								data: defaultStatsData,
+								filename: 'analytics_stats.csv',
+								converter: convertStatsDataToCsv
+							})
+						}
 					>
 						Экспорт CSV
 					</Button>

@@ -30,10 +30,12 @@ export type LinkStatus = 'active' | 'paused' | 'expired' | 'deleted'
 export type ModalAction =
 	| 'pause'
 	| 'resume'
+	| 'restore'
 	| 'delete'
 	| 'delete-single'
 	| 'pause-single'
 	| 'resume-single'
+	| 'restore-single'
 	| null
 
 export interface ConfirmModalState {
@@ -47,6 +49,8 @@ export interface LinksFiltersState {
 	statuses: LinkStatus[]
 	tags: string[]
 	datePreset: '7d' | '30d' | 'custom' | null
+	createdFrom?: string | null
+	createdTo?: string | null
 	sort: {
 		field: SortField
 		order: 'asc' | 'desc'
@@ -102,6 +106,13 @@ export const getModalConfig = (
 				confirmText: 'Возобновить',
 				variant: 'warning'
 			}
+		case 'restore':
+			return {
+				title: 'Восстановить ссылки',
+				message: `Вы уверены, что хотите восстановить ${selectedCount} ссылок?`,
+				confirmText: 'Восстановить',
+				variant: 'warning'
+			}
 		case 'delete':
 			return {
 				title: 'Удалить ссылки',
@@ -128,6 +139,13 @@ export const getModalConfig = (
 				title: 'Возобновить ссылку',
 				message: `Вы уверены, что хотите возобновить ссылку "${itemTitle}"?`,
 				confirmText: 'Возобновить',
+				variant: 'warning'
+			}
+		case 'restore-single':
+			return {
+				title: 'Восстановить ссылку',
+				message: `Вы уверены, что хотите восстановить ссылку "${itemTitle}"?`,
+				confirmText: 'Восстановить',
 				variant: 'warning'
 			}
 		default:

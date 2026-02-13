@@ -5,7 +5,8 @@ export interface TrendData {
 }
 
 export const calculateTrend = (clicks: number): TrendData => {
-	const trend = (clicks % 21) - 10
+	void clicks
+	const trend = 0
 
 	let className: 'positive' | 'negative' | 'neutral' = 'neutral'
 	if (trend > 0) className = 'positive'

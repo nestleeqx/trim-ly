@@ -5,15 +5,17 @@ import commonStyles from '../FilterCommon.module.scss'
 import FilterDropdown from '../FilterDropdown/FilterDropdown'
 
 interface TagsFilterProps {
+	availableTags: string[]
 	selectedTags: string[]
 	onTagsChange: (tags: string[]) => void
+	isLoading?: boolean
 }
 
-const availableTags = ['АКЦИЯ', 'СОЦСЕТИ', 'ЗАПУСК', 'ЗИМА', 'РЕФЕРАЛ']
-
 export default function TagsFilter({
+	availableTags,
 	selectedTags,
-	onTagsChange
+	onTagsChange,
+	isLoading = false
 }: TagsFilterProps) {
 	const toggleTag = (tag: string) => {
 		onTagsChange(
@@ -30,18 +32,25 @@ export default function TagsFilter({
 			badgeCount={selectedTags.length}
 			hasSelection={selectedTags.length > 0}
 		>
-			{availableTags.map(tag => (
-				<button
-					key={tag}
-					className={`${commonStyles.dropdownItem} ${selectedTags.includes(tag) ? commonStyles.selected : ''}`}
-					onClick={() => toggleTag(tag)}
-				>
-					<span className={commonStyles.checkbox}>
-						{selectedTags.includes(tag) && <Check size={12} />}
-					</span>
-					{tag}
-				</button>
-			))}
+			{isLoading ? (
+				<div className={commonStyles.dropdownItem}>Загрузка тегов...</div>
+			) : availableTags.length === 0 ? (
+				<div className={commonStyles.dropdownItem}>Теги не найдены</div>
+			) : (
+				availableTags.map(tag => (
+					<button
+						key={tag}
+						type='button'
+						className={`${commonStyles.dropdownItem} ${selectedTags.includes(tag) ? commonStyles.selected : ''}`}
+						onClick={() => toggleTag(tag)}
+					>
+						<span className={commonStyles.checkbox}>
+							{selectedTags.includes(tag) && <Check size={12} />}
+						</span>
+						{tag}
+					</button>
+				))
+			)}
 		</FilterDropdown>
 	)
 }

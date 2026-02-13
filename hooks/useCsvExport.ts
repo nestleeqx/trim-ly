@@ -1,26 +1,18 @@
-import { LinkItem } from '@/types/links'
+type CsvConverter<T> = (data: T[]) => string
 
-interface ExportOptions {
-	includeHeaders?: boolean
-	filename?: string
-	delimiter?: string
+interface DownloadCsvOptions<T> {
+	data: T[]
+	filename: string
+	converter: CsvConverter<T>
 }
 
-const useCsvExport = <T extends unknown>(
-	data: T[],
-	defaultFilename: string,
-	converter: (data: T[]) => string
-) => {
-	const downloadCsv = (
-		filteredAndSortedLinks: LinkItem[],
-		options: ExportOptions = {}
-	) => {
-		const {
-			filename = `${defaultFilename}_${new Date().toISOString().split('T')[0]}.csv`
-		} = options
-
+const useCsvExport = () => {
+	const downloadCsv = <T>({
+		data,
+		filename,
+		converter
+	}: DownloadCsvOptions<T>) => {
 		const csvContent = converter(data)
-
 		const blob = new Blob(['\ufeff' + csvContent], {
 			type: 'text/csv;charset=utf-8;'
 		})

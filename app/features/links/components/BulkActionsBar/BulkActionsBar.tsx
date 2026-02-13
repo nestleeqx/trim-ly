@@ -1,6 +1,6 @@
-'use client'
+﻿'use client'
 
-import { Pause, Play, Trash2, X } from 'lucide-react'
+import { Pause, Play, RotateCcw, Trash2, X } from 'lucide-react'
 import styles from './BulkActionsBar.module.scss'
 
 interface BulkActionsBarProps {
@@ -8,9 +8,12 @@ interface BulkActionsBarProps {
 	onClearSelection: () => void
 	onPause: () => void
 	onResume: () => void
+	onRestore: () => void
 	onDelete: () => void
 	canPauseBulk: boolean
 	canResumeBulk: boolean
+	canRestoreBulk: boolean
+	canDeleteBulk: boolean
 }
 
 export default function BulkActionsBar({
@@ -18,9 +21,12 @@ export default function BulkActionsBar({
 	onClearSelection,
 	onPause,
 	onResume,
+	onRestore,
 	onDelete,
 	canPauseBulk,
-	canResumeBulk
+	canResumeBulk,
+	canRestoreBulk,
+	canDeleteBulk
 }: BulkActionsBarProps) {
 	if (selectedCount === 0) return null
 
@@ -41,32 +47,35 @@ export default function BulkActionsBar({
 
 			<div className={styles.actions}>
 				{canPauseBulk && (
-					<button
-						className={styles.actionButton}
-						onClick={onPause}
-					>
+					<button className={styles.actionButton} onClick={onPause}>
 						<Pause size={16} />
 						<span>Приостановить</span>
 					</button>
 				)}
 
 				{canResumeBulk && (
-					<button
-						className={styles.actionButton}
-						onClick={onResume}
-					>
+					<button className={styles.actionButton} onClick={onResume}>
 						<Play size={16} />
 						<span>Возобновить</span>
 					</button>
 				)}
 
-				<button
-					className={`${styles.actionButton} ${styles.destructive}`}
-					onClick={onDelete}
-				>
-					<Trash2 size={16} />
-					<span>Удалить</span>
-				</button>
+				{canRestoreBulk && (
+					<button className={styles.actionButton} onClick={onRestore}>
+						<RotateCcw size={16} />
+						<span>Восстановить</span>
+					</button>
+				)}
+
+				{canDeleteBulk && (
+					<button
+						className={`${styles.actionButton} ${styles.destructive}`}
+						onClick={onDelete}
+					>
+						<Trash2 size={16} />
+						<span>Удалить</span>
+					</button>
+				)}
 			</div>
 		</div>
 	)

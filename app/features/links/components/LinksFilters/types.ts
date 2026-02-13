@@ -5,6 +5,8 @@ export interface EnhancedLinksFiltersProps extends LinksFiltersProps {
 	onViewModeChange?: (mode: 'list' | 'grid') => void
 	onExport?: () => void
 	exportLoading?: boolean
+	availableTags?: string[]
+	tagsLoading?: boolean
 	hideRight?: boolean
 	showCountry?: boolean
 	showDevice?: boolean

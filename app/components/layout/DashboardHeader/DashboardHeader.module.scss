@@ -80,6 +80,30 @@
 	}
 }
 
+.searchMobileBtn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	padding: 0;
+	border: 1px solid $color-border;
+	border-radius: $border-radius-md;
+	background: $color-bg-dark;
+	color: $color-text-secondary;
+	cursor: pointer;
+	transition: $transition-fast;
+
+	&:hover {
+		color: $color-text-primary;
+		border-color: $color-primary;
+	}
+
+	@media (min-width: $breakpoint-md) {
+		display: none;
+	}
+}
+
 .createBtn {
 	span {
 		display: none;

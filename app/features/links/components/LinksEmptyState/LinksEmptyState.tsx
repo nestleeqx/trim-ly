@@ -1,7 +1,8 @@
-'use client'
+﻿'use client'
 
 import Button from '@/app/components/ui/Button/Button'
 import { Link2, Plus, Search, X } from 'lucide-react'
+import Link from 'next/link'
 import styles from './LinksEmptyState.module.scss'
 
 interface LinksEmptyStateProps {
@@ -9,13 +10,15 @@ interface LinksEmptyStateProps {
 	hasFilteredLinks: boolean
 	hasActiveFilters: boolean
 	onClearFilters: () => void
+	isLoading?: boolean
 }
 
 export default function LinksEmptyState({
 	hasLinks,
 	hasFilteredLinks,
 	hasActiveFilters,
-	onClearFilters
+	onClearFilters,
+	isLoading = false
 }: LinksEmptyStateProps) {
 	if (!hasLinks) {
 		return (
@@ -25,13 +28,14 @@ export default function LinksEmptyState({
 				</div>
 				<h3 className={styles.emptyStateTitle}>Ссылок пока нет</h3>
 				<p className={styles.emptyStateText}>
-					Создайте свою первую короткую ссылку и начните отслеживать
-					переходы
+					Создайте свою первую короткую ссылку и начните отслеживать переходы
 				</p>
-				<button className={styles.emptyStateButton}>
-					<Plus size={18} />
-					Создать первую ссылку
-				</button>
+				<Link href='/links/new' className={styles.createBtn}>
+					<Button variant='primary'>
+						<Plus size={18} />
+						Создать первую ссылку
+					</Button>
+				</Link>
 			</div>
 		)
 	}
@@ -44,21 +48,15 @@ export default function LinksEmptyState({
 				</div>
 				<h3 className={styles.emptyStateTitle}>Ссылки не найдены</h3>
 				<p className={styles.emptyStateText}>
-					По вашему запросу ничего не найдено. Попробуйте изменить
-					параметры поиска.
+					По вашему запросу ничего не найдено. Попробуйте изменить параметры поиска.
 				</p>
 				{hasActiveFilters && (
-					<Button
-						variant='primary'
-						onClick={onClearFilters}
-					>
+					<Button variant='primary' onClick={onClearFilters} disabled={isLoading}>
 						<X size={16} />
-						Сбросить фильтры
+						{isLoading ? 'Обновляем...' : 'Сбросить фильтры'}
 					</Button>
 				)}
-				<p className={styles.emptyStateHint}>
-					Попробуйте другой поисковый запрос
-				</p>
+				<p className={styles.emptyStateHint}>Попробуйте другой поисковый запрос</p>
 			</div>
 		)
 	}

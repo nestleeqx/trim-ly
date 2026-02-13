@@ -35,6 +35,7 @@ export default function ItemsPerPageDropdown({
 				ref={dropdownRef}
 			>
 				<button
+					type='button'
 					className={styles.dropdownBtn}
 					onClick={() => setIsOpen(!isOpen)}
 				>
@@ -46,6 +47,7 @@ export default function ItemsPerPageDropdown({
 					<div className={styles.dropdownMenu}>
 						{options.map(count => (
 							<button
+								type='button'
 								key={count}
 								className={`${styles.dropdownItem} ${itemsPerPage === count ? styles.active : ''}`}
 								onClick={() => handleOptionClick(count)}

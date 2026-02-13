@@ -19,6 +19,7 @@ interface ActionsCellProps {
 		handleEdit: (linkId: string) => void
 		handleToggleStatus: (link: LinkItem) => void
 		handleDelete: (linkId: string) => void
+		handleRestore: (linkId: string) => void
 	}
 }
 

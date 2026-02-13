@@ -1,22 +1,39 @@
 import { LinkItem, LinksFiltersState } from '@/types/links'
 import { useMemo } from 'react'
 
-const sortLinks = (links: LinkItem[], sortConfig: LinksFiltersState['sort']) => {
-	return [...links].sort((a, b) => {
-		const order = sortConfig.order === 'asc' ? 1 : -1
+const compareNullableNumbers = (
+	a: number | null | undefined,
+	b: number | null | undefined,
+	dir: 1 | -1
+) => {
+	const av = a ?? Number.NEGATIVE_INFINITY
+	const bv = b ?? Number.NEGATIVE_INFINITY
+	return (av - bv) * dir
+}
 
+const compareStrings = (a: string, b: string, dir: 1 | -1) =>
+	a.localeCompare(b, 'ru') * dir
+
+const sortLinks = (
+	links: LinkItem[],
+	sortConfig: LinksFiltersState['sort']
+) => {
+	const dir: 1 | -1 = sortConfig.order === 'asc' ? 1 : -1
+
+	return [...links].sort((a, b) => {
 		switch (sortConfig.field) {
 			case 'created_date':
-				return (
-					(new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) *
-					order
+				return compareNullableNumbers(
+					new Date(a.createdAt).getTime(),
+					new Date(b.createdAt).getTime(),
+					dir
 				)
 
 			case 'clicks':
-				return (b.clicks - a.clicks) * order
+				return compareNullableNumbers(a.clicks, b.clicks, dir)
 
 			case 'title':
-				return a.title.localeCompare(b.title, 'ru') * order
+				return compareStrings(a.title || '', b.title || '', dir)
 
 			case 'status': {
 				const statusOrder = {
@@ -25,13 +42,21 @@ const sortLinks = (links: LinkItem[], sortConfig: LinksFiltersState['sort']) => 
 					expired: 2,
 					deleted: 3
 				}
-				return (statusOrder[a.status] - statusOrder[b.status]) * order
+				return compareNullableNumbers(
+					statusOrder[a.status],
+					statusOrder[b.status],
+					dir
+				)
 			}
 
 			case 'expiration_date': {
-				const dateA = a.expirationDate ? new Date(a.expirationDate).getTime() : 0
-				const dateB = b.expirationDate ? new Date(b.expirationDate).getTime() : 0
-				return (dateB - dateA) * order
+				const ea = a.expirationDate
+					? new Date(a.expirationDate).getTime()
+					: null
+				const eb = b.expirationDate
+					? new Date(b.expirationDate).getTime()
+					: null
+				return compareNullableNumbers(ea, eb, dir)
 			}
 
 			default:
@@ -59,7 +84,9 @@ export const useLinksFiltering = (
 		}
 
 		if (filters.statuses.length > 0) {
-			filtered = filtered.filter(link => filters.statuses.includes(link.status))
+			filtered = filtered.filter(link =>
+				filters.statuses.includes(link.status)
+			)
 		}
 
 		if (filters.tags.length > 0) {
@@ -76,9 +103,18 @@ export const useLinksFiltering = (
 			appliedSearch.trim() !== '' ||
 			filters.statuses.length > 0 ||
 			filters.tags.length > 0 ||
-			filters.datePreset !== null
+			filters.datePreset !== null ||
+			!!filters.createdFrom ||
+			!!filters.createdTo
 		)
-	}, [appliedSearch, filters.statuses, filters.tags, filters.datePreset])
+	}, [
+		appliedSearch,
+		filters.statuses,
+		filters.tags,
+		filters.datePreset,
+		filters.createdFrom,
+		filters.createdTo
+	])
 
 	return {
 		filteredAndSortedLinks,

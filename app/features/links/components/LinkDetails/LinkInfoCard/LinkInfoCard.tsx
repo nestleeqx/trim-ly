@@ -12,6 +12,7 @@ interface LinkInfoCardProps {
 	onEdit: () => void
 	onPause: () => void
 	onResume: () => void
+	onRestore: () => void
 	onDelete: () => void
 	onDownloadQr: () => void
 	onCopy: (url: string) => void
@@ -23,6 +24,7 @@ export default function LinkInfoCard({
 	onEdit,
 	onPause,
 	onResume,
+	onRestore,
 	onDelete,
 	onDownloadQr,
 	onCopy,
@@ -65,6 +67,7 @@ export default function LinkInfoCard({
 					onEdit={onEdit}
 					onPause={onPause}
 					onResume={onResume}
+					onRestore={onRestore}
 					onDelete={onDelete}
 					onDownloadQr={onDownloadQr}
 					hideEditButton={hideEditButton}

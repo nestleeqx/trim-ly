@@ -71,7 +71,8 @@ export default function LinkCard({
 								closeKebabMenu: actions.closeKebabMenu,
 								handleEdit: actions.handleEdit,
 								handleToggleStatus: actions.handleToggleStatus,
-								handleDelete: actions.handleDelete
+								handleDelete: actions.handleDelete,
+								handleRestore: actions.handleRestore
 							}}
 						/>
 					</div>

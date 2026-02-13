@@ -5,30 +5,36 @@ import styles from './LinksPageSkeleton.module.scss'
 
 interface LinksPageSkeletonProps {
 	rows?: number
+	showFilters?: boolean
+	showPagination?: boolean
 }
 
 export default function LinksPageSkeleton({
-	rows = 8
+	rows = 8,
+	showFilters = true,
+	showPagination = true
 }: LinksPageSkeletonProps) {
 	return (
 		<div className={styles.container}>
-			<div className={styles.filters}>
-				<Skeleton
-					className={styles.filter}
-					height={35}
-					radius={12}
-				/>
-				<Skeleton
-					className={styles.filter}
-					height={35}
-					radius={12}
-				/>
-				<Skeleton
-					className={styles.filterShort}
-					height={35}
-					radius={12}
-				/>
-			</div>
+			{showFilters && (
+				<div className={styles.filters}>
+					<Skeleton
+						className={styles.filter}
+						height={35}
+						radius={12}
+					/>
+					<Skeleton
+						className={styles.filter}
+						height={35}
+						radius={12}
+					/>
+					<Skeleton
+						className={styles.filterShort}
+						height={35}
+						radius={12}
+					/>
+				</div>
+			)}
 
 			<div className={styles.tableCard}>
 				<div className={styles.tableHeader}>
@@ -85,20 +91,22 @@ export default function LinksPageSkeleton({
 				</div>
 			</div>
 
-			<div className={styles.pagination}>
-				<Skeleton
-					className={styles.pageItem}
-					height={34}
-				/>
-				<Skeleton
-					className={styles.pageItem}
-					height={34}
-				/>
-				<Skeleton
-					className={styles.pageItem}
-					height={34}
-				/>
-			</div>
+			{showPagination && (
+				<div className={styles.pagination}>
+					<Skeleton
+						className={styles.pageItem}
+						height={34}
+					/>
+					<Skeleton
+						className={styles.pageItem}
+						height={34}
+					/>
+					<Skeleton
+						className={styles.pageItem}
+						height={34}
+					/>
+				</div>
+			)}
 		</div>
 	)
 }

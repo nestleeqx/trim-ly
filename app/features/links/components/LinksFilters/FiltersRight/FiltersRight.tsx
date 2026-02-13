@@ -2,7 +2,6 @@
 
 import { SortState } from '@/types/filterLinks'
 import { Download } from 'lucide-react'
-import { useState } from 'react'
 import styles from './FiltersRight.module.scss'
 import SortDropdown from './SortDropdown/SortDropdown'
 import ViewToggle from './ViewToggle/ViewToggle'
@@ -26,17 +25,9 @@ export default function FiltersRight({
 	exportDisabled = false,
 	exportLoading = false
 }: FiltersRightProps) {
-	const [isExporting, setIsExporting] = useState(false)
-
-	const handleExport = async () => {
-		if (exportDisabled || isExporting) return
-
-		setIsExporting(true)
-		try {
-			await onExport?.()
-		} finally {
-			setIsExporting(false)
-		}
+	const handleExport = () => {
+		if (exportDisabled || exportLoading) return
+		onExport?.()
 	}
 
 	return (
@@ -52,17 +43,14 @@ export default function FiltersRight({
 			/>
 
 			<button
-				className={`${styles.exportBtn} ${exportLoading || isExporting ? styles.loading : ''}`}
+				type='button'
+				className={`${styles.exportBtn} ${exportLoading ? styles.loading : ''}`}
 				onClick={handleExport}
-				disabled={exportDisabled || exportLoading || isExporting}
+				disabled={exportDisabled || exportLoading}
 				aria-label='Экспорт CSV'
 			>
 				<Download size={16} />
-				<span>
-					{exportLoading || isExporting
-						? 'Экспорт...'
-						: 'Экспорт CSV'}
-				</span>
+				<span>{exportLoading ? 'Экспорт...' : 'Экспорт CSV'}</span>
 			</button>
 		</div>
 	)

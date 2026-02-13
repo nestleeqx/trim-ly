@@ -14,6 +14,7 @@ interface LinksCardsProps {
 	onDelete?: (id: string) => void
 	onPause?: (id: string) => void
 	onResume?: (id: string) => void
+	onRestore?: (id: string) => void
 }
 
 export default function LinksCards({
@@ -23,9 +24,16 @@ export default function LinksCards({
 	onCopy,
 	onDelete,
 	onPause,
-	onResume
+	onResume,
+	onRestore
 }: LinksCardsProps) {
-	const actions = useLinkActions({ onCopy, onDelete, onPause, onResume })
+	const actions = useLinkActions({
+		onCopy,
+		onDelete,
+		onPause,
+		onResume,
+		onRestore
+	})
 
 	return (
 		<>

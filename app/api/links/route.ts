@@ -17,6 +17,15 @@ const MIN_SLUG_LENGTH = 3
 const MAX_SLUG_LENGTH = 25
 const SHORT_LINK_DOMAIN = 't.ly/'
 
+type UiStatus = 'active' | 'paused' | 'expired' | 'deleted'
+type SortFieldApi =
+	| 'created_date'
+	| 'clicks'
+	| 'title'
+	| 'status'
+	| 'expiration_date'
+type SortOrderApi = 'asc' | 'desc'
+
 function normalizeUrl(value: string) {
 	const raw = value.trim()
 	try {
@@ -46,10 +55,7 @@ function mapStatus(params: {
 	deletedAt: Date | null
 }) {
 	if (params.deletedAt) return 'deleted'
-	if (
-		params.expiresAt &&
-		params.expiresAt.getTime() <= Date.now()
-	) {
+	if (params.expiresAt && params.expiresAt.getTime() <= Date.now()) {
 		return 'expired'
 	}
 	if (params.status === 'disabled') return 'paused'
@@ -57,7 +63,93 @@ function mapStatus(params: {
 	return 'active'
 }
 
-export async function GET() {
+function parseTagFilters(req: Request): string[] {
+	const url = new URL(req.url)
+	const multi = url.searchParams.getAll('tags')
+	const csv = (url.searchParams.get('tags') || '')
+		.split(',')
+		.map(v => v.trim())
+		.filter(Boolean)
+
+	return [...new Set([...multi, ...csv].map(v => v.trim()).filter(Boolean))]
+}
+
+function parseDatePreset(req: Request): '7d' | '30d' | null {
+	const value = (new URL(req.url).searchParams.get('datePreset') || '').trim()
+	if (value === '7d' || value === '30d') return value
+	return null
+}
+
+function parseCreatedRange(req: Request): {
+	from: Date | null
+	to: Date | null
+} {
+	const url = new URL(req.url)
+	const rawFrom = (url.searchParams.get('createdFrom') || '').trim()
+	const rawTo = (url.searchParams.get('createdTo') || '').trim()
+
+	const from = rawFrom ? new Date(rawFrom) : null
+	const to = rawTo ? new Date(rawTo) : null
+
+	return {
+		from: from && !Number.isNaN(from.getTime()) ? from : null,
+		to: to && !Number.isNaN(to.getTime()) ? to : null
+	}
+}
+
+function parseStatusFilters(req: Request): UiStatus[] {
+	const url = new URL(req.url)
+	const multi = url.searchParams.getAll('status')
+	const csv = (url.searchParams.get('status') || '')
+		.split(',')
+		.map(v => v.trim())
+		.filter(Boolean)
+
+	const allowed: UiStatus[] = ['active', 'paused', 'expired', 'deleted']
+	return [...new Set([...multi, ...csv])].filter((v): v is UiStatus =>
+		allowed.includes(v as UiStatus)
+	)
+}
+
+function parseSearch(req: Request): string | null {
+	const raw = (new URL(req.url).searchParams.get('search') || '').trim()
+	return raw ? raw.slice(0, 120) : null
+}
+
+function parsePositiveInt(raw: string | null, fallback: number) {
+	const n = Number(raw)
+	return Number.isInteger(n) && n > 0 ? n : fallback
+}
+
+function parsePage(req: Request) {
+	return parsePositiveInt(new URL(req.url).searchParams.get('page'), 1)
+}
+
+function parsePageSize(req: Request) {
+	const n = parsePositiveInt(new URL(req.url).searchParams.get('pageSize'), 10)
+	return [10, 25, 50].includes(n) ? n : 10
+}
+
+function parseSort(req: Request): { field: SortFieldApi; order: SortOrderApi } {
+	const url = new URL(req.url)
+	const fieldRaw = (url.searchParams.get('sort') || 'created_date').trim()
+	const orderRaw = (url.searchParams.get('order') || 'desc').trim()
+
+	const field: SortFieldApi = [
+		'created_date',
+		'clicks',
+		'title',
+		'status',
+		'expiration_date'
+	].includes(fieldRaw)
+		? (fieldRaw as SortFieldApi)
+		: 'created_date'
+
+	const order: SortOrderApi = orderRaw === 'asc' ? 'asc' : 'desc'
+	return { field, order }
+}
+
+export async function GET(req: Request) {
 	const session = await getServerSession(authOptions)
 	const userId = session?.user?.id
 
@@ -65,31 +157,140 @@ export async function GET() {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
-	const links = await prisma.link.findMany({
-		where: { userId, deletedAt: null },
-		orderBy: { createdAt: 'desc' },
-		select: {
-			id: true,
-			title: true,
-			slug: true,
-			targetUrl: true,
-			clicksTotal: true,
-			status: true,
-			createdAt: true,
-			expiresAt: true,
-			deletedAt: true,
-			passwordHash: true,
+	const tagsFilter = parseTagFilters(req)
+	const statusFilters = parseStatusFilters(req)
+	const search = parseSearch(req)
+	const page = parsePage(req)
+	const pageSize = parsePageSize(req)
+	const { field: sortField, order: sortOrder } = parseSort(req)
+	const datePreset = parseDatePreset(req)
+	const createdRange = parseCreatedRange(req)
+	const now = new Date()
+	const createdAtFilter =
+		createdRange.from || createdRange.to
+			? {
+					...(createdRange.from ? { gte: createdRange.from } : {}),
+					...(createdRange.to ? { lte: createdRange.to } : {})
+			  }
+			: datePreset === '7d'
+				? { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
+				: datePreset === '30d'
+					? { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
+					: undefined
+
+	const statusWhere = statusFilters.length
+		? {
+				OR: [
+					...(statusFilters.includes('deleted')
+						? [{ deletedAt: { not: null } }]
+						: []),
+					...(statusFilters.includes('active')
+						? [
+								{
+									deletedAt: null,
+									status: 'active',
+									OR: [{ expiresAt: null }, { expiresAt: { gt: now } }]
+								}
+						  ]
+						: []),
+					...(statusFilters.includes('paused')
+						? [
+								{
+									deletedAt: null,
+									status: 'disabled',
+									OR: [{ expiresAt: null }, { expiresAt: { gt: now } }]
+								}
+						  ]
+						: []),
+					...(statusFilters.includes('expired')
+						? [
+								{
+									deletedAt: null,
+									OR: [{ status: 'expired' }, { expiresAt: { lte: now } }]
+								}
+						  ]
+						: [])
+				]
+		  }
+		: { deletedAt: null }
+
+	const andClauses: any[] = [statusWhere]
+
+	if (createdAtFilter) {
+		andClauses.push({ createdAt: createdAtFilter })
+	}
+
+	if (tagsFilter.length) {
+		andClauses.push({
 			tags: {
-				select: {
+				some: {
 					tag: {
-						select: {
-							name: true
+						name: { in: tagsFilter }
+					}
+				}
+			}
+		})
+	}
+
+	if (search) {
+		andClauses.push({
+			OR: [
+				{ title: { contains: search, mode: 'insensitive' } },
+				{ slug: { contains: search, mode: 'insensitive' } },
+				{ targetUrl: { contains: search, mode: 'insensitive' } }
+			]
+		})
+	}
+
+	const where: any = {
+		userId,
+		...(andClauses.length ? { AND: andClauses } : {})
+	}
+
+	const orderBy =
+		sortField === 'clicks'
+			? [{ clicksTotal: sortOrder }, { createdAt: 'desc' as const }]
+			: sortField === 'title'
+				? [{ title: sortOrder }, { createdAt: 'desc' as const }]
+				: sortField === 'status'
+					? [{ status: sortOrder }, { createdAt: 'desc' as const }]
+					: sortField === 'expiration_date'
+						? [{ expiresAt: sortOrder }, { createdAt: 'desc' as const }]
+						: [{ createdAt: sortOrder }]
+
+	const [links, totalAll, totalFiltered] = await Promise.all([
+		prisma.link.findMany({
+			where,
+			orderBy,
+			skip: (page - 1) * pageSize,
+			take: pageSize,
+			select: {
+				id: true,
+				title: true,
+				slug: true,
+				targetUrl: true,
+				clicksTotal: true,
+				status: true,
+				createdAt: true,
+				expiresAt: true,
+				deletedAt: true,
+				passwordHash: true,
+				tags: {
+					select: {
+						tag: {
+							select: {
+								name: true
+							}
 						}
 					}
 				}
 			}
-		}
-	})
+		}),
+		prisma.link.count({ where: { userId } }),
+		prisma.link.count({ where })
+	])
+
+	const totalPages = Math.max(1, Math.ceil(totalFiltered / pageSize))
 
 	return NextResponse.json({
 		links: links.map(link => ({
@@ -107,7 +308,14 @@ export async function GET() {
 			createdAt: link.createdAt.toISOString(),
 			expirationDate: link.expiresAt?.toISOString() ?? null,
 			hasPassword: !!link.passwordHash
-		}))
+		})),
+		meta: {
+			totalAll,
+			totalFiltered,
+			page,
+			pageSize,
+			totalPages
+		}
 	})
 }
 

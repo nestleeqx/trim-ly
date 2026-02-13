@@ -9,6 +9,7 @@ export interface LinksTableProps {
 	onDelete?: (id: string) => void
 	onPause?: (id: string) => void
 	onResume?: (id: string) => void
+	onRestore?: (id: string) => void
 	title?: string
 	allLinksHref?: string
 	allowSelection?: boolean

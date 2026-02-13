@@ -24,4 +24,5 @@ export interface LinkActions {
 	handleEdit: (linkId: string) => void
 	handleToggleStatus: (link: LinkItemType) => void
 	handleDelete: (linkId: string) => void
+	handleRestore: (linkId: string) => void
 }

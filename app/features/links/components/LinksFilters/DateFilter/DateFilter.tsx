@@ -12,7 +12,10 @@ type DatePresetNullable = DatePreset | null
 
 interface DateFilterProps {
 	datePreset: DatePresetNullable
-	onDatePresetChange: (preset: DatePresetNullable) => void
+	onDatePresetChange: (
+		preset: DatePresetNullable,
+		range?: { from: string | null; to: string | null }
+	) => void
 }
 
 const DATE_PRESETS: { value: DatePresetNullable; label: string }[] = [
@@ -43,7 +46,7 @@ export default function DateFilter({
 
 	const handleApplyRange = (startDate: string, endDate: string) => {
 		setCustomLabel(formatDateRange(startDate, endDate))
-		onDatePresetChange('custom')
+		onDatePresetChange('custom', { from: startDate, to: endDate })
 		setShowPicker(false)
 	}
 
@@ -53,10 +56,13 @@ export default function DateFilter({
 				label={getLabel()}
 				icon={<Calendar size={14} />}
 				hasSelection={datePreset !== null}
-				onClose={() => setShowPicker(false)}
+				onClose={() => {
+					if (!showPicker) setShowPicker(false)
+				}}
 			>
 				{DATE_PRESETS.map(({ value, label }) => (
 					<button
+						type='button'
 						key={String(value)}
 						className={`${commonStyles.dropdownItem} ${datePreset === value ? commonStyles.selected : ''}`}
 						onClick={() => handlePresetSelect(value)}
@@ -66,6 +72,7 @@ export default function DateFilter({
 				))}
 				<div className={commonStyles.divider} />
 				<button
+					type='button'
 					className={`${commonStyles.dropdownItem} ${datePreset === 'custom' ? commonStyles.selected : ''}`}
 					onClick={() => handlePresetSelect('custom')}
 				>

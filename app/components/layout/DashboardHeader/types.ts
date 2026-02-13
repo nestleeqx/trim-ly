@@ -4,4 +4,5 @@ export interface SearchConfig {
 	onSearch: (value: string) => void
 	placeholder?: string
 	autoSubmit?: boolean
+	debounceMs?: number
 }

@@ -13,11 +13,7 @@ interface RawClickEventsProps {
 }
 
 export default function RawClickEvents({ events }: RawClickEventsProps) {
-	const { downloadCsv } = useCsvExport(
-		events,
-		'click_events',
-		convertClickEventsToCsv
-	)
+	const { downloadCsv } = useCsvExport()
 
 	const {
 		currentPage,
@@ -32,25 +28,31 @@ export default function RawClickEvents({ events }: RawClickEventsProps) {
 	return (
 		<div className={styles.card}>
 			<div className={styles.header}>
-				<h3 className={styles.title}>События кликов</h3>
+				<h3 className={styles.title}>??????? ??????</h3>
 				<Button
 					variant='ghost'
 					size='sm'
-					onClick={() => downloadCsv()}
-					aria-label='Экспорт CSV'
+					onClick={() =>
+						downloadCsv({
+							data: events,
+							filename: 'click_events.csv',
+							converter: convertClickEventsToCsv
+						})
+					}
+					aria-label='??????? CSV'
 				>
-					Экспорт CSV
+					??????? CSV
 				</Button>
 			</div>
 			<div className={styles.tableWrapper}>
 				<table className={styles.table}>
 					<thead>
 						<tr>
-							<th>ВРЕМЯ</th>
-							<th>СТРАНА</th>
-							<th>УСТРОЙСТВО</th>
-							<th>БРАУЗЕР</th>
-							<th>ИСТОЧНИК</th>
+							<th>?????</th>
+							<th>??????</th>
+							<th>??????????</th>
+							<th>???????</th>
+							<th>????????</th>
 						</tr>
 					</thead>
 					<tbody>

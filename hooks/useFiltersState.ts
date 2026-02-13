@@ -18,6 +18,8 @@ export interface FiltersStateReturn {
 	selectedCountry: string | null
 	selectedDevice: string | null
 	datePreset: '7d' | '30d' | 'custom' | null
+	createdFrom: string | null
+	createdTo: string | null
 	sort: SortState
 
 	handlers: {
@@ -25,7 +27,10 @@ export interface FiltersStateReturn {
 		setSelectedTags: (tags: string[]) => void
 		setSelectedCountry: (country: string | null) => void
 		setSelectedDevice: (device: string | null) => void
-		setDatePreset: (preset: '7d' | '30d' | 'custom' | null) => void
+		setDatePreset: (
+			preset: '7d' | '30d' | 'custom' | null,
+			range?: { from: string | null; to: string | null }
+		) => void
 		setSort: (sort: SortState) => void
 		clearFilters: () => void
 	}
@@ -45,6 +50,8 @@ export const useFiltersState = (): FiltersStateReturn => {
 	const [datePreset, setDatePreset] = useState<
 		'7d' | '30d' | 'custom' | null
 	>(null)
+	const [createdFrom, setCreatedFrom] = useState<string | null>(null)
+	const [createdTo, setCreatedTo] = useState<string | null>(null)
 	const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
 	const [selectedDevice, setSelectedDevice] = useState<string | null>(null)
 
@@ -52,22 +59,45 @@ export const useFiltersState = (): FiltersStateReturn => {
 		selectedStatuses.length > 0 ||
 		selectedTags.length > 0 ||
 		datePreset !== null ||
+		!!createdFrom ||
+		!!createdTo ||
 		!!selectedCountry ||
 		!!selectedDevice
+
+	const handleSetDatePreset = useCallback(
+		(
+			preset: '7d' | '30d' | 'custom' | null,
+			range?: { from: string | null; to: string | null }
+		) => {
+			setDatePreset(preset)
+
+			if (preset === 'custom') {
+				setCreatedFrom(range?.from ?? null)
+				setCreatedTo(range?.to ?? null)
+				return
+			}
+
+			setCreatedFrom(null)
+			setCreatedTo(null)
+		},
+		[]
+	)
 
 	const clearFilters = useCallback(() => {
 		setSelectedStatuses([])
 		setSelectedTags([])
-		setDatePreset(null)
+		handleSetDatePreset(null)
 		setSelectedCountry(null)
 		setSelectedDevice(null)
 		setSort({ field: 'created_date', order: 'desc' })
-	}, [])
+	}, [handleSetDatePreset])
 
 	const filters: FiltersStateData = {
 		statuses: selectedStatuses,
 		tags: selectedTags,
 		datePreset,
+		createdFrom,
+		createdTo,
 		country: selectedCountry,
 		device: selectedDevice,
 		sort
@@ -80,6 +110,8 @@ export const useFiltersState = (): FiltersStateReturn => {
 		selectedCountry,
 		selectedDevice,
 		datePreset,
+		createdFrom,
+		createdTo,
 		sort,
 
 		handlers: {
@@ -87,7 +119,7 @@ export const useFiltersState = (): FiltersStateReturn => {
 			setSelectedTags,
 			setSelectedCountry,
 			setSelectedDevice,
-			setDatePreset,
+			setDatePreset: handleSetDatePreset,
 			setSort,
 			clearFilters
 		},

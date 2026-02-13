@@ -37,6 +37,7 @@ export default function StatusFilter({
 		>
 			{(Object.keys(statusLabels) as StatusFilterType[]).map(status => (
 				<button
+					type='button'
 					key={status}
 					className={`${commonStyles.dropdownItem} ${selectedStatuses.includes(status) ? commonStyles.selected : ''}`}
 					onClick={() => toggleStatus(status)}

@@ -18,6 +18,8 @@ export default function LinksFilters({
 	onViewModeChange,
 	onExport,
 	exportLoading,
+	availableTags = [],
+	tagsLoading = false,
 	hideRight = false,
 	showCountry = false,
 	showDevice = false,
@@ -36,6 +38,8 @@ export default function LinksFilters({
 			statuses: filtersState.selectedStatuses,
 			tags: filtersState.selectedTags,
 			datePreset: filtersState.datePreset,
+			createdFrom: filtersState.createdFrom,
+			createdTo: filtersState.createdTo,
 			country: filtersState.selectedCountry,
 			device: filtersState.selectedDevice,
 			sort: filtersState.sort,
@@ -45,6 +49,8 @@ export default function LinksFilters({
 		filtersState.selectedStatuses,
 		filtersState.selectedTags,
 		filtersState.datePreset,
+		filtersState.createdFrom,
+		filtersState.createdTo,
 		filtersState.selectedCountry,
 		filtersState.selectedDevice,
 		filtersState.sort,
@@ -64,6 +70,8 @@ export default function LinksFilters({
 				</span>
 
 				<TagsFilter
+					availableTags={availableTags}
+					isLoading={tagsLoading}
 					selectedTags={filtersState.selectedTags}
 					onTagsChange={handlers.setSelectedTags}
 				/>

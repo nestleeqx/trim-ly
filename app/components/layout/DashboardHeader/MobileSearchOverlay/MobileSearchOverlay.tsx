@@ -20,13 +20,13 @@ export default function MobileSearchOverlay({
 				<Search
 					value={search.value}
 					onChange={search.onChange}
-					onSearch={v => {
-						search.onSearch(v)
-						onClose()
-					}}
+					onSearch={search.onSearch}
 					placeholder={search.placeholder}
+					autoSubmit={search.autoSubmit}
+					debounceMs={search.debounceMs}
 				/>
 				<button
+					type='button'
 					className={styles.closeSearch}
 					onClick={onClose}
 					aria-label='Закрыть поиск'

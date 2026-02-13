@@ -18,6 +18,8 @@ export interface FiltersState {
 	statuses: StatusFilter[]
 	tags: string[]
 	datePreset: DatePreset | null
+	createdFrom?: string | null
+	createdTo?: string | null
 	country?: string | null
 	device?: string | null
 	sort: SortState

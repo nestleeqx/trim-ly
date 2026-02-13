@@ -9,6 +9,7 @@ import styles from './LinksViewContent.module.scss'
 interface LinksViewContentProps {
 	viewMode: 'list' | 'grid'
 	links: LinkItem[]
+	isRefetching?: boolean
 	selectedLinks: string[]
 	currentPage: number
 	totalPages: number
@@ -20,6 +21,7 @@ interface LinksViewContentProps {
 	onDelete: (id: string) => void
 	onPause: (id: string) => void
 	onResume: (id: string) => void
+	onRestore: (id: string) => void
 	onPageChange: (page: number) => void
 	onItemsPerPageChange: (count: number) => void
 }
@@ -27,6 +29,7 @@ interface LinksViewContentProps {
 export default function LinksViewContent({
 	viewMode,
 	links,
+	isRefetching = false,
 	selectedLinks,
 	currentPage,
 	totalPages,
@@ -38,33 +41,48 @@ export default function LinksViewContent({
 	onDelete,
 	onPause,
 	onResume,
+	onRestore,
 	onPageChange,
 	onItemsPerPageChange
 }: LinksViewContentProps) {
 	return (
 		<div className={styles.container}>
-			{viewMode === 'list' ? (
-				<LinksTable
-					links={links}
-					selectedLinks={selectedLinks}
-					onSelectAll={onSelectAll}
-					onSelectLink={onSelectLink}
-					onCopy={onCopy}
-					onDelete={onDelete}
-					onPause={onPause}
-					onResume={onResume}
-				/>
-			) : (
-				<LinksCards
-					links={links}
-					selectedLinks={selectedLinks}
-					onSelectLink={onSelectLink}
-					onCopy={onCopy}
-					onDelete={onDelete}
-					onPause={onPause}
-					onResume={onResume}
-				/>
-			)}
+			<div className={styles.contentArea}>
+				{viewMode === 'list' ? (
+					<LinksTable
+						links={links}
+						selectedLinks={selectedLinks}
+						onSelectAll={onSelectAll}
+						onSelectLink={onSelectLink}
+						onCopy={onCopy}
+						onDelete={onDelete}
+						onPause={onPause}
+						onResume={onResume}
+						onRestore={onRestore}
+					/>
+				) : (
+					<LinksCards
+						links={links}
+						selectedLinks={selectedLinks}
+						onSelectLink={onSelectLink}
+						onCopy={onCopy}
+						onDelete={onDelete}
+						onPause={onPause}
+						onResume={onResume}
+						onRestore={onRestore}
+					/>
+				)}
+
+				{isRefetching && (
+					<div
+						className={styles.loadingOverlay}
+						aria-hidden='true'
+					>
+						<div className={styles.linearLoader} />
+						<div className={styles.spinner} />
+					</div>
+				)}
+			</div>
 
 			<Pagination
 				currentPage={currentPage}

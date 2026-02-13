@@ -14,6 +14,9 @@ export interface UrlParamsConfig {
 	search: string
 	statuses: string[]
 	tags: string[]
+	datePreset: '7d' | '30d' | 'custom' | null
+	createdFrom: string | null
+	createdTo: string | null
 	sort: { field: SortField; order: 'asc' | 'desc' }
 }
 
@@ -69,10 +72,17 @@ export const useUrlParamsSync = () => {
 		(): LinksFiltersState => ({
 			statuses: getInitialStatuses(),
 			tags: getInitialTags(),
-			datePreset: null,
+			datePreset:
+				searchParams.get('datePreset') === '7d' ||
+				searchParams.get('datePreset') === '30d' ||
+				searchParams.get('datePreset') === 'custom'
+					? (searchParams.get('datePreset') as '7d' | '30d' | 'custom')
+					: null,
+			createdFrom: searchParams.get('createdFrom') || null,
+			createdTo: searchParams.get('createdTo') || null,
 			sort: getInitialSort()
 		}),
-		[getInitialStatuses, getInitialTags, getInitialSort]
+		[getInitialStatuses, getInitialTags, getInitialSort, searchParams]
 	)
 
 	const updateUrl = useCallback(
@@ -116,6 +126,30 @@ export const useUrlParamsSync = () => {
 					newParams.set('tag', params.tags.join(','))
 				} else {
 					newParams.delete('tag')
+				}
+			}
+
+			if (params.datePreset !== undefined) {
+				if (params.datePreset) {
+					newParams.set('datePreset', params.datePreset)
+				} else {
+					newParams.delete('datePreset')
+				}
+			}
+
+			if (params.createdFrom !== undefined) {
+				if (params.createdFrom) {
+					newParams.set('createdFrom', params.createdFrom)
+				} else {
+					newParams.delete('createdFrom')
+				}
+			}
+
+			if (params.createdTo !== undefined) {
+				if (params.createdTo) {
+					newParams.set('createdTo', params.createdTo)
+				} else {
+					newParams.delete('createdTo')
 				}
 			}
 

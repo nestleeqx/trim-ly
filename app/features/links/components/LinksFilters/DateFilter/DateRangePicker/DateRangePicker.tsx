@@ -20,9 +20,13 @@ export default function DateRangePicker({
 		<>
 			<div
 				className={styles.overlay}
-				onClick={onCancel}
+				onMouseDown={onCancel}
 			/>
-			<div className={styles.picker}>
+			<div
+				className={styles.picker}
+				onMouseDown={e => e.stopPropagation()}
+				onClick={e => e.stopPropagation()}
+			>
 				<div className={styles.title}>Выберите период</div>
 				<div className={styles.inputs}>
 					<div className={styles.field}>
