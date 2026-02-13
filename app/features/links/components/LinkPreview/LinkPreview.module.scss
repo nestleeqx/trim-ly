@@ -41,6 +41,11 @@
 	gap: $spacing-sm;
 }
 
+.previewBadge {
+	max-width: max-content;
+	margin-left: auto;
+}
+
 .previewLabel {
 	font-size: $font-size-xs;
 	font-weight: $font-weight-semibold;

@@ -9,6 +9,8 @@ export interface LinkEditFormData {
 	password: string
 }
 
+export const MAX_TAG_LENGTH = 20
+
 export const defaultFormData: LinkEditFormData = {
 	destinationUrl: '',
 	shortLink: '',

@@ -1,0 +1,109 @@
+@use 'variables' as *;
+
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-lg;
+}
+
+.filters {
+	display: grid;
+	grid-template-columns: 1fr 1fr auto;
+	gap: $spacing-md;
+	background: $color-bg-light;
+	height: 69px;
+	border-radius: $border-radius-xl;
+	border: 1px solid $color-border;
+	padding: $spacing-md;
+	margin-top: 8px;
+}
+
+.filter {
+	width: 100%;
+}
+
+.filterShort {
+	width: 160px;
+}
+
+.tableCard {
+	background: var(--color-bg);
+	border: 1px solid $color-border;
+	border-radius: $border-radius-xl;
+	overflow: hidden;
+}
+
+.tableHeader,
+.row {
+	display: grid;
+	grid-template-columns: 28px 1.4fr 1.2fr 0.5fr 0.6fr;
+	gap: $spacing-md;
+	align-items: center;
+	padding: $spacing-md;
+}
+
+.tableHeader {
+	border-bottom: 1px solid $color-border;
+}
+
+.body .row {
+	border-bottom: 1px solid $color-border;
+}
+
+.body .row:last-child {
+	border-bottom: none;
+}
+
+.checkbox {
+	width: 16px;
+}
+
+.headerCell {
+	width: 70%;
+}
+
+.title {
+	width: 85%;
+}
+
+.shortUrl {
+	width: 80%;
+}
+
+.clicks {
+	width: 40%;
+}
+
+.status {
+	width: 55%;
+}
+
+.pagination {
+	display: flex;
+	gap: $spacing-sm;
+	justify-content: flex-end;
+}
+
+.pageItem {
+	width: 34px;
+}
+
+@media (max-width: $breakpoint-md) {
+	.filters {
+		grid-template-columns: 1fr;
+	}
+
+	.filterShort {
+		width: 100%;
+	}
+
+	.tableHeader,
+	.row {
+		grid-template-columns: 20px 1fr 1fr;
+	}
+
+	.clicks,
+	.status {
+		display: none;
+	}
+}

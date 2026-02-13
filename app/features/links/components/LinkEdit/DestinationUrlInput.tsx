@@ -1,6 +1,6 @@
 'use client'
 
-import { normalizeUrl, stripCyrillic, validateUrl } from '@/utils/validation'
+import { normalizeUrl, validateUrl } from '@/utils/validation'
 import { AlertCircle, Link2 } from 'lucide-react'
 import React, { useCallback } from 'react'
 import styles from './LinkEdit.module.scss'
@@ -24,7 +24,7 @@ export default function DestinationUrlInput({
 }: DestinationUrlInputProps) {
 	const handleChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
-			const newValue = stripCyrillic(e.target.value)
+			const newValue = e.target.value
 			onChange(newValue)
 
 			const validationError = validateUrl(newValue)

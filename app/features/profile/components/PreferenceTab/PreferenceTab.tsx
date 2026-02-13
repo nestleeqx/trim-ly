@@ -1,4 +1,4 @@
-import TabCard from '../TabCard'
+import TabCard from '../TabCard/TabCard'
 import PreferenceActionsSection from './components/PreferenceActionsSection/PreferenceActionsSection'
 import PreferenceNoticesSection from './components/PreferenceNoticesSection/PreferenceNoticesSection'
 import PreferenceTabSkeleton from './components/PreferenceTabSkeleton/PreferenceTabSkeleton'

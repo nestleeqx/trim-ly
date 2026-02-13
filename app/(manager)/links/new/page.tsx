@@ -4,75 +4,28 @@ import styles from '@/app/(manager)/links/new/page.module.scss'
 import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
 import Toast from '@/app/components/ui/Toast/Toast'
 import LinkEditForm from '@/app/features/links/components/LinkDetails/LinkDetailsContent/LinkEditView/LinkEditForm/LinkEditForm'
-import {
-	LinkEditFormData,
-	SHORT_LINK_DOMAIN
-} from '@/app/features/links/components/LinkEdit/linkEdit.config'
 import LinkPreview from '@/app/features/links/components/LinkPreview/LinkPreview'
-import { useToast } from '@/hooks/useToast'
-import { LinkItem } from '@/types/links'
-import { useRouter } from 'next/navigation'
-import { useCallback, useState } from 'react'
-
-const emptyLink: LinkItem = {
-	id: 'new',
-	title: '',
-	shortUrl: `${SHORT_LINK_DOMAIN}`,
-	destination: '',
-	clicks: 0,
-	status: 'active',
-	tags: [],
-	createdAt: new Date()
-}
+import useCreateLinkPage from '@/app/features/links/hooks/useCreateLinkPage'
 
 export default function CreateLinkPage() {
-	const router = useRouter()
-	const [isLoading, setIsLoading] = useState(false)
-	const { toast, showToast, hideToast } = useToast()
-	const [formData, setFormData] = useState<LinkEditFormData>({
-		title: '',
-		destinationUrl: '',
-		shortLink: '',
-		tags: [],
-		expirationDate: '',
-		password: '',
-		iosRedirect: '',
-		androidRedirect: ''
-	})
-	const handleFormChange = useCallback((data: LinkEditFormData) => {
-		setFormData(data)
-	}, [])
-
-	const handleSave = useCallback(
-		async (data: LinkEditFormData) => {
-			setIsLoading(true)
-			await new Promise(resolve => setTimeout(resolve, 1000))
-			setIsLoading(false)
-			router.push('/links')
-		},
-		[router]
-	)
-
-	const handleCancel = useCallback(() => {
-		router.push('/links')
-	}, [router])
-
-	const handlePreviewCopy = useCallback(() => {
-		const shortUrl = formData.shortLink
-			? `${SHORT_LINK_DOMAIN}${formData.shortLink}`
-			: `${SHORT_LINK_DOMAIN}`
-		navigator.clipboard.writeText(`https://${shortUrl}`)
-		showToast('Ссылка скопирована')
-	}, [formData.shortLink, showToast])
-
-	const handleDownloadQr = useCallback(() => {
-		showToast('QR-код сохранён')
-	}, [showToast])
+	const {
+		emptyLink,
+		formData,
+		isLoading,
+		toast,
+		hideToast,
+		handleFormChange,
+		handleSave,
+		handleCancel,
+		handlePreviewCopy,
+		handleDownloadQr
+	} = useCreateLinkPage()
 
 	return (
 		<>
 			<DashboardHeader
 				title='Создать новую короткую ссылку'
+				subtitle='Создать новую короткую ссылку.'
 				backHref='/links'
 				showCreateButton={false}
 			/>

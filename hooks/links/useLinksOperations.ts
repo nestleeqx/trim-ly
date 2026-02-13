@@ -1,3 +1,8 @@
+import {
+	deleteLink,
+	mapCreateLinkError,
+	patchLinkStatus
+} from '@/app/features/links/api/linksApi'
 import { ToastVariant } from '@/app/components/ui/Toast/Toast'
 import { ConfirmModalState, LinkItem } from '@/types/links'
 import { useCallback, useState } from 'react'
@@ -89,10 +94,11 @@ export const useLinksOperations = ({
 		setActionLoading(true)
 
 		try {
-			await new Promise(resolve => setTimeout(resolve, 500))
-
 			switch (confirmModal.action) {
 				case 'pause':
+					await Promise.all(
+						selectedLinks.map(id => patchLinkStatus(id, 'pause'))
+					)
 					setLinks(prev =>
 						prev.map(link =>
 							selectedLinks.includes(link.id)
@@ -108,6 +114,9 @@ export const useLinksOperations = ({
 					break
 
 				case 'resume':
+					await Promise.all(
+						selectedLinks.map(id => patchLinkStatus(id, 'resume'))
+					)
 					setLinks(prev =>
 						prev.map(link =>
 							selectedLinks.includes(link.id)
@@ -123,18 +132,17 @@ export const useLinksOperations = ({
 					break
 
 				case 'delete':
+					await Promise.all(selectedLinks.map(id => deleteLink(id)))
 					setLinks(prev =>
 						prev.filter(link => !selectedLinks.includes(link.id))
 					)
-					showToast(
-						`Удалено ссылок: ${selectedLinks.length}`,
-						'success'
-					)
+					showToast(`Удалено ссылок: ${selectedLinks.length}`, 'success')
 					clearSelection()
 					break
 
 				case 'delete-single':
 					if (confirmModal.itemId) {
+						await deleteLink(confirmModal.itemId)
 						setLinks(prev =>
 							prev.filter(link => link.id !== confirmModal.itemId)
 						)
@@ -144,6 +152,7 @@ export const useLinksOperations = ({
 
 				case 'pause-single':
 					if (confirmModal.itemId) {
+						await patchLinkStatus(confirmModal.itemId, 'pause')
 						setLinks(prev =>
 							prev.map(link =>
 								link.id === confirmModal.itemId
@@ -157,6 +166,7 @@ export const useLinksOperations = ({
 
 				case 'resume-single':
 					if (confirmModal.itemId) {
+						await patchLinkStatus(confirmModal.itemId, 'resume')
 						setLinks(prev =>
 							prev.map(link =>
 								link.id === confirmModal.itemId
@@ -170,8 +180,12 @@ export const useLinksOperations = ({
 			}
 
 			handleCloseModal()
-		} catch {
-			showToast('Произошла ошибка. Попробуйте ещё раз.', 'error')
+		} catch (error) {
+			const message =
+				error instanceof Error
+					? mapCreateLinkError(error.message)
+					: 'Произошла ошибка. Попробуйте еще раз.'
+			showToast(message, 'error')
 		} finally {
 			setActionLoading(false)
 		}

@@ -6,11 +6,11 @@ import {
 	removeAvatar,
 	updateProfile,
 	uploadAvatar
-} from '../../../../api/profileApi'
+} from '../../../api/profileApi'
 import {
 	normalizeUsername,
 	validateProfile
-} from '../../../../validation/profileValidation'
+} from '../../../validation/profileValidation'
 
 type FieldErrors = Partial<Record<'name' | 'username', string>>
 

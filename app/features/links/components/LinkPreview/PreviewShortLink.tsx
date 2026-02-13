@@ -1,5 +1,6 @@
 'use client'
 
+import StatusBadge from '@/app/components/ui/StatusBadge/StatusBadge'
 import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 import { LinkStatus } from '@/types/links'
 import { Copy } from 'lucide-react'
@@ -27,9 +28,10 @@ export default function PreviewShortLink({
 
 	return (
 		<div className={styles.previewSection}>
-			<span className={`${styles.statusBadge} ${styles[status]}`}>
-				{STATUS_LABELS[status]}
-			</span>
+			<StatusBadge
+				status={status}
+				className={styles.previewBadge}
+			/>
 			<span className={styles.previewLabel}>КОРОТКАЯ ССЫЛКА</span>
 			<div className={styles.shortLinkDisplay}>
 				<span className={styles.shortLinkText}>{shortUrl}</span>

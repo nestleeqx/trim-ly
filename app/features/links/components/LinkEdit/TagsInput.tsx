@@ -1,9 +1,10 @@
 'use client'
 
+import { getTags } from '@/app/features/links/api/tagsApi'
 import { Tag, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import styles from './LinkEdit.module.scss'
-import { existingTags } from './linkEdit.config'
+import { MAX_TAG_LENGTH } from './linkEdit.config'
 
 interface TagsInputProps {
 	tags: string[]
@@ -16,16 +17,36 @@ export default function TagsInput({
 	onChange,
 	maxTags = 5
 }: TagsInputProps) {
+	const [existingTags, setExistingTags] = useState<string[]>([])
+
 	const [value, setValue] = useState('')
 	const [open, setOpen] = useState(false)
 
 	const limitReached = tags.length >= maxTags
 	const q = value.trim().toLowerCase()
 
+	useEffect(() => {
+		let isMounted = true
+
+		getTags()
+			.then(list => {
+				if (!isMounted) return
+				setExistingTags(list.map(t => t.name))
+			})
+			.catch(() => {
+				if (!isMounted) return
+				setExistingTags([])
+			})
+
+		return () => {
+			isMounted = false
+		}
+	}, [])
+
 	const filtered = useMemo(() => {
 		const base = existingTags.filter(t => !tags.includes(t))
 		return q ? base.filter(t => t.toLowerCase().includes(q)) : base
-	}, [q, tags])
+	}, [existingTags, q, tags])
 
 	const close = () => {
 		setValue('')
@@ -34,7 +55,8 @@ export default function TagsInput({
 
 	const add = (raw: string) => {
 		const t = raw.trim()
-		if (!t || limitReached || tags.includes(t)) return close()
+		if (!t || t.length > MAX_TAG_LENGTH || limitReached || tags.includes(t))
+			return close()
 		onChange([...tags, t])
 		close()
 	}
@@ -66,10 +88,14 @@ export default function TagsInput({
 					))}
 
 					<input
+						name='tags-input'
 						className={styles.tagInput}
 						placeholder='Добавить тег...'
 						disabled={limitReached}
 						value={value}
+						autoComplete='off'
+						autoCorrect='off'
+						spellCheck={false}
 						onChange={e => setValue(e.target.value)}
 						onFocus={() => setOpen(true)}
 						onBlur={() => setTimeout(() => setOpen(false), 200)}
@@ -79,6 +105,7 @@ export default function TagsInput({
 								add(value)
 							}
 						}}
+						maxLength={MAX_TAG_LENGTH}
 					/>
 				</div>
 
@@ -103,6 +130,9 @@ export default function TagsInput({
 					</div>
 				)}
 			</div>
+			<span className={styles.hint}>
+				Максимум {MAX_TAG_LENGTH} символов на тег.
+			</span>
 		</div>
 	)
 }

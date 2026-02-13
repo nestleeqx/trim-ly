@@ -41,7 +41,6 @@ export default function LinkEditForm({
 		handleExpirationChange,
 		handleClearExpiration,
 		handlePasswordToggle,
-		checkAliasAvailability,
 		validateForm,
 		getNormalizedData,
 		initialData
@@ -93,13 +92,13 @@ export default function LinkEditForm({
 				isCreateMode={isCreateMode}
 				onFieldChange={handleFieldChange}
 				onDestinationError={handleDestinationError}
-				onAliasCheck={checkAliasAvailability}
 			/>
 			<AdvancedSettings
 				expirationDate={formData.expirationDate}
 				expirationError={errors.expirationDate}
 				passwordEnabled={formData.passwordEnabled}
 				password={formData.password}
+				passwordError={errors.password}
 				hasExistingPassword={!!link.hasPassword}
 				isOpen={advancedOpen}
 				onExpirationChange={handleExpirationChange}

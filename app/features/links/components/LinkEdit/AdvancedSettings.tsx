@@ -11,6 +11,7 @@ interface AdvancedSettingsProps {
 	expirationError?: string
 	passwordEnabled: boolean
 	password: string
+	passwordError?: string
 	hasExistingPassword: boolean
 	isOpen: boolean
 	onExpirationChange: (value: string) => void
@@ -24,6 +25,7 @@ export default function AdvancedSettings({
 	expirationError,
 	passwordEnabled,
 	password,
+	passwordError,
 	hasExistingPassword,
 	isOpen,
 	onExpirationChange,
@@ -47,6 +49,7 @@ export default function AdvancedSettings({
 				<PasswordSettings
 					passwordEnabled={passwordEnabled}
 					password={password}
+					passwordError={passwordError}
 					hasExistingPassword={hasExistingPassword}
 					onPasswordToggle={onPasswordToggle}
 					onPasswordChange={onPasswordChange}

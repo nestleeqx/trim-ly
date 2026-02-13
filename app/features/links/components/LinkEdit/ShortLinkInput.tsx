@@ -1,6 +1,5 @@
 'use client'
 
-import { stripCyrillic } from '@/utils/validation'
 import { AlertCircle, AlertTriangle, Check, Loader2 } from 'lucide-react'
 import React, { useCallback } from 'react'
 import styles from './LinkEdit.module.scss'
@@ -14,7 +13,6 @@ interface ShortLinkInputProps {
 	aliasAvailable: boolean
 	isEditMode: boolean
 	onChange: (value: string) => void
-	onAliasCheck: (value: string) => void
 }
 
 export default function ShortLinkInput({
@@ -24,23 +22,21 @@ export default function ShortLinkInput({
 	aliasChecking,
 	aliasAvailable,
 	isEditMode,
-	onChange,
-	onAliasCheck
+	onChange
 }: ShortLinkInputProps) {
 	const aliasChanged = value !== initialValue
 
 	const handleChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
-			const newValue = stripCyrillic(e.target.value)
+			const newValue = e.target.value
 			onChange(newValue)
-			onAliasCheck(newValue)
 		},
-		[onChange, onAliasCheck]
+		[onChange]
 	)
 
 	return (
 		<div className={styles.formGroup}>
-			<label className={styles.label}>Короткая ссылка</label>
+			<label className={styles.label}>Short link</label>
 			<div
 				className={`${styles.shortLinkWrapper} ${
 					error ? styles.error : ''
@@ -56,6 +52,7 @@ export default function ShortLinkInput({
 					onChange={handleChange}
 					placeholder='alias'
 					className={styles.shortLinkInput}
+					maxLength={25}
 				/>
 				{aliasChecking && (
 					<Loader2
@@ -76,10 +73,13 @@ export default function ShortLinkInput({
 					{error}
 				</span>
 			)}
+			<span className={styles.hint}>
+				Используйте латиницу: a-z, 0-9, &quot;-&quot; и &quot;_&quot;.
+			</span>
 			{isEditMode && aliasChanged && !error && (
 				<span className={styles.fieldWarning}>
 					<AlertTriangle size={12} />
-					Изменение alias сломает старую ссылку
+					Changing alias will break the old short URL
 				</span>
 			)}
 		</div>

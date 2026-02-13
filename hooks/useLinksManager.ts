@@ -32,6 +32,10 @@ export const useLinksManager = (initialLinks: LinkItem[]) => {
 		variant: ToastVariant
 	}>({ isVisible: false, message: '', variant: 'success' })
 
+	useEffect(() => {
+		setLinks(initialLinks)
+	}, [initialLinks])
+
 	const { downloadCsv } = useCsvExport()
 
 	const showToast = useCallback(

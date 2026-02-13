@@ -17,7 +17,6 @@ interface FormFieldsProps {
 	isCreateMode: boolean
 	onFieldChange: (field: keyof LinkEditFormData, value: any) => void
 	onDestinationError: (error: string | undefined) => void
-	onAliasCheck: (alias: string) => void
 }
 
 export default function FormFields({
@@ -29,8 +28,7 @@ export default function FormFields({
 	aliasAvailable,
 	isCreateMode,
 	onFieldChange,
-	onDestinationError,
-	onAliasCheck
+	onDestinationError
 }: FormFieldsProps) {
 	const handleTitleChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,21 +65,20 @@ export default function FormFields({
 					aliasAvailable={aliasAvailable}
 					isEditMode={!isCreateMode}
 					onChange={value => onFieldChange('shortLink', value)}
-					onAliasCheck={onAliasCheck}
 				/>
 				<div className={styles.formGroup}>
 					<label className={styles.label}>
-						Название (необязательно)
+						Заголовок (необязательно)
 					</label>
 					<input
 						type='text'
 						name='title'
 						value={formData.title}
 						onChange={handleTitleChange}
-						placeholder='Например: Black Friday campaign'
+						placeholder='Example: Black Friday campaign'
 						className={styles.input}
 					/>
-					<span className={styles.hint}>Видно только вам.</span>
+					<span className={styles.hint}>Видите только вы.</span>
 				</div>
 			</div>
 			<TagsInput

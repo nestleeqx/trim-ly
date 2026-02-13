@@ -4,6 +4,7 @@ import {
 	LinkEditFormData,
 	SHORT_LINK_DOMAIN
 } from '@/app/features/links/components/LinkEdit/linkEdit.config'
+import { validateSlug } from '@/app/features/links/validation/createLinkValidation'
 import { useAliasCheck } from '@/hooks/useAliasCheck'
 import { LinkItem } from '@/types/links'
 import {
@@ -49,15 +50,12 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 	}, [link])
 	const [advancedOpen, setAdvancedOpen] = useState(hasAdvancedParams)
 
-	const linkKey = link.id
-	const [prevLinkKey, setPrevLinkKey] = useState(linkKey)
-	if (prevLinkKey !== linkKey) {
-		setPrevLinkKey(linkKey)
+	useEffect(() => {
 		setFormData(initialData)
 		setErrors({})
 		setTouched({})
 		setAdvancedOpen(hasAdvancedParams)
-	}
+	}, [link.id, initialData, hasAdvancedParams])
 
 	const isDirty = useMemo(() => {
 		const normalize = (d: LinkEditFormData) => ({
@@ -83,10 +81,32 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 
 	const handleFieldChange = useCallback(
 		(field: keyof LinkEditFormData, value: any) => {
+			if (field === 'shortLink' && typeof value === 'string') {
+				const normalized = value
+					.trim()
+					.toLowerCase()
+					.replace(/\s+/g, '-')
+				const localError = validateSlug(normalized)
+
+				setFormData(prev => ({ ...prev, shortLink: normalized }))
+				setTouched(prev => ({ ...prev, shortLink: true }))
+				setErrors(prev => ({ ...prev, shortLink: localError }))
+
+				if (!localError) {
+					checkAliasAvailability(normalized)
+				} else {
+					checkAliasAvailability('')
+				}
+				return
+			}
+
 			setFormData(prev => ({ ...prev, [field]: value }))
 			setTouched(prev => ({ ...prev, [field]: true }))
+			if (field === 'password') {
+				setErrors(prev => ({ ...prev, password: undefined }))
+			}
 		},
-		[]
+		[checkAliasAvailability]
 	)
 
 	const handleDestinationError = useCallback((error: string | undefined) => {
@@ -113,19 +133,43 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 			passwordEnabled: !prev.passwordEnabled,
 			password: !prev.passwordEnabled ? prev.password : ''
 		}))
+		setErrors(prev => ({ ...prev, password: undefined }))
 	}, [])
 
 	const validateForm = useCallback(() => {
 		const urlError = validateUrl(formData.destinationUrl)
 		const dateError = validateExpirationDate(formData.expirationDate)
+
+		const localShortLinkError = validateSlug(formData.shortLink)
+		const shortLinkError = localShortLinkError ?? errors.shortLink
+
+		let passwordError: string | undefined
+		if (formData.passwordEnabled) {
+			const pass = (formData.password || '').trim()
+			if (!pass) {
+				passwordError = 'Введите пароль.'
+			} else if (pass.length < 6 || pass.length > 128) {
+				passwordError = 'Пароль должен быть от 6 до 128 символов.'
+			}
+		}
+
 		const newErrors = {
 			destinationUrl: urlError,
 			expirationDate: dateError,
-			shortLink: errors.shortLink
+			shortLink: shortLinkError,
+			password: passwordError
 		}
+
 		setErrors(newErrors)
 		return !Object.values(newErrors).some(Boolean)
-	}, [formData, errors.shortLink])
+	}, [
+		formData.destinationUrl,
+		formData.expirationDate,
+		formData.shortLink,
+		formData.passwordEnabled,
+		formData.password,
+		errors.shortLink
+	])
 
 	const getNormalizedData = useCallback(() => {
 		return {

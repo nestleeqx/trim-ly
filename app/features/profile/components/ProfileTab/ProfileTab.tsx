@@ -1,4 +1,4 @@
-import TabCard from '../TabCard'
+import TabCard from '../TabCard/TabCard'
 import AvatarSection from './components/AvatarSection/AvatarSection'
 import ProfileActionsSection from './components/ProfileActionsSection/ProfileActionsSection'
 import ProfileFormSection from './components/ProfileFormSection/ProfileFormSection'

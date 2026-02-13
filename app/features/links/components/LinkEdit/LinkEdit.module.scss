@@ -389,6 +389,36 @@
 	gap: $spacing-sm;
 }
 
+.passwordInputWrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.passwordInput {
+	padding-right: 40px;
+}
+
+.passwordToggle {
+	position: absolute;
+	right: 10px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	border: none;
+	background: transparent;
+	color: $color-text-secondary;
+	cursor: pointer;
+	transition: $transition-fast;
+
+	&:hover {
+		color: $color-text-primary;
+	}
+}
+
 .formActions {
 	display: flex;
 	justify-content: flex-start;

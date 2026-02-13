@@ -25,6 +25,12 @@ enum Theme {
   system
 }
 
+enum LinkStatus {
+  active
+  disabled
+  expired
+}
+
 model Plan {
   id          String @id
   name        String @unique
@@ -58,6 +64,9 @@ model User {
   updatedAt           DateTime             @updatedAt
   passwordResetTokens PasswordResetToken[]
 
+  links Link[]
+  tags  Tag[]
+
   @@unique([provider, providerId])
 }
 
@@ -80,4 +89,76 @@ model UserUsage {
   linksCreated Int    @default(0)
   clicksTotal  Int    @default(0)
   user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Link {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  targetUrl    String
+  slug         String     @unique
+  title        String?
+  passwordHash String?
+  expiresAt    DateTime?
+  status       LinkStatus @default(active)
+
+  clicksTotal Int @default(0)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  tags        LinkTag[]
+  clickEvents LinkClickEvent[]
+
+  @@index([userId, createdAt])
+  @@index([expiresAt])
+  @@index([status])
+}
+
+model Tag {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name String
+  slug String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  links LinkTag[]
+
+  @@unique([userId, slug])
+  @@index([userId, name])
+}
+
+model LinkTag {
+  linkId String
+  tagId  String
+
+  link Link @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([linkId, tagId])
+  @@index([tagId])
+}
+
+model LinkClickEvent {
+  id     String @id @default(cuid())
+  linkId String
+  link   Link   @relation(fields: [linkId], references: [id], onDelete: Cascade)
+
+  clickedAt  DateTime @default(now())
+  ipHash     String?
+  country    String?
+  city       String?
+  referrer   String?
+  userAgent  String?
+  deviceType String?
+  os         String?
+  browser    String?
+
+  @@index([linkId, clickedAt])
 }
