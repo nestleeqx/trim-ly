@@ -6,6 +6,7 @@ export interface LinksTableProps {
 	onSelectAll: (checked: boolean) => void
 	onSelectLink: (id: string, checked: boolean) => void
 	onCopy?: (shortUrl: string) => void
+	onEdit?: (id: string) => void
 	onDelete?: (id: string) => void
 	onPause?: (id: string) => void
 	onResume?: (id: string) => void

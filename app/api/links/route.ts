@@ -126,7 +126,7 @@ function parsePage(req: Request) {
 
 function parsePageSize(req: Request) {
 	const n = parsePositiveInt(new URL(req.url).searchParams.get('pageSize'), 10)
-	return [10, 25, 50].includes(n) ? n : 10
+	return [5, 10, 25, 50].includes(n) ? n : 10
 }
 
 function parseSort(req: Request): { field: SortFieldApi; order: SortOrderApi } {

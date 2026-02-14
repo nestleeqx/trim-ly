@@ -1,5 +1,7 @@
 'use client'
 
+import ChartLoadingOverlay from '@/app/components/ui/ChartLoadingOverlay/ChartLoadingOverlay'
+import ChartSummaryStats from '@/app/components/ui/ChartSummaryStats/ChartSummaryStats'
 import PeriodSelector, {
 	PeriodOption
 } from '@/app/components/ui/PeriodSelector/PeriodSelector'
@@ -55,7 +57,6 @@ export default function LinkClicksChart({
 }: LinkClicksChartProps) {
 	const { yAxisMax, yAxisTicks } = useMemo(() => {
 		const maxValue = Math.max(0, ...data.map(d => d.value))
-
 		const step =
 			maxValue <= 20
 				? 5
@@ -64,7 +65,6 @@ export default function LinkClicksChart({
 					: maxValue <= 500
 						? 50
 						: 500
-
 		const max = Math.max(step * 2, Math.ceil((maxValue * 1.1) / step) * step)
 		return {
 			yAxisMax: max,
@@ -112,27 +112,18 @@ export default function LinkClicksChart({
 			/>
 
 			<div className={styles.chartContainer}>
-				{isLoading ? (
-					<div className={styles.loader}>Загрузка данных...</div>
-				) : (
-					<RechartsAreaBundle
-						data={data}
-						yAxisMax={yAxisMax}
-						yAxisTicks={yAxisTicks}
-					/>
-				)}
+				{isLoading ? <ChartLoadingOverlay /> : null}
+				<RechartsAreaBundle
+					data={data}
+					yAxisMax={yAxisMax}
+					yAxisTicks={yAxisTicks}
+				/>
 			</div>
 
-			<div className={styles.stats}>
-				<div className={styles.statItem}>
-					<span className={styles.statLabel}>ВСЕГО КЛИКОВ</span>
-					<span className={styles.statValue}>{totalLabel}</span>
-				</div>
-				<div className={styles.statItem}>
-					<span className={styles.statLabel}>СРЕДНЕЕ В ДЕНЬ</span>
-					<span className={styles.statValue}>{averageLabel}</span>
-				</div>
-			</div>
+			<ChartSummaryStats
+				total={totalLabel}
+				average={averageLabel}
+			/>
 		</div>
 	)
 }

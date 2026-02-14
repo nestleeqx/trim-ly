@@ -8,6 +8,7 @@ import { useCallback, useState } from 'react'
 export type FiltersStateData = Omit<FiltersState, 'viewMode'> & {
 	country?: string | null
 	device?: string | null
+	referrer?: string | null
 }
 
 export interface FiltersStateReturn {
@@ -17,6 +18,7 @@ export interface FiltersStateReturn {
 	selectedTags: string[]
 	selectedCountry: string | null
 	selectedDevice: string | null
+	selectedReferrer: string | null
 	datePreset: '7d' | '30d' | 'custom' | null
 	createdFrom: string | null
 	createdTo: string | null
@@ -27,6 +29,7 @@ export interface FiltersStateReturn {
 		setSelectedTags: (tags: string[]) => void
 		setSelectedCountry: (country: string | null) => void
 		setSelectedDevice: (device: string | null) => void
+		setSelectedReferrer: (referrer: string | null) => void
 		setDatePreset: (
 			preset: '7d' | '30d' | 'custom' | null,
 			range?: { from: string | null; to: string | null }
@@ -54,6 +57,7 @@ export const useFiltersState = (): FiltersStateReturn => {
 	const [createdTo, setCreatedTo] = useState<string | null>(null)
 	const [selectedCountry, setSelectedCountry] = useState<string | null>(null)
 	const [selectedDevice, setSelectedDevice] = useState<string | null>(null)
+	const [selectedReferrer, setSelectedReferrer] = useState<string | null>(null)
 
 	const hasActiveFilters =
 		selectedStatuses.length > 0 ||
@@ -62,7 +66,8 @@ export const useFiltersState = (): FiltersStateReturn => {
 		!!createdFrom ||
 		!!createdTo ||
 		!!selectedCountry ||
-		!!selectedDevice
+		!!selectedDevice ||
+		!!selectedReferrer
 
 	const handleSetDatePreset = useCallback(
 		(
@@ -89,6 +94,7 @@ export const useFiltersState = (): FiltersStateReturn => {
 		handleSetDatePreset(null)
 		setSelectedCountry(null)
 		setSelectedDevice(null)
+		setSelectedReferrer(null)
 		setSort({ field: 'created_date', order: 'desc' })
 	}, [handleSetDatePreset])
 
@@ -100,6 +106,7 @@ export const useFiltersState = (): FiltersStateReturn => {
 		createdTo,
 		country: selectedCountry,
 		device: selectedDevice,
+		referrer: selectedReferrer,
 		sort
 	}
 
@@ -109,6 +116,7 @@ export const useFiltersState = (): FiltersStateReturn => {
 		selectedTags,
 		selectedCountry,
 		selectedDevice,
+		selectedReferrer,
 		datePreset,
 		createdFrom,
 		createdTo,
@@ -119,6 +127,7 @@ export const useFiltersState = (): FiltersStateReturn => {
 			setSelectedTags,
 			setSelectedCountry,
 			setSelectedDevice,
+			setSelectedReferrer,
 			setDatePreset: handleSetDatePreset,
 			setSort,
 			clearFilters

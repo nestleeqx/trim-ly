@@ -11,4 +11,10 @@ export interface EnhancedLinksFiltersProps extends LinksFiltersProps {
 	showCountry?: boolean
 	showDevice?: boolean
 	showDate?: boolean
+	showStatus?: boolean
+	showTags?: boolean
+	showReferrer?: boolean
+	availableCountries?: Array<{ code: string; name: string }>
+	availableDevices?: Array<{ type: string; name?: string }>
+	availableReferrers?: Array<{ name: string }>
 }

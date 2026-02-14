@@ -7,6 +7,7 @@ import { useCallback, useState } from 'react'
 
 interface UseLinkActionsProps {
 	onCopy?: (shortUrl: string) => void
+	onEdit?: (id: string) => void
 	onDelete?: (id: string) => void
 	onPause?: (id: string) => void
 	onResume?: (id: string) => void
@@ -15,6 +16,7 @@ interface UseLinkActionsProps {
 
 export const useLinkActions = ({
 	onCopy,
+	onEdit,
 	onDelete,
 	onPause,
 	onResume,
@@ -64,7 +66,7 @@ export const useLinkActions = ({
 	const handleAnalyticsClick = useCallback(
 		(linkId: string, e: React.MouseEvent) => {
 			e.stopPropagation()
-			router.push(`/analytics?link=${linkId}`)
+			router.push(`/links/${linkId}?tab=analytics`)
 		},
 		[router]
 	)
@@ -80,9 +82,13 @@ export const useLinkActions = ({
 	const handleEdit = useCallback(
 		(linkId: string) => {
 			setOpenKebabId(null)
+			if (onEdit) {
+				onEdit(linkId)
+				return
+			}
 			router.push(`/links/${linkId}`)
 		},
-		[router]
+		[onEdit, router]
 	)
 
 	const handleToggleStatus = useCallback(

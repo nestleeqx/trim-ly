@@ -8,6 +8,10 @@
 	flex-direction: column;
 	gap: $spacing-sm;
 
+	.contentSkeleton {
+		margin-bottom: $spacing-md;
+	}
+
 	@media (max-width: $breakpoint-md) {
 		padding: $spacing-md;
 		gap: $spacing-md;
@@ -47,6 +51,11 @@
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-md;
+
+	.sideChartsSkeleton {
+		display: flex;
+		flex-direction: column;
+	}
 
 	@media (max-width: $breakpoint-xl) {
 		display: grid;

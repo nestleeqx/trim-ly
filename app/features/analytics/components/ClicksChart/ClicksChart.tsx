@@ -1,9 +1,14 @@
 'use client'
 
+import {
+	AnalyticsChartSkeleton
+} from '@/app/components/ui/AnalyticsSkeleton/AnalyticsSkeleton'
+import ChartLoadingOverlay from '@/app/components/ui/ChartLoadingOverlay/ChartLoadingOverlay'
+import ChartSummaryStats from '@/app/components/ui/ChartSummaryStats/ChartSummaryStats'
 import PeriodSelector, {
 	PeriodOption
 } from '@/app/components/ui/PeriodSelector/PeriodSelector'
-import useChartManager from '@/hooks/useChartManager'
+import { useAnalyticsClicks } from '@/hooks/analytics/useAnalyticsClicks'
 import dynamic from 'next/dynamic'
 import { useMemo } from 'react'
 import ChartDatePicker from './ChartDatePicker/ChartDatePicker'
@@ -16,6 +21,7 @@ const RechartsAreaBundle = dynamic<RechartsAreaBundleProps>(
 )
 
 const periods: PeriodOption[] = [
+	{ key: '24h', label: '24ч' },
 	{ key: '7d', label: '7д' },
 	{ key: '30d', label: '30д' },
 	{ key: '90d', label: '90д' },
@@ -26,6 +32,9 @@ export default function ClicksChart() {
 	const {
 		activePeriod,
 		isLoading,
+		isInitialLoading,
+		isRefetching,
+		error,
 		chartData,
 		stats,
 		showDatePicker,
@@ -39,11 +48,19 @@ export default function ClicksChart() {
 		setStartDate,
 		setEndDate,
 		setDateRangeError
-	} = useChartManager('7d')
+	} = useAnalyticsClicks()
 
 	const { yAxisMax, yAxisTicks } = useMemo(() => {
 		const maxValue = Math.max(0, ...chartData.map(d => d.value))
-		const max = Math.ceil(maxValue / 500) * 500 + 200
+		const step =
+			maxValue <= 20
+				? 5
+				: maxValue <= 100
+					? 10
+					: maxValue <= 500
+						? 50
+						: 500
+		const max = Math.max(step * 2, Math.ceil((maxValue * 1.1) / step) * step)
 		return {
 			yAxisMax: max,
 			yAxisTicks: Array.from({ length: 5 }, (_, i) =>
@@ -54,6 +71,10 @@ export default function ClicksChart() {
 
 	const totalLabel = stats.total?.trim() ? stats.total : 'Нет данных'
 	const averageLabel = stats.average?.trim() ? stats.average : 'Нет данных'
+
+	if (isInitialLoading) {
+		return <AnalyticsChartSkeleton />
+	}
 
 	return (
 		<div className={styles.card}>
@@ -69,7 +90,9 @@ export default function ClicksChart() {
 					options={periods}
 					activeKey={activePeriod}
 					onChange={key =>
-						handlePeriodChange(key as '7d' | '30d' | '90d' | 'custom')
+						handlePeriodChange(
+							key as '24h' | '7d' | '30d' | '90d' | 'custom'
+						)
 					}
 					disabled={isLoading}
 					getLabel={option =>
@@ -95,12 +118,10 @@ export default function ClicksChart() {
 				onCancel={handleCancelDatePicker}
 			/>
 
+			{error ? <div className={styles.error}>{error}</div> : null}
+
 			<div className={styles.chartContainer}>
-				{isLoading && (
-					<div className={styles.loadingOverlay}>
-						<div className={styles.spinner} />
-					</div>
-				)}
+				{isRefetching ? <ChartLoadingOverlay /> : null}
 				<RechartsAreaBundle
 					data={chartData}
 					yAxisMax={yAxisMax}
@@ -108,16 +129,10 @@ export default function ClicksChart() {
 				/>
 			</div>
 
-			<div className={styles.stats}>
-				<div className={styles.stat}>
-					<span className={styles.statLabel}>ВСЕГО КЛИКОВ</span>
-					<span className={styles.statValue}>{totalLabel}</span>
-				</div>
-				<div className={styles.stat}>
-					<span className={styles.statLabel}>СРЕДНЕЕ В ДЕНЬ</span>
-					<span className={styles.statValue}>{averageLabel}</span>
-				</div>
-			</div>
+			<ChartSummaryStats
+				total={totalLabel}
+				average={averageLabel}
+			/>
 		</div>
 	)
 }

@@ -1,0 +1,36 @@
+@use 'variables' as *;
+
+.stats {
+	display: flex;
+	gap: $spacing-2xl;
+	padding-top: $spacing-md;
+	border-top: 1px solid $color-border;
+	margin-top: $spacing-md;
+
+	@media (max-width: $breakpoint-sm) {
+		gap: $spacing-lg;
+	}
+}
+
+.stat {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-xs;
+}
+
+.statLabel {
+	font-size: $font-size-xs;
+	font-weight: $font-weight-medium;
+	color: $color-primary;
+	letter-spacing: 0.05em;
+}
+
+.statValue {
+	font-size: $font-size-2xl;
+	font-weight: $font-weight-bold;
+	color: $color-text-primary;
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-xl;
+	}
+}

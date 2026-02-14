@@ -18,14 +18,14 @@ export const statsConfig: StatCardConfig[] = [
 	{
 		id: 'clicks',
 		icon: MousePointerClick,
-		label: 'Всего кликов (7д)',
+		label: 'Количество кликов (24ч)',
 		iconBgColor: '#eef2ff',
 		filterKey: 'clicks'
 	},
 	{
 		id: 'links',
 		icon: LinkIcon,
-		label: 'Активных ссылок',
+		label: 'Количество активных ссылок',
 		iconBgColor: '#f0fdf4',
 		filterKey: 'links'
 	},
@@ -39,7 +39,7 @@ export const statsConfig: StatCardConfig[] = [
 	{
 		id: 'qr',
 		icon: QrCode,
-		label: 'QR сканирований',
+		label: 'Количество QR сканирований',
 		iconBgColor: '#faf5ff',
 		filterKey: 'qr'
 	}
@@ -52,8 +52,8 @@ export interface StatData {
 }
 
 export const defaultStatsData: StatData[] = [
-	{ id: 'clicks', value: '12 842', change: 12.4 },
-	{ id: 'links', value: '48', change: 2.1 },
-	{ id: 'top', value: '4 102', change: 8.5 },
-	{ id: 'qr', value: '854', change: -4.2 }
+	{ id: 'clicks', value: '0', change: 0 },
+	{ id: 'links', value: '0', change: 0 },
+	{ id: 'top', value: '0', change: 0 },
+	{ id: 'qr', value: '0', change: 0 }
 ]

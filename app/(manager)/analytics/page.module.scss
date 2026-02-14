@@ -48,6 +48,14 @@
 	margin-top: $spacing-md;
 }
 
+.sideCardsSkeleton {
+	grid-column: 1 / -1;
+}
+
 .topLinksBlock {
-	margin-top: $spacing-md;
+	margin: $spacing-xl 0;
+}
+
+.topLinksContent {
+	position: relative;
 }

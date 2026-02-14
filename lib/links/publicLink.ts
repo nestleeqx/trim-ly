@@ -69,6 +69,27 @@ function getClientIp(headers: Headers) {
 	return realIp?.trim() || null
 }
 
+function getCountry(headers: Headers) {
+	const candidates = [
+		headers.get('x-vercel-ip-country'),
+		headers.get('cf-ipcountry'),
+		headers.get('x-country-code')
+	]
+
+	for (const candidate of candidates) {
+		const value = candidate?.trim().toUpperCase()
+		if (!value || value === 'XX' || value === 'UNKNOWN') continue
+		if (value.length === 2) return value
+	}
+
+	return null
+}
+
+function getCity(headers: Headers) {
+	const city = headers.get('x-vercel-ip-city')?.trim()
+	return city || null
+}
+
 export async function registerPublicClick(params: {
 	linkId: string
 	userId: string
@@ -77,6 +98,8 @@ export async function registerPublicClick(params: {
 	const { linkId, userId, headers } = params
 	const userAgent = headers.get('user-agent')?.slice(0, 512) || null
 	const referrer = headers.get('referer')?.slice(0, 2048) || null
+	const country = getCountry(headers)
+	const city = getCity(headers)
 
 	const rawIp = getClientIp(headers)
 	const salt = process.env.IP_HASH_SALT || 'trimly'
@@ -98,6 +121,8 @@ export async function registerPublicClick(params: {
 			data: {
 				linkId,
 				ipHash,
+				country,
+				city,
 				referrer,
 				userAgent
 			}

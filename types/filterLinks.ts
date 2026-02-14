@@ -22,6 +22,7 @@ export interface FiltersState {
 	createdTo?: string | null
 	country?: string | null
 	device?: string | null
+	referrer?: string | null
 	sort: SortState
 	viewMode: ViewMode
 }

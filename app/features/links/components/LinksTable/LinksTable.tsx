@@ -13,6 +13,7 @@ export default function LinksTable({
 	onSelectAll,
 	onSelectLink,
 	onCopy,
+	onEdit,
 	onDelete,
 	onPause,
 	onResume,
@@ -28,6 +29,7 @@ export default function LinksTable({
 
 	const actions = useLinkActions({
 		onCopy,
+		onEdit,
 		onDelete,
 		onPause,
 		onResume,

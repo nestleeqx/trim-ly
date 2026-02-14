@@ -77,14 +77,14 @@ export default function LinkAnalytics({ linkId }: LinkAnalyticsProps) {
 	const handleApplyCustomRange = () => {
 		if (!startDate || !endDate) return
 		if (new Date(startDate).getTime() > new Date(endDate).getTime()) {
-			setDateRangeError(
-				'Дата начала не может быть позже даты окончания.'
-			)
+			setDateRangeError('Дата начала не может быть позже даты окончания.')
 			return
 		}
 
 		setDateRangeError(null)
-		setCustomDateLabel(`${formatLabelDate(startDate)} — ${formatLabelDate(endDate)}`)
+		setCustomDateLabel(
+			`${formatLabelDate(startDate)} — ${formatLabelDate(endDate)}`
+		)
 		setActivePeriod('custom')
 		setShowDatePicker(false)
 	}

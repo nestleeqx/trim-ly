@@ -1,5 +1,6 @@
 'use client'
 
+import LoadingOverlay from '@/app/components/ui/LoadingOverlay/LoadingOverlay'
 import Pagination from '@/app/components/ui/Pagination/Pagination'
 import LinksTable from '@/app/features/links/components/LinksTable/LinksTable'
 import { LinkItem } from '@/types/links'
@@ -74,13 +75,7 @@ export default function LinksViewContent({
 				)}
 
 				{isRefetching && (
-					<div
-						className={styles.loadingOverlay}
-						aria-hidden='true'
-					>
-						<div className={styles.linearLoader} />
-						<div className={styles.spinner} />
-					</div>
+					<LoadingOverlay />
 				)}
 			</div>
 

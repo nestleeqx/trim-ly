@@ -7,6 +7,7 @@ import CountryFilter from './CountryFilter/CountryFilter'
 import DateFilter from './DateFilter/DateFilter'
 import DeviceFilter from './DeviceFilter/DeviceFilter'
 import FiltersRight from './FiltersRight/FiltersRight'
+import ReferrerFilter from './ReferrerFilter/ReferrerFilter'
 import styles from './LinksFilters.module.scss'
 import StatusFilter from './StatusFilter/StatusFilter'
 import TagsFilter from './TagsFilter/TagsFilter'
@@ -23,7 +24,13 @@ export default function LinksFilters({
 	hideRight = false,
 	showCountry = false,
 	showDevice = false,
-	showDate = true
+	showDate = true,
+	showStatus = true,
+	showTags = true,
+	showReferrer = false,
+	availableCountries,
+	availableDevices,
+	availableReferrers
 }: EnhancedLinksFiltersProps) {
 	const filtersState = useFiltersState()
 	const { handlers, hasActiveFilters } = filtersState
@@ -42,6 +49,7 @@ export default function LinksFilters({
 			createdTo: filtersState.createdTo,
 			country: filtersState.selectedCountry,
 			device: filtersState.selectedDevice,
+			referrer: filtersState.selectedReferrer,
 			sort: filtersState.sort,
 			viewMode
 		})
@@ -53,6 +61,7 @@ export default function LinksFilters({
 		filtersState.createdTo,
 		filtersState.selectedCountry,
 		filtersState.selectedDevice,
+		filtersState.selectedReferrer,
 		filtersState.sort,
 		viewMode
 	])
@@ -69,22 +78,27 @@ export default function LinksFilters({
 					Фильтры
 				</span>
 
-				<TagsFilter
-					availableTags={availableTags}
-					isLoading={tagsLoading}
-					selectedTags={filtersState.selectedTags}
-					onTagsChange={handlers.setSelectedTags}
-				/>
+				{showTags && (
+					<TagsFilter
+						availableTags={availableTags}
+						isLoading={tagsLoading}
+						selectedTags={filtersState.selectedTags}
+						onTagsChange={handlers.setSelectedTags}
+					/>
+				)}
 
-				<StatusFilter
-					selectedStatuses={filtersState.selectedStatuses}
-					onStatusChange={handlers.setSelectedStatuses}
-				/>
+				{showStatus && (
+					<StatusFilter
+						selectedStatuses={filtersState.selectedStatuses}
+						onStatusChange={handlers.setSelectedStatuses}
+					/>
+				)}
 
 				{showCountry && (
 					<CountryFilter
 						selectedCountry={filtersState.selectedCountry}
 						onCountryChange={handlers.setSelectedCountry}
+						countries={availableCountries}
 					/>
 				)}
 
@@ -92,6 +106,15 @@ export default function LinksFilters({
 					<DeviceFilter
 						selectedDevice={filtersState.selectedDevice}
 						onDeviceChange={handlers.setSelectedDevice}
+						devices={availableDevices}
+					/>
+				)}
+
+				{showReferrer && (
+					<ReferrerFilter
+						selectedReferrer={filtersState.selectedReferrer}
+						onReferrerChange={handlers.setSelectedReferrer}
+						referrers={availableReferrers}
 					/>
 				)}
 
