@@ -54,6 +54,8 @@
 	text-decoration: none;
 }
 
-.paginationWrapper {
-	margin-top: $spacing-sm;
+.empty {
+	padding: $spacing-lg 8px !important;
+	text-align: center;
+	color: var(--color-text-secondary);
 }

@@ -20,12 +20,17 @@ export default function LinkStatsCards({
 			{linkStatsConfig.map(config => {
 				const statData = data.find(d => d.id === config.id)
 				if (!statData) return null
+				const value = statData.value?.trim()
+					? statData.value
+					: config.id === 'topCountry'
+						? 'Нет данных'
+						: '0'
 
 				return (
 					<StatCard
 						key={config.id}
 						icon={config.icon}
-						value={statData.value}
+						value={value}
 						label={config.label}
 						change={statData.change}
 						iconBgColor={config.iconBgColor}

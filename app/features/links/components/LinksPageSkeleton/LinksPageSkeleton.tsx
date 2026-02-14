@@ -7,15 +7,19 @@ interface LinksPageSkeletonProps {
 	rows?: number
 	showFilters?: boolean
 	showPagination?: boolean
+	embedded?: boolean
 }
 
 export default function LinksPageSkeleton({
 	rows = 8,
 	showFilters = true,
-	showPagination = true
+	showPagination = true,
+	embedded = false
 }: LinksPageSkeletonProps) {
 	return (
-		<div className={styles.container}>
+		<div
+			className={`${styles.container} ${embedded ? styles.embedded : ''}`}
+		>
 			{showFilters && (
 				<div className={styles.filters}>
 					<Skeleton

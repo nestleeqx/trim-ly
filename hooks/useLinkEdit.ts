@@ -1,10 +1,20 @@
-'use client'
+﻿'use client'
 
 import { ToastVariant } from '@/app/components/ui/Toast/Toast'
 import {
-	LinkEditFormData,
-	SHORT_LINK_DOMAIN
+	getLinkById,
+	mapCreateLinkError,
+	updateLink
+} from '@/app/features/links/api/linksApi'
+import {
+	LinkEditFormData
 } from '@/app/features/links/components/LinkEdit/linkEdit.config'
+import { mapLinkDtoToItem } from '@/app/features/links/mappers/linkMappers'
+import {
+	buildShortLink,
+	extractSlugFromShortLink,
+	toShortLinkHref
+} from '@/app/features/links/utils/shortLink'
 import { LinkItem } from '@/types/links'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -48,7 +58,7 @@ export const useLinkEdit = ({
 		if (link) {
 			setEditFormData({
 				destinationUrl: link.destination,
-				shortLink: link.shortUrl.replace(SHORT_LINK_DOMAIN, ''),
+				shortLink: extractSlugFromShortLink(link.shortUrl),
 				title: link.title,
 				tags: link.tags,
 				folder: 'General',
@@ -113,30 +123,41 @@ export const useLinkEdit = ({
 		async (data: LinkEditFormData) => {
 			setSaveLoading(true)
 			try {
-				await new Promise(resolve => setTimeout(resolve, 500))
+				await updateLink(linkId, {
+					targetUrl: data.destinationUrl,
+					slug: data.shortLink,
+					title: data.title,
+					tags: data.tags,
+					expiresAt: data.expirationDate || null,
+					passwordEnabled: data.passwordEnabled,
+					password: data.password
+				})
+
+				const refreshed = await getLinkById(linkId)
+				const updatedLink = mapLinkDtoToItem(refreshed.link)
+
 				setLinks(prev =>
-					prev.map(l =>
-						l.id === linkId
-							? {
-									...l,
-									destination: data.destinationUrl,
-									shortUrl: `${SHORT_LINK_DOMAIN}${data.shortLink}`,
-									title: data.title,
-									tags: data.tags,
-									expirationDate: data.expirationDate
-										? new Date(data.expirationDate)
-										: undefined,
-									hasPassword: data.passwordEnabled
-								}
-							: l
-					)
+					prev.map(l => (l.id === linkId ? updatedLink : l))
 				)
-				setEditFormData(data)
+				setEditFormData({
+					...data,
+					shortLink: extractSlugFromShortLink(updatedLink.shortUrl),
+					tags: updatedLink.tags,
+					password: '',
+					passwordEnabled: updatedLink.hasPassword || false,
+					expirationDate: updatedLink.expirationDate
+						? updatedLink.expirationDate.toISOString().split('T')[0]
+						: ''
+				})
 				setIsFormDirty(false)
 				showToast('Ссылка сохранена')
 				router.push(`/links/${linkId}?tab=analytics`)
-			} catch {
-				showToast('Ошибка сохранения', 'error')
+			} catch (error) {
+				const message =
+					error instanceof Error
+						? mapCreateLinkError(error.message)
+						: 'Ошибка сохранения'
+				showToast(message, 'error')
 			} finally {
 				setSaveLoading(false)
 			}
@@ -146,9 +167,9 @@ export const useLinkEdit = ({
 
 	const handlePreviewCopy = useCallback(() => {
 		const shortUrl = editFormData.shortLink
-			? `${SHORT_LINK_DOMAIN}${editFormData.shortLink}`
+			? buildShortLink(editFormData.shortLink)
 			: link?.shortUrl || ''
-		navigator.clipboard.writeText(`https://${shortUrl}`)
+		navigator.clipboard.writeText(toShortLinkHref(shortUrl))
 		showToast('Ссылка скопирована')
 	}, [editFormData.shortLink, link?.shortUrl, showToast])
 

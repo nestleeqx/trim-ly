@@ -89,6 +89,12 @@
 	margin-top: $spacing-lg;
 }
 
+.dateError {
+	margin-top: $spacing-sm;
+	font-size: $font-size-xs;
+	color: $color-red;
+}
+
 .datePickerBtn {
 	padding: $spacing-sm $spacing-md;
 	font-family: $font-family-base;

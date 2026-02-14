@@ -1,9 +1,9 @@
-'use client'
+﻿'use client'
 import {
 	defaultFormData,
-	LinkEditFormData,
-	SHORT_LINK_DOMAIN
+	LinkEditFormData
 } from '@/app/features/links/components/LinkEdit/linkEdit.config'
+import { extractSlugFromShortLink } from '@/app/features/links/utils/shortLink'
 import { validateSlug } from '@/app/features/links/validation/createLinkValidation'
 import { useAliasCheck } from '@/hooks/useAliasCheck'
 import { LinkItem } from '@/types/links'
@@ -24,7 +24,7 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 		() => ({
 			...defaultFormData,
 			destinationUrl: link.destination,
-			shortLink: link.shortUrl.replace(SHORT_LINK_DOMAIN, ''),
+			shortLink: extractSlugFromShortLink(link.shortUrl),
 			title: link.title,
 			tags: [...link.tags],
 			expirationDate: link.expirationDate
@@ -146,10 +146,11 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 		let passwordError: string | undefined
 		if (formData.passwordEnabled) {
 			const pass = (formData.password || '').trim()
-			if (!pass) {
-				passwordError = 'Введите пароль.'
+			const hasExistingPassword = Boolean(link.hasPassword)
+			if (!pass && !hasExistingPassword) {
+				passwordError = 'Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ.'
 			} else if (pass.length < 6 || pass.length > 128) {
-				passwordError = 'Пароль должен быть от 6 до 128 символов.'
+				passwordError = 'РџР°СЂРѕР»СЊ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РѕС‚ 6 РґРѕ 128 СЃРёРјРІРѕР»РѕРІ.'
 			}
 		}
 
@@ -168,6 +169,7 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 		formData.shortLink,
 		formData.passwordEnabled,
 		formData.password,
+		link.hasPassword,
 		errors.shortLink
 	])
 

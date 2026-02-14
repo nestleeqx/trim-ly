@@ -23,7 +23,7 @@ export const linkStatsConfig: LinkStatCardConfig[] = [
 	{
 		id: 'visitors',
 		icon: Users,
-		label: 'Уникальный посетителей',
+		label: 'Уникальные посетители',
 		iconBgColor: '#eef2ff'
 	},
 	{
@@ -47,8 +47,8 @@ export interface LinkStatData {
 }
 
 export const defaultLinkStatsData: LinkStatData[] = [
-	{ id: 'clicks', value: '2,314', change: 12.4 },
-	{ id: 'visitors', value: '1,842', change: 8.2 },
-	{ id: 'avgPerDay', value: '324', change: -2.1 },
-	{ id: 'topCountry', value: 'США (48%)', change: 1.5 }
+	{ id: 'clicks', value: '0', change: 0 },
+	{ id: 'visitors', value: '0', change: 0 },
+	{ id: 'avgPerDay', value: '0', change: 0 },
+	{ id: 'topCountry', value: '—', change: 0 }
 ]

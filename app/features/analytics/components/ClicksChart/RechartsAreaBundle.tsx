@@ -62,7 +62,7 @@ export default function RechartsAreaBundle({
 					stroke='#e5e7eb'
 				/>
 				<XAxis
-					dataKey='day'
+					dataKey='date'
 					axisLine={false}
 					tickLine={false}
 					tick={{ fill: '#6b7280', fontSize: 12 }}
@@ -84,7 +84,7 @@ export default function RechartsAreaBundle({
 					stroke='#4f46e5'
 					strokeWidth={2}
 					fillOpacity={1}
-					fill='url(#colorValue)'
+					fill={`url(#${gradientId})`}
 					dot={{
 						r: 4,
 						fill: '#fff',

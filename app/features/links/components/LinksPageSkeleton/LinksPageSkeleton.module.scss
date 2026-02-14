@@ -6,6 +6,14 @@
 	gap: $spacing-lg;
 }
 
+.embedded {
+	gap: $spacing-md;
+
+	.tableCard {
+		margin-top: 0;
+	}
+}
+
 .filters {
 	display: grid;
 	grid-template-columns: 1fr 1fr auto;

@@ -36,7 +36,7 @@ export default function ShortLinkInput({
 
 	return (
 		<div className={styles.formGroup}>
-			<label className={styles.label}>Short link</label>
+			<label className={styles.label}>Короткая ссылка</label>
 			<div
 				className={`${styles.shortLinkWrapper} ${
 					error ? styles.error : ''
@@ -79,7 +79,7 @@ export default function ShortLinkInput({
 			{isEditMode && aliasChanged && !error && (
 				<span className={styles.fieldWarning}>
 					<AlertTriangle size={12} />
-					Changing alias will break the old short URL
+					Изменение алиаса сломает старую ссылку
 				</span>
 			)}
 		</div>

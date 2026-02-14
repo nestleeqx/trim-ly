@@ -33,7 +33,7 @@ export default function LinkDetailsContent({
 	return (
 		<>
 			{currentTab === 'analytics' ? (
-				<LinkAnalytics />
+				<LinkAnalytics linkId={linkId} />
 			) : (
 				<LinkEditView
 					link={link}

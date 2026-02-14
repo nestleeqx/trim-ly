@@ -1,5 +1,6 @@
 'use client'
 
+import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
 import { ExternalLink } from 'lucide-react'
 import sharedStyles from '../shared.module.scss'
 
@@ -11,7 +12,7 @@ export default function ShortUrlCell({ shortUrl }: ShortUrlCellProps) {
 	return (
 		<td>
 			<a
-				href={`https://${shortUrl}`}
+				href={toShortLinkHref(shortUrl)}
 				target='_blank'
 				rel='noopener noreferrer'
 				className={sharedStyles.shortUrlLink}

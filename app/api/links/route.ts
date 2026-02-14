@@ -1,4 +1,5 @@
-import { authOptions } from '@/auth'
+﻿import { authOptions } from '@/auth'
+import { buildShortLink } from '@/app/features/links/utils/shortLink'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { getServerSession } from 'next-auth'
@@ -15,8 +16,6 @@ function normalizeSlug(value: string) {
 
 const MIN_SLUG_LENGTH = 3
 const MAX_SLUG_LENGTH = 25
-const SHORT_LINK_DOMAIN = 't.ly/'
-
 type UiStatus = 'active' | 'paused' | 'expired' | 'deleted'
 type SortFieldApi =
 	| 'created_date'
@@ -296,7 +295,7 @@ export async function GET(req: Request) {
 		links: links.map(link => ({
 			id: link.id,
 			title: link.title || 'Без названия',
-			shortUrl: `${SHORT_LINK_DOMAIN}${link.slug}`,
+			shortUrl: buildShortLink(link.slug),
 			destination: link.targetUrl,
 			clicks: link.clicksTotal,
 			status: mapStatus({
@@ -436,3 +435,4 @@ export async function POST(req: Request) {
 
 	return NextResponse.json({ link: created }, { status: 201 })
 }
+

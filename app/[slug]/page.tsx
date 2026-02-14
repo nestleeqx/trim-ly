@@ -1,41 +1,70 @@
-'use client'
-
 import styles from '@/app/[slug]/page.module.scss'
+import Logo from '@/app/components/ui/Logo/Logo'
 import ErrorState from '@/app/features/slug/components/ErrorState'
 import ExpiredState from '@/app/features/slug/components/ExpiredState'
 import NotFoundState from '@/app/features/slug/components/NotFoundState'
 import PasswordState from '@/app/features/slug/components/PasswordState'
 import PausedState from '@/app/features/slug/components/PausedState'
-import RedirectingState from '@/app/features/slug/components/RedirectingState'
-import { LinkState, MOCK_LINKS } from '@/data/mockLinks'
-import { Link as LinkIcon, ShieldCheck } from 'lucide-react'
-import { useParams } from 'next/navigation'
+import { registerPublicClick, resolvePublicLink } from '@/lib/links/publicLink'
+import { ShieldCheck } from 'lucide-react'
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 
-export default function SlugPage() {
-	const params = useParams()
-	const slug = params.slug as string
+interface SlugPageProps {
+	params: Promise<{
+		slug: string
+	}>
+}
 
-	const linkData = MOCK_LINKS[slug] ?? {
-		state: 'redirecting' as LinkState,
-		destination: 'https://example.com/destination'
+export const dynamic = 'force-dynamic'
+
+export default async function SlugPage({ params }: SlugPageProps) {
+	const { slug } = await params
+
+	let resolved: Awaited<ReturnType<typeof resolvePublicLink>>
+	try {
+		resolved = await resolvePublicLink(slug)
+	} catch {
+		return (
+			<div className={styles.page}>
+				<div className={styles.logo}>
+					<Logo />
+				</div>
+				<ErrorState />
+				<div className={styles.footer}>
+					<ShieldCheck size={14} />
+					<span>Защищено trim.ly</span>
+				</div>
+			</div>
+		)
+	}
+
+	if (resolved.state === 'redirect') {
+		try {
+			const requestHeaders = await headers()
+			await registerPublicClick({
+				linkId: resolved.link.id,
+				userId: resolved.link.userId,
+				headers: requestHeaders
+			})
+		} catch {}
+
+		redirect(resolved.link.targetUrl)
 	}
 
 	return (
 		<div className={styles.page}>
 			<div className={styles.logo}>
-				<div className={styles.logoIcon}>
-					<LinkIcon size={20} />
-				</div>
-				<span className={styles.logoText}>trim.ly</span>
+				<Logo />
 			</div>
-			{linkData.state === 'redirecting' && (
-				<RedirectingState destination={linkData.destination} />
-			)}
-			{linkData.state === 'password' && <PasswordState />}
-			{linkData.state === 'paused' && <PausedState />}
-			{linkData.state === 'expired' && <ExpiredState />}
-			{linkData.state === 'not-found' && <NotFoundState />}
-			{linkData.state === 'error' && <ErrorState />}
+
+			{resolved.state === 'password' ? (
+				<PasswordState slug={slug} />
+			) : null}
+			{resolved.state === 'paused' ? <PausedState /> : null}
+			{resolved.state === 'expired' ? <ExpiredState /> : null}
+			{resolved.state === 'not-found' ? <NotFoundState /> : null}
+
 			<div className={styles.footer}>
 				<ShieldCheck size={14} />
 				<span>Защищено trim.ly</span>

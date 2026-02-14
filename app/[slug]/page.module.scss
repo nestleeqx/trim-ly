@@ -16,23 +16,6 @@
 	margin-bottom: $spacing-3xl;
 }
 
-.logoIcon {
-	width: 36px;
-	height: 36px;
-	background: $color-primary;
-	color: white;
-	border-radius: $border-radius-md;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.logoText {
-	font-size: $font-size-lg;
-	font-weight: $font-weight-bold;
-	color: $color-text-primary;
-}
-
 .footer {
 	margin-top: auto;
 	padding-top: $spacing-2xl;

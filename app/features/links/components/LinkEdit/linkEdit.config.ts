@@ -1,3 +1,5 @@
+import { buildShortLink } from '@/app/features/links/utils/shortLink'
+
 export interface LinkEditFormData {
 	destinationUrl: string
 	shortLink: string
@@ -42,7 +44,7 @@ export const folderOptions = [
 	{ value: 'Campaigns', label: 'Кампании' }
 ]
 
-export const SHORT_LINK_DOMAIN = 't.ly/'
+export const SHORT_LINK_DOMAIN = buildShortLink()
 
 export const statusLabels = {
 	active: 'Активна',

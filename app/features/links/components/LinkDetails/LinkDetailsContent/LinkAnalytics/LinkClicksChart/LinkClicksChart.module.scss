@@ -1,0 +1,125 @@
+@use 'variables' as *;
+
+.card {
+	background: $color-bg-light;
+	border: 1px solid $color-border;
+	border-radius: $border-radius-lg;
+	padding: $spacing-lg;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: $spacing-md;
+	flex-wrap: wrap;
+}
+
+.title {
+	margin: 0;
+	font-size: $font-size-lg;
+	font-weight: $font-weight-semibold;
+}
+
+.subtitle {
+	margin: 4px 0 0;
+	color: $color-text-secondary;
+	font-size: $font-size-sm;
+}
+
+.chartContainer {
+	height: 320px;
+	position: relative;
+}
+
+.datePicker {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: $spacing-sm;
+	padding: $spacing-sm;
+	border: 1px solid $color-border;
+	border-radius: $border-radius-md;
+}
+
+.dateField {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.dateField label {
+	font-size: $font-size-xs;
+	color: $color-text-secondary;
+}
+
+.dateField input {
+	border: 1px solid $color-border;
+	border-radius: $border-radius-sm;
+	padding: 8px 10px;
+}
+
+.dateActions {
+	grid-column: 1 / -1;
+	display: flex;
+	justify-content: flex-end;
+	gap: $spacing-xs;
+}
+
+.secondaryBtn,
+.primaryBtn {
+	border: 1px solid $color-border;
+	background: $color-bg-light;
+	padding: 8px 12px;
+	border-radius: $border-radius-sm;
+	cursor: pointer;
+}
+
+.primaryBtn {
+	background: $color-primary;
+	color: #fff;
+	border-color: $color-primary;
+}
+
+.loader {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: $color-text-secondary;
+}
+
+.dateError {
+	margin-top: -4px;
+	color: $color-red;
+	font-size: $font-size-xs;
+}
+
+.stats {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: $spacing-md;
+	border-top: 1px solid $color-border;
+	margin-top: $spacing-xs;
+}
+
+.statItem {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-top: $spacing-md;
+}
+
+.statLabel {
+	color: $color-text-secondary;
+	font-size: $font-size-xs;
+	letter-spacing: 0.04em;
+}
+
+.statValue {
+	font-size: $font-size-lg;
+	font-weight: $font-weight-semibold;
+	color: $color-text-primary;
+}

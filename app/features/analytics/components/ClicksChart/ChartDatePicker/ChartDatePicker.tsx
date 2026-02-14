@@ -4,6 +4,7 @@ interface ChartDatePickerProps {
 	show: boolean
 	startDate: string
 	endDate: string
+	error?: string | null
 	onStartDateChange: (date: string) => void
 	onEndDateChange: (date: string) => void
 	onApply: () => void
@@ -14,6 +15,7 @@ export default function ChartDatePicker({
 	show,
 	startDate,
 	endDate,
+	error,
 	onStartDateChange,
 	onEndDateChange,
 	onApply,
@@ -49,6 +51,7 @@ export default function ChartDatePicker({
 						/>
 					</div>
 				</div>
+				{error ? <p className={styles.dateError}>{error}</p> : null}
 				<div className={styles.datePickerActions}>
 					<button
 						className={`${styles.datePickerBtn} ${styles.datePickerBtnCancel}`}

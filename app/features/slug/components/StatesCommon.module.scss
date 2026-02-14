@@ -196,3 +196,9 @@
 		color: $color-text-primary;
 	}
 }
+
+.formError {
+	margin: 0;
+	font-size: $font-size-sm;
+	color: $color-red;
+}

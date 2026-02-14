@@ -1,0 +1,53 @@
+@use 'variables' as *;
+
+.periods {
+	display: flex;
+	gap: $spacing-xs;
+	background: $color-bg-dark;
+	padding: $spacing-xs;
+	border-radius: $border-radius-lg;
+	flex-wrap: wrap;
+
+	@media (max-width: $breakpoint-sm) {
+		width: 100%;
+		justify-content: space-between;
+	}
+}
+
+.periodBtn {
+	display: flex;
+	align-items: center;
+	gap: $spacing-xs;
+	padding: $spacing-sm $spacing-md;
+	background: transparent;
+	border: none;
+	border-radius: $border-radius-md;
+	font-family: $font-family-base;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+	color: $color-text-secondary;
+	cursor: pointer;
+	transition: $transition-fast;
+
+	&:hover {
+		color: $color-text-primary;
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+
+	&.active {
+		background: $color-bg-light;
+		color: $color-text-primary;
+		box-shadow: $shadow-sm;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		flex: 1;
+		justify-content: center;
+		padding: $spacing-sm;
+		font-size: $font-size-xs;
+	}
+}

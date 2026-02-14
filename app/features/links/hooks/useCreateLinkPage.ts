@@ -5,14 +5,15 @@ import {
 	mapCreateLinkError
 } from '@/app/features/links/api/linksApi'
 import { createTag } from '@/app/features/links/api/tagsApi'
-import {
-	LinkEditFormData,
-	SHORT_LINK_DOMAIN
-} from '@/app/features/links/components/LinkEdit/linkEdit.config'
+import { LinkEditFormData } from '@/app/features/links/components/LinkEdit/linkEdit.config'
 import {
 	EMPTY_LINK,
 	INITIAL_LINK_FORM_DATA
 } from '@/app/features/links/constants/newLinkDefaults'
+import {
+	buildShortLink,
+	toShortLinkHref
+} from '@/app/features/links/utils/shortLink'
 import { useToast } from '@/hooks/useToast'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
@@ -30,14 +31,10 @@ export default function useCreateLinkPage() {
 	}, [])
 
 	const ensureTagIds = useCallback(async (tags: string[]) => {
-		const uniqueNames = [
-			...new Set(tags.map(t => t.trim()).filter(Boolean))
-		]
+		const uniqueNames = [...new Set(tags.map(t => t.trim()).filter(Boolean))]
 		if (!uniqueNames.length) return [] as string[]
 
-		const results = await Promise.all(
-			uniqueNames.map(name => createTag(name))
-		)
+		const results = await Promise.all(uniqueNames.map(name => createTag(name)))
 		return results.map(t => t.id)
 	}, [])
 
@@ -87,10 +84,10 @@ export default function useCreateLinkPage() {
 
 	const handlePreviewCopy = useCallback(() => {
 		const shortUrl = formData.shortLink
-			? `${SHORT_LINK_DOMAIN}${formData.shortLink}`
-			: `${SHORT_LINK_DOMAIN}`
+			? buildShortLink(formData.shortLink)
+			: buildShortLink()
 
-		navigator.clipboard.writeText(`https://${shortUrl}`)
+		navigator.clipboard.writeText(toShortLinkHref(shortUrl))
 		showToast('Ссылка скопирована')
 	}, [formData.shortLink, showToast])
 

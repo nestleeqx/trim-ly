@@ -1,12 +1,13 @@
 'use client'
 
 import sharedStyles from '@/app/features/links/components/LinksTable/shared.module.scss'
+import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
 import { LinkItem as LinkItemType } from '@/types/links'
 import { formatDate } from '@/utils/formatters'
 import { getStatusLabel } from '@/utils/link-helpers'
 import { ExternalLink, MoreVertical } from 'lucide-react'
 import KebabMenuActions from '../../../KebabMenuActions/KebabMenuActions'
-import LinkActions from '../../../LinksTable/LinkTableRow'
+import { LinkActions } from '../../../LinksTable/LinkTableRow/types'
 import { getStatusClass } from '../../../LinksTable/shared'
 import styles from './LinkCard.module.scss'
 import QuickButtons from './QuickButtons'
@@ -28,7 +29,7 @@ export default function LinkCard({
 	openKebabId,
 	actions
 }: LinkCardProps) {
-	const href = `https://${link.shortUrl}`
+	const href = toShortLinkHref(link.shortUrl)
 
 	return (
 		<div

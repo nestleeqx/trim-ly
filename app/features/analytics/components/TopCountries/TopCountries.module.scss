@@ -149,3 +149,10 @@
 		min-width: 32px;
 	}
 }
+
+.empty {
+	margin: 0;
+	padding: $spacing-sm 0;
+	color: var(--color-text-secondary);
+	font-size: $font-size-sm;
+}

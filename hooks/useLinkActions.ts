@@ -1,5 +1,6 @@
 'use client'
 
+import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
 import { LinkItem } from '@/types/links'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
@@ -45,7 +46,7 @@ export const useLinkActions = ({
 	const handleCopy = useCallback(
 		(url: string, e?: React.MouseEvent) => {
 			e?.stopPropagation()
-			navigator.clipboard.writeText(`https://${url}`)
+			navigator.clipboard.writeText(toShortLinkHref(url))
 			onCopy?.(url)
 		},
 		[onCopy]
@@ -120,7 +121,7 @@ export const useLinkActions = ({
 
 	const handleCopyQrUrl = useCallback(() => {
 		if (qrModalLink) {
-			navigator.clipboard.writeText(`https://${qrModalLink.shortUrl}`)
+			navigator.clipboard.writeText(toShortLinkHref(qrModalLink.shortUrl))
 			onCopy?.(qrModalLink.shortUrl)
 		}
 	}, [qrModalLink, onCopy])

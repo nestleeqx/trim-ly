@@ -1,7 +1,9 @@
 'use client'
 
+import PeriodSelector, {
+	PeriodOption
+} from '@/app/components/ui/PeriodSelector/PeriodSelector'
 import useChartManager from '@/hooks/useChartManager'
-import { Calendar } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useMemo } from 'react'
 import ChartDatePicker from './ChartDatePicker/ChartDatePicker'
@@ -13,12 +15,12 @@ const RechartsAreaBundle = dynamic<RechartsAreaBundleProps>(
 	{ ssr: false }
 )
 
-const periods = [
+const periods: PeriodOption[] = [
 	{ key: '7d', label: '7д' },
 	{ key: '30d', label: '30д' },
 	{ key: '90d', label: '90д' },
 	{ key: 'custom', label: 'Период' }
-] as const
+]
 
 export default function ClicksChart() {
 	const {
@@ -29,12 +31,14 @@ export default function ClicksChart() {
 		showDatePicker,
 		startDate,
 		endDate,
+		dateRangeError,
 		handlePeriodChange,
 		handleApplyCustomRange,
 		handleCancelDatePicker,
 		getCustomLabel,
 		setStartDate,
-		setEndDate
+		setEndDate,
+		setDateRangeError
 	} = useChartManager('7d')
 
 	const { yAxisMax, yAxisTicks } = useMemo(() => {
@@ -48,36 +52,45 @@ export default function ClicksChart() {
 		}
 	}, [chartData])
 
+	const totalLabel = stats.total?.trim() ? stats.total : 'Нет данных'
+	const averageLabel = stats.average?.trim() ? stats.average : 'Нет данных'
+
 	return (
 		<div className={styles.card}>
 			<div className={styles.header}>
 				<div className={styles.titleSection}>
 					<h3 className={styles.title}>Клики по времени</h3>
 					<p className={styles.subtitle}>
-						Аналитика в реальном времени по всем ссылкам
+						Аналитика в реальном времени по всем вашим ссылкам
 					</p>
 				</div>
-				<div className={styles.periods}>
-					{periods.map(({ key, label }) => (
-						<button
-							key={key}
-							className={`${styles.periodBtn} ${activePeriod === key ? styles.active : ''}`}
-							onClick={() => handlePeriodChange(key)}
-							disabled={isLoading}
-						>
-							{key === 'custom' && <Calendar size={14} />}
-							{key === 'custom' ? getCustomLabel() : label}
-						</button>
-					))}
-				</div>
+
+				<PeriodSelector
+					options={periods}
+					activeKey={activePeriod}
+					onChange={key =>
+						handlePeriodChange(key as '7d' | '30d' | '90d' | 'custom')
+					}
+					disabled={isLoading}
+					getLabel={option =>
+						option.key === 'custom' ? getCustomLabel() : option.label
+					}
+				/>
 			</div>
 
 			<ChartDatePicker
 				show={showDatePicker}
 				startDate={startDate}
 				endDate={endDate}
-				onStartDateChange={setStartDate}
-				onEndDateChange={setEndDate}
+				error={dateRangeError}
+				onStartDateChange={value => {
+					setDateRangeError(null)
+					setStartDate(value)
+				}}
+				onEndDateChange={value => {
+					setDateRangeError(null)
+					setEndDate(value)
+				}}
 				onApply={handleApplyCustomRange}
 				onCancel={handleCancelDatePicker}
 			/>
@@ -98,11 +111,11 @@ export default function ClicksChart() {
 			<div className={styles.stats}>
 				<div className={styles.stat}>
 					<span className={styles.statLabel}>ВСЕГО КЛИКОВ</span>
-					<span className={styles.statValue}>{stats.total}</span>
+					<span className={styles.statValue}>{totalLabel}</span>
 				</div>
 				<div className={styles.stat}>
 					<span className={styles.statLabel}>СРЕДНЕЕ В ДЕНЬ</span>
-					<span className={styles.statValue}>{stats.average}</span>
+					<span className={styles.statValue}>{averageLabel}</span>
 				</div>
 			</div>
 		</div>

@@ -31,8 +31,64 @@ export type LinkListItemDto = {
 	hasPassword: boolean
 }
 
+export type LinkAnalyticsResponse = {
+	statsCards: Array<{
+		id: 'clicks' | 'visitors' | 'avgPerDay' | 'topCountry'
+		value: string
+		change: number
+	}>
+	chart: {
+		points: Array<{
+			day: string
+			date: string
+			value: number
+			unique: number
+		}>
+		total: string
+		average: string
+	}
+	topCountries: Array<{
+		code: string
+		name: string
+		clicks: number
+		percentage: number
+	}>
+	deviceStats: Array<{
+		type: string
+		percentage: number
+		color: string
+	}>
+	topReferrers: Array<{
+		name: string
+		clicks: number
+	}>
+	rawEvents: Array<{
+		time: string
+		country: {
+			code: string
+			name: string
+		}
+		device: {
+			type: string
+			name: string
+		}
+		browser: string
+		referrer: string
+	}>
+}
+
 export type GetLinkByIdResponse = {
 	link: LinkListItemDto
+}
+
+export type UpdateLinkPayload = {
+	targetUrl: string
+	slug: string
+	title?: string
+	tags?: string[]
+	expiresAt?: string | null
+	passwordEnabled: boolean
+	password?: string
 }
 
 export type GetLinksResponse = {
@@ -172,6 +228,54 @@ export async function getLinkById(
 		method: 'GET',
 		cache: 'no-store',
 		signal
+	})
+
+	const data = await res.json().catch(() => ({}))
+	if (!res.ok) {
+		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+	}
+
+	return data as GetLinkByIdResponse
+}
+
+export async function getLinkAnalytics(
+	id: string,
+	params?: {
+		period?: '7d' | '30d' | '90d' | 'custom'
+		from?: string
+		to?: string
+		signal?: AbortSignal
+	}
+): Promise<LinkAnalyticsResponse> {
+	const search = new URLSearchParams()
+	if (params?.period) search.set('period', params.period)
+	if (params?.from) search.set('from', params.from)
+	if (params?.to) search.set('to', params.to)
+	const qs = search.toString()
+	const url = qs ? `/api/links/${id}/analytics?${qs}` : `/api/links/${id}/analytics`
+
+	const res = await fetch(url, {
+		method: 'GET',
+		cache: 'no-store',
+		signal: params?.signal
+	})
+
+	const data = await res.json().catch(() => ({}))
+	if (!res.ok) {
+		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+	}
+
+	return data as LinkAnalyticsResponse
+}
+
+export async function updateLink(
+	id: string,
+	payload: UpdateLinkPayload
+): Promise<GetLinkByIdResponse> {
+	const res = await fetch(`/api/links/${id}`, {
+		method: 'PATCH',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(payload)
 	})
 
 	const data = await res.json().catch(() => ({}))

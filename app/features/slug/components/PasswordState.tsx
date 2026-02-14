@@ -1,20 +1,63 @@
+'use client'
+
 import Button from '@/app/components/ui/Button/Button'
 import { Eye, EyeOff, Lock } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
 import styles from './StatesCommon.module.scss'
 
-export default function PasswordState() {
+interface PasswordStateProps {
+	slug: string
+}
+
+export default function PasswordState({ slug }: PasswordStateProps) {
 	const [password, setPassword] = useState('')
 	const [showPassword, setShowPassword] = useState(false)
+	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [error, setError] = useState<string | null>(null)
 
 	const togglePassword = useCallback(() => {
 		setShowPassword(prev => !prev)
 	}, [])
 
-	const handleSubmit = useCallback((e: React.FormEvent) => {
-		e.preventDefault()
-	}, [])
+	const handlePasswordChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement>) => {
+			setPassword(e.target.value)
+			if (error) setError(null)
+		},
+		[error]
+	)
+
+	const handleSubmit = useCallback(
+		async (e: React.FormEvent) => {
+			e.preventDefault()
+			if (!password || isSubmitting) return
+
+			setIsSubmitting(true)
+			setError(null)
+
+			try {
+				const response = await fetch(`/api/slug/${slug}/unlock`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ password })
+				})
+
+				const data = await response.json().catch(() => null)
+				if (!response.ok || !data?.targetUrl) {
+					setError(data?.error || 'Не удалось открыть ссылку')
+					return
+				}
+
+				window.location.replace(data.targetUrl)
+			} catch {
+				setError('Сетевая ошибка. Попробуйте ещё раз.')
+			} finally {
+				setIsSubmitting(false)
+			}
+		},
+		[password, isSubmitting, slug]
+	)
 
 	return (
 		<div className={styles.card}>
@@ -37,7 +80,7 @@ export default function PasswordState() {
 						className={styles.input}
 						placeholder='••••••••'
 						value={password}
-						onChange={e => setPassword(e.target.value)}
+						onChange={handlePasswordChange}
 						autoComplete='off'
 					/>
 					<button
@@ -56,12 +99,15 @@ export default function PasswordState() {
 					</button>
 				</div>
 
+				{error ? <p className={styles.formError}>{error}</p> : null}
+
 				<Button
 					variant='primary'
 					type='submit'
 					size='lg'
+					disabled={!password || isSubmitting}
 				>
-					Разблокировать ссылку
+					{isSubmitting ? 'Проверяем...' : 'Разблокировать ссылку'}
 				</Button>
 			</form>
 

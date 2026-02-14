@@ -34,3 +34,24 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Deleted Links Cleanup
+
+Deleted links use soft delete (`deletedAt`) so they can be restored.
+Non-restored links are automatically purged by cron.
+
+- Endpoint: `/api/cron/links-purge`
+- Schedule: daily at `03:00` (configured in `vercel.json`)
+- Retention: `30` days by default
+
+Optional environment variables:
+
+- `LINK_SOFT_DELETE_RETENTION_DAYS=30`
+- `CRON_SECRET=your_secret` (if set, send `Authorization: Bearer your_secret`)
+
+Manual local run example:
+
+```bash
+curl -X POST http://localhost:3000/api/cron/links-purge \
+  -H "Authorization: Bearer your_secret"
+```

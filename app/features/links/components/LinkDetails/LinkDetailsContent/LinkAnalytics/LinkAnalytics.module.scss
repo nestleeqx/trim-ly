@@ -8,3 +8,12 @@
 		width: 100%;
 	}
 }
+
+.error {
+	padding: $spacing-md;
+	border: 1px solid rgba($color-red, 0.3);
+	background: rgba($color-red, 0.06);
+	color: $color-red;
+	border-radius: $border-radius-md;
+	margin-bottom: $spacing-md;
+}

@@ -18,38 +18,10 @@ const MANAGER_PREFIXES = [
 	'/settings'
 ]
 
-const RESERVED_SINGLE_SEGMENTS = new Set([
-	'',
-	'login',
-	'signup',
-	'forgot-password',
-	'reset-password',
-	'check-email',
-	'dashboard',
-	'analytics',
-	'links',
-	'pricing',
-	'settings',
-	'api',
-	'_next',
-	'terms',
-	'privacy'
-])
-
 function isManagerPath(pathname: string): boolean {
 	return MANAGER_PREFIXES.some(
 		prefix => pathname === prefix || pathname.startsWith(`${prefix}/`)
 	)
-}
-
-function isProtectedSlugPath(pathname: string): boolean {
-	const segments = pathname.split('/').filter(Boolean)
-	if (segments.length !== 1) return false
-
-	const segment = segments[0]
-	if (segment.includes('.')) return false
-
-	return !RESERVED_SINGLE_SEGMENTS.has(segment)
 }
 
 export async function middleware(req: NextRequest) {
@@ -57,8 +29,7 @@ export async function middleware(req: NextRequest) {
 	const searchParams = req.nextUrl.searchParams
 
 	const isAuthPage = AUTH_PAGES.has(pathname)
-	const isProtectedPath =
-		isManagerPath(pathname) || isProtectedSlugPath(pathname)
+	const isProtectedPath = isManagerPath(pathname)
 
 	if (!isAuthPage && !isProtectedPath) {
 		return NextResponse.next()

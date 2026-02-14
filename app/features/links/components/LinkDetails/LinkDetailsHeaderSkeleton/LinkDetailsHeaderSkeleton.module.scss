@@ -1,0 +1,95 @@
+@use 'variables' as *;
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
+}
+
+.card {
+	background-color: var(--color-bg);
+	border: 1px solid var(--color-border);
+	border-radius: $border-radius-xl;
+	height: 137px;
+	padding: $spacing-lg;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-lg;
+
+	@media (min-width: $breakpoint-md) {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+}
+
+.info {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-sm;
+	flex: 1;
+
+	.infoHeader {
+		display: flex;
+		margin-bottom: $spacing-sm;
+	}
+
+	.infoBody {
+		display: flex;
+	}
+}
+
+.title,
+.badge,
+.shortUrl,
+.destination {
+	height: 28px;
+}
+
+.title {
+	width: 220px;
+}
+
+.badge {
+	width: 88px;
+	margin-left: $spacing-md;
+}
+
+.shortUrl {
+	width: 130px;
+}
+
+.destination {
+	width: 30%;
+	margin-left: $spacing-md;
+}
+
+.actions {
+	display: flex;
+	gap: $spacing-sm;
+}
+
+.actionBtn {
+	width: 130px;
+	height: 40px;
+	border-radius: 12;
+}
+
+.tabs {
+	display: flex;
+	gap: $spacing-md;
+	margin-top: $spacing-xl;
+}
+
+.tab {
+	padding: $spacing-sm;
+	width: 132px;
+	height: 34px;
+	border: 1px solid $color-border;
+	background: $color-bg-light;
+	border-radius: $border-radius-lg;
+
+	& > div {
+		margin: 0 auto;
+	}
+}

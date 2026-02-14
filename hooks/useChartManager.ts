@@ -8,12 +8,14 @@ const useChartManager = (initialPeriod: Period = '7d') => {
 	const [startDate, setStartDate] = useState('')
 	const [endDate, setEndDate] = useState('')
 	const [customDateLabel, setCustomDateLabel] = useState('')
+	const [dateRangeError, setDateRangeError] = useState<string | null>(null)
 
 	const chartData = chartDataByPeriod[activePeriod]
 	const stats = statsByPeriod[activePeriod]
 
 	const handlePeriodChange = useCallback((period: Period) => {
 		if (period === 'custom') {
+			setDateRangeError(null)
 			setShowDatePicker(true)
 			return
 		}
@@ -21,6 +23,8 @@ const useChartManager = (initialPeriod: Period = '7d') => {
 		setIsLoading(true)
 		setActivePeriod(period)
 		setCustomDateLabel('')
+		setDateRangeError(null)
+		setShowDatePicker(false)
 
 		setTimeout(() => {
 			setIsLoading(false)
@@ -33,13 +37,23 @@ const useChartManager = (initialPeriod: Period = '7d') => {
 		const start = new Date(startDate)
 		const end = new Date(endDate)
 
-		const formatDate = (date: Date) => {
-			return date.toLocaleDateString('ru-RU', {
+		if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+			setDateRangeError('Выберите корректные даты.')
+			return
+		}
+
+		if (start.getTime() > end.getTime()) {
+			setDateRangeError('Дата начала не может быть позже даты окончания.')
+			return
+		}
+
+		const formatDate = (date: Date) =>
+			date.toLocaleDateString('ru-RU', {
 				day: 'numeric',
 				month: 'short'
 			})
-		}
 
+		setDateRangeError(null)
 		setCustomDateLabel(`${formatDate(start)} — ${formatDate(end)}`)
 		setIsLoading(true)
 		setActivePeriod('custom')
@@ -51,6 +65,7 @@ const useChartManager = (initialPeriod: Period = '7d') => {
 	}, [startDate, endDate])
 
 	const handleCancelDatePicker = useCallback(() => {
+		setDateRangeError(null)
 		setShowDatePicker(false)
 	}, [])
 
@@ -67,12 +82,14 @@ const useChartManager = (initialPeriod: Period = '7d') => {
 		showDatePicker,
 		startDate,
 		endDate,
+		dateRangeError,
 		handlePeriodChange,
 		handleApplyCustomRange,
 		handleCancelDatePicker,
 		getCustomLabel,
 		setStartDate,
-		setEndDate
+		setEndDate,
+		setDateRangeError
 	}
 }
 

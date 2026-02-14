@@ -4,7 +4,6 @@ import styles from './CustomTooltip.module.scss'
 interface CustomTooltipProps {
 	active?: boolean
 	payload?: Array<{ payload: ChartDataPoint }>
-	label?: string
 }
 
 export default function CustomTooltip({ active, payload }: CustomTooltipProps) {
@@ -20,13 +19,13 @@ export default function CustomTooltip({ active, payload }: CustomTooltipProps) {
 				<span
 					className={`${styles.tooltipValue} ${styles.tooltipValuePrimary}`}
 				>
-					{data.value.toLocaleString()}
+					{data.value.toLocaleString('ru-RU')}
 				</span>
 			</div>
 			<div className={styles.tooltipRow}>
 				<span className={styles.tooltipLabel}>Уникальные</span>
 				<span className={styles.tooltipValue}>
-					{data.unique.toLocaleString()}
+					{data.unique.toLocaleString('ru-RU')}
 				</span>
 			</div>
 		</div>

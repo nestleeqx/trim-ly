@@ -21,38 +21,41 @@ export default function DevicesChart({
 }: DevicesChartProps) {
 	const [hoveredSegment, setHoveredSegment] = useState<number | null>(null)
 
-	const segments = useMemo(
-		() => calculateSegments(deviceStats),
-		[deviceStats]
-	)
-
+	const segments = useMemo(() => calculateSegments(deviceStats), [deviceStats])
 	const hoveredDevice =
 		hoveredSegment !== null ? deviceStats[hoveredSegment] : null
+	const hasData = deviceStats.length > 0
 
 	return (
 		<div className={styles.card}>
 			<h3 className={styles.title}>Устройства</h3>
 
-			<div className={styles.chartWrapper}>
-				<div className={styles.chartContainer}>
-					<ChartSVG
-						segments={segments}
+			{hasData ? (
+				<>
+					<div className={styles.chartWrapper}>
+						<div className={styles.chartContainer}>
+							<ChartSVG
+								segments={segments}
+								onSegmentHover={setHoveredSegment}
+							/>
+
+							<CenterLabel
+								mainPercentage={mainPercentage}
+								mainDeviceType={mainDeviceType}
+								hoveredDevice={hoveredDevice}
+							/>
+						</div>
+					</div>
+
+					<ChartLegend
+						devices={deviceStats}
+						hoveredSegment={hoveredSegment}
 						onSegmentHover={setHoveredSegment}
 					/>
-
-					<CenterLabel
-						mainPercentage={mainPercentage}
-						mainDeviceType={mainDeviceType}
-						hoveredDevice={hoveredDevice}
-					/>
-				</div>
-			</div>
-
-			<ChartLegend
-				devices={deviceStats}
-				hoveredSegment={hoveredSegment}
-				onSegmentHover={setHoveredSegment}
-			/>
+				</>
+			) : (
+				<p className={styles.empty}>Нет данных за выбранный период.</p>
+			)}
 		</div>
 	)
 }

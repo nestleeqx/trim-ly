@@ -1,5 +1,6 @@
 'use client'
 
+import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
 import { LinkItem } from '@/types/links'
 import { useCallback, useState } from 'react'
 
@@ -12,14 +13,13 @@ export const useQrModal = ({ link, showToast }: UseQrModalProps) => {
 	const [showQrModal, setShowQrModal] = useState(false)
 
 	const handleQrCopy = useCallback(() => {
-		if (link) {
-			navigator.clipboard.writeText(`https://${link.shortUrl}`)
-			showToast('Ссылка скопирована')
-		}
+		if (!link) return
+		navigator.clipboard.writeText(toShortLinkHref(link.shortUrl))
+		showToast('Ссылка скопирована')
 	}, [link, showToast])
 
 	const handleQrDownload = useCallback(() => {
-		showToast('QR-код сохранён')
+		showToast('QR-код сохранен')
 		setShowQrModal(false)
 	}, [showToast])
 

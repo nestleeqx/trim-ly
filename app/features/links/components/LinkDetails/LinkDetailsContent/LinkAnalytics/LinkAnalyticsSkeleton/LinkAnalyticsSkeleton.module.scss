@@ -1,0 +1,96 @@
+@use 'variables' as *;
+
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-lg;
+}
+
+.statsGrid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: $spacing-md;
+}
+
+.statsCard,
+.chartCard,
+.sideCard {
+	padding: $spacing-lg;
+	background: $color-bg-light;
+	border: 1px solid $color-border;
+	border-radius: $border-radius-xl;
+}
+
+.statsCard {
+	height: 213px;
+
+	.statCardHeader {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: $spacing-lg;
+	}
+
+	.statCardTitle {
+		margin-bottom: $spacing-sm;
+	}
+}
+
+.chartCard {
+	height: 460px;
+
+	.chartCardHeader {
+		display: flex;
+		justify-content: space-between;
+
+		.chartCardTitle {
+			margin-bottom: $spacing-sm;
+		}
+	}
+
+	.chartContent {
+		margin-top: $spacing-md;
+		width: 100%;
+		height: 280px;
+		border-radius: $border-radius-xl;
+	}
+
+	.chartContentDetails {
+		margin-top: $spacing-md;
+		display: flex;
+		justify-content: space-between;
+	}
+}
+
+.sideCharts {
+	display: flex;
+	gap: $spacing-lg;
+
+	.sideCardContent {
+		margin-top: $spacing-lg;
+
+		& > div:not(:last-child) {
+			margin-bottom: $spacing-sm;
+		}
+	}
+}
+
+.sideCard {
+	flex: 1;
+	height: 260px;
+}
+
+.tableSkeleton {
+	min-height: 380px;
+}
+
+@media (max-width: $breakpoint-lg) {
+	.statsGrid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: $breakpoint-md) {
+	.sideCharts {
+		flex-direction: column;
+	}
+}

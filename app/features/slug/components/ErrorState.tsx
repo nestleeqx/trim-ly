@@ -1,3 +1,5 @@
+'use client'
+
 import Button from '@/app/components/ui/Button/Button'
 import { AlertTriangle } from 'lucide-react'
 import Link from 'next/link'
