@@ -1,8 +1,9 @@
-import {
+﻿import {
 	Calendar,
 	Globe,
 	LucideIcon,
 	MousePointerClick,
+	QrCode,
 	Users
 } from 'lucide-react'
 
@@ -37,6 +38,12 @@ export const linkStatsConfig: LinkStatCardConfig[] = [
 		icon: Globe,
 		label: 'Топ страна',
 		iconBgColor: '#eef2ff'
+	},
+	{
+		id: 'qrScans',
+		icon: QrCode,
+		label: 'QR-сканирования',
+		iconBgColor: '#eef2ff'
 	}
 ]
 
@@ -50,5 +57,6 @@ export const defaultLinkStatsData: LinkStatData[] = [
 	{ id: 'clicks', value: '0', change: 0 },
 	{ id: 'visitors', value: '0', change: 0 },
 	{ id: 'avgPerDay', value: '0', change: 0 },
-	{ id: 'topCountry', value: '—', change: 0 }
+	{ id: 'topCountry', value: '—', change: 0 },
+	{ id: 'qrScans', value: '0', change: 0 }
 ]

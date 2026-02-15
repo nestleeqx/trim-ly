@@ -93,3 +93,14 @@ export async function getBilling(): Promise<BillingResponse> {
 	})
 	return parseJson<BillingResponse>(res)
 }
+
+export async function updateBillingPlan(
+	planId: 'free' | 'pro' | 'team'
+): Promise<BillingResponse> {
+	const res = await fetch('/api/profile/billing', {
+		method: 'PATCH',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ planId })
+	})
+	return parseJson<BillingResponse>(res)
+}

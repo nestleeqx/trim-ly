@@ -4,6 +4,7 @@
 	shortUrl: string
 	destination: string
 	clicks: number
+	trend?: number
 	status: LinkStatus
 	tags: string[]
 	createdAt: Date

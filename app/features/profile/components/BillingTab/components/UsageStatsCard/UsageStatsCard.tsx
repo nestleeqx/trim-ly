@@ -4,9 +4,13 @@ import ProgressBar from './ProgressBar'
 
 interface UsageStatsCardProps {
 	metrics: UsageMetric[]
+	limitNotice?: string | null
 }
 
-export default function UsageStatsCard({ metrics }: UsageStatsCardProps) {
+export default function UsageStatsCard({
+	metrics,
+	limitNotice = null
+}: UsageStatsCardProps) {
 	return (
 		<div className={styles.usageCard}>
 			{metrics.map(metric => (
@@ -23,6 +27,14 @@ export default function UsageStatsCard({ metrics }: UsageStatsCardProps) {
 					/>
 				</div>
 			))}
+			{limitNotice && (
+				<div
+					className={styles.usageLimitNotice}
+					role='status'
+				>
+					{limitNotice}
+				</div>
+			)}
 		</div>
 	)
 }

@@ -1,6 +1,8 @@
-'use client'
+﻿'use client'
 
 import Modal from '@/app/components/ui/Modal/Modal'
+import { withQrSource } from '@/app/features/links/utils/qrTracking'
+import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
 import { LinkItem } from '@/types/links'
 import ActionButtons from './ActionButtons'
 import QrCodeDisplay from './QrCodeDisplay'
@@ -34,7 +36,10 @@ export default function QrCodeModal({
 	onDownload,
 	qrCodeSize = 200
 }: QrCodeModalProps) {
-	const displayUrl = link?.shortUrl ?? url ?? ''
+	const rawDisplayUrl = link?.shortUrl ?? url ?? ''
+	const qrValue = rawDisplayUrl
+		? withQrSource(toShortLinkHref(rawDisplayUrl))
+		: ''
 	const showCopyButton = Boolean(onCopyUrl)
 
 	return (
@@ -45,10 +50,10 @@ export default function QrCodeModal({
 		>
 			<div className={styles.qrContent}>
 				<QrCodeDisplay
-					value={displayUrl}
+					value={qrValue}
 					size={qrCodeSize}
 				/>
-				<span className={styles.qrUrl}>{displayUrl}</span>
+				<span className={styles.qrUrl}>{rawDisplayUrl}</span>
 				<ActionButtons
 					showCopyButton={showCopyButton}
 					onCopy={onCopyUrl}

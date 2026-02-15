@@ -1,6 +1,5 @@
-import Button from '@/app/components/ui/Button/Button'
+﻿import Button from '@/app/components/ui/Button/Button'
 import Modal from '@/app/components/ui/Modal/Modal'
-import NoticeBanner from '@/app/components/ui/NoticeBanner/NoticeBanner'
 import PasswordInput from '@/app/features/auth/components/FormContent/PasswordInput'
 import commonStyles from '../../DangerTab.module.scss'
 import styles from './DeleteAccountModal.module.scss'
@@ -37,21 +36,15 @@ export default function DeleteAccountModal({
 
 				<PasswordInput
 					id='delete-account-password'
-					label='пароль'
+					label='Пароль'
 					labelStyle='secondary'
 					placeholder='Введите пароль'
 					value={password}
 					onChange={e => onPasswordChange(e.target.value)}
 					autoComplete='current-password'
 					showForgotLink={false}
+					error={error ?? undefined}
 				/>
-
-				{error && (
-					<NoticeBanner
-						message={error}
-						type='error'
-					/>
-				)}
 
 				<div className={styles.modalActions}>
 					<Button

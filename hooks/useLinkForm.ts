@@ -1,4 +1,5 @@
 ﻿'use client'
+
 import {
 	defaultFormData,
 	LinkEditFormData
@@ -148,9 +149,9 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 			const pass = (formData.password || '').trim()
 			const hasExistingPassword = Boolean(link.hasPassword)
 			if (!pass && !hasExistingPassword) {
-				passwordError = 'Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ.'
+				passwordError = 'Введите пароль.'
 			} else if (pass.length < 6 || pass.length > 128) {
-				passwordError = 'РџР°СЂРѕР»СЊ РґРѕР»Р¶РµРЅ Р±С‹С‚СЊ РѕС‚ 6 РґРѕ 128 СЃРёРјРІРѕР»РѕРІ.'
+				passwordError = 'Пароль должен быть от 6 до 128 символов.'
 			}
 		}
 

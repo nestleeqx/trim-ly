@@ -1,6 +1,11 @@
-'use client'
+﻿'use client'
 
-import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
+import { downloadQrPng } from '@/app/features/links/utils/downloadQrPng'
+import { withQrSource } from '@/app/features/links/utils/qrTracking'
+import {
+	extractSlugFromShortLink,
+	toShortLinkHref
+} from '@/app/features/links/utils/shortLink'
 import { LinkItem } from '@/types/links'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
@@ -121,9 +126,21 @@ export const useLinkActions = ({
 		[onRestore]
 	)
 
-	const handleDownloadQr = useCallback(() => {
-		setQrModalLink(null)
-	}, [])
+	const handleDownloadQr = useCallback(async () => {
+		if (!qrModalLink) return
+		try {
+			const qrValue = withQrSource(toShortLinkHref(qrModalLink.shortUrl))
+			const slug =
+				extractSlugFromShortLink(qrModalLink.shortUrl) || qrModalLink.id
+			await downloadQrPng({
+				value: qrValue,
+				fileName: `qr-${slug}.png`
+			})
+			setQrModalLink(null)
+		} catch {
+			// noop: keeping current modal open is enough fallback here
+		}
+	}, [qrModalLink])
 
 	const handleCopyQrUrl = useCallback(() => {
 		if (qrModalLink) {

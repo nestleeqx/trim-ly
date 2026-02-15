@@ -19,7 +19,8 @@ const EMPTY_ANALYTICS: LinkAnalyticsResponse = {
 		{ id: 'clicks', value: '0', change: 0 },
 		{ id: 'visitors', value: '0', change: 0 },
 		{ id: 'avgPerDay', value: '0', change: 0 },
-		{ id: 'topCountry', value: '-', change: 0 }
+		{ id: 'topCountry', value: '-', change: 0 },
+		{ id: 'qrScans', value: '0', change: 0 }
 	],
 	chart: {
 		points: [],

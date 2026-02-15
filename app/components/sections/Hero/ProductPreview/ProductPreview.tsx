@@ -1,10 +1,13 @@
-'use client'
+﻿'use client'
 
 import Toast from '@/app/components/ui/Toast/Toast'
 import QrCodeModal from '@/app/features/links/components/QrCodeModal/QrCodeModal'
+import { downloadQrPng } from '@/app/features/links/utils/downloadQrPng'
+import { withQrSource } from '@/app/features/links/utils/qrTracking'
+import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
 import { useActionCallbacks } from '@/hooks/useActionCallbacks'
 import { useToast } from '@/hooks/useToast'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import ActivityChart from './ActivityChart'
 import LinksTableHero from './LinksTableHero'
 import { mockChartData, mockLinks, PreviewTab } from './preview.config'
@@ -13,13 +16,15 @@ import styles from './ProductPreview.module.scss'
 import QrBadge from './QrBadge'
 import UrlInput from './UrlInput'
 
-const QR_SLUG = 'trim.ly/launch-v2'
-
 export default function ProductPreview() {
 	const { toast, showToast, hideToast } = useToast()
 	const { handleCopy, handleCreate } = useActionCallbacks({ showToast })
 	const [showQrModal, setShowQrModal] = useState(false)
 	const [activeTab, setActiveTab] = useState<PreviewTab>('links')
+	const landingUrl = useMemo(
+		() => process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000',
+		[]
+	)
 
 	const scrollToAnalytics = useCallback(() => {
 		const element = document.getElementById('analytics')
@@ -32,10 +37,18 @@ export default function ProductPreview() {
 	const openQrModal = useCallback(() => setShowQrModal(true), [])
 	const closeQrModal = useCallback(() => setShowQrModal(false), [])
 
-	const handleQrDownload = useCallback(() => {
-		showToast('QR-код сохранен!')
-		closeQrModal()
-	}, [showToast, closeQrModal])
+	const handleQrDownload = useCallback(async () => {
+		try {
+			await downloadQrPng({
+				value: withQrSource(toShortLinkHref(landingUrl)),
+				fileName: 'qr-landing-page.png'
+			})
+			showToast('QR-код сохранен!')
+			closeQrModal()
+		} catch {
+			showToast('Не удалось скачать QR-код')
+		}
+	}, [showToast, closeQrModal, landingUrl])
 
 	return (
 		<div className={styles.right}>
@@ -47,7 +60,7 @@ export default function ProductPreview() {
 
 			{showQrModal && (
 				<QrCodeModal
-					url={QR_SLUG}
+					url={landingUrl}
 					onClose={closeQrModal}
 					onDownload={handleQrDownload}
 				/>

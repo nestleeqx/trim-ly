@@ -14,12 +14,16 @@ interface SlugPageProps {
 	params: Promise<{
 		slug: string
 	}>
+	searchParams: Promise<{
+		src?: string
+	}>
 }
 
 export const dynamic = 'force-dynamic'
 
-export default async function SlugPage({ params }: SlugPageProps) {
+export default async function SlugPage({ params, searchParams }: SlugPageProps) {
 	const { slug } = await params
+	const { src } = await searchParams
 
 	let resolved: Awaited<ReturnType<typeof resolvePublicLink>>
 	try {
@@ -45,7 +49,8 @@ export default async function SlugPage({ params }: SlugPageProps) {
 			await registerPublicClick({
 				linkId: resolved.link.id,
 				userId: resolved.link.userId,
-				headers: requestHeaders
+				headers: requestHeaders,
+				source: src
 			})
 		} catch {}
 

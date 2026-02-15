@@ -4,11 +4,11 @@ import { calculateTrend } from './helpers'
 import styles from './LinkTableRow.module.scss'
 
 interface TrendCellProps {
-	clicks: number
+	trend: number
 }
 
-export default function TrendCell({ clicks }: TrendCellProps) {
-	const trend = calculateTrend(clicks)
+export default function TrendCell({ trend: trendValue }: TrendCellProps) {
+	const trend = calculateTrend(trendValue)
 	const trendStyleClass =
 		trend.className === 'positive'
 			? styles.trendPositive

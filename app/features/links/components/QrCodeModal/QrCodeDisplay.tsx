@@ -1,5 +1,7 @@
-'use client'
+﻿'use client'
 
+import { buildQrImageUrl } from '@/app/features/links/utils/downloadQrPng'
+import { useEffect, useState } from 'react'
 import styles from './QrCodeModal.module.scss'
 
 interface QrCodeDisplayProps {
@@ -7,14 +9,34 @@ interface QrCodeDisplayProps {
 	value?: string
 }
 
-/**
- * QrCodeDisplay - отображает QR-код
- * TODO: Интегрировать реальную библиотеку QR-генератора (qrcode.react или qrcode)
- */
 export default function QrCodeDisplay({
 	size = 200,
 	value
 }: QrCodeDisplayProps) {
+	const [src, setSrc] = useState('')
+
+	useEffect(() => {
+		let active = true
+		if (!value) {
+			setSrc('')
+			return
+		}
+
+		void buildQrImageUrl(value, Math.max(size, 256))
+			.then(dataUrl => {
+				if (!active) return
+				setSrc(dataUrl)
+			})
+			.catch(() => {
+				if (!active) return
+				setSrc('')
+			})
+
+		return () => {
+			active = false
+		}
+	}, [value, size])
+
 	return (
 		<div
 			className={styles.qrCode}
@@ -26,8 +48,15 @@ export default function QrCodeDisplay({
 			role='img'
 			aria-label={value ? `QR код для ${value}` : 'QR код'}
 		>
-			{/* Плейсхолдер для QR-кода */}
-			{/* Когда добавится библиотека, сюда будет QR компонент */}
+			{src ? (
+				<img
+					src={src}
+					alt='QR код'
+					width={size}
+					height={size}
+					className={styles.qrImage}
+				/>
+			) : null}
 		</div>
 	)
 }

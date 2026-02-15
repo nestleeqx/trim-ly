@@ -1,9 +1,11 @@
-import { z } from 'zod'
+﻿import { z } from 'zod'
 
 export const contactSchema = z.object({
 	name: z.string().min(2, 'Имя должно содержать минимум 2 символа'),
 	email: z.string().email('Введите корректный email адрес'),
-	message: z.string().min(10, 'Сообщение должно быть не менее 10 символов')
+	message: z
+		.string()
+		.min(10, 'Сообщение должно быть не менее 10 символов')
 })
 
 export type ContactFormData = z.infer<typeof contactSchema>

@@ -154,6 +154,7 @@ model LinkClickEvent {
   ipHash     String?
   country    String?
   city       String?
+  source     String?
   referrer   String?
   userAgent  String?
   deviceType String?
@@ -161,4 +162,5 @@ model LinkClickEvent {
   browser    String?
 
   @@index([linkId, clickedAt])
+  @@index([source, clickedAt])
 }

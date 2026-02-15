@@ -1,4 +1,4 @@
-import { authOptions } from '@/auth'
+﻿import { authOptions } from '@/auth'
 import prisma from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
@@ -38,6 +38,18 @@ function getRange(req: Request, period: Period) {
 
 	const days = period === '90d' ? 90 : period === '30d' ? 30 : 7
 	return { from: new Date(now.getTime() - (days - 1) * DAY_MS), to }
+}
+
+function getPreviousRange(from: Date, to: Date) {
+	const duration = to.getTime() - from.getTime()
+	const prevTo = new Date(from.getTime() - 1)
+	const prevFrom = new Date(prevTo.getTime() - duration)
+	return { from: prevFrom, to: prevTo }
+}
+
+function calcChange(current: number, previous: number) {
+	if (previous <= 0) return current > 0 ? 100 : 0
+	return Math.round(((current - previous) / previous) * 100)
 }
 
 function formatDayLabel(date: Date) {
@@ -144,8 +156,9 @@ export async function GET(req: Request, context: RouteContext) {
 
 	const period = parsePeriod(req)
 	const { from, to } = getRange(req, period)
+	const { from: prevFrom, to: prevTo } = getPreviousRange(from, to)
 
-	const [events, recentEvents] = await Promise.all([
+	const [events, prevEvents, recentEvents] = await Promise.all([
 		prisma.linkClickEvent.findMany({
 			where: {
 				linkId: id,
@@ -155,6 +168,24 @@ export async function GET(req: Request, context: RouteContext) {
 				clickedAt: true,
 				ipHash: true,
 				country: true,
+				source: true,
+				referrer: true,
+				userAgent: true,
+				deviceType: true,
+				browser: true
+			},
+			orderBy: { clickedAt: 'asc' }
+		}),
+		prisma.linkClickEvent.findMany({
+			where: {
+				linkId: id,
+				clickedAt: { gte: prevFrom, lte: prevTo }
+			},
+			select: {
+				clickedAt: true,
+				ipHash: true,
+				country: true,
+				source: true,
 				referrer: true,
 				userAgent: true,
 				deviceType: true,
@@ -170,6 +201,7 @@ export async function GET(req: Request, context: RouteContext) {
 			select: {
 				clickedAt: true,
 				country: true,
+				source: true,
 				referrer: true,
 				userAgent: true,
 				deviceType: true,
@@ -181,6 +213,7 @@ export async function GET(req: Request, context: RouteContext) {
 	])
 
 	const totalClicks = events.length
+	const qrScans = events.filter(event => event.source === 'qr').length
 	const uniqueVisitors = new Set(
 		events.map((event, idx) => event.ipHash || event.userAgent || `anon-${idx}`)
 	).size
@@ -189,6 +222,19 @@ export async function GET(req: Request, context: RouteContext) {
 		Math.floor((to.getTime() - from.getTime()) / DAY_MS) + 1
 	)
 	const avgPerDay = Math.round(totalClicks / daysSpan)
+
+	const prevTotalClicks = prevEvents.length
+	const prevQrScans = prevEvents.filter(event => event.source === 'qr').length
+	const prevUniqueVisitors = new Set(
+		prevEvents.map(
+			(event, idx) => event.ipHash || event.userAgent || `anon-prev-${idx}`
+		)
+	).size
+	const prevDaysSpan = Math.max(
+		1,
+		Math.floor((prevTo.getTime() - prevFrom.getTime()) / DAY_MS) + 1
+	)
+	const prevAvgPerDay = Math.round(prevTotalClicks / prevDaysSpan)
 
 	const countryCounts = new Map<string, number>()
 	const referrerCounts = new Map<string, number>()
@@ -261,27 +307,40 @@ export async function GET(req: Request, context: RouteContext) {
 	const topCountryLabel = topCountries[0]
 		? `${topCountries[0].name} (${topCountries[0].percentage}%)`
 		: '—'
+	const topCountryClicks = topCountries[0]?.clicks ?? 0
+	const prevCountryCounts = new Map<string, number>()
+	for (const event of prevEvents) {
+		const country = toCountryName(event.country)
+		prevCountryCounts.set(country, (prevCountryCounts.get(country) || 0) + 1)
+	}
+	const prevTopCountryClicks =
+		[...prevCountryCounts.values()].sort((a, b) => b - a)[0] ?? 0
 
 	const statsCards = [
 		{
 			id: 'clicks',
 			value: totalClicks.toLocaleString('ru-RU'),
-			change: 0
+			change: calcChange(totalClicks, prevTotalClicks)
 		},
 		{
 			id: 'visitors',
 			value: uniqueVisitors.toLocaleString('ru-RU'),
-			change: 0
+			change: calcChange(uniqueVisitors, prevUniqueVisitors)
 		},
 		{
 			id: 'avgPerDay',
 			value: avgPerDay.toLocaleString('ru-RU'),
-			change: 0
+			change: calcChange(avgPerDay, prevAvgPerDay)
 		},
 		{
 			id: 'topCountry',
 			value: topCountryLabel,
-			change: 0
+			change: calcChange(topCountryClicks, prevTopCountryClicks)
+		},
+		{
+			id: 'qrScans',
+			value: qrScans.toLocaleString('ru-RU'),
+			change: calcChange(qrScans, prevQrScans)
 		}
 	]
 

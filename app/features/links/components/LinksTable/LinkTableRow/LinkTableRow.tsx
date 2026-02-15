@@ -53,7 +53,7 @@ export default function LinkTableRow({
 			/>
 			<ShortUrlCell shortUrl={link.shortUrl} />
 			<ClicksCell clicks={link.clicks} />
-			{showTrend ? <TrendCell clicks={link.clicks} /> : null}
+			{showTrend ? <TrendCell trend={link.trend ?? 0} /> : null}
 			<StatusCell status={link.status} />
 			<DateCell date={link.createdAt} />
 			{showActions ? (

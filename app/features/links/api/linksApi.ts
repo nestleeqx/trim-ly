@@ -1,4 +1,4 @@
-export type CreateLinkPayload = {
+﻿export type CreateLinkPayload = {
 	targetUrl: string
 	slug: string
 	title?: string
@@ -24,6 +24,7 @@ export type LinkListItemDto = {
 	shortUrl: string
 	destination: string
 	clicks: number
+	trend?: number
 	status: 'active' | 'paused' | 'expired' | 'deleted'
 	tags: string[]
 	createdAt: string
@@ -33,7 +34,7 @@ export type LinkListItemDto = {
 
 export type LinkAnalyticsResponse = {
 	statsCards: Array<{
-		id: 'clicks' | 'visitors' | 'avgPerDay' | 'topCountry'
+		id: 'clicks' | 'visitors' | 'avgPerDay' | 'topCountry' | 'qrScans'
 		value: string
 		change: number
 	}>
@@ -105,6 +106,12 @@ export type GetLinksResponse = {
 export type LinkAction = 'pause' | 'resume' | 'restore'
 export type BulkLinkAction = 'pause' | 'resume' | 'delete' | 'restore'
 
+function emitBillingUpdated() {
+	if (typeof window !== 'undefined') {
+		window.dispatchEvent(new Event('billing-updated'))
+	}
+}
+
 export function mapCreateLinkError(raw: string): string {
 	switch (raw) {
 		case 'Failed to fetch':
@@ -121,6 +128,8 @@ export function mapCreateLinkError(raw: string): string {
 			return 'Пароль должен быть от 6 до 128 символов.'
 		case 'Some tags are invalid':
 			return 'Некоторые теги недоступны.'
+		case 'Links limit reached':
+			return 'Достигнут лимит ссылок для текущего тарифа.'
 		case 'Unauthorized':
 			return 'Сессия истекла. Войдите снова.'
 		case 'Invalid action':
@@ -217,6 +226,7 @@ export async function createLink(
 		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
 	}
 
+	emitBillingUpdated()
 	return data as CreateLinkResponse
 }
 
@@ -300,6 +310,10 @@ export async function patchLinkStatus(
 	if (!res.ok) {
 		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
 	}
+
+	if (action === 'restore') {
+		emitBillingUpdated()
+	}
 }
 
 export async function deleteLink(id: string): Promise<void> {
@@ -309,6 +323,8 @@ export async function deleteLink(id: string): Promise<void> {
 	if (!res.ok) {
 		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
 	}
+
+	emitBillingUpdated()
 }
 
 export async function bulkLinkAction(
@@ -326,7 +342,13 @@ export async function bulkLinkAction(
 		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
 	}
 
+	if (action === 'delete' || action === 'restore') {
+		emitBillingUpdated()
+	}
+
 	return {
 		affected: Number((data as any)?.affected ?? 0)
 	}
 }
+
+

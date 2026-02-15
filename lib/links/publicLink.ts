@@ -90,14 +90,23 @@ function getCity(headers: Headers) {
 	return city || null
 }
 
+function normalizeSource(value: string | null | undefined) {
+	if (!value) return null
+	const normalized = value.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '')
+	if (!normalized) return null
+	return normalized.slice(0, 24)
+}
+
 export async function registerPublicClick(params: {
 	linkId: string
 	userId: string
 	headers: Headers
+	source?: string
 }) {
-	const { linkId, userId, headers } = params
+	const { linkId, userId, headers, source } = params
 	const userAgent = headers.get('user-agent')?.slice(0, 512) || null
 	const referrer = headers.get('referer')?.slice(0, 2048) || null
+	const normalizedSource = normalizeSource(source)
 	const country = getCountry(headers)
 	const city = getCity(headers)
 
@@ -106,6 +115,20 @@ export async function registerPublicClick(params: {
 	const ipHash = rawIp
 		? createHash('sha256').update(`${salt}:${rawIp}`).digest('hex')
 		: null
+
+	const userWithPlan = await prisma.user.findUnique({
+		where: { id: userId },
+		select: {
+			plan: { select: { clicksLimit: true } },
+			usage: { select: { clicksTotal: true } }
+		}
+	})
+
+	if (!userWithPlan || !userWithPlan.plan) return
+
+	const clicksLimit = userWithPlan.plan.clicksLimit
+	const clicksTotal = userWithPlan.usage?.clicksTotal ?? 0
+	if (clicksTotal >= clicksLimit) return
 
 	await prisma.$transaction([
 		prisma.link.update({
@@ -123,6 +146,7 @@ export async function registerPublicClick(params: {
 				ipHash,
 				country,
 				city,
+				source: normalizedSource,
 				referrer,
 				userAgent
 			}

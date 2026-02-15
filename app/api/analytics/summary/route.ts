@@ -27,6 +27,18 @@ function getRange(period: AnalyticsPeriod) {
 	return { from: new Date(to.getTime() - days * DAY_MS), to }
 }
 
+function getPreviousRange(from: Date, to: Date) {
+	const duration = to.getTime() - from.getTime()
+	const prevTo = new Date(from.getTime() - 1)
+	const prevFrom = new Date(prevTo.getTime() - duration)
+	return { from: prevFrom, to: prevTo }
+}
+
+function calcChange(current: number, previous: number) {
+	if (previous <= 0) return current > 0 ? 100 : 0
+	return Math.round(((current - previous) / previous) * 100)
+}
+
 export async function GET(req: Request) {
 	const session = await getServerSession(authOptions)
 	const userId = session?.user?.id
@@ -37,11 +49,18 @@ export async function GET(req: Request) {
 
 	const period = parsePeriod(req)
 	const { from, to } = getRange(period)
+	const { from: prevFrom, to: prevTo } = getPreviousRange(from, to)
 	const activeLinkWhere = {
 		userId,
 		deletedAt: null as null,
 		status: 'active' as const,
 		OR: [{ expiresAt: null }, { expiresAt: { gt: to } }]
+	}
+	const previousActiveLinkWhere = {
+		userId,
+		deletedAt: null as null,
+		status: 'active' as const,
+		OR: [{ expiresAt: null }, { expiresAt: { gt: prevTo } }]
 	}
 	const eventWhere = {
 		clickedAt: { gte: from, lte: to },
@@ -50,10 +69,28 @@ export async function GET(req: Request) {
 			deletedAt: null as null
 		}
 	}
+	const previousEventWhere = {
+		clickedAt: { gte: prevFrom, lte: prevTo },
+		link: {
+			userId,
+			deletedAt: null as null
+		}
+	}
 
-	const [totalClicks, activeLinks, topLinkClicks, qrScans] = await Promise.all([
+	const [
+		totalClicks,
+		prevTotalClicks,
+		activeLinks,
+		prevActiveLinks,
+		topLinkClicks,
+		prevTopLinkClicks,
+		qrScans,
+		prevQrScans
+	] = await Promise.all([
 		prisma.linkClickEvent.count({ where: eventWhere }),
+		prisma.linkClickEvent.count({ where: previousEventWhere }),
 		prisma.link.count({ where: activeLinkWhere }),
+		prisma.link.count({ where: previousActiveLinkWhere }),
 		prisma.linkClickEvent.groupBy({
 			by: ['linkId'],
 			where: eventWhere,
@@ -61,29 +98,52 @@ export async function GET(req: Request) {
 			orderBy: { _count: { linkId: 'desc' } },
 			take: 1
 		}),
+		prisma.linkClickEvent.groupBy({
+			by: ['linkId'],
+			where: previousEventWhere,
+			_count: { linkId: true },
+			orderBy: { _count: { linkId: 'desc' } },
+			take: 1
+		}),
 		prisma.linkClickEvent.count({
 			where: {
 				...eventWhere,
-				OR: [
-					{ referrer: { contains: 'utm_source=qr', mode: 'insensitive' } },
-					{ referrer: { contains: 'qrcode', mode: 'insensitive' } },
-					{ referrer: { contains: '/qr', mode: 'insensitive' } }
-				]
+				source: 'qr'
+			}
+		}),
+		prisma.linkClickEvent.count({
+			where: {
+				...previousEventWhere,
+				source: 'qr'
 			}
 		})
 	])
+	const topCurrent = topLinkClicks[0]?._count.linkId ?? 0
+	const topPrevious = prevTopLinkClicks[0]?._count.linkId ?? 0
 
 	return NextResponse.json({
 		period,
 		stats: [
-			{ id: 'clicks', value: formatNumber(totalClicks), change: 0 },
-			{ id: 'links', value: formatNumber(activeLinks), change: 0 },
+			{
+				id: 'clicks',
+				value: formatNumber(totalClicks),
+				change: calcChange(totalClicks, prevTotalClicks)
+			},
+			{
+				id: 'links',
+				value: formatNumber(activeLinks),
+				change: calcChange(activeLinks, prevActiveLinks)
+			},
 			{
 				id: 'top',
-				value: formatNumber(topLinkClicks[0]?._count.linkId ?? 0),
-				change: 0
+				value: formatNumber(topCurrent),
+				change: calcChange(topCurrent, topPrevious)
 			},
-			{ id: 'qr', value: formatNumber(qrScans), change: 0 }
+			{
+				id: 'qr',
+				value: formatNumber(qrScans),
+				change: calcChange(qrScans, prevQrScans)
+			},
 		]
 	})
 }

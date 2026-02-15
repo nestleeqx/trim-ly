@@ -4,9 +4,8 @@ export interface TrendData {
 	className: 'positive' | 'negative' | 'neutral'
 }
 
-export const calculateTrend = (clicks: number): TrendData => {
-	void clicks
-	const trend = 0
+export const calculateTrend = (rawTrend: number): TrendData => {
+	const trend = Number.isFinite(rawTrend) ? Math.round(rawTrend) : 0
 
 	let className: 'positive' | 'negative' | 'neutral' = 'neutral'
 	if (trend > 0) className = 'positive'

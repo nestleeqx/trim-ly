@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import {
 	createLink,
@@ -10,10 +10,9 @@ import {
 	EMPTY_LINK,
 	INITIAL_LINK_FORM_DATA
 } from '@/app/features/links/constants/newLinkDefaults'
-import {
-	buildShortLink,
-	toShortLinkHref
-} from '@/app/features/links/utils/shortLink'
+import { withQrSource } from '@/app/features/links/utils/qrTracking'
+import { buildShortLink, toShortLinkHref } from '@/app/features/links/utils/shortLink'
+import { downloadQrPng } from '@/app/features/links/utils/downloadQrPng'
 import { useToast } from '@/hooks/useToast'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
@@ -91,9 +90,26 @@ export default function useCreateLinkPage() {
 		showToast('Ссылка скопирована')
 	}, [formData.shortLink, showToast])
 
-	const handleDownloadQr = useCallback(() => {
-		showToast('QR-код сохранен')
-	}, [showToast])
+	const handleDownloadQr = useCallback(async () => {
+		try {
+			const slug = formData.shortLink.trim()
+			if (!slug) {
+				showToast('Сначала укажите slug для короткой ссылки.', 'error')
+				return
+			}
+
+			const shortUrl = withQrSource(
+				toShortLinkHref(buildShortLink(slug))
+			)
+			await downloadQrPng({
+				value: shortUrl,
+				fileName: `qr-${slug}.png`
+			})
+			showToast('QR-код сохранён', 'success')
+		} catch {
+			showToast('Не удалось скачать QR-код.', 'error')
+		}
+	}, [formData.shortLink, showToast])
 
 	return {
 		emptyLink: EMPTY_LINK,

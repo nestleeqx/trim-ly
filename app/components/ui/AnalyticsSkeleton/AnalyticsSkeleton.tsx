@@ -4,12 +4,16 @@ import styles from './AnalyticsSkeleton.module.scss'
 
 interface SkeletonBlockProps {
 	className?: string
+	cardsCount?: number
 }
 
-export function AnalyticsStatsSkeleton({ className }: SkeletonBlockProps) {
+export function AnalyticsStatsSkeleton({
+	className,
+	cardsCount = 4
+}: SkeletonBlockProps) {
 	return (
 		<div className={`${styles.statsGrid} ${className ?? ''}`.trim()}>
-			{Array.from({ length: 4 }).map((_, idx) => (
+			{Array.from({ length: cardsCount }).map((_, idx) => (
 				<div
 					key={idx}
 					className={styles.statsCard}

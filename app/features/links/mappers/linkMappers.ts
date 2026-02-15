@@ -10,6 +10,7 @@ export function mapLinkDtoToItem(link: LinkDto): LinkItem {
 		shortUrl: link.shortUrl,
 		destination: link.destination,
 		clicks: link.clicks,
+		trend: link.trend ?? 0,
 		status: link.status,
 		tags: link.tags,
 		createdAt: new Date(link.createdAt),
