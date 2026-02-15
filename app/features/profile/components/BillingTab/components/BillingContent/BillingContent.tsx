@@ -15,6 +15,15 @@ type Props = {
 }
 
 export default function BillingContent({ data }: Props) {
+	const isLinksLimitReached =
+		data.usage.linksLimit > 0 && data.usage.linksCreated >= data.usage.linksLimit
+	const isClicksLimitReached =
+		data.usage.clicksLimit > 0 && data.usage.clicksTotal >= data.usage.clicksLimit
+	const limitNotice =
+		isLinksLimitReached || isClicksLimitReached
+			? 'Вы достигли лимита. Нужен тариф выше.'
+			: null
+
 	const usageMetrics = [
 		{
 			label: 'Создано ссылок',
@@ -62,7 +71,10 @@ export default function BillingContent({ data }: Props) {
 					planName={normalizePlanName(data.plan.id, data.plan.name)}
 					status={normalizeSubscriptionStatus(data.plan.status)}
 				/>
-				<UsageStatsCard metrics={usageMetrics} />
+				<UsageStatsCard
+					metrics={usageMetrics}
+					limitNotice={limitNotice}
+				/>
 			</div>
 
 			<InvoiceHistoryTable

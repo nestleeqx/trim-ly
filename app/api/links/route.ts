@@ -16,6 +16,7 @@ function normalizeSlug(value: string) {
 
 const MIN_SLUG_LENGTH = 3
 const MAX_SLUG_LENGTH = 25
+const TREND_WINDOW_DAYS = 7
 type UiStatus = 'active' | 'paused' | 'expired' | 'deleted'
 type SortFieldApi =
 	| 'created_date'
@@ -146,6 +147,11 @@ function parseSort(req: Request): { field: SortFieldApi; order: SortOrderApi } {
 
 	const order: SortOrderApi = orderRaw === 'asc' ? 'asc' : 'desc'
 	return { field, order }
+}
+
+function calculateTrendPercent(current: number, previous: number): number {
+	if (previous <= 0) return current > 0 ? 100 : 0
+	return Math.round(((current - previous) / previous) * 100)
 }
 
 export async function GET(req: Request) {
@@ -289,10 +295,51 @@ export async function GET(req: Request) {
 		prisma.link.count({ where })
 	])
 
+	const linkIds = links.map(link => link.id)
+	const nowDate = new Date()
+	const currentFrom = new Date(
+		nowDate.getTime() - TREND_WINDOW_DAYS * 24 * 60 * 60 * 1000
+	)
+	const previousFrom = new Date(
+		currentFrom.getTime() - TREND_WINDOW_DAYS * 24 * 60 * 60 * 1000
+	)
+
+	const [currentCounts, previousCounts] = linkIds.length
+		? await Promise.all([
+				prisma.linkClickEvent.groupBy({
+					by: ['linkId'],
+					where: {
+						linkId: { in: linkIds },
+						clickedAt: { gte: currentFrom, lt: nowDate }
+					},
+					_count: { _all: true }
+				}),
+				prisma.linkClickEvent.groupBy({
+					by: ['linkId'],
+					where: {
+						linkId: { in: linkIds },
+						clickedAt: { gte: previousFrom, lt: currentFrom }
+					},
+					_count: { _all: true }
+				})
+		  ])
+		: [[], []]
+
+	const currentMap = new Map(
+		currentCounts.map(item => [item.linkId, item._count._all])
+	)
+	const previousMap = new Map(
+		previousCounts.map(item => [item.linkId, item._count._all])
+	)
+
 	const totalPages = Math.max(1, Math.ceil(totalFiltered / pageSize))
 
 	return NextResponse.json({
 		links: links.map(link => ({
+			trend: calculateTrendPercent(
+				currentMap.get(link.id) ?? 0,
+				previousMap.get(link.id) ?? 0
+			),
 			id: link.id,
 			title: link.title || 'Без названия',
 			shortUrl: buildShortLink(link.slug),
@@ -396,6 +443,24 @@ export async function POST(req: Request) {
 		}
 	}
 
+	const userWithPlan = await prisma.user.findUnique({
+		where: { id: userId },
+		select: {
+			plan: { select: { linksLimit: true } },
+			usage: { select: { linksCreated: true } }
+		}
+	})
+
+	if (!userWithPlan || !userWithPlan.plan) {
+		return NextResponse.json({ error: 'User not found' }, { status: 404 })
+	}
+
+	const linksLimit = userWithPlan.plan.linksLimit
+	const linksCreated = userWithPlan.usage?.linksCreated ?? 0
+	if (linksCreated >= linksLimit) {
+		return NextResponse.json({ error: 'Links limit reached' }, { status: 403 })
+	}
+
 	const created = await prisma.$transaction(async tx => {
 		const link = await tx.link.create({
 			data: {
@@ -425,9 +490,10 @@ export async function POST(req: Request) {
 			})
 		}
 
-		await tx.userUsage.update({
+		await tx.userUsage.upsert({
 			where: { userId },
-			data: { linksCreated: { increment: 1 } }
+			create: { userId, linksCreated: 1, clicksTotal: 0 },
+			update: { linksCreated: { increment: 1 } }
 		})
 
 		return link

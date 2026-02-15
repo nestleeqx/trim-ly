@@ -24,7 +24,6 @@
 .input {
 	width: 100%;
 	padding: 12px $spacing-md;
-	border: 1px solid $color-border;
 	border-radius: $border-radius-md;
 	font-size: $font-size-sm;
 	color: $color-text-primary;
@@ -48,21 +47,12 @@
 	}
 }
 
-.labelRow {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.inputWrapper {
-	position: relative;
+.inputWithAdornment {
+	padding-right: 44px;
 }
 
 .passwordToggle {
-	position: absolute;
-	right: 12px;
-	top: 50%;
-	transform: translateY(-50%);
+	position: static;
 	background: none;
 	border: none;
 	color: $color-text-secondary;

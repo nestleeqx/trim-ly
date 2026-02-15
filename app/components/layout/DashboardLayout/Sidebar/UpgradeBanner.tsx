@@ -6,13 +6,18 @@ import styles from './Sidebar.module.scss'
 interface UpgradeBannerProps {
 	planName?: string
 	onUpgradeClick?: () => void
+	isLimitReached?: boolean
 }
 
 export default function UpgradeBanner({
 	planName = 'Бесплатный план',
-	onUpgradeClick
+	onUpgradeClick,
+	isLimitReached = false
 }: UpgradeBannerProps) {
 	const router = useRouter()
+	const normalizedPlan = planName.trim().toLowerCase()
+	const isPaidPlan =
+		normalizedPlan.includes('pro') || normalizedPlan.includes('команда')
 
 	const handleClick = () => {
 		if (onUpgradeClick) return onUpgradeClick()
@@ -21,6 +26,11 @@ export default function UpgradeBanner({
 
 	return (
 		<>
+			{isLimitReached && (
+				<div className={styles.upgradeHint}>
+					<span>Вы достигли лимита. Нужен тариф выше.</span>
+				</div>
+			)}
 			<Button
 				variant='primary'
 				size='lg'
@@ -28,7 +38,13 @@ export default function UpgradeBanner({
 				className={styles.upgradeBtn}
 			>
 				<Zap className={styles.upgradeIcon} />
-				<span>Перейти на Pro</span>
+				<span>
+					{isLimitReached
+						? 'Обновить тариф'
+						: isPaidPlan
+							? 'Управление тарифом'
+							: 'Перейти на Pro'}
+				</span>
 			</Button>
 			<span className={styles.planText}>{planName}</span>
 		</>

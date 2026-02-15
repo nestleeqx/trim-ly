@@ -1,5 +1,6 @@
-'use client'
+﻿'use client'
 
+import FormField from '@/app/components/ui/FormField'
 import Button from '@/app/components/ui/Button/Button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2, XCircle } from 'lucide-react'
@@ -54,41 +55,43 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
 			onSubmit={handleSubmit(onSubmit)}
 			noValidate
 		>
+			<div className={styles.demoNotice}>
+				Это демо-форма для портфолио. Сообщения не отправляются в реальную
+				поддержку.
+			</div>
+
 			{formFields.map(field => {
-				const hasError = !!errors[field.id]
-				const commonProps = {
+				const errorMessage = errors[field.id]?.message
+				const sharedProps = {
 					id: field.id,
+					label: field.label,
 					placeholder: field.placeholder,
 					disabled: isSubmitting,
-					className: hasError ? styles.inputError : '',
-					...register(field.id)
+					error:
+						typeof errorMessage === 'string'
+							? errorMessage
+							: undefined
 				}
 
-				return (
-					<div
+				return field.type === 'textarea' ? (
+					<FormField
 						key={field.id}
-						className={styles.field}
-					>
-						<label htmlFor={field.id}>{field.label}</label>
-
-						{field.type === 'textarea' ? (
-							<textarea
-								{...commonProps}
-								rows={field.rows}
-							/>
-						) : (
-							<input
-								{...commonProps}
-								type={field.type}
-							/>
-						)}
-
-						{hasError && (
-							<span className={styles.errorMessage}>
-								{errors[field.id]?.message}
-							</span>
-						)}
-					</div>
+						as='textarea'
+						rows={field.rows}
+						{...sharedProps}
+						textareaProps={{
+							...register(field.id)
+						}}
+					/>
+				) : (
+					<FormField
+						key={field.id}
+						type={field.type}
+						{...sharedProps}
+						inputProps={{
+							...register(field.id)
+						}}
+					/>
 				)
 			})}
 

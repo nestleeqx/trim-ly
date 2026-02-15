@@ -1,7 +1,8 @@
-'use client'
+﻿'use client'
 
+import FormField from '@/app/components/ui/FormField'
 import { normalizeUrl, validateUrl } from '@/utils/validation'
-import { AlertCircle, Link2 } from 'lucide-react'
+import { Link2 } from 'lucide-react'
 import React, { useCallback } from 'react'
 import styles from './LinkEdit.module.scss'
 
@@ -41,32 +42,20 @@ export default function DestinationUrlInput({
 	}, [value, onChange, onError, onTouch])
 
 	return (
-		<div className={styles.formGroup}>
-			<label className={styles.label}>Целевой URL</label>
-			<div className={styles.inputWrapper}>
-				<Link2
-					size={18}
-					className={styles.inputIcon}
-				/>
-				<input
-					type='text'
-					name='destinationUrl'
-					value={value}
-					onChange={handleChange}
-					onBlur={handleBlur}
-					placeholder='https://example.com/very/long/link'
-					className={`${styles.input} ${
-						touched && error ? styles.error : ''
-					}`}
-					required
-				/>
-			</div>
-			{touched && error && (
-				<span className={styles.fieldError}>
-					<AlertCircle size={12} />
-					{error}
-				</span>
-			)}
-		</div>
+		<FormField
+			id='destinationUrl'
+			label='Целевой URL'
+			type='text'
+			value={value}
+			onChange={handleChange}
+			onBlur={handleBlur}
+			placeholder='https://example.com/very/long/link'
+			error={touched ? error : undefined}
+			required
+			leftIcon={<Link2 size={18} />}
+			className={styles.formGroup}
+			labelClassName={styles.label}
+			inputClassName={styles.input}
+		/>
 	)
 }

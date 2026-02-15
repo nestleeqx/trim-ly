@@ -22,7 +22,29 @@ async function main() {
 		}
 	})
 
-	console.log('Seeded plan:', free.id)
+	const pro = await prisma.plan.upsert({
+		where: { id: 'pro' },
+		update: {},
+		create: {
+			id: 'pro',
+			name: 'Pro',
+			linksLimit: 1000,
+			clicksLimit: 100000
+		}
+	})
+
+	const team = await prisma.plan.upsert({
+		where: { id: 'team' },
+		update: {},
+		create: {
+			id: 'team',
+			name: 'Team',
+			linksLimit: 10000,
+			clicksLimit: 1000000
+		}
+	})
+
+	console.log('Seeded plans:', [free.id, pro.id, team.id].join(', '))
 }
 
 main()

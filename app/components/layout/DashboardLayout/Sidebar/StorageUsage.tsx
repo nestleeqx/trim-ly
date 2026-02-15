@@ -4,11 +4,12 @@ interface StorageUsageProps {
 	used: number
 	max: number
 	label?: string
+	isLimitReached?: boolean
 }
 
 const formatNumber = (num: number): string => {
 	if (num >= 1000) {
-		return `${(num / 1000).toFixed(1)}k`
+		return `${num / 1000}k`
 	}
 	return num.toString()
 }
@@ -16,7 +17,8 @@ const formatNumber = (num: number): string => {
 export default function StorageUsage({
 	used,
 	max,
-	label = 'ХРАНИЛИЩЕ'
+	label = 'ХРАНИЛИЩЕ',
+	isLimitReached = false
 }: StorageUsageProps) {
 	const usagePercent = max > 0 ? Math.min((used / max) * 100, 100) : 0
 
@@ -25,7 +27,7 @@ export default function StorageUsage({
 			<span className={styles.storageLabel}>{label}</span>
 			<div className={styles.progressBar}>
 				<div
-					className={styles.progressFill}
+					className={`${styles.progressFill} ${isLimitReached ? styles.progressFillDanger : ''}`}
 					style={{ width: `${usagePercent}%` }}
 				/>
 			</div>

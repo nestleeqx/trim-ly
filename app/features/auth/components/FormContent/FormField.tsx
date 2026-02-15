@@ -1,4 +1,4 @@
-import authSharedStyles from '@/app/(auth)/AuthShared.module.scss'
+import BaseFormField from '@/app/components/ui/FormField'
 import cn from 'classnames'
 import styles from './FormContent.module.scss'
 
@@ -28,39 +28,22 @@ export default function FormField({
 	error
 }: FormFieldProps) {
 	return (
-		<div className={styles.formGroup}>
-			<label
-				className={cn(styles.label, {
-					[styles.labelPrimary]: labelStyle === 'primary',
-					[styles.labelSecondary]: labelStyle === 'secondary'
-				})}
-				htmlFor={id}
-			>
-				{label}
-			</label>
-
-			<input
-				id={id}
-				name={id}
-				type={type}
-				className={`${styles.input} ${error ? authSharedStyles.inputError : ''}`}
-				placeholder={placeholder}
-				value={value}
-				onChange={onChange}
-				autoComplete={autoComplete}
-				aria-invalid={!!error}
-				aria-describedby={error ? `${id}-error` : undefined}
-				disabled={disabled}
-			/>
-
-			{error && (
-				<p
-					id={`${id}-error`}
-					className={authSharedStyles.errorText}
-				>
-					{error}
-				</p>
-			)}
-		</div>
+		<BaseFormField
+			id={id}
+			label={label}
+			type={type}
+			placeholder={placeholder}
+			value={value}
+			onChange={onChange}
+			autoComplete={autoComplete}
+			disabled={disabled}
+			error={error}
+			className={styles.formGroup}
+			labelClassName={cn(styles.label, {
+				[styles.labelPrimary]: labelStyle === 'primary',
+				[styles.labelSecondary]: labelStyle === 'secondary'
+			})}
+			inputClassName={styles.input}
+		/>
 	)
 }

@@ -131,13 +131,25 @@
 	transition: width 0.3s ease;
 }
 
+.progressFillDanger {
+	background: linear-gradient(90deg, #ef4444, #f97316);
+}
+
 .storageText {
 	font-size: $font-size-sm;
 	color: var(--color-text-secondary);
 }
 
+.storageWarning {
+	font-size: $font-size-xs;
+	color: #ef4444;
+	font-weight: $font-weight-medium;
+}
+
 .upgradeBtn {
-	gap: $spacing-sm;
+	& > span {
+		font-size: $font-size-sm;
+	}
 }
 
 .upgradeIcon {
@@ -150,7 +162,20 @@
 .planText {
 	text-align: center;
 	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
 	color: var(--color-primary);
+}
+
+.upgradeHint {
+	display: flex;
+	align-items: center;
+	gap: $spacing-xs;
+	font-size: $font-size-xs;
+	color: #ef4444;
+	background: rgba(239, 68, 68, 0.08);
+	border: 1px solid rgba(239, 68, 68, 0.2);
+	border-radius: $border-radius-md;
+	padding: $spacing-xs $spacing-sm;
 }
 
 .overlay {

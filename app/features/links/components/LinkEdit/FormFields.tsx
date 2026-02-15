@@ -1,5 +1,6 @@
-'use client'
+﻿'use client'
 
+import FormField from '@/app/components/ui/FormField'
 import React, { useCallback } from 'react'
 import DestinationUrlInput from './DestinationUrlInput'
 import styles from './LinkEdit.module.scss'
@@ -66,20 +67,19 @@ export default function FormFields({
 					isEditMode={!isCreateMode}
 					onChange={value => onFieldChange('shortLink', value)}
 				/>
-				<div className={styles.formGroup}>
-					<label className={styles.label}>
-						Заголовок (необязательно)
-					</label>
-					<input
-						type='text'
-						name='title'
-						value={formData.title}
-						onChange={handleTitleChange}
-						placeholder='Example: Black Friday campaign'
-						className={styles.input}
-					/>
-					<span className={styles.hint}>Видите только вы.</span>
-				</div>
+				<FormField
+					id='title'
+					label='Заголовок (необязательно)'
+					type='text'
+					name='title'
+					value={formData.title}
+					onChange={handleTitleChange}
+					placeholder='Example: Black Friday campaign'
+					hint='Видите только вы.'
+					className={styles.formGroup}
+					labelClassName={styles.label}
+					inputClassName={styles.input}
+				/>
 			</div>
 			<TagsInput
 				tags={formData.tags}

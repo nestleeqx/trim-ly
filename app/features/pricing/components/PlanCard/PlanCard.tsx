@@ -1,9 +1,10 @@
-import Button from '@/app/components/ui/Button/Button'
+﻿import Button from '@/app/components/ui/Button/Button'
 import { Check } from 'lucide-react'
 import Link from 'next/link'
 import styles from './PlanCard.module.scss'
 
 export interface PlanLike {
+	id: 'free' | 'pro' | 'team'
 	name: string
 	monthlyPrice: string | number
 	yearlyPrice: string | number
@@ -21,15 +22,22 @@ interface PlanCardProps {
 	plan: PlanLike
 	isYearly: boolean
 	onContactClick: () => void
+	onSelectPlan?: (planId: PlanLike['id']) => void
+	currentPlanId?: PlanLike['id'] | null
+	isUpdating?: boolean
 }
 
 export default function PlanCard({
 	plan,
 	isYearly,
-	onContactClick
+	onContactClick,
+	onSelectPlan,
+	currentPlanId = null,
+	isUpdating = false
 }: PlanCardProps) {
 	const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice
 	const period = isYearly ? '/год' : '/месяц'
+	const isCurrent = currentPlanId === plan.id
 
 	return (
 		<div className={`${styles.card} ${plan.popular ? styles.popular : ''}`}>
@@ -66,29 +74,51 @@ export default function PlanCard({
 			</ul>
 
 			<div className={styles.cardFooter}>
-				{plan.isContact ? (
-					<div className={styles.buttonLink}>
-						<Button
-							variant={plan.buttonVariant}
-							size='lg'
-							onClick={onContactClick}
-						>
-							{plan.buttonText}
-						</Button>
-					</div>
-				) : (
-					<Link
-						href={plan.href || '#'}
-						className={styles.buttonLink}
-					>
-						<Button
-							variant={plan.buttonVariant}
-							size='lg'
-						>
-							{plan.buttonText}
-						</Button>
-					</Link>
-				)}
+				<div className={styles.buttonLink}>
+					{onSelectPlan ? (
+						<>
+							{plan.isContact ? (
+								<Button
+									variant={plan.buttonVariant}
+									size='lg'
+									onClick={onContactClick}
+								>
+									{plan.buttonText}
+								</Button>
+							) : (
+								<Button
+									variant={plan.buttonVariant}
+									size='lg'
+									onClick={() => onSelectPlan(plan.id)}
+									disabled={isCurrent || isUpdating}
+								>
+									{isCurrent ? 'Текущий план' : plan.buttonText}
+								</Button>
+							)}
+						</>
+					) : (
+						<>
+							{plan.isContact ? (
+								<Button
+									variant={plan.buttonVariant}
+									size='lg'
+									onClick={onContactClick}
+								>
+									{plan.buttonText}
+								</Button>
+							) : (
+								<Link href={plan.href || '#'}>
+									<Button
+										variant={plan.buttonVariant}
+										size='lg'
+									>
+										{plan.buttonText}
+									</Button>
+								</Link>
+							)}
+						</>
+					)}
+				</div>
 			</div>
 		</div>
 	)

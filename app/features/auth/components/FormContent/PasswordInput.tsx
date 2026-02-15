@@ -1,4 +1,4 @@
-import authSharedStyles from '@/app/(auth)/AuthShared.module.scss'
+﻿import BaseFormField from '@/app/components/ui/FormField'
 import { usePasswordToggle } from '@/hooks/usePasswordToggle'
 import cn from 'classnames'
 import { Eye, EyeOff } from 'lucide-react'
@@ -36,68 +36,42 @@ export default function PasswordInput({
 }: PasswordInputProps) {
 	const { showPassword, togglePassword } = usePasswordToggle()
 
-	return (
-		<div className={styles.formGroup}>
-			{showForgotLink ? (
-				<div className={styles.labelRow}>
-					<label
-						className={styles.label}
-						htmlFor={id}
-					>
-						{label}
-					</label>
-					<Link
-						href={forgotLinkHref}
-						className={forgotLinkClassName}
-					>
-						{forgotLinkText}
-					</Link>
-				</div>
-			) : (
-				<label
-					className={cn(styles.label, {
-						[styles.labelPrimary]: labelStyle === 'primary',
-						[styles.labelSecondary]: labelStyle === 'secondary'
-					})}
-					htmlFor={id}
-				>
-					{label}
-				</label>
-			)}
+	const labelAccessory = showForgotLink ? (
+		<Link
+			href={forgotLinkHref}
+			className={forgotLinkClassName}
+		>
+			{forgotLinkText}
+		</Link>
+	) : undefined
 
-			<div className={styles.inputWrapper}>
-				<input
-					id={id}
-					name={id}
-					type={showPassword ? 'text' : 'password'}
-					className={`${styles.input} ${error ? authSharedStyles.inputError : ''}`}
-					placeholder={placeholder}
-					value={value}
-					onChange={onChange}
-					autoComplete={autoComplete}
-					aria-invalid={!!error}
-					aria-describedby={error ? `${id}-error` : undefined}
-				/>
+	return (
+		<BaseFormField
+			id={id}
+			label={label}
+			labelAccessory={labelAccessory}
+			type={showPassword ? 'text' : 'password'}
+			placeholder={placeholder}
+			value={value}
+			onChange={onChange}
+			autoComplete={autoComplete}
+			error={error}
+			className={styles.formGroup}
+			labelClassName={cn(styles.label, {
+				[styles.labelPrimary]: labelStyle === 'primary',
+				[styles.labelSecondary]: labelStyle === 'secondary'
+			})}
+			inputClassName={`${styles.input} ${styles.inputWithAdornment}`}
+			rightAdornment={
 				<button
 					type='button'
 					className={styles.passwordToggle}
 					onClick={togglePassword}
-					aria-label={
-						showPassword ? 'Скрыть пароль' : 'Показать пароль'
-					}
+					aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
 				>
 					{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
 				</button>
-			</div>
-
-			{error && (
-				<p
-					id={`${id}-error`}
-					className={authSharedStyles.errorText}
-				>
-					{error}
-				</p>
-			)}
-		</div>
+			}
+		/>
 	)
 }

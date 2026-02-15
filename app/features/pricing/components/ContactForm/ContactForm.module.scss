@@ -6,6 +6,15 @@
 	gap: $spacing-md;
 }
 
+.demoNotice {
+	font-size: $font-size-sm;
+	color: var(--color-text-secondary);
+	background: var(--color-bg-secondary);
+	border: 1px dashed var(--color-border);
+	border-radius: $border-radius-md;
+	padding: $spacing-sm;
+}
+
 .field {
 	display: flex;
 	flex-direction: column;
@@ -42,17 +51,10 @@
 			cursor: not-allowed;
 		}
 	}
-
-	.inputError {
-		border-color: var(--color-error);
-		&:focus {
-			box-shadow: 0 0 0 2px rgba(var(--color-error-rgb), 0.1);
-		}
-	}
 }
 
 .errorMessage {
-	color: var(--color-error);
+	color: $color-red;
 	font-size: $font-size-xs;
 	margin-top: 2px;
 }

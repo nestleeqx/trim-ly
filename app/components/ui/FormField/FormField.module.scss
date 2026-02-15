@@ -1,0 +1,102 @@
+@use 'variables' as *;
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-sm;
+}
+
+.label {
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+	color: var(--color-text-secondary);
+}
+
+.labelRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: $spacing-sm;
+}
+
+.labelAccessory {
+	display: inline-flex;
+	align-items: center;
+}
+
+.controlWrap {
+	position: relative;
+}
+
+.leftIcon {
+	position: absolute;
+	top: 50%;
+	left: 12px;
+	transform: translateY(-50%);
+	color: var(--color-text-secondary);
+	pointer-events: none;
+	display: inline-flex;
+}
+
+.control {
+	width: 100%;
+	padding: 10px 14px;
+	border-radius: $border-radius-md;
+	border: 1px solid var(--color-border);
+	background: var(--color-bg-secondary);
+	color: var(--color-text-primary);
+	font-size: $font-size-sm;
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
+	font-family: inherit;
+
+	&:focus {
+		outline: none;
+		border-color: var(--color-primary);
+		box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.1);
+	}
+
+	&:disabled {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+}
+
+.withLeftIcon {
+	padding-left: 40px;
+}
+
+.rightAdornment {
+	position: absolute;
+	top: 50%;
+	right: 12px;
+	transform: translateY(-50%);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.textarea {
+	resize: none;
+	min-height: 96px;
+}
+
+.controlError {
+	border-color: $color-red;
+
+	&:focus {
+		box-shadow: 0 0 0 2px rgba($color-red-opacity, 0.1);
+	}
+}
+
+.error {
+	color: $color-red;
+	font-size: $font-size-xs;
+	margin-top: 2px;
+}
+
+.hint {
+	font-size: $font-size-xs;
+	color: var(--color-text-secondary);
+}

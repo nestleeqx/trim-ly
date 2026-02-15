@@ -1,68 +1,110 @@
-export interface PlanFeature {
+﻿export interface PlanFeature {
 	text: string
 }
 
+export interface Plan {
+	id: 'free' | 'pro' | 'team'
+	name: string
+	monthlyPrice: string
+	yearlyPrice: string
+	description: string
+	features: PlanFeature[]
+	buttonText: string
+	buttonVariant: 'primary' | 'outline' | 'ghost'
+	popular?: boolean
+	href: string
+	isContact?: boolean
+	discount?: string
+}
+
+export const plans: Plan[] = [
+	{
+		id: 'free',
+		name: 'Бесплатный',
+		monthlyPrice: '0',
+		yearlyPrice: '0',
+		description: 'Идеально для старта и личного использования.',
+		features: [
+			{ text: '10 ссылок / месяц' },
+			{ text: '1 000 кликов / месяц' },
+			{ text: 'Базовая аналитика' },
+			{ text: 'Статичные QR-коды' }
+		],
+		buttonText: 'Начать бесплатно',
+		buttonVariant: 'outline',
+		href: '/signup'
+	},
+	{
+		id: 'pro',
+		name: 'Pro',
+		monthlyPrice: '950',
+		yearlyPrice: '9 500',
+		description: 'Всё для развития вашего бренда.',
+		features: [
+			{ text: '1 000 ссылок / месяц' },
+			{ text: '100 000 кликов / месяц' },
+			{ text: 'Расширенная аналитика' },
+			{ text: 'Брендированные домены' },
+			{ text: 'Динамические QR-коды' }
+		],
+		buttonText: 'Перейти на Pro',
+		buttonVariant: 'primary',
+		popular: true,
+		href: '/signup?plan=pro',
+		discount: 'Экономия 1 900 ₽'
+	},
+	{
+		id: 'team',
+		name: 'Команда',
+		monthlyPrice: '3 400',
+		yearlyPrice: '34 000',
+		description: 'Масштабируйтесь с расширенными возможностями.',
+		features: [
+			{ text: 'Множество воркспейсов' },
+			{ text: 'Командная работа' },
+			{ text: 'API доступ' },
+			{ text: 'Приоритетная поддержка' },
+			{ text: 'SAML SSO' }
+		],
+		buttonText: 'Связаться с нами',
+		buttonVariant: 'outline',
+		href: '/contact',
+		isContact: true,
+		discount: 'Экономия 6 800 ₽'
+	}
+]
+
 export interface DashboardPlan {
+	id: 'free' | 'pro' | 'team'
 	name: string
 	description: string
-	monthlyPrice: number
-	yearlyPrice: number
+	monthlyPrice: string | number
+	yearlyPrice: string | number
 	features: PlanFeature[]
 	buttonText: string
 	buttonVariant: 'primary' | 'outline'
 	popular?: boolean
 	isContact?: boolean
+	discount?: string
 }
 
-export const dashboardPlans: DashboardPlan[] = [
-	{
-		name: 'Free',
-		description: 'Для личного использования',
-		monthlyPrice: 0,
-		yearlyPrice: 0,
-		features: [
-			{ text: '100 ссылок' },
-			{ text: 'Базовая аналитика' },
-			{ text: 'QR-коды' }
-		],
-		buttonText: 'Начать бесплатно',
-		buttonVariant: 'outline'
-	},
-	{
-		name: 'Pro',
-		description: 'Для фрилансеров и создателей контента',
-		monthlyPrice: 12,
-		yearlyPrice: 10,
-		features: [
-			{ text: 'Безлимитные ссылки' },
-			{ text: 'Расширенная аналитика' },
-			{ text: 'Кастомные алиасы' },
-			{ text: 'Настройка QR-кодов' },
-			{ text: 'Защита паролем' },
-			{ text: 'UTM конструктор' }
-		],
-		buttonText: 'Перейти на Pro',
-		buttonVariant: 'primary',
-		popular: true
-	},
-	{
-		name: 'Team',
-		description: 'Для небольших команд',
-		monthlyPrice: 29,
-		yearlyPrice: 24,
-		features: [
-			{ text: 'Всё из Pro' },
-			{ text: '5 участников включено' },
-			{ text: 'Общие папки' },
-			{ text: 'API доступ' },
-			{ text: 'Командная аналитика' }
-		],
-		buttonText: 'Связаться с продажами',
-		buttonVariant: 'outline',
-		isContact: true
+function toDashboardPlan(plan: Plan): DashboardPlan {
+	return {
+		id: plan.id,
+		name: plan.name,
+		description: plan.description,
+		monthlyPrice: plan.monthlyPrice,
+		yearlyPrice: plan.yearlyPrice,
+		features: plan.features,
+		buttonText: plan.buttonText,
+		buttonVariant: plan.buttonVariant === 'primary' ? 'primary' : 'outline',
+		popular: plan.popular,
+		isContact: Boolean(plan.isContact),
+		discount: plan.discount
 	}
-]
+}
 
+export const dashboardPlans: DashboardPlan[] = plans.map(toDashboardPlan)
 export interface ComparisonFeature {
 	name: string
 	free: string | boolean
@@ -73,8 +115,14 @@ export interface ComparisonFeature {
 export const comparisonFeatures: ComparisonFeature[] = [
 	{
 		name: 'Лимит ссылок',
-		free: '100',
-		pro: 'Безлимит',
+		free: '10',
+		pro: '1 000',
+		team: 'Безлимит'
+	},
+	{
+		name: 'Количество кликов',
+		free: '1 000',
+		pro: '100 000',
 		team: 'Безлимит'
 	},
 	{
@@ -169,10 +217,10 @@ export const faqItems: FAQItem[] = [
 	},
 	{
 		question: 'Какие способы оплаты вы принимаете?',
-		answer: 'Мы принимаем все основные банковские карты (Visa, Mastercard, Mir), а также PayPal и банковские переводы для корпоративных клиентов.'
+		answer: 'Для портфолио-проекта в демо-режиме оплата не требуется: вы можете переключать тарифы вручную.'
 	},
 	{
 		question: 'Могу ли я изменить тариф позже?',
-		answer: 'Да, вы можете повысить или понизить тариф в любое время. Изменения вступят в силу сразу, а разница будет пропорционально рассчитана.'
+		answer: 'Да, вы можете повысить или понизить тариф в любое время. Изменения применяются сразу.'
 	}
 ]
