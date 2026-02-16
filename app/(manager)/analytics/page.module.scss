@@ -30,6 +30,10 @@
 		background: $color-primary;
 		color: white;
 		border-color: $color-primary;
+
+		&:hover {
+			background: $color-primary;
+		}
 	}
 }
 

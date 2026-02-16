@@ -11,7 +11,7 @@ type LinkRecord = {
 	deletedAt: Date | null
 }
 
-export type PublicLinkState =
+type PublicLinkState =
 	| { state: 'not-found' }
 	| { state: 'paused' }
 	| { state: 'expired' }
@@ -30,7 +30,8 @@ function resolveState(link: LinkRecord | null): PublicLinkState {
 
 	const isExpiredByDate =
 		!!link.expiresAt && link.expiresAt.getTime() <= Date.now()
-	if (link.status === 'expired' || isExpiredByDate) return { state: 'expired' }
+	if (link.status === 'expired' || isExpiredByDate)
+		return { state: 'expired' }
 	if (link.status === 'disabled') return { state: 'paused' }
 	if (link.passwordHash) {
 		return {
@@ -92,7 +93,10 @@ function getCity(headers: Headers) {
 
 function normalizeSource(value: string | null | undefined) {
 	if (!value) return null
-	const normalized = value.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '')
+	const normalized = value
+		.trim()
+		.toLowerCase()
+		.replace(/[^a-z0-9_-]/g, '')
 	if (!normalized) return null
 	return normalized.slice(0, 24)
 }
@@ -130,17 +134,33 @@ export async function registerPublicClick(params: {
 	const clicksTotal = userWithPlan.usage?.clicksTotal ?? 0
 	if (clicksTotal >= clicksLimit) return
 
-	await prisma.$transaction([
-		prisma.link.update({
+	await prisma.$transaction(async tx => {
+		// Best-effort dedupe for immediate retries (double submit/network retry).
+		if (ipHash || userAgent) {
+			const duplicate = await tx.linkClickEvent.findFirst({
+				where: {
+					linkId,
+					clickedAt: { gte: new Date(Date.now() - 10_000) },
+					...(ipHash ? { ipHash } : {}),
+					...(userAgent ? { userAgent } : {}),
+					...(normalizedSource ? { source: normalizedSource } : {})
+				},
+				select: { id: true }
+			})
+
+			if (duplicate) return
+		}
+
+		await tx.link.update({
 			where: { id: linkId },
 			data: { clicksTotal: { increment: 1 } }
-		}),
-		prisma.userUsage.upsert({
+		})
+		await tx.userUsage.upsert({
 			where: { userId },
 			update: { clicksTotal: { increment: 1 } },
 			create: { userId, clicksTotal: 1 }
-		}),
-		prisma.linkClickEvent.create({
+		})
+		await tx.linkClickEvent.create({
 			data: {
 				linkId,
 				ipHash,
@@ -151,5 +171,5 @@ export async function registerPublicClick(params: {
 				userAgent
 			}
 		})
-	])
+	})
 }

@@ -18,16 +18,28 @@ export function useForgotPassword() {
 			const data = await res.json().catch(() => ({}))
 
 			if (!res.ok) {
+				const errorMessage =
+					typeof data === 'object' &&
+					data !== null &&
+					'error' in data &&
+					typeof (data as { error: unknown }).error === 'string'
+						? (data as { error: string }).error
+						: ''
+
 				const mapped = mapAuthApiError(
-					String((data as any)?.error ?? ''),
+					errorMessage,
 					'Не удалось отправить письмо. Попробуйте позже.'
 				)
 				throw new Error(mapped.message)
 			}
 
 			return { ok: true as const }
-		} catch (e: any) {
-			setError(e?.message ?? 'Не удалось отправить письмо. Попробуйте позже.')
+		} catch (error: unknown) {
+			const message =
+				error instanceof Error
+					? error.message
+					: 'Не удалось отправить письмо. Попробуйте позже.'
+			setError(message)
 			return { ok: false as const }
 		} finally {
 			setIsLoading(false)

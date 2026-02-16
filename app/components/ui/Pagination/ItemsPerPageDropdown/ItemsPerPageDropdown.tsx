@@ -1,6 +1,7 @@
 'use client'
 
 import { useClickOutside } from '@/hooks/useClickOutside'
+import cn from 'classnames'
 import { ChevronDown } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import styles from './ItemsPerPageDropdown.module.scss'
@@ -49,7 +50,9 @@ export default function ItemsPerPageDropdown({
 							<button
 								type='button'
 								key={count}
-								className={`${styles.dropdownItem} ${itemsPerPage === count ? styles.active : ''}`}
+								className={cn(styles.dropdownItem, {
+									[styles.active]: itemsPerPage === count
+								})}
 								onClick={() => handleOptionClick(count)}
 							>
 								{count}

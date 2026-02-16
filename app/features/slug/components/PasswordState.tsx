@@ -1,6 +1,7 @@
 'use client'
 
 import Button from '@/app/components/ui/Button/Button'
+import cn from 'classnames'
 import { Eye, EyeOff, Lock } from 'lucide-react'
 import Link from 'next/link'
 import { useCallback, useState } from 'react'
@@ -61,7 +62,7 @@ export default function PasswordState({ slug }: PasswordStateProps) {
 
 	return (
 		<div className={styles.card}>
-			<div className={`${styles.stateIcon} ${styles.stateIconPurple}`}>
+			<div className={cn(styles.stateIcon, styles.stateIconPurple)}>
 				<Lock size={24} />
 			</div>
 

@@ -1,36 +1,27 @@
 'use client'
 
-import Button from '@/app/components/ui/Button/Button'
 import Logo from '@/app/components/ui/Logo/Logo'
 import { useTheme } from '@/context/ThemeContext'
 import classNames from 'classnames'
 import { Moon, Sun } from 'lucide-react'
 import { useSession } from 'next-auth/react'
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import MobileNav from './components/MobileNav/MobileNav'
+import DesktopHeaderActions from './components/DesktopHeaderActions/DesktopHeaderActions'
+import { headerNavItems } from './header.config'
 import styles from './Header.module.scss'
-import MobileNav from './MobileNav/MobileNav'
 
 export default function Header() {
 	const { resolvedTheme, toggleTheme } = useTheme()
 	const { status } = useSession()
 	const [scrolled, setScrolled] = useState(false)
+	const isAuthenticated = status === 'authenticated'
 
 	useEffect(() => {
-		const handleScroll = () => {
-			setScrolled(window.scrollY > 10)
-		}
-
-		window.addEventListener('scroll', handleScroll)
-		return () => window.removeEventListener('scroll', handleScroll)
+		const onScroll = () => setScrolled(window.scrollY > 10)
+		window.addEventListener('scroll', onScroll)
+		return () => window.removeEventListener('scroll', onScroll)
 	}, [])
-
-	const navItems = [
-		{ label: 'Возможности', href: '#features' },
-		{ label: 'Аналитика', href: '#analytics' },
-		{ label: 'Тарифы', href: '#pricing' },
-		{ label: 'FAQ', href: '#faq' }
-	]
 
 	return (
 		<header
@@ -43,7 +34,7 @@ export default function Header() {
 					<Logo />
 
 					<nav className={styles.nav}>
-						{navItems.map(item => (
+						{headerNavItems.map(item => (
 							<a
 								key={item.label}
 								href={item.href}
@@ -60,52 +51,11 @@ export default function Header() {
 							onClick={toggleTheme}
 							aria-label='Переключить тему'
 						>
-							{resolvedTheme === 'light' ? (
-								<Moon size={20} />
-							) : (
-								<Sun size={20} />
-							)}
+							{resolvedTheme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
 						</button>
 
-						{status !== 'authenticated' ? (
-							<>
-								<Link
-									href='/login'
-									className={styles.desktopOnly}
-								>
-									<Button
-										variant='ghost'
-										size='sm'
-									>
-										Войти
-									</Button>
-								</Link>
-								<Link
-									href='/signup'
-									className={styles.desktopOnly}
-								>
-									<Button
-										variant='primary'
-										size='sm'
-									>
-										Начать бесплатно
-									</Button>
-								</Link>
-							</>
-						) : (
-							<Link
-								href='/dashboard'
-								className={styles.desktopOnly}
-							>
-								<Button
-									variant='primary'
-									size='sm'
-								>
-									Личный кабинет
-								</Button>
-							</Link>
-						)}
-						<MobileNav navItems={navItems} />
+						<DesktopHeaderActions isAuthenticated={isAuthenticated} />
+						<MobileNav navItems={headerNavItems} />
 					</div>
 				</div>
 			</div>

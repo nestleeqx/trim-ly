@@ -39,10 +39,18 @@ function normalizeDevice(
 
 	const ua = userAgent.toLowerCase()
 	if (ua.includes('ipad') || ua.includes('tablet')) return 'Tablet'
-	if (ua.includes('mobi') || ua.includes('android') || ua.includes('iphone')) {
+	if (
+		ua.includes('mobi') ||
+		ua.includes('android') ||
+		ua.includes('iphone')
+	) {
 		return 'Mobile'
 	}
-	if (ua.includes('macintosh') || ua.includes('windows') || ua.includes('linux')) {
+	if (
+		ua.includes('macintosh') ||
+		ua.includes('windows') ||
+		ua.includes('linux')
+	) {
 		return 'Desktop'
 	}
 	return 'Other'
@@ -53,7 +61,9 @@ function extractReferrerHost(value: string | null) {
 	const input = value.trim()
 	if (!input) return 'direct'
 	try {
-		const url = new URL(input.startsWith('http') ? input : `https://${input}`)
+		const url = new URL(
+			input.startsWith('http') ? input : `https://${input}`
+		)
 		return url.hostname.replace(/^www\./, '')
 	} catch {
 		return input.replace(/^www\./, '')
@@ -69,7 +79,8 @@ export async function GET(req: Request) {
 
 	const url = new URL(req.url)
 	const period = parsePeriod(req)
-	const selectedCountry = (url.searchParams.get('country') || '').trim() || null
+	const selectedCountry =
+		(url.searchParams.get('country') || '').trim() || null
 	const selectedDevice = (url.searchParams.get('device') || '').trim() || null
 	const selectedReferrer =
 		(url.searchParams.get('referrer') || '').trim() || null
@@ -99,7 +110,9 @@ export async function GET(req: Request) {
 				? event.country.toUpperCase()
 				: '--'
 		availableCountriesSet.set(countryCode, countryName)
-		availableDevicesSet.add(normalizeDevice(event.deviceType, event.userAgent))
+		availableDevicesSet.add(
+			normalizeDevice(event.deviceType, event.userAgent)
+		)
 		const referrer = extractReferrerHost(event.referrer)
 		availableReferrersCounts.set(
 			referrer,
@@ -114,9 +127,13 @@ export async function GET(req: Request) {
 				: '--'
 		const device = normalizeDevice(event.deviceType, event.userAgent)
 		const referrer = extractReferrerHost(event.referrer)
-		const byCountry = selectedCountry ? countryCode === selectedCountry : true
+		const byCountry = selectedCountry
+			? countryCode === selectedCountry
+			: true
 		const byDevice = selectedDevice ? device === selectedDevice : true
-		const byReferrer = selectedReferrer ? referrer === selectedReferrer : true
+		const byReferrer = selectedReferrer
+			? referrer === selectedReferrer
+			: true
 		return byCountry && byDevice && byReferrer
 	})
 
@@ -143,7 +160,9 @@ export async function GET(req: Request) {
 			code: name.length === 2 ? name.toUpperCase() : '--',
 			name,
 			clicks,
-			percentage: totalClicks ? Math.round((clicks / totalClicks) * 100) : 0
+			percentage: totalClicks
+				? Math.round((clicks / totalClicks) * 100)
+				: 0
 		}))
 
 	const deviceColors: Record<string, string> = {
@@ -156,7 +175,9 @@ export async function GET(req: Request) {
 		.sort((a, b) => b[1] - a[1])
 		.map(([type, clicks]) => ({
 			type,
-			percentage: totalClicks ? Math.round((clicks / totalClicks) * 100) : 0,
+			percentage: totalClicks
+				? Math.round((clicks / totalClicks) * 100)
+				: 0,
 			color: deviceColors[type] || '#e5e7eb'
 		}))
 

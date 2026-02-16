@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'classnames'
 import { calculateTrend } from './helpers'
 import styles from './LinkTableRow.module.scss'
 
@@ -18,7 +19,7 @@ export default function TrendCell({ trend: trendValue }: TrendCellProps) {
 
 	return (
 		<td>
-			<span className={`${styles.trend} ${trendStyleClass}`}>
+			<span className={cn(styles.trend, trendStyleClass)}>
 				{trend.text}
 			</span>
 		</td>

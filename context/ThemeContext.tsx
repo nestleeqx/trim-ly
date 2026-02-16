@@ -9,7 +9,7 @@ import React, {
 	useState
 } from 'react'
 
-export type Theme = 'light' | 'dark' | 'system'
+type Theme = 'light' | 'dark' | 'system'
 type ResolvedTheme = 'light' | 'dark'
 
 interface ThemeContextType {

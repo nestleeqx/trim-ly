@@ -6,13 +6,6 @@ import { LinkStatus } from '@/types/links'
 import { Copy } from 'lucide-react'
 import styles from './LinkPreview.module.scss'
 
-const STATUS_LABELS: Record<LinkStatus, string> = {
-	active: 'АКТИВНА',
-	paused: 'ПАУЗА',
-	expired: 'ИСТЕКЛА',
-	deleted: 'УДАЛЕНА'
-}
-
 interface PreviewShortLinkProps {
 	shortUrl: string
 	status: LinkStatus

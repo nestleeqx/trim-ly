@@ -3,10 +3,10 @@
 import Button from '@/app/components/ui/Button/Button'
 import Pagination from '@/app/components/ui/Pagination/Pagination'
 import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
-import useCsvExport from '@/hooks/useCsvExport'
 import { usePagination } from '@/hooks/usePagination'
 import { ClickEvent } from '@/types/links'
 import { convertClickEventsToCsv } from '@/utils/csvConverters'
+import { downloadCsv } from '@/utils/downloadCsv'
 import styles from './RawClickEvents.module.scss'
 
 interface RawClickEventsProps {
@@ -18,8 +18,6 @@ export default function RawClickEvents({
 	events,
 	isLoading = false
 }: RawClickEventsProps) {
-	const { downloadCsv } = useCsvExport()
-
 	const {
 		currentPage,
 		itemsPerPage,

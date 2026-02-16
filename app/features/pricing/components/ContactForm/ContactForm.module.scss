@@ -15,50 +15,6 @@
 	padding: $spacing-sm;
 }
 
-.field {
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-
-	label {
-		font-size: $font-size-sm;
-		font-weight: $font-weight-medium;
-		color: var(--color-text-secondary);
-	}
-
-	input,
-	textarea {
-		padding: 10px 14px;
-		border-radius: $border-radius-md;
-		border: 1px solid var(--color-border);
-		background: var(--color-bg-secondary);
-		color: var(--color-text-primary);
-		font-size: $font-size-base;
-		resize: none;
-		transition:
-			border-color 0.2s ease,
-			box-shadow 0.2s ease;
-		font-family: inherit;
-
-		&:focus {
-			outline: none;
-			border-color: var(--color-primary);
-			box-shadow: 0 0 0 2px rgba(var(--color-primary-rgb), 0.1);
-		}
-
-		&:disabled {
-			opacity: 0.6;
-			cursor: not-allowed;
-		}
-	}
-}
-
-.errorMessage {
-	color: $color-red;
-	font-size: $font-size-xs;
-	margin-top: 2px;
-}
-
 .feedbackContainer {
 	display: flex;
 	flex-direction: column;

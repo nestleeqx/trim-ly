@@ -1,6 +1,7 @@
 'use client'
 
 import { useClickOutside } from '@/hooks/useClickOutside'
+import cn from 'classnames'
 import { ChevronDown } from 'lucide-react'
 import { ReactNode, useCallback, useState } from 'react'
 import styles from './FilterDropdown.module.scss'
@@ -39,7 +40,10 @@ export default function FilterDropdown({
 			ref={dropdownRef}
 		>
 			<button
-				className={`${styles.filterBtn} ${isOpen ? styles.open : ''} ${hasSelection ? styles.hasSelection : ''} ${className}`}
+				className={cn(styles.filterBtn, className, {
+					[styles.open]: isOpen,
+					[styles.hasSelection]: hasSelection
+				})}
 				onClick={() => setIsOpen(!isOpen)}
 			>
 				{icon}

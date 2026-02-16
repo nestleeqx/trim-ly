@@ -1,4 +1,5 @@
 import type { ThemeValue } from '@/app/features/profile/api/profileApi'
+import cn from 'classnames'
 import styles from '../../Preference.module.scss'
 
 type Props = {
@@ -17,7 +18,9 @@ export default function ThemeCardsSection({
 			<div className={styles.sectionTitle}>Тема</div>
 			<div className={styles.appearance}>
 				<button
-					className={`${styles.themeCard} ${theme === 'light' ? styles.selected : ''}`}
+					className={cn(styles.themeCard, {
+						[styles.selected]: theme === 'light'
+					})}
 					onClick={() => onSelectTheme('light')}
 					aria-pressed={theme === 'light'}
 					disabled={isSaving}
@@ -30,7 +33,9 @@ export default function ThemeCardsSection({
 				</button>
 
 				<button
-					className={`${styles.themeCard} ${theme === 'dark' ? styles.selected : ''}`}
+					className={cn(styles.themeCard, {
+						[styles.selected]: theme === 'dark'
+					})}
 					onClick={() => onSelectTheme('dark')}
 					aria-pressed={theme === 'dark'}
 					disabled={isSaving}
@@ -43,7 +48,9 @@ export default function ThemeCardsSection({
 				</button>
 
 				<button
-					className={`${styles.themeCard} ${theme === 'system' ? styles.selected : ''}`}
+					className={cn(styles.themeCard, {
+						[styles.selected]: theme === 'system'
+					})}
 					onClick={() => onSelectTheme('system')}
 					aria-pressed={theme === 'system'}
 					disabled={isSaving}

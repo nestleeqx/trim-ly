@@ -1,6 +1,7 @@
-﻿'use client'
+'use client'
 
 import { buildQrImageUrl } from '@/app/features/links/utils/downloadQrPng'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import styles from './QrCodeModal.module.scss'
 
@@ -17,9 +18,16 @@ export default function QrCodeDisplay({
 
 	useEffect(() => {
 		let active = true
+
 		if (!value) {
-			setSrc('')
-			return
+			const clearTimer = window.setTimeout(() => {
+				if (active) setSrc('')
+			}, 0)
+
+			return () => {
+				active = false
+				window.clearTimeout(clearTimer)
+			}
 		}
 
 		void buildQrImageUrl(value, Math.max(size, 256))
@@ -49,12 +57,13 @@ export default function QrCodeDisplay({
 			aria-label={value ? `QR код для ${value}` : 'QR код'}
 		>
 			{src ? (
-				<img
+				<Image
 					src={src}
 					alt='QR код'
 					width={size}
 					height={size}
 					className={styles.qrImage}
+					unoptimized
 				/>
 			) : null}
 		</div>

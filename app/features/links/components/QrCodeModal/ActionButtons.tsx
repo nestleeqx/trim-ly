@@ -1,6 +1,7 @@
 'use client'
 
 import Button from '@/app/components/ui/Button/Button'
+import cn from 'classnames'
 import { Copy, Download } from 'lucide-react'
 import styles from './QrCodeModal.module.scss'
 
@@ -28,7 +29,7 @@ export default function ActionButtons({
 			</Button>
 			{showCopyButton && onCopy && (
 				<Button
-					className={`${styles.qrBtn} ${styles.qrBtnSecondary}`}
+					className={cn(styles.qrBtn, styles.qrBtnSecondary)}
 					onClick={onCopy}
 					variant='outline'
 					title='Копировать URL в буфер обмена'

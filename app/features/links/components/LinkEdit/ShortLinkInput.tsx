@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'classnames'
 import { AlertCircle, AlertTriangle, Check, Loader2 } from 'lucide-react'
 import React, { useCallback } from 'react'
 import styles from './LinkEdit.module.scss'
@@ -38,9 +39,10 @@ export default function ShortLinkInput({
 		<div className={styles.formGroup}>
 			<label className={styles.label}>Короткая ссылка</label>
 			<div
-				className={`${styles.shortLinkWrapper} ${
-					error ? styles.error : ''
-				} ${aliasAvailable ? styles.success : ''}`}
+				className={cn(styles.shortLinkWrapper, {
+					[styles.error]: error,
+					[styles.success]: aliasAvailable
+				})}
 			>
 				<span className={styles.shortLinkPrefix}>
 					{SHORT_LINK_DOMAIN}

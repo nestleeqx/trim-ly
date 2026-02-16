@@ -1,8 +1,8 @@
 'use client'
 
-import Sidebar from '@/app/components/layout/DashboardLayout/Sidebar/Sidebar'
 import React from 'react'
 import styles from './DashboardLayout.module.scss'
+import Sidebar from './components/Sidebar/Sidebar'
 
 interface DashboardLayoutProps {
 	children: React.ReactNode

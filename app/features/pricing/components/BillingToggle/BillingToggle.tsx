@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import styles from './BillingToggle.module.scss'
 
 interface BillingToggleProps {
@@ -13,19 +14,26 @@ export default function BillingToggle({
 		<div className={styles.toggleContainer}>
 			<div className={styles.toggleWrapper}>
 				<button
-					className={`${styles.toggleOption} ${!isYearly ? styles.active : ''}`}
+					className={cn(styles.toggleOption, {
+						[styles.active]: !isYearly
+					})}
 					onClick={() => onToggle(false)}
 				>
 					Ежемесячно
 				</button>
 				<button
-					className={`${styles.toggleOption} ${isYearly ? styles.active : ''}`}
+					className={cn(styles.toggleOption, {
+						[styles.active]: isYearly
+					})}
 					onClick={() => onToggle(true)}
 				>
 					Ежегодно
 				</button>
 				<div
-					className={`${styles.toggleSlider} ${isYearly ? styles.right : styles.left}`}
+					className={cn(styles.toggleSlider, {
+						[styles.right]: isYearly,
+						[styles.left]: !isYearly
+					})}
 				/>
 			</div>
 			{isYearly && (

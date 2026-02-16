@@ -1,6 +1,7 @@
 'use client'
 
 import { LinkItem } from '@/types/links'
+import cn from 'classnames'
 import { statusLabels } from './linkEdit.config'
 import styles from './LinkEdit.module.scss'
 
@@ -14,9 +15,7 @@ export default function FormHeader({ link, isDirty }: FormHeaderProps) {
 		<div className={styles.formStatus}>
 			<span className={styles.statusLabel}>Статус ссылки:</span>
 			<div className={styles.statusValue}>
-				<span
-					className={`${styles.statusBadge} ${styles[link.status]}`}
-				>
+				<span className={cn(styles.statusBadge, styles[link.status])}>
 					{statusLabels[link.status]}
 				</span>
 				{isDirty && (

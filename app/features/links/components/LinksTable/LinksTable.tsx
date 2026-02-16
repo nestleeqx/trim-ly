@@ -1,6 +1,6 @@
 'use client'
 
-import { useLinkActions } from '@/hooks/useLinkActions'
+import { useLinkActions } from '@/app/features/links/hooks/useLinkActions'
 import QrCodeModal from '../QrCodeModal/QrCodeModal'
 import styles from './LinksTable.module.scss'
 import LinkTableRow from './LinkTableRow/LinkTableRow'

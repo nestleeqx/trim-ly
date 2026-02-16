@@ -47,20 +47,8 @@
 	}
 }
 
-.inputError {
-	border-color: $color-red;
-}
-
-.errorText,
-.noticeText {
+.errorText {
 	font-size: $font-size-sm;
 	line-height: 1.2;
-}
-
-.errorText {
 	color: $color-red;
-}
-
-.noticeText {
-	color: $color-active;
 }

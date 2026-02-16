@@ -28,21 +28,29 @@ export default function NoticeBanner({
 	const [visibleMessage, setVisibleMessage] = useState<string | null>(null)
 
 	useEffect(() => {
-		// Auto-hide only for legacy auth flow driven by query params.
 		if (message !== undefined || reset !== '1') return
 		const t = window.setTimeout(() => router.replace(pathname), autoHideMs)
 		return () => window.clearTimeout(t)
 	}, [autoHideMs, message, pathname, reset, router])
 
 	useEffect(() => {
-		setVisibleMessage(resolvedMessage ?? null)
-		if (!resolvedMessage || autoHideMs <= 0) return
+		const nextMessage = resolvedMessage ?? null
+		const showTimer = window.setTimeout(() => {
+			setVisibleMessage(nextMessage)
+		}, 0)
 
-		const t = window.setTimeout(() => {
+		if (!nextMessage || autoHideMs <= 0) {
+			return () => window.clearTimeout(showTimer)
+		}
+
+		const hideTimer = window.setTimeout(() => {
 			setVisibleMessage(null)
 		}, autoHideMs)
 
-		return () => window.clearTimeout(t)
+		return () => {
+			window.clearTimeout(showTimer)
+			window.clearTimeout(hideTimer)
+		}
 	}, [autoHideMs, resolvedMessage])
 
 	if (!visibleMessage) return null

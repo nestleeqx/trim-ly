@@ -1,15 +1,20 @@
 import { StatData } from '@/app/features/analytics/components/StatsCards/stats.config'
 import { LinkListItemDto } from '@/app/features/links/api/linksApi'
-import { ChartDataPoint, DeviceStats, TopCountry, TopReferrer } from '@/types/charts'
+import {
+	ChartDataPoint,
+	DeviceStats,
+	TopCountry,
+	TopReferrer
+} from '@/types/charts'
 
-export type AnalyticsSummaryResponse = {
+type AnalyticsSummaryResponse = {
 	period: Exclude<AnalyticsClicksPeriod, 'custom'>
 	stats: StatData[]
 }
 
 export type AnalyticsClicksPeriod = '24h' | '7d' | '30d' | '90d' | 'custom'
 
-export type AnalyticsClicksResponse = {
+type AnalyticsClicksResponse = {
 	period: AnalyticsClicksPeriod
 	chart: {
 		points: ChartDataPoint[]
@@ -18,7 +23,7 @@ export type AnalyticsClicksResponse = {
 	}
 }
 
-export type AnalyticsBreakdownResponse = {
+type AnalyticsBreakdownResponse = {
 	period: Exclude<AnalyticsClicksPeriod, 'custom'>
 	topCountries: TopCountry[]
 	deviceStats: DeviceStats[]
@@ -28,9 +33,26 @@ export type AnalyticsBreakdownResponse = {
 	availableReferrers: Array<{ name: string }>
 }
 
-export type AnalyticsTopLinksResponse = {
+type AnalyticsTopLinksResponse = {
 	period: Exclude<AnalyticsClicksPeriod, 'custom'>
 	links: LinkListItemDto[]
+}
+
+type ErrorResponse = {
+	error?: string
+}
+
+function parseErrorMessage(data: unknown, fallback: string): string {
+	if (
+		typeof data === 'object' &&
+		data !== null &&
+		'error' in data &&
+		typeof (data as { error: unknown }).error === 'string'
+	) {
+		return (data as ErrorResponse).error || fallback
+	}
+
+	return fallback
 }
 
 export async function getAnalyticsSummary(params?: {
@@ -50,20 +72,18 @@ export async function getAnalyticsSummary(params?: {
 
 	const data = await res.json().catch(() => ({}))
 	if (!res.ok) {
-		throw new Error(String((data as any)?.error ?? 'Failed to load analytics'))
+		throw new Error(parseErrorMessage(data, 'Failed to load analytics'))
 	}
 
 	return data as AnalyticsSummaryResponse
 }
 
-export async function getAnalyticsClicks(
-	params?: {
-		period?: AnalyticsClicksPeriod
-		from?: string
-		to?: string
-		signal?: AbortSignal
-	}
-): Promise<AnalyticsClicksResponse> {
+export async function getAnalyticsClicks(params?: {
+	period?: AnalyticsClicksPeriod
+	from?: string
+	to?: string
+	signal?: AbortSignal
+}): Promise<AnalyticsClicksResponse> {
 	const search = new URLSearchParams()
 	if (params?.period) search.set('period', params.period)
 	if (params?.from) search.set('from', params.from)
@@ -79,7 +99,7 @@ export async function getAnalyticsClicks(
 
 	const data = await res.json().catch(() => ({}))
 	if (!res.ok) {
-		throw new Error(String((data as any)?.error ?? 'Failed to load chart'))
+		throw new Error(parseErrorMessage(data, 'Failed to load chart'))
 	}
 
 	return data as AnalyticsClicksResponse
@@ -110,9 +130,7 @@ export async function getAnalyticsBreakdown(params?: {
 
 	const data = await res.json().catch(() => ({}))
 	if (!res.ok) {
-		throw new Error(
-			String((data as any)?.error ?? 'Failed to load breakdown')
-		)
+		throw new Error(parseErrorMessage(data, 'Failed to load breakdown'))
 	}
 
 	return data as AnalyticsBreakdownResponse
@@ -131,7 +149,9 @@ export async function getAnalyticsTopLinks(params?: {
 	if (params?.device) search.set('device', params.device)
 	if (params?.referrer) search.set('referrer', params.referrer)
 	const qs = search.toString()
-	const url = qs ? `/api/analytics/top-links?${qs}` : '/api/analytics/top-links'
+	const url = qs
+		? `/api/analytics/top-links?${qs}`
+		: '/api/analytics/top-links'
 
 	const res = await fetch(url, {
 		method: 'GET',
@@ -141,9 +161,7 @@ export async function getAnalyticsTopLinks(params?: {
 
 	const data = await res.json().catch(() => ({}))
 	if (!res.ok) {
-		throw new Error(
-			String((data as any)?.error ?? 'Failed to load top links')
-		)
+		throw new Error(parseErrorMessage(data, 'Failed to load top links'))
 	}
 
 	return data as AnalyticsTopLinksResponse

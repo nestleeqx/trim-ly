@@ -10,7 +10,10 @@ import FAQSection from '@/app/features/pricing/components/FAQSection/FAQSection'
 import PlanCardsGrid from '@/app/features/pricing/components/PlanCardsGrid/PlanCardsGrid'
 import PricingHeader from '@/app/features/pricing/components/PricingHeader/PricingHeader'
 import TestimonialsGrid from '@/app/features/pricing/components/TestimonialsGrid/TestimonialsGrid'
-import { getBilling, updateBillingPlan } from '@/app/features/profile/api/profileApi'
+import {
+	getBilling,
+	updateBillingPlan
+} from '@/app/features/profile/api/profileApi'
 import { useToast } from '@/hooks/useToast'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -60,7 +63,9 @@ export default function PricingPage() {
 				window.dispatchEvent(new Event('billing-updated'))
 			} catch (error) {
 				showToast(
-					error instanceof Error ? error.message : 'Не удалось сменить тариф',
+					error instanceof Error
+						? error.message
+						: 'Не удалось сменить тариф',
 					'error'
 				)
 			} finally {

@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import { AlertCircle, AlertTriangle, Check } from 'lucide-react'
 import { useEffect } from 'react'
 import styles from './Toast.module.scss'
@@ -35,7 +36,7 @@ export default function Toast({
 	const Icon = icons[variant]
 
 	return (
-		<div className={`${styles.toast} ${styles[variant]}`}>
+		<div className={cn(styles.toast, styles[variant])}>
 			<Icon size={16} />
 			<span>{message}</span>
 		</div>

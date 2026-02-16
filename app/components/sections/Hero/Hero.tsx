@@ -4,8 +4,8 @@ import Button from '@/app/components/ui/Button/Button'
 import DemoModal from '@/app/components/ui/DemoModal/DemoModal'
 import { motion } from 'framer-motion'
 import { Zap } from 'lucide-react'
-import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { useState } from 'react'
 import { containerVariants, heroFeatures, itemVariants } from './hero.config'
 import styles from './Hero.module.scss'
@@ -54,14 +54,16 @@ export default function Hero() {
 							className={styles.actions}
 							variants={itemVariants}
 						>
-							{status !== 'authenticated' && <Link href='/signup'>
-								<Button
-									variant='primary'
-									size='lg'
-								>
-									Создать аккаунт
-								</Button>
-							</Link>}
+							{status !== 'authenticated' && (
+								<Link href='/signup'>
+									<Button
+										variant='primary'
+										size='lg'
+									>
+										Создать аккаунт
+									</Button>
+								</Link>
+							)}
 							<Button
 								variant='ghost'
 								size='lg'

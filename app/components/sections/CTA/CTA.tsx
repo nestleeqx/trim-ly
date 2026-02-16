@@ -3,8 +3,8 @@
 import Button from '@/app/components/ui/Button/Button'
 import DemoModal from '@/app/components/ui/DemoModal/DemoModal'
 import { motion } from 'framer-motion'
-import Link from 'next/link'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { useState } from 'react'
 import styles from './CTA.module.scss'
 
@@ -31,18 +31,20 @@ export default function CTASection() {
 							небольшим командам.
 						</p>
 						<div className={styles.actions}>
-							{status !== 'authenticated' && <Link
-								href='/signup'
-								className={styles.actionLink}
-							>
-								<Button
-									variant='invertPrimary'
-									size='lg'
-									className={styles.primaryBtn}
+							{status !== 'authenticated' && (
+								<Link
+									href='/signup'
+									className={styles.actionLink}
 								>
-									Создать бесплатный аккаунт
-								</Button>
-							</Link>}
+									<Button
+										variant='invertPrimary'
+										size='lg'
+										className={styles.primaryBtn}
+									>
+										Создать бесплатный аккаунт
+									</Button>
+								</Link>
+							)}
 							<Button
 								variant='invertOutline'
 								size='lg'

@@ -2,7 +2,7 @@
 
 import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
 import LinksPageContent from '@/app/features/links/components/LinksPageContent/LinksPageContent'
-import { useLinksPageController } from '@/hooks/links/useLinksPageController'
+import { useLinksPageController } from '@/app/features/links/hooks/useLinksPageController'
 
 export default function LinksPage() {
 	const {

@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'classnames'
 import React from 'react'
 import styles from './LinkTableRow.module.scss'
 
@@ -13,7 +14,7 @@ export default function TitleCell({ title, onTitleClick }: TitleCellProps) {
 		<td>
 			<div className={styles.titleCell}>
 				<span
-					className={`${styles.linkTitle} ${styles.clickableTitle}`}
+					className={cn(styles.linkTitle, styles.clickableTitle)}
 					onClick={onTitleClick}
 				>
 					{title}

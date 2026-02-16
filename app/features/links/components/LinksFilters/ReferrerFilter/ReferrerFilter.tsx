@@ -1,6 +1,6 @@
 'use client'
 
-import { mockTopReferrers } from '@/data/mockDashboardData'
+import cn from 'classnames'
 import { Check } from 'lucide-react'
 import commonStyles from '../FilterCommon.module.scss'
 import FilterDropdown from '../FilterDropdown/FilterDropdown'
@@ -14,7 +14,7 @@ interface ReferrerFilterProps {
 export default function ReferrerFilter({
 	selectedReferrer,
 	onReferrerChange,
-	referrers = mockTopReferrers.map(item => ({ name: item.name }))
+	referrers = []
 }: ReferrerFilterProps) {
 	return (
 		<FilterDropdown
@@ -24,7 +24,9 @@ export default function ReferrerFilter({
 		>
 			<button
 				type='button'
-				className={`${commonStyles.dropdownItem} ${!selectedReferrer ? commonStyles.selected : ''}`}
+				className={cn(commonStyles.dropdownItem, {
+					[commonStyles.selected]: !selectedReferrer
+				})}
 				onClick={() => onReferrerChange?.(null)}
 			>
 				<span className={commonStyles.checkbox} />
@@ -35,11 +37,16 @@ export default function ReferrerFilter({
 				<button
 					type='button'
 					key={referrer.name}
-					className={`${commonStyles.dropdownItem} ${selectedReferrer === referrer.name ? commonStyles.selected : ''}`}
+					className={cn(commonStyles.dropdownItem, {
+						[commonStyles.selected]:
+							selectedReferrer === referrer.name
+					})}
 					onClick={() => onReferrerChange?.(referrer.name)}
 				>
 					<span className={commonStyles.checkbox}>
-						{selectedReferrer === referrer.name && <Check size={12} />}
+						{selectedReferrer === referrer.name && (
+							<Check size={12} />
+						)}
 					</span>
 					{referrer.name}
 				</button>

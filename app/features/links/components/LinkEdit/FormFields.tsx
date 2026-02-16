@@ -16,7 +16,10 @@ interface FormFieldsProps {
 	aliasChecking: boolean
 	aliasAvailable: boolean
 	isCreateMode: boolean
-	onFieldChange: (field: keyof LinkEditFormData, value: any) => void
+	onFieldChange: <K extends keyof LinkEditFormData>(
+		field: K,
+		value: LinkEditFormData[K]
+	) => void
 	onDestinationError: (error: string | undefined) => void
 }
 

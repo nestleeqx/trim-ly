@@ -23,14 +23,16 @@ export function useSignup() {
 			if (signInRes?.error) {
 				const mapped = mapAuthApiError(
 					String(signInRes.error),
-					'Аккаунт создан, но не удалось войти. Попробуйте логин.'
+					'Аккаунт создан, но войти автоматически не удалось. Попробуйте войти вручную.'
 				)
 				throw new Error(mapped.message)
 			}
 
 			return { ok: true as const }
-		} catch (e: any) {
-			setError(e?.message ?? 'Ошибка')
+		} catch (error: unknown) {
+			const message =
+				error instanceof Error ? error.message : 'Ошибка регистрации.'
+			setError(message)
 			return { ok: false as const }
 		} finally {
 			setIsLoading(false)

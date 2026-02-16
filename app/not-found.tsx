@@ -3,6 +3,7 @@
 import Button from '@/app/components/ui/Button/Button'
 import Logo from '@/app/components/ui/Logo/Logo'
 import styles from '@/app/not-found.module.scss'
+import cn from 'classnames'
 import { CreditCard, Home, Search, Zap } from 'lucide-react'
 import Link from 'next/link'
 
@@ -19,7 +20,7 @@ export default function NotFound() {
 				<div className={styles.dot + ' ' + styles.dot3} />
 
 				<div className={styles.digits}>
-					<span className={`${styles.digit} ${styles.digitAnimated}`}>
+					<span className={cn(styles.digit, styles.digitAnimated)}>
 						4
 					</span>
 
@@ -30,7 +31,7 @@ export default function NotFound() {
 						/>
 					</div>
 
-					<span className={`${styles.digit} ${styles.digitAnimated}`}>
+					<span className={cn(styles.digit, styles.digitAnimated)}>
 						4
 					</span>
 				</div>

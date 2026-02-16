@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'classnames'
 import { Check, Tag } from 'lucide-react'
 import commonStyles from '../FilterCommon.module.scss'
 import FilterDropdown from '../FilterDropdown/FilterDropdown'
@@ -33,7 +34,9 @@ export default function TagsFilter({
 			hasSelection={selectedTags.length > 0}
 		>
 			{isLoading ? (
-				<div className={commonStyles.dropdownItem}>Загрузка тегов...</div>
+				<div className={commonStyles.dropdownItem}>
+					Загрузка тегов...
+				</div>
 			) : availableTags.length === 0 ? (
 				<div className={commonStyles.dropdownItem}>Теги не найдены</div>
 			) : (
@@ -41,7 +44,9 @@ export default function TagsFilter({
 					<button
 						key={tag}
 						type='button'
-						className={`${commonStyles.dropdownItem} ${selectedTags.includes(tag) ? commonStyles.selected : ''}`}
+						className={cn(commonStyles.dropdownItem, {
+							[commonStyles.selected]: selectedTags.includes(tag)
+						})}
 						onClick={() => toggleTag(tag)}
 					>
 						<span className={commonStyles.checkbox}>

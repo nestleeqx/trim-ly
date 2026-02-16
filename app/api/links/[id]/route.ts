@@ -1,5 +1,6 @@
-﻿import { authOptions } from '@/auth'
 import { buildShortLink } from '@/app/features/links/utils/shortLink'
+import { Prisma } from '@/app/generated/prisma/client'
+import { authOptions } from '@/auth'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { getServerSession } from 'next-auth'
@@ -77,7 +78,6 @@ export async function GET(_: Request, context: RouteContext) {
 	}
 
 	const { id } = await context.params
-
 	if (!id) {
 		return NextResponse.json({ error: 'Invalid link id' }, { status: 400 })
 	}
@@ -154,45 +154,38 @@ export async function PATCH(req: Request, context: RouteContext) {
 		}
 
 		if (action === 'restore') {
-			const existingDeleted = await prisma.link.findFirst({
-				where: { id, userId, deletedAt: { not: null } },
-				select: { id: true }
+			const affected = await prisma.$transaction(async tx => {
+				const result = await tx.link.updateMany({
+					where: { id, userId, deletedAt: { not: null } },
+					data: { deletedAt: null, status: 'active' }
+				})
+
+				if (result.count > 0) {
+					await tx.userUsage.upsert({
+						where: { userId },
+						create: { userId, linksCreated: result.count, clicksTotal: 0 },
+						update: { linksCreated: { increment: result.count } }
+					})
+				}
+
+				return result.count
 			})
 
-			if (!existingDeleted) {
+			if (affected === 0) {
 				return NextResponse.json({ error: 'Link not found' }, { status: 404 })
 			}
-
-			await prisma.$transaction([
-				prisma.link.update({
-					where: { id },
-					data: { deletedAt: null, status: 'active' }
-				}),
-				prisma.userUsage.update({
-					where: { userId },
-					data: { linksCreated: { increment: 1 } }
-				})
-			])
-
 			return NextResponse.json({ ok: true })
 		}
 
-		const existing = await prisma.link.findFirst({
-			where: { id, userId, deletedAt: null },
-			select: { id: true }
-		})
-
-		if (!existing) {
-			return NextResponse.json({ error: 'Link not found' }, { status: 404 })
-		}
-
 		const nextStatus = action === 'pause' ? 'disabled' : 'active'
-
-		await prisma.link.update({
-			where: { id },
+		const result = await prisma.link.updateMany({
+			where: { id, userId, deletedAt: null },
 			data: { status: nextStatus }
 		})
 
+		if (result.count === 0) {
+			return NextResponse.json({ error: 'Link not found' }, { status: 404 })
+		}
 		return NextResponse.json({ ok: true })
 	}
 
@@ -209,11 +202,9 @@ export async function PATCH(req: Request, context: RouteContext) {
 	if (!targetUrl) {
 		return NextResponse.json({ error: 'Invalid target URL' }, { status: 400 })
 	}
-
 	if (!slug || slug.length < MIN_SLUG_LENGTH || slug.length > MAX_SLUG_LENGTH) {
 		return NextResponse.json({ error: 'Invalid slug' }, { status: 400 })
 	}
-
 	if (expiresAt && expiresAt.getTime() <= Date.now()) {
 		return NextResponse.json(
 			{ error: 'Expiration date must be in the future' },
@@ -225,18 +216,8 @@ export async function PATCH(req: Request, context: RouteContext) {
 		where: { id, userId, deletedAt: null },
 		select: { id: true, passwordHash: true }
 	})
-
 	if (!existingLink) {
 		return NextResponse.json({ error: 'Link not found' }, { status: 404 })
-	}
-
-	const slugOwner = await prisma.link.findUnique({
-		where: { slug },
-		select: { id: true }
-	})
-
-	if (slugOwner && slugOwner.id !== id) {
-		return NextResponse.json({ error: 'Slug already taken' }, { status: 409 })
 	}
 
 	const uniqueTagNames = [...new Set(tagNamesRaw.map(v => v.trim()).filter(Boolean))]
@@ -256,99 +237,121 @@ export async function PATCH(req: Request, context: RouteContext) {
 		passwordHashToSave = existingLink.passwordHash
 	}
 
-	const updated = await prisma.$transaction(async tx => {
-		const upsertedTags = [] as { id: string }[]
+	try {
+		const updated = await prisma.$transaction(async tx => {
+			const upsertedTags: Array<{ id: string }> = []
 
-		for (const tagName of uniqueTagNames) {
-			const tagSlug = slugifyTagName(tagName)
-			if (!tagSlug) {
-				throw new Error('Invalid tag name')
-			}
+			for (const tagName of uniqueTagNames) {
+				const tagSlug = slugifyTagName(tagName)
+				if (!tagSlug) {
+					throw new Error('Invalid tag name')
+				}
 
-			const tag = await tx.tag.upsert({
-				where: {
-					userId_slug: {
+				const tag = await tx.tag.upsert({
+					where: {
+						userId_slug: {
+							userId,
+							slug: tagSlug
+						}
+					},
+					update: {
+						name: tagName
+					},
+					create: {
 						userId,
+						name: tagName,
 						slug: tagSlug
-					}
-				},
-				update: {
-					name: tagName
-				},
-				create: {
-					userId,
-					name: tagName,
-					slug: tagSlug
-				},
-				select: { id: true }
-			})
+					},
+					select: { id: true }
+				})
 
-			upsertedTags.push(tag)
-		}
-
-		await tx.link.update({
-			where: { id },
-			data: {
-				targetUrl,
-				slug,
-				title,
-				expiresAt,
-				passwordHash: passwordHashToSave
+				upsertedTags.push(tag)
 			}
-		})
 
-		await tx.linkTag.deleteMany({ where: { linkId: id } })
-
-		if (upsertedTags.length) {
-			await tx.linkTag.createMany({
-				data: upsertedTags.map(tag => ({ linkId: id, tagId: tag.id }))
+			const updatedResult = await tx.link.updateMany({
+				where: { id, userId, deletedAt: null },
+				data: {
+					targetUrl,
+					slug,
+					title,
+					expiresAt,
+					passwordHash: passwordHashToSave
+				}
 			})
-		}
 
-		return tx.link.findUnique({
-			where: { id },
-			select: {
-				id: true,
-				title: true,
-				slug: true,
-				targetUrl: true,
-				clicksTotal: true,
-				status: true,
-				createdAt: true,
-				expiresAt: true,
-				deletedAt: true,
-				passwordHash: true,
-				tags: {
-					select: {
-						tag: { select: { name: true } }
+			if (updatedResult.count === 0) {
+				throw new Error('Link not found')
+			}
+
+			await tx.linkTag.deleteMany({ where: { linkId: id } })
+
+			if (upsertedTags.length) {
+				await tx.linkTag.createMany({
+					data: upsertedTags.map(tag => ({ linkId: id, tagId: tag.id }))
+				})
+			}
+
+			return tx.link.findUnique({
+				where: { id },
+				select: {
+					id: true,
+					title: true,
+					slug: true,
+					targetUrl: true,
+					clicksTotal: true,
+					status: true,
+					createdAt: true,
+					expiresAt: true,
+					deletedAt: true,
+					passwordHash: true,
+					tags: {
+						select: {
+							tag: { select: { name: true } }
+						}
 					}
 				}
+			})
+		})
+
+		if (!updated) {
+			return NextResponse.json({ error: 'Link not found' }, { status: 404 })
+		}
+
+		return NextResponse.json({
+			link: {
+				id: updated.id,
+				title: updated.title || 'Без названия',
+				shortUrl: buildShortLink(updated.slug),
+				destination: updated.targetUrl,
+				clicks: updated.clicksTotal,
+				status: mapStatus({
+					status: updated.status,
+					expiresAt: updated.expiresAt,
+					deletedAt: updated.deletedAt
+				}),
+				tags: updated.tags.map(tagRel => tagRel.tag.name),
+				createdAt: updated.createdAt.toISOString(),
+				expirationDate: updated.expiresAt?.toISOString() ?? null,
+				hasPassword: !!updated.passwordHash
 			}
 		})
-	})
-
-	if (!updated) {
-		return NextResponse.json({ error: 'Link not found' }, { status: 404 })
-	}
-
-	return NextResponse.json({
-		link: {
-			id: updated.id,
-			title: updated.title || 'Без названия',
-			shortUrl: buildShortLink(updated.slug),
-			destination: updated.targetUrl,
-			clicks: updated.clicksTotal,
-			status: mapStatus({
-				status: updated.status,
-				expiresAt: updated.expiresAt,
-				deletedAt: updated.deletedAt
-			}),
-			tags: updated.tags.map(tagRel => tagRel.tag.name),
-			createdAt: updated.createdAt.toISOString(),
-			expirationDate: updated.expiresAt?.toISOString() ?? null,
-			hasPassword: !!updated.passwordHash
+	} catch (error) {
+		if (error instanceof Error) {
+			if (error.message === 'Invalid tag name') {
+				return NextResponse.json({ error: 'Invalid tag name' }, { status: 400 })
+			}
+			if (error.message === 'Link not found') {
+				return NextResponse.json({ error: 'Link not found' }, { status: 404 })
+			}
 		}
-	})
+		if (
+			error instanceof Prisma.PrismaClientKnownRequestError &&
+			error.code === 'P2002'
+		) {
+			return NextResponse.json({ error: 'Slug already taken' }, { status: 409 })
+		}
+		return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+	}
 }
 
 export async function DELETE(_: Request, context: RouteContext) {
@@ -360,34 +363,42 @@ export async function DELETE(_: Request, context: RouteContext) {
 	}
 
 	const { id } = await context.params
-
 	if (!id) {
 		return NextResponse.json({ error: 'Invalid link id' }, { status: 400 })
 	}
 
-	const existing = await prisma.link.findFirst({
-		where: { id, userId, deletedAt: null },
-		select: { id: true }
-	})
-
-	if (!existing) {
-		return NextResponse.json({ error: 'Link not found' }, { status: 404 })
-	}
-
-	await prisma.$transaction([
-		prisma.link.update({
-			where: { id },
+	const affected = await prisma.$transaction(async tx => {
+		const result = await tx.link.updateMany({
+			where: { id, userId, deletedAt: null },
 			data: {
 				deletedAt: new Date(),
 				status: 'disabled'
 			}
-		}),
-		prisma.userUsage.update({
-			where: { userId },
-			data: { linksCreated: { decrement: 1 } }
 		})
-	])
+
+		if (result.count > 0) {
+			const usage = await tx.userUsage.findUnique({
+				where: { userId },
+				select: { linksCreated: true }
+			})
+			await tx.userUsage.upsert({
+				where: { userId },
+				create: { userId, linksCreated: 0, clicksTotal: 0 },
+				update: {
+					linksCreated: Math.max(
+						0,
+						(usage?.linksCreated ?? 0) - result.count
+					)
+				}
+			})
+		}
+
+		return result.count
+	})
+
+	if (affected === 0) {
+		return NextResponse.json({ error: 'Link not found' }, { status: 404 })
+	}
 
 	return NextResponse.json({ ok: true })
 }
-

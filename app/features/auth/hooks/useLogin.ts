@@ -25,8 +25,10 @@ export function useLogin() {
 			}
 
 			return { ok: true as const }
-		} catch (e: any) {
-			setError(e?.message ?? 'Ошибка входа.')
+		} catch (error: unknown) {
+			const message =
+				error instanceof Error ? error.message : 'Ошибка входа.'
+			setError(message)
 			return { ok: false as const }
 		} finally {
 			setIsLoading(false)

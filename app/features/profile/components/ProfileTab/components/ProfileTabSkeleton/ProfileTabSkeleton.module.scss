@@ -43,22 +43,8 @@
 	margin-top: $spacing-sm;
 }
 
-.actions {
-	display: flex;
-	justify-content: flex-end;
-	margin-top: $spacing-xl;
-}
-
 @media (max-width: $breakpoint-sm) {
 	.avatarRow {
 		align-items: flex-start;
-	}
-
-	.actions {
-		justify-content: stretch;
-	}
-
-	.actions :global(*) {
-		width: 100%;
 	}
 }

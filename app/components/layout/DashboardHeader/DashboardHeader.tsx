@@ -1,9 +1,9 @@
 'use client'
 
-import MobileSearchOverlay from '@/app/components/layout/DashboardHeader/MobileSearchOverlay/MobileSearchOverlay'
-import NotificationBell from '@/app/components/layout/DashboardHeader/NotificationBell/NotificationBell'
-import Search from '@/app/components/layout/DashboardHeader/Search/Search'
-import UserMenu from '@/app/components/layout/DashboardHeader/UserMenu/UserMenu'
+import MobileSearchOverlay from '@/app/components/layout/DashboardHeader/components/MobileSearchOverlay/MobileSearchOverlay'
+import NotificationBell from '@/app/components/layout/DashboardHeader/components/NotificationBell/NotificationBell'
+import Search from '@/app/components/layout/DashboardHeader/components/Search/Search'
+import UserMenu from '@/app/components/layout/DashboardHeader/components/UserMenu/UserMenu'
 import Button from '@/app/components/ui/Button/Button'
 import { ArrowLeft, Plus, Search as SearchIcon } from 'lucide-react'
 import Link from 'next/link'

@@ -1,4 +1,5 @@
 import { SortField, SortOrder, SortState } from '@/types/filterLinks'
+import cn from 'classnames'
 import { Check, ChevronDown } from 'lucide-react'
 import styles from './SortDropdown.module.scss'
 import { SORT_OPTIONS } from './sortConfig'
@@ -26,7 +27,7 @@ export default function SubMenu({
 	return selectedOption ? (
 		<>
 			<button
-				className={`${styles.dropdownItem} ${styles.sortBack}`}
+				className={cn(styles.dropdownItem, styles.sortBack)}
 				onClick={() => setSelectedField(null)}
 			>
 				<ChevronDown
@@ -45,7 +46,9 @@ export default function SubMenu({
 				return (
 					<button
 						key={sub.order}
-						className={`${styles.dropdownItem} ${styles.sortSubItem} ${isActive ? styles.selected : ''}`}
+						className={cn(styles.dropdownItem, styles.sortSubItem, {
+							[styles.selected]: isActive
+						})}
 						onClick={() =>
 							selectOrder(selectedOption.field, sub.order)
 						}

@@ -1,4 +1,5 @@
 import { ChartDataPoint } from '@/types/charts'
+import cn from 'classnames'
 import styles from './CustomTooltip.module.scss'
 
 interface CustomTooltipProps {
@@ -17,7 +18,10 @@ export default function CustomTooltip({ active, payload }: CustomTooltipProps) {
 			<div className={styles.tooltipRow}>
 				<span className={styles.tooltipLabel}>Клики</span>
 				<span
-					className={`${styles.tooltipValue} ${styles.tooltipValuePrimary}`}
+					className={cn(
+						styles.tooltipValue,
+						styles.tooltipValuePrimary
+					)}
 				>
 					{data.value.toLocaleString('ru-RU')}
 				</span>

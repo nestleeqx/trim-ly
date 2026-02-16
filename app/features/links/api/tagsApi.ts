@@ -1,4 +1,4 @@
-export type TagDto = {
+type TagDto = {
 	id: string
 	name: string
 	slug: string
@@ -24,8 +24,16 @@ function mapTagApiError(raw: string): string {
 
 async function parseJson<T>(res: Response): Promise<T> {
 	const data = await res.json().catch(() => ({}))
-	if (!res.ok)
-		throw new Error(mapTagApiError(String((data as any)?.error ?? '')))
+	if (!res.ok) {
+		const errorMessage =
+			typeof data === 'object' &&
+			data !== null &&
+			'error' in data &&
+			typeof (data as { error: unknown }).error === 'string'
+				? (data as { error: string }).error
+				: ''
+		throw new Error(mapTagApiError(errorMessage))
+	}
 	return data as T
 }
 
@@ -43,9 +51,4 @@ export async function createTag(name: string): Promise<TagDto> {
 	})
 	const data = await parseJson<{ tag: TagDto }>(res)
 	return data.tag
-}
-
-export async function deleteTag(id: string): Promise<void> {
-	const res = await fetch(`/api/tags/${id}`, { method: 'DELETE' })
-	await parseJson<{ ok: true }>(res)
 }

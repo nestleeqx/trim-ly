@@ -1,5 +1,6 @@
 ﻿'use client'
 
+import cn from 'classnames'
 import { Pause, Play, RotateCcw, Trash2, X } from 'lucide-react'
 import styles from './BulkActionsBar.module.scss'
 
@@ -47,21 +48,30 @@ export default function BulkActionsBar({
 
 			<div className={styles.actions}>
 				{canPauseBulk && (
-					<button className={styles.actionButton} onClick={onPause}>
+					<button
+						className={styles.actionButton}
+						onClick={onPause}
+					>
 						<Pause size={16} />
 						<span>Приостановить</span>
 					</button>
 				)}
 
 				{canResumeBulk && (
-					<button className={styles.actionButton} onClick={onResume}>
+					<button
+						className={styles.actionButton}
+						onClick={onResume}
+					>
 						<Play size={16} />
 						<span>Возобновить</span>
 					</button>
 				)}
 
 				{canRestoreBulk && (
-					<button className={styles.actionButton} onClick={onRestore}>
+					<button
+						className={styles.actionButton}
+						onClick={onRestore}
+					>
 						<RotateCcw size={16} />
 						<span>Восстановить</span>
 					</button>
@@ -69,7 +79,7 @@ export default function BulkActionsBar({
 
 				{canDeleteBulk && (
 					<button
-						className={`${styles.actionButton} ${styles.destructive}`}
+						className={cn(styles.actionButton, styles.destructive)}
 						onClick={onDelete}
 					>
 						<Trash2 size={16} />

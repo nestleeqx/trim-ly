@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 interface UsePaginationProps<T> {
 	data: T[]
@@ -18,17 +18,12 @@ export const usePagination = <T>({
 
 	const totalItems = data.length
 	const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage))
-
-	useEffect(() => {
-		if (currentPage > totalPages) {
-			setCurrentPage(1)
-		}
-	}, [currentPage, totalPages])
+	const safeCurrentPage = Math.min(currentPage, totalPages)
 
 	const paginatedData = useMemo(() => {
-		const start = (currentPage - 1) * itemsPerPage
+		const start = (safeCurrentPage - 1) * itemsPerPage
 		return data.slice(start, start + itemsPerPage)
-	}, [data, currentPage, itemsPerPage])
+	}, [data, safeCurrentPage, itemsPerPage])
 
 	const handlePageChange = (page: number) => {
 		const safePage = Math.min(Math.max(page, 1), totalPages)
@@ -41,7 +36,7 @@ export const usePagination = <T>({
 	}
 
 	return {
-		currentPage,
+		currentPage: safeCurrentPage,
 		itemsPerPage,
 		totalItems,
 		totalPages,

@@ -6,6 +6,7 @@ import {
 	AnalyticsSideCardsSkeleton,
 	AnalyticsStatsSkeleton
 } from '@/app/components/ui/AnalyticsSkeleton/AnalyticsSkeleton'
+import LoadingOverlay from '@/app/components/ui/LoadingOverlay/LoadingOverlay'
 import ClicksChart from '@/app/features/analytics/components/ClicksChart/ClicksChart'
 import DevicesChart from '@/app/features/analytics/components/DevicesChart/DevicesChart'
 import StatsCards from '@/app/features/analytics/components/StatsCards/StatsCards'
@@ -13,8 +14,8 @@ import TopCountries from '@/app/features/analytics/components/TopCountries/TopCo
 import TopReferrers from '@/app/features/analytics/components/TopReferrers/TopReferrers'
 import EmptyDashboard from '@/app/features/dashboard/components/EmptyDashboard/EmptyDashboard'
 import RecentLinks from '@/app/features/dashboard/components/RecentLinks/RecentLinks'
-import { useAnalyticsBreakdown } from '@/hooks/analytics/useAnalyticsBreakdown'
-import { useAnalyticsSummary } from '@/hooks/analytics/useAnalyticsSummary'
+import { useAnalyticsBreakdown } from '@/app/features/analytics/hooks/useAnalyticsBreakdown'
+import { useAnalyticsSummary } from '@/app/features/analytics/hooks/useAnalyticsSummary'
 
 export default function DashboardPage() {
 	const summary = useAnalyticsSummary('24h')
@@ -53,15 +54,18 @@ export default function DashboardPage() {
 				subtitle='С возвращением, вот что происходит.'
 			/>
 			<div className={styles.content}>
-				{summary.isLoading ? (
+				{summary.isInitialLoading ? (
 					<AnalyticsStatsSkeleton
 						className={styles.contentSkeleton}
 					/>
 				) : (
-					<StatsCards
-						data={summary.stats}
-						clickable={false}
-					/>
+					<div className={styles.loadingArea}>
+						<StatsCards
+							data={summary.stats}
+							clickable={false}
+						/>
+						{summary.isRefetching ? <LoadingOverlay /> : null}
+					</div>
 				)}
 
 				<div className={styles.chartsGrid}>
@@ -70,12 +74,12 @@ export default function DashboardPage() {
 						<RecentLinks />
 					</div>
 					<div className={styles.sideCharts}>
-						{breakdown.isLoading ? (
+						{breakdown.isInitialLoading ? (
 							<AnalyticsSideCardsSkeleton
 								className={styles.sideChartsSkeleton}
 							/>
 						) : (
-							<>
+							<div className={styles.loadingArea}>
 								<TopCountries
 									countries={breakdown.topCountries}
 								/>
@@ -92,7 +96,8 @@ export default function DashboardPage() {
 								<TopReferrers
 									referrers={breakdown.topReferrers}
 								/>
-							</>
+								{breakdown.isRefetching ? <LoadingOverlay /> : null}
+							</div>
 						)}
 					</div>
 				</div>

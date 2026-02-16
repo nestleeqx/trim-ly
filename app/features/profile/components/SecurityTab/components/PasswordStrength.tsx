@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import styles from './PasswordStrength.module.scss'
 
 type Tone = 'weak' | 'medium' | 'strong'
@@ -16,13 +17,11 @@ export default function PasswordStrength({ score, label, tone }: Props) {
 		<div className={styles.root}>
 			<div className={styles.row}>
 				<span className={styles.caption}>Сила пароля</span>
-				<span className={`${styles.value} ${styles[tone]}`}>
-					{label}
-				</span>
+				<span className={cn(styles.value, styles[tone])}>{label}</span>
 			</div>
 			<div className={styles.track}>
 				<div
-					className={`${styles.fill} ${styles[tone]}`}
+					className={cn(styles.fill, styles[tone])}
 					style={{ width: percent }}
 				/>
 			</div>

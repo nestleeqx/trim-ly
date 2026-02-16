@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import styles from './ChartSummaryStats.module.scss'
 
 interface ChartSummaryStatsProps {
@@ -16,7 +17,7 @@ export default function ChartSummaryStats({
 	className
 }: ChartSummaryStatsProps) {
 	return (
-		<div className={`${styles.stats} ${className ?? ''}`.trim()}>
+		<div className={cn(styles.stats, className)}>
 			<div className={styles.stat}>
 				<span className={styles.statLabel}>{totalLabel}</span>
 				<span className={styles.statValue}>{total}</span>

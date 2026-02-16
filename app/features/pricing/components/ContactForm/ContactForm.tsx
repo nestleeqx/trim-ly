@@ -1,17 +1,12 @@
-﻿'use client'
+'use client'
 
-import FormField from '@/app/components/ui/FormField'
-import Button from '@/app/components/ui/Button/Button'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2, XCircle } from 'lucide-react'
+import { XCircle } from 'lucide-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import {
-	ContactFormData,
-	contactSchema,
-	formFields,
-	FormStatus
-} from './contactForm.config'
+import { ContactFormData, contactSchema, FormStatus } from './contactForm.config'
+import ContactFormFields from './ContactFormFields'
+import ContactFormSubmitButton from './ContactFormSubmitButton'
 import styles from './ContactForm.module.scss'
 import SuccessMessage from './SuccessMessage'
 
@@ -60,70 +55,23 @@ export default function ContactForm({ onSuccess }: ContactFormProps) {
 				поддержку.
 			</div>
 
-			{formFields.map(field => {
-				const errorMessage = errors[field.id]?.message
-				const sharedProps = {
-					id: field.id,
-					label: field.label,
-					placeholder: field.placeholder,
-					disabled: isSubmitting,
-					error:
-						typeof errorMessage === 'string'
-							? errorMessage
-							: undefined
-				}
+			<ContactFormFields
+				register={register}
+				errors={errors}
+				isSubmitting={isSubmitting}
+			/>
 
-				return field.type === 'textarea' ? (
-					<FormField
-						key={field.id}
-						as='textarea'
-						rows={field.rows}
-						{...sharedProps}
-						textareaProps={{
-							...register(field.id)
-						}}
-					/>
-				) : (
-					<FormField
-						key={field.id}
-						type={field.type}
-						{...sharedProps}
-						inputProps={{
-							...register(field.id)
-						}}
-					/>
-				)
-			})}
-
-			{status === 'error' && (
+			{status === 'error' ? (
 				<div className={styles.serverError}>
 					<XCircle size={20} />
-					<span>
-						Произошла ошибка при отправке. Попробуйте позже.
-					</span>
+					<span>Произошла ошибка при отправке. Попробуйте позже.</span>
 				</div>
-			)}
+			) : null}
 
-			<div className={styles.actions}>
-				<Button
-					type='submit'
-					variant='primary'
-					size='lg'
-					disabled={isSubmitting || !isValid}
-				>
-					{isSubmitting ? (
-						<span className={styles.loadingInner}>
-							<Loader2
-								className={styles.spinner}
-								size={20}
-							/>
-							Отправка...
-						</span>
-					) : (
-						'Отправить сообщение'
-					)}
-				</Button>
-			</div>
+			<ContactFormSubmitButton
+				isSubmitting={isSubmitting}
+				isValid={isValid}
+			/>
 		</form>
 	)
 }

@@ -5,20 +5,28 @@ import QrCodeModal from '@/app/features/links/components/QrCodeModal/QrCodeModal
 import { downloadQrPng } from '@/app/features/links/utils/downloadQrPng'
 import { withQrSource } from '@/app/features/links/utils/qrTracking'
 import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
-import { useActionCallbacks } from '@/hooks/useActionCallbacks'
 import { useToast } from '@/hooks/useToast'
 import { useCallback, useMemo, useState } from 'react'
-import ActivityChart from './ActivityChart'
-import LinksTableHero from './LinksTableHero'
-import { mockChartData, mockLinks, PreviewTab } from './preview.config'
-import PreviewTabs from './PreviewTabs'
+import ActivityChart from './components/ActivityChart'
+import LinksTableHero from './components/LinksTableHero'
+import {
+	mockChartData,
+	mockLinks,
+	PreviewTab
+} from './components/preview.config'
+import PreviewTabs from './components/PreviewTabs'
+import QrBadge from './components/QrBadge'
+import UrlInput from './components/UrlInput'
 import styles from './ProductPreview.module.scss'
-import QrBadge from './QrBadge'
-import UrlInput from './UrlInput'
 
 export default function ProductPreview() {
 	const { toast, showToast, hideToast } = useToast()
-	const { handleCopy, handleCreate } = useActionCallbacks({ showToast })
+	const handleCopy = useCallback(() => {
+		showToast('Скопировано!')
+	}, [showToast])
+	const handleCreate = useCallback(() => {
+		showToast('Ссылка создана')
+	}, [showToast])
 	const [showQrModal, setShowQrModal] = useState(false)
 	const [activeTab, setActiveTab] = useState<PreviewTab>('links')
 	const landingUrl = useMemo(

@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'classnames'
 import { Calendar } from 'lucide-react'
 import React from 'react'
 import styles from './PeriodSelector.module.scss'
@@ -34,11 +35,15 @@ export default function PeriodSelector({
 					<button
 						key={option.key}
 						type='button'
-						className={`${styles.periodBtn} ${activeKey === option.key ? styles.active : ''}`}
+						className={cn(styles.periodBtn, {
+							[styles.active]: activeKey === option.key
+						})}
 						onClick={() => onChange(option.key)}
 						disabled={disabled}
 					>
-						{option.key === showCalendarOnKey ? <Calendar size={14} /> : null}
+						{option.key === showCalendarOnKey ? (
+							<Calendar size={14} />
+						) : null}
 						{label}
 					</button>
 				)

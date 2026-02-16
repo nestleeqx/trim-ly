@@ -1,6 +1,7 @@
 ﻿'use client'
 
 import { LinkItem as LinkItemType } from '@/types/links'
+import cn from 'classnames'
 import { Edit3, Pause, Play, RotateCcw, Trash2 } from 'lucide-react'
 import React from 'react'
 import styles from './KebabMenuActions.module.scss'
@@ -26,9 +27,15 @@ export default function KebabMenuActions({
 
 	return (
 		<>
-			<div className={styles.kebabOverlay} onClick={actions.closeKebabMenu} />
+			<div
+				className={styles.kebabOverlay}
+				onClick={actions.closeKebabMenu}
+			/>
 			<div className={styles.kebabMenu}>
-				<button className={styles.kebabItem} onClick={() => actions.handleEdit(link.id)}>
+				<button
+					className={styles.kebabItem}
+					onClick={() => actions.handleEdit(link.id)}
+				>
 					<Edit3 size={16} />
 					<span>Редактировать</span>
 				</button>
@@ -67,7 +74,7 @@ export default function KebabMenuActions({
 					<>
 						<div className={styles.kebabDivider} />
 						<button
-							className={`${styles.kebabItem} ${styles.danger}`}
+							className={cn(styles.kebabItem, styles.danger)}
 							onClick={() => actions.handleDelete(link.id)}
 						>
 							<Trash2 size={16} />

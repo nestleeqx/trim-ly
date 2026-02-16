@@ -1,6 +1,6 @@
 'use client'
 
-import { mockDeviceStats } from '@/data/mockDashboardData'
+import cn from 'classnames'
 import { Check } from 'lucide-react'
 import commonStyles from '../FilterCommon.module.scss'
 import FilterDropdown from '../FilterDropdown/FilterDropdown'
@@ -14,7 +14,7 @@ interface DeviceFilterProps {
 export default function DeviceFilter({
 	selectedDevice,
 	onDeviceChange,
-	devices = mockDeviceStats.map(d => ({ type: d.type }))
+	devices = []
 }: DeviceFilterProps) {
 	return (
 		<FilterDropdown
@@ -23,7 +23,9 @@ export default function DeviceFilter({
 			hasSelection={!!selectedDevice}
 		>
 			<button
-				className={`${commonStyles.dropdownItem} ${!selectedDevice ? commonStyles.selected : ''}`}
+				className={cn(commonStyles.dropdownItem, {
+					[commonStyles.selected]: !selectedDevice
+				})}
 				onClick={() => onDeviceChange?.(null)}
 			>
 				<span className={commonStyles.checkbox} />
@@ -33,7 +35,9 @@ export default function DeviceFilter({
 			{devices.map(device => (
 				<button
 					key={device.type}
-					className={`${commonStyles.dropdownItem} ${selectedDevice === device.type ? commonStyles.selected : ''}`}
+					className={cn(commonStyles.dropdownItem, {
+						[commonStyles.selected]: selectedDevice === device.type
+					})}
 					onClick={() => onDeviceChange?.(device.type)}
 				>
 					<span className={commonStyles.checkbox}>

@@ -2,6 +2,7 @@
 
 import Button from '@/app/components/ui/Button/Button'
 import Modal from '@/app/components/ui/Modal/Modal'
+import cn from 'classnames'
 import { AlertTriangle } from 'lucide-react'
 import styles from './ConfirmModal.module.scss'
 
@@ -35,7 +36,7 @@ export default function ConfirmModal({
 			title={title}
 		>
 			<div className={styles.content}>
-				<div className={`${styles.icon} ${styles[variant]}`}>
+				<div className={cn(styles.icon, styles[variant])}>
 					<AlertTriangle size={32} />
 				</div>
 				<p className={styles.message}>{message}</p>
@@ -48,7 +49,7 @@ export default function ConfirmModal({
 						{cancelText}
 					</Button>
 					<button
-						className={`${styles.confirmButton} ${styles[variant]}`}
+						className={cn(styles.confirmButton, styles[variant])}
 						onClick={onConfirm}
 						disabled={loading}
 					>

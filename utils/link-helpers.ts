@@ -39,7 +39,7 @@ export const calculateBulkCapabilities = (selectedItems: LinkItem[]) => {
 	}
 }
 
-export interface ResultsInfoData {
+interface ResultsInfoData {
 	show: boolean
 	totalFound: number
 	searchQuery: string
@@ -57,7 +57,7 @@ export const getResultsInfo = (
 	}
 }
 
-export interface EmptyStateData {
+interface EmptyStateData {
 	show: boolean
 	hasLinks: boolean
 	hasFilteredLinks: boolean

@@ -61,13 +61,15 @@ export default function PasswordInput({
 				[styles.labelPrimary]: labelStyle === 'primary',
 				[styles.labelSecondary]: labelStyle === 'secondary'
 			})}
-			inputClassName={`${styles.input} ${styles.inputWithAdornment}`}
+			inputClassName={cn(styles.input, styles.inputWithAdornment)}
 			rightAdornment={
 				<button
 					type='button'
 					className={styles.passwordToggle}
 					onClick={togglePassword}
-					aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
+					aria-label={
+						showPassword ? 'Скрыть пароль' : 'Показать пароль'
+					}
 				>
 					{showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
 				</button>

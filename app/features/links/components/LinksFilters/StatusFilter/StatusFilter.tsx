@@ -1,6 +1,7 @@
 'use client'
 
 import { StatusFilter as StatusFilterType } from '@/types/filterLinks'
+import cn from 'classnames'
 import { Check } from 'lucide-react'
 import commonStyles from '../FilterCommon.module.scss'
 import FilterDropdown from '../FilterDropdown/FilterDropdown'
@@ -39,7 +40,10 @@ export default function StatusFilter({
 				<button
 					type='button'
 					key={status}
-					className={`${commonStyles.dropdownItem} ${selectedStatuses.includes(status) ? commonStyles.selected : ''}`}
+					className={cn(commonStyles.dropdownItem, {
+						[commonStyles.selected]:
+							selectedStatuses.includes(status)
+					})}
 					onClick={() => toggleStatus(status)}
 				>
 					<span className={commonStyles.checkbox}>

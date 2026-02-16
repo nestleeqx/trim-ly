@@ -1,6 +1,6 @@
 'use client'
 
-import { useLinkActions } from '@/hooks/useLinkActions'
+import { useLinkActions } from '@/app/features/links/hooks/useLinkActions'
 import { LinkItem as LinkItemType } from '@/types/links'
 import QrCodeModal from '../../QrCodeModal/QrCodeModal'
 import LinkCard from './LinkCard/LinkCard'

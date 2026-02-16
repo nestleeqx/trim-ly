@@ -1,20 +1,11 @@
 'use client'
 
-import { motion } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
 import { useState } from 'react'
+import FAQListItem from './FAQListItem'
+import type { FAQListProps, FAQItem } from './types'
 import styles from './FAQ.module.scss'
 
-export interface FAQItem {
-	question: string
-	answer: string
-}
-
-interface FAQListProps {
-	items: FAQItem[]
-	initialOpenIndex?: number | null
-	useMotion?: boolean
-}
+export type { FAQItem }
 
 export default function FAQList({
 	items,
@@ -33,87 +24,16 @@ export default function FAQList({
 			role='region'
 			aria-label='FAQ list'
 		>
-			{items.map((faq, index) => {
-				const isOpen = openIndex === index
-
-				if (useMotion) {
-					return (
-						<motion.div
-							key={index}
-							className={`${styles.item} ${isOpen ? styles.open : ''}`}
-							initial={{ opacity: 0, y: 20 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true, amount: 0.3 }}
-							transition={{ duration: 0.35, delay: index * 0.04 }}
-						>
-							<button
-								type='button'
-								className={styles.question}
-								onClick={() => toggle(index)}
-								aria-expanded={isOpen}
-								aria-controls={`faq-answer-${index}`}
-							>
-								<span className={styles.questionText}>
-									{faq.question}
-								</span>
-								<ChevronDown
-									className={styles.icon}
-									size={20}
-									aria-hidden='true'
-								/>
-							</button>
-
-							<div
-								id={`faq-answer-${index}`}
-								className={styles.answer}
-								aria-hidden={!isOpen}
-							>
-								<div className={styles.answerInner}>
-									<div className={styles.answerContent}>
-										{faq.answer}
-									</div>
-								</div>
-							</div>
-						</motion.div>
-					)
-				}
-
-				return (
-					<div
-						key={index}
-						className={`${styles.item} ${isOpen ? styles.open : ''}`}
-					>
-						<button
-							type='button'
-							className={styles.question}
-							onClick={() => toggle(index)}
-							aria-expanded={isOpen}
-							aria-controls={`faq-answer-${index}`}
-						>
-							<span className={styles.questionText}>
-								{faq.question}
-							</span>
-							<ChevronDown
-								className={styles.icon}
-								size={20}
-								aria-hidden='true'
-							/>
-						</button>
-
-						<div
-							id={`faq-answer-${index}`}
-							className={styles.answer}
-							aria-hidden={!isOpen}
-						>
-							<div className={styles.answerInner}>
-								<div className={styles.answerContent}>
-									{faq.answer}
-								</div>
-							</div>
-						</div>
-					</div>
-				)
-			})}
+			{items.map((faq, index) => (
+				<FAQListItem
+					key={index}
+					faq={faq}
+					index={index}
+					isOpen={openIndex === index}
+					useMotion={useMotion}
+					onToggle={toggle}
+				/>
+			))}
 		</div>
 	)
 }

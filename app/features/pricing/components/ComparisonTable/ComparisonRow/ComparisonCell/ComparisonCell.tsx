@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import { Check } from 'lucide-react'
 import styles from '../ComparisonRow.module.scss'
 
@@ -12,7 +13,7 @@ export default function ComparisonCell({
 }: ComparisonCellProps) {
 	if (typeof value === 'boolean') {
 		return (
-			<div className={`${styles.tableCell} ${styles.center}`}>
+			<div className={cn(styles.tableCell, styles.center)}>
 				{value ? (
 					<Check
 						size={18}
@@ -27,7 +28,9 @@ export default function ComparisonCell({
 
 	return (
 		<div
-			className={`${styles.tableCell} ${styles.center} ${isHighlight ? styles.highlight : ''}`}
+			className={cn(styles.tableCell, styles.center, {
+				[styles.highlight]: isHighlight
+			})}
 		>
 			{value}
 		</div>

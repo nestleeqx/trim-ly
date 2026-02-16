@@ -3,13 +3,12 @@
 import sharedStyles from '@/app/features/links/components/LinksTable/shared.module.scss'
 import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
 import { LinkItem as LinkItemType } from '@/types/links'
-import { formatDate } from '@/utils/formatters'
-import { getStatusLabel } from '@/utils/link-helpers'
-import { ExternalLink, MoreVertical } from 'lucide-react'
-import KebabMenuActions from '../../../KebabMenuActions/KebabMenuActions'
+import cn from 'classnames'
+import { ExternalLink } from 'lucide-react'
 import { LinkActions } from '../../../LinksTable/LinkTableRow/types'
-import { getStatusClass } from '../../../LinksTable/shared'
 import styles from './LinkCard.module.scss'
+import LinkCardHeader from './LinkCardHeader'
+import LinkCardStats from './LinkCardStats'
 import QuickButtons from './QuickButtons'
 
 interface LinkCardProps {
@@ -33,52 +32,19 @@ export default function LinkCard({
 
 	return (
 		<div
-			className={`${styles.card} ${isSelected ? styles.selected : ''}`}
+			className={cn(styles.card, {
+				[styles.selected]: isSelected
+			})}
 			onClick={actions.handleItemClick}
 		>
-			<div className={styles.cardHeader}>
-				<div className={styles.checkboxWrapper}>
-					<input
-						type='checkbox'
-						checked={isSelected}
-						className={sharedStyles.checkbox}
-						aria-label={`Выбрать ${link.title}`}
-						onClick={stop}
-						onChange={e => onSelectLink(link.id, e.target.checked)}
-					/>
-				</div>
-
-				<span
-					className={`${sharedStyles.status} ${getStatusClass(link.status)}`}
-				>
-					{getStatusLabel(link.status)}
-				</span>
-
-				<div className={styles.kebabActions}>
-					<div className={sharedStyles.kebabWrapper}>
-						<button
-							type='button'
-							className={sharedStyles.actionBtn}
-							title='Ещё'
-							onClick={e => actions.handleKebabClick(link.id, e)}
-						>
-							<MoreVertical size={16} />
-						</button>
-
-						<KebabMenuActions
-							link={link}
-							openKebabId={openKebabId}
-							actions={{
-								closeKebabMenu: actions.closeKebabMenu,
-								handleEdit: actions.handleEdit,
-								handleToggleStatus: actions.handleToggleStatus,
-								handleDelete: actions.handleDelete,
-								handleRestore: actions.handleRestore
-							}}
-						/>
-					</div>
-				</div>
-			</div>
+			<LinkCardHeader
+				link={link}
+				isSelected={isSelected}
+				openKebabId={openKebabId}
+				onSelectLink={onSelectLink}
+				stop={stop}
+				actions={actions}
+			/>
 
 			<h3
 				className={styles.cardTitle}
@@ -101,20 +67,7 @@ export default function LinkCard({
 				/>
 			</a>
 
-			<div className={styles.stats}>
-				<div className={styles.statItem}>
-					<span className={styles.statLabel}>Клики</span>
-					<span className={styles.statValue}>
-						{link.clicks.toLocaleString()}
-					</span>
-				</div>
-				<div className={styles.statItem}>
-					<span className={styles.statLabel}>Создано</span>
-					<span className={styles.statValue}>
-						{formatDate(link.createdAt)}
-					</span>
-				</div>
-			</div>
+			<LinkCardStats link={link} />
 
 			<QuickButtons
 				stop={stop}

@@ -42,20 +42,21 @@ export async function POST(req: Request) {
 	const rawToken = crypto.randomBytes(32).toString('hex')
 	const tokenHash = hashToken(rawToken)
 
-	await prisma.passwordResetToken.deleteMany({
-		where: {
-			userId: user.id,
-			usedAt: null
-		}
-	})
-
-	await prisma.passwordResetToken.create({
-		data: {
-			userId: user.id,
-			tokenHash,
-			expiresAt: new Date(Date.now() + TOKEN_TTL_MIN * 60 * 1000)
-		}
-	})
+	await prisma.$transaction([
+		prisma.passwordResetToken.deleteMany({
+			where: {
+				userId: user.id,
+				usedAt: null
+			}
+		}),
+		prisma.passwordResetToken.create({
+			data: {
+				userId: user.id,
+				tokenHash,
+				expiresAt: new Date(Date.now() + TOKEN_TTL_MIN * 60 * 1000)
+			}
+		})
+	])
 
 	const baseUrl = process.env.NEXTAUTH_URL
 	if (!baseUrl) return okResponse

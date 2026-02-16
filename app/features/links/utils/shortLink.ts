@@ -13,7 +13,7 @@ function normalizeDomain(value: string) {
 	return stripTrailingSlash(stripProtocol(value.trim().toLowerCase()))
 }
 
-export function getShortLinkDomain() {
+function getShortLinkDomain() {
 	const fromEnv = process.env.NEXT_PUBLIC_SHORT_LINK_DOMAIN
 	const normalized = fromEnv ? normalizeDomain(fromEnv) : ''
 	if (normalized) return normalized
@@ -22,7 +22,7 @@ export function getShortLinkDomain() {
 		: DEFAULT_PROD_DOMAIN
 }
 
-export function getShortLinkProtocol() {
+function getShortLinkProtocol() {
 	const fromEnv = process.env.NEXT_PUBLIC_SHORT_LINK_PROTOCOL
 	if (fromEnv === 'http' || fromEnv === 'https') return fromEnv
 

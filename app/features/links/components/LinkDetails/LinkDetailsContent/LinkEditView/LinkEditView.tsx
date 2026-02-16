@@ -9,7 +9,7 @@ interface LinkEditViewProps {
 	linkId: string
 	editFormData: LinkEditFormData
 	saveLoading: boolean
-	onSave: (data: LinkEditFormData) => Promise<void>
+	onSave: (data: LinkEditFormData) => void | Promise<void>
 	onCancel: () => void
 	onChange: (data: LinkEditFormData, isDirty: boolean) => void
 	onCopy: () => void

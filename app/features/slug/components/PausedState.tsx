@@ -1,4 +1,5 @@
 import Button from '@/app/components/ui/Button/Button'
+import cn from 'classnames'
 import { Pause } from 'lucide-react'
 import Link from 'next/link'
 import styles from './StatesCommon.module.scss'
@@ -6,7 +7,7 @@ import styles from './StatesCommon.module.scss'
 export default function PausedState() {
 	return (
 		<div className={styles.card}>
-			<div className={`${styles.stateIcon} ${styles.stateIconOrange}`}>
+			<div className={cn(styles.stateIcon, styles.stateIconOrange)}>
 				<Pause size={24} />
 			</div>
 

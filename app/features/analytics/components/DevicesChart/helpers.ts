@@ -24,7 +24,7 @@ export const calculateSegments = (
 		const strokeDasharray = `${
 			(device.percentage / 100) * circumference
 		} ${circumference}`
-		const strokeDashoffset = -((cumulativePercentage / 100) * circumference)
+		const strokeDashoffset = `${-((cumulativePercentage / 100) * circumference)}`
 		cumulativePercentage += device.percentage
 
 		return {

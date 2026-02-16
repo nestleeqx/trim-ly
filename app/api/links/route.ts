@@ -1,5 +1,6 @@
-﻿import { authOptions } from '@/auth'
-import { buildShortLink } from '@/app/features/links/utils/shortLink'
+﻿import { buildShortLink } from '@/app/features/links/utils/shortLink'
+import { Prisma } from '@/app/generated/prisma/client'
+import { authOptions } from '@/auth'
 import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { getServerSession } from 'next-auth'
@@ -25,6 +26,19 @@ type SortFieldApi =
 	| 'status'
 	| 'expiration_date'
 type SortOrderApi = 'asc' | 'desc'
+
+class LinkCreationError extends Error {
+	constructor(
+		public status: number,
+		public code:
+			| 'USER_NOT_FOUND'
+			| 'LINK_LIMIT_REACHED'
+			| 'INVALID_TAGS'
+			| 'SLUG_TAKEN'
+	) {
+		super(code)
+	}
+}
 
 function normalizeUrl(value: string) {
 	const raw = value.trim()
@@ -88,8 +102,16 @@ function parseCreatedRange(req: Request): {
 	const rawFrom = (url.searchParams.get('createdFrom') || '').trim()
 	const rawTo = (url.searchParams.get('createdTo') || '').trim()
 
-	const from = rawFrom ? new Date(rawFrom) : null
-	const to = rawTo ? new Date(rawTo) : null
+	const from = rawFrom
+		? /^\d{4}-\d{2}-\d{2}$/.test(rawFrom)
+			? new Date(`${rawFrom}T00:00:00.000Z`)
+			: new Date(rawFrom)
+		: null
+	const to = rawTo
+		? /^\d{4}-\d{2}-\d{2}$/.test(rawTo)
+			? new Date(`${rawTo}T23:59:59.999Z`)
+			: new Date(rawTo)
+		: null
 
 	return {
 		from: from && !Number.isNaN(from.getTime()) ? from : null,
@@ -126,7 +148,10 @@ function parsePage(req: Request) {
 }
 
 function parsePageSize(req: Request) {
-	const n = parsePositiveInt(new URL(req.url).searchParams.get('pageSize'), 10)
+	const n = parsePositiveInt(
+		new URL(req.url).searchParams.get('pageSize'),
+		10
+	)
 	return [5, 10, 25, 50].includes(n) ? n : 10
 }
 
@@ -176,50 +201,59 @@ export async function GET(req: Request) {
 			? {
 					...(createdRange.from ? { gte: createdRange.from } : {}),
 					...(createdRange.to ? { lte: createdRange.to } : {})
-			  }
+				}
 			: datePreset === '7d'
 				? { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
 				: datePreset === '30d'
 					? { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
 					: undefined
 
-	const statusWhere = statusFilters.length
+	const statusWhere: Prisma.LinkWhereInput = statusFilters.length
 		? {
 				OR: [
 					...(statusFilters.includes('deleted')
-						? [{ deletedAt: { not: null } }]
+						? ([{ deletedAt: { not: null } }] as Prisma.LinkWhereInput[])
 						: []),
 					...(statusFilters.includes('active')
-						? [
+						? ([
 								{
 									deletedAt: null,
 									status: 'active',
-									OR: [{ expiresAt: null }, { expiresAt: { gt: now } }]
+									OR: [
+										{ expiresAt: null },
+										{ expiresAt: { gt: now } }
+									]
 								}
-						  ]
+							] as Prisma.LinkWhereInput[])
 						: []),
 					...(statusFilters.includes('paused')
-						? [
+						? ([
 								{
 									deletedAt: null,
 									status: 'disabled',
-									OR: [{ expiresAt: null }, { expiresAt: { gt: now } }]
+									OR: [
+										{ expiresAt: null },
+										{ expiresAt: { gt: now } }
+									]
 								}
-						  ]
+							] as Prisma.LinkWhereInput[])
 						: []),
 					...(statusFilters.includes('expired')
-						? [
+						? ([
 								{
 									deletedAt: null,
-									OR: [{ status: 'expired' }, { expiresAt: { lte: now } }]
+									OR: [
+										{ status: 'expired' },
+										{ expiresAt: { lte: now } }
+									]
 								}
-						  ]
+							] as Prisma.LinkWhereInput[])
 						: [])
 				]
-		  }
+			}
 		: { deletedAt: null }
 
-	const andClauses: any[] = [statusWhere]
+	const andClauses: Prisma.LinkWhereInput[] = [statusWhere]
 
 	if (createdAtFilter) {
 		andClauses.push({ createdAt: createdAtFilter })
@@ -247,7 +281,7 @@ export async function GET(req: Request) {
 		})
 	}
 
-	const where: any = {
+	const where: Prisma.LinkWhereInput = {
 		userId,
 		...(andClauses.length ? { AND: andClauses } : {})
 	}
@@ -260,7 +294,10 @@ export async function GET(req: Request) {
 				: sortField === 'status'
 					? [{ status: sortOrder }, { createdAt: 'desc' as const }]
 					: sortField === 'expiration_date'
-						? [{ expiresAt: sortOrder }, { createdAt: 'desc' as const }]
+						? [
+								{ expiresAt: sortOrder },
+								{ createdAt: 'desc' as const }
+							]
 						: [{ createdAt: sortOrder }]
 
 	const [links, totalAll, totalFiltered] = await Promise.all([
@@ -322,7 +359,7 @@ export async function GET(req: Request) {
 					},
 					_count: { _all: true }
 				})
-		  ])
+			])
 		: [[], []]
 
 	const currentMap = new Map(
@@ -417,88 +454,106 @@ export async function POST(req: Request) {
 		passwordHash = await bcrypt.hash(rawPassword, 10)
 	}
 
-	const existing = await prisma.link.findUnique({
-		where: { slug },
-		select: { id: true }
-	})
+	try {
+		const created = await prisma.$transaction(async tx => {
+			if (tagIds.length) {
+				const uniqueTagIds = [...new Set(tagIds)]
+				const ownedTags = await tx.tag.findMany({
+					where: { id: { in: uniqueTagIds }, userId },
+					select: { id: true }
+				})
 
-	if (existing) {
-		return NextResponse.json(
-			{ error: 'Slug already taken' },
-			{ status: 409 }
-		)
-	}
-
-	if (tagIds.length) {
-		const ownedTags = await prisma.tag.findMany({
-			where: { id: { in: tagIds }, userId },
-			select: { id: true }
-		})
-
-		if (ownedTags.length !== new Set(tagIds).size) {
-			return NextResponse.json(
-				{ error: 'Some tags are invalid' },
-				{ status: 400 }
-			)
-		}
-	}
-
-	const userWithPlan = await prisma.user.findUnique({
-		where: { id: userId },
-		select: {
-			plan: { select: { linksLimit: true } },
-			usage: { select: { linksCreated: true } }
-		}
-	})
-
-	if (!userWithPlan || !userWithPlan.plan) {
-		return NextResponse.json({ error: 'User not found' }, { status: 404 })
-	}
-
-	const linksLimit = userWithPlan.plan.linksLimit
-	const linksCreated = userWithPlan.usage?.linksCreated ?? 0
-	if (linksCreated >= linksLimit) {
-		return NextResponse.json({ error: 'Links limit reached' }, { status: 403 })
-	}
-
-	const created = await prisma.$transaction(async tx => {
-		const link = await tx.link.create({
-			data: {
-				userId,
-				targetUrl,
-				slug,
-				title,
-				passwordHash,
-				expiresAt
-			},
-			select: {
-				id: true,
-				targetUrl: true,
-				slug: true,
-				title: true,
-				expiresAt: true,
-				createdAt: true
+				if (ownedTags.length !== uniqueTagIds.length) {
+					throw new LinkCreationError(400, 'INVALID_TAGS')
+				}
 			}
+
+			const userWithPlan = await tx.user.findUnique({
+				where: { id: userId },
+				select: {
+					plan: { select: { linksLimit: true } },
+					usage: { select: { linksCreated: true } }
+				}
+			})
+
+			if (!userWithPlan || !userWithPlan.plan) {
+				throw new LinkCreationError(404, 'USER_NOT_FOUND')
+			}
+
+			const linksLimit = userWithPlan.plan.linksLimit
+			const linksCreated = userWithPlan.usage?.linksCreated ?? 0
+			if (linksCreated >= linksLimit) {
+				throw new LinkCreationError(403, 'LINK_LIMIT_REACHED')
+			}
+
+			const link = await tx.link.create({
+				data: {
+					userId,
+					targetUrl,
+					slug,
+					title,
+					passwordHash,
+					expiresAt
+				},
+				select: {
+					id: true,
+					targetUrl: true,
+					slug: true,
+					title: true,
+					expiresAt: true,
+					createdAt: true
+				}
+			})
+
+			if (tagIds.length) {
+				await tx.linkTag.createMany({
+					data: [...new Set(tagIds)].map(tagId => ({
+						linkId: link.id,
+						tagId
+					}))
+				})
+			}
+
+			await tx.userUsage.upsert({
+				where: { userId },
+				create: { userId, linksCreated: 1, clicksTotal: 0 },
+				update: { linksCreated: { increment: 1 } }
+			})
+
+			return link
 		})
 
-		if (tagIds.length) {
-			await tx.linkTag.createMany({
-				data: [...new Set(tagIds)].map(tagId => ({
-					linkId: link.id,
-					tagId
-				}))
-			})
+		return NextResponse.json({ link: created }, { status: 201 })
+	} catch (error) {
+		if (error instanceof LinkCreationError) {
+			switch (error.code) {
+				case 'INVALID_TAGS':
+					return NextResponse.json(
+						{ error: 'Some tags are invalid' },
+						{ status: error.status }
+					)
+				case 'LINK_LIMIT_REACHED':
+					return NextResponse.json(
+						{ error: 'Links limit reached' },
+						{ status: error.status }
+					)
+				case 'USER_NOT_FOUND':
+					return NextResponse.json(
+						{ error: 'User not found' },
+						{ status: error.status }
+					)
+				default:
+					break
+			}
 		}
 
-		await tx.userUsage.upsert({
-			where: { userId },
-			create: { userId, linksCreated: 1, clicksTotal: 0 },
-			update: { linksCreated: { increment: 1 } }
-		})
+		if (
+			error instanceof Prisma.PrismaClientKnownRequestError &&
+			error.code === 'P2002'
+		) {
+			return NextResponse.json({ error: 'Slug already taken' }, { status: 409 })
+		}
 
-		return link
-	})
-
-	return NextResponse.json({ link: created }, { status: 201 })
+		return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+	}
 }
-

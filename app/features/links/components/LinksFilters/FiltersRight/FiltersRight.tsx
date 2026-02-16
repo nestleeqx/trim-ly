@@ -1,6 +1,7 @@
 'use client'
 
 import { SortState } from '@/types/filterLinks'
+import cn from 'classnames'
 import { Download } from 'lucide-react'
 import styles from './FiltersRight.module.scss'
 import SortDropdown from './SortDropdown/SortDropdown'
@@ -44,7 +45,9 @@ export default function FiltersRight({
 
 			<button
 				type='button'
-				className={`${styles.exportBtn} ${exportLoading ? styles.loading : ''}`}
+				className={cn(styles.exportBtn, {
+					[styles.loading]: exportLoading
+				})}
 				onClick={handleExport}
 				disabled={exportDisabled || exportLoading}
 				aria-label='Экспорт CSV'

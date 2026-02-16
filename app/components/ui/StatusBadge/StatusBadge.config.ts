@@ -1,6 +1,6 @@
 import { LinkStatus } from '@/types/links'
 
-export interface StatusConfig {
+interface StatusConfig {
 	label: string
 	className: string
 }

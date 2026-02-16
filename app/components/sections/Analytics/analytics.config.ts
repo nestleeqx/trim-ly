@@ -6,7 +6,7 @@ export interface TrafficSource {
 	color: string
 }
 
-export interface PeriodData {
+interface PeriodData {
 	trafficSources: TrafficSource[]
 	mobilePercent: number
 	topLocation: string
@@ -14,7 +14,7 @@ export interface PeriodData {
 	subtitle: string
 }
 
-export interface PeriodTab {
+interface PeriodTab {
 	id: Period
 	label: string
 }
@@ -71,7 +71,7 @@ export const checklistItems = [
 	'Экспорт статистики в CSV'
 ]
 
-export interface DeviceLegendItem {
+interface DeviceLegendItem {
 	color: string
 	label: string
 }

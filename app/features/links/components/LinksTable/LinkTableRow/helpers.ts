@@ -1,4 +1,4 @@
-export interface TrendData {
+interface TrendData {
 	value: number
 	text: string
 	className: 'positive' | 'negative' | 'neutral'

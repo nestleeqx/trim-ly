@@ -6,7 +6,7 @@ import {
 	TrendingUp
 } from 'lucide-react'
 
-export interface StatCardConfig {
+interface StatCardConfig {
 	id: string
 	icon: LucideIcon
 	label: string

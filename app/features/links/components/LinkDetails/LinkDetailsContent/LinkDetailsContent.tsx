@@ -11,10 +11,10 @@ interface LinkDetailsContentProps {
 	linkId: string
 	editFormData: LinkEditFormData
 	saveLoading: boolean
-	onSave: (data: LinkEditFormData) => void
+	onSave: (data: LinkEditFormData) => void | Promise<void>
 	onCancel: () => void
 	onChange: (data: LinkEditFormData, isDirty: boolean) => void
-	onCopy: (url: string) => void
+	onCopy: () => void
 	onDownloadQr: () => void
 }
 

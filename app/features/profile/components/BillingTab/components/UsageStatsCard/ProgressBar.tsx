@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import styles from '../../BillingTab.module.scss'
 
 interface ProgressBarProps {
@@ -13,7 +14,9 @@ export default function ProgressBar({
 
 	return (
 		<div
-			className={`${styles.progressBar} ${isAlt ? styles.progressAlt : ''}`}
+			className={cn(styles.progressBar, {
+				[styles.progressAlt]: isAlt
+			})}
 		>
 			<div
 				className={isAlt ? styles.progressFillAlt : styles.progressFill}

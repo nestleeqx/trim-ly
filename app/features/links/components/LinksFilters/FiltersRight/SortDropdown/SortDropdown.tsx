@@ -2,6 +2,7 @@
 
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { SortField, SortState } from '@/types/filterLinks'
+import cn from 'classnames'
 import { ArrowUp, ChevronDown } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import MainMenu from './MainMenu'
@@ -42,7 +43,9 @@ export default function SortDropdown({
 				ref={dropdownRef}
 			>
 				<button
-					className={`${styles.filterBtn} ${isOpen ? styles.open : ''}`}
+					className={cn(styles.filterBtn, {
+						[styles.open]: isOpen
+					})}
 					onClick={open}
 				>
 					<ArrowUp size={14} />
@@ -51,9 +54,7 @@ export default function SortDropdown({
 				</button>
 
 				{isOpen && (
-					<div
-						className={`${styles.dropdown} ${styles.sortDropdown}`}
-					>
+					<div className={cn(styles.dropdown, styles.sortDropdown)}>
 						{selectedField ? (
 							<SubMenu
 								sort={sort}

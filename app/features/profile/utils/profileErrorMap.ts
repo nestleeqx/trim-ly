@@ -1,4 +1,4 @@
-export type ProfileKnownField =
+type ProfileKnownField =
 	| 'name'
 	| 'username'
 	| 'currentPassword'

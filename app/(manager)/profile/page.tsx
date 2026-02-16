@@ -7,6 +7,7 @@ import DangerTab from '@/app/features/profile/components/DangerTab/DangerTab'
 import PreferenceTab from '@/app/features/profile/components/PreferenceTab/PreferenceTab'
 import ProfileTab from '@/app/features/profile/components/ProfileTab/ProfileTab'
 import SecurityTab from '@/app/features/profile/components/SecurityTab/SecurityTab'
+import cn from 'classnames'
 import { AlertTriangle, CreditCard, Palette, Shield, User } from 'lucide-react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
@@ -91,9 +92,11 @@ export default function SettingsPage() {
 								return (
 									<li
 										key={tab.key}
-										className={`${activeTab === tab.key ? styles.active : ''} ${
-											tab.danger ? styles.danger : ''
-										}`}
+										className={cn({
+											[styles.active]:
+												activeTab === tab.key,
+											[styles.danger]: tab.danger
+										})}
 										onClick={() => setTab(tab.key)}
 										role='button'
 										tabIndex={0}

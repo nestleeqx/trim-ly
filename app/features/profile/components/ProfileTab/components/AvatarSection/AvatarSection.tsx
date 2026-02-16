@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import Image from 'next/image'
 import stylesCommon from '../../../settingsCommon.module.scss'
 import styles from './AvatarSection.module.scss'
@@ -62,7 +63,7 @@ export default function AvatarSection({
 						{isAvatarSaving ? 'Сохраняем...' : 'Изменить'}
 					</button>
 					<button
-						className={`${styles.linkBtn} ${styles.remove}`}
+						className={cn(styles.linkBtn, styles.remove)}
 						onClick={onRemoveAvatar}
 						disabled={isAvatarSaving || !avatarURL}
 						type='button'

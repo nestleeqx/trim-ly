@@ -17,9 +17,16 @@ function parsePeriod(req: Request): Period {
 	return '7d'
 }
 
-function parseDate(value: string | null) {
+function parseDate(value: string | null, endOfDay = false) {
 	if (!value) return null
-	const date = new Date(value)
+	const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(value)
+	const date = isDateOnly
+		? new Date(
+				endOfDay
+					? `${value}T23:59:59.999Z`
+					: `${value}T00:00:00.000Z`
+			)
+		: new Date(value)
 	if (Number.isNaN(date.getTime())) return null
 	return date
 }
@@ -31,13 +38,16 @@ function getRange(req: Request, period: Period) {
 	if (period === 'custom') {
 		const url = new URL(req.url)
 		const fromParam = parseDate(url.searchParams.get('from'))
-		const toParam = parseDate(url.searchParams.get('to'))
+		const toParam = parseDate(url.searchParams.get('to'), true)
 		const from = fromParam || new Date(now.getTime() - 6 * DAY_MS)
 		return { from, to: toParam || now }
 	}
 
 	const days = period === '90d' ? 90 : period === '30d' ? 30 : 7
-	return { from: new Date(now.getTime() - (days - 1) * DAY_MS), to }
+	const from = new Date(to)
+	from.setUTCHours(0, 0, 0, 0)
+	from.setUTCDate(from.getUTCDate() - (days - 1))
+	return { from, to }
 }
 
 function getPreviousRange(from: Date, to: Date) {
@@ -111,7 +121,11 @@ function normalizeDevice(
 	) {
 		return 'Mobile'
 	}
-	if (ua.includes('macintosh') || ua.includes('windows') || ua.includes('linux')) {
+	if (
+		ua.includes('macintosh') ||
+		ua.includes('windows') ||
+		ua.includes('linux')
+	) {
 		return 'Desktop'
 	}
 	return 'Other'
@@ -122,7 +136,9 @@ function extractReferrerHost(value: string | null) {
 	const input = value.trim()
 	if (!input) return 'direct'
 	try {
-		const url = new URL(input.startsWith('http') ? input : `https://${input}`)
+		const url = new URL(
+			input.startsWith('http') ? input : `https://${input}`
+		)
 		return url.hostname.replace(/^www\./, '')
 	} catch {
 		return input.replace(/^www\./, '')
@@ -215,7 +231,9 @@ export async function GET(req: Request, context: RouteContext) {
 	const totalClicks = events.length
 	const qrScans = events.filter(event => event.source === 'qr').length
 	const uniqueVisitors = new Set(
-		events.map((event, idx) => event.ipHash || event.userAgent || `anon-${idx}`)
+		events.map(
+			(event, idx) => event.ipHash || event.userAgent || `anon-${idx}`
+		)
 	).size
 	const daysSpan = Math.max(
 		1,
@@ -227,7 +245,8 @@ export async function GET(req: Request, context: RouteContext) {
 	const prevQrScans = prevEvents.filter(event => event.source === 'qr').length
 	const prevUniqueVisitors = new Set(
 		prevEvents.map(
-			(event, idx) => event.ipHash || event.userAgent || `anon-prev-${idx}`
+			(event, idx) =>
+				event.ipHash || event.userAgent || `anon-prev-${idx}`
 		)
 	).size
 	const prevDaysSpan = Math.max(
@@ -238,7 +257,10 @@ export async function GET(req: Request, context: RouteContext) {
 
 	const countryCounts = new Map<string, number>()
 	const referrerCounts = new Map<string, number>()
-	const deviceCounts = new Map<'Mobile' | 'Desktop' | 'Tablet' | 'Other', number>()
+	const deviceCounts = new Map<
+		'Mobile' | 'Desktop' | 'Tablet' | 'Other',
+		number
+	>()
 
 	for (const event of events) {
 		const country = toCountryName(event.country)
@@ -258,7 +280,9 @@ export async function GET(req: Request, context: RouteContext) {
 			code: name.length === 2 ? name.toUpperCase() : '--',
 			name,
 			clicks,
-			percentage: totalClicks ? Math.round((clicks / totalClicks) * 100) : 0
+			percentage: totalClicks
+				? Math.round((clicks / totalClicks) * 100)
+				: 0
 		}))
 
 	const topReferrers = [...referrerCounts.entries()]
@@ -276,7 +300,9 @@ export async function GET(req: Request, context: RouteContext) {
 		.sort((a, b) => b[1] - a[1])
 		.map(([type, clicks]) => ({
 			type,
-			percentage: totalClicks ? Math.round((clicks / totalClicks) * 100) : 0,
+			percentage: totalClicks
+				? Math.round((clicks / totalClicks) * 100)
+				: 0,
 			color: deviceColors[type]
 		}))
 
@@ -294,7 +320,9 @@ export async function GET(req: Request, context: RouteContext) {
 		const row = bucket.get(key)
 		if (!row) continue
 		row.value += 1
-		row.unique.add(event.ipHash || event.userAgent || event.clickedAt.toISOString())
+		row.unique.add(
+			event.ipHash || event.userAgent || event.clickedAt.toISOString()
+		)
 	}
 
 	const chartData = [...bucket.values()].map(row => ({
@@ -311,7 +339,10 @@ export async function GET(req: Request, context: RouteContext) {
 	const prevCountryCounts = new Map<string, number>()
 	for (const event of prevEvents) {
 		const country = toCountryName(event.country)
-		prevCountryCounts.set(country, (prevCountryCounts.get(country) || 0) + 1)
+		prevCountryCounts.set(
+			country,
+			(prevCountryCounts.get(country) || 0) + 1
+		)
 	}
 	const prevTopCountryClicks =
 		[...prevCountryCounts.values()].sort((a, b) => b - a)[0] ?? 0
@@ -347,7 +378,10 @@ export async function GET(req: Request, context: RouteContext) {
 	const rawEvents = recentEvents.map(event => ({
 		time: formatRelativeTime(event.clickedAt),
 		country: {
-			code: event.country?.length === 2 ? event.country.toUpperCase() : '--',
+			code:
+				event.country?.length === 2
+					? event.country.toUpperCase()
+					: '--',
 			name: toCountryName(event.country)
 		},
 		device: {

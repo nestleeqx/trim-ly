@@ -3,6 +3,7 @@
 import styles from '@/app/(manager)/links/[id]/page.module.scss'
 import LinkInfoCard from '@/app/features/links/components/LinkDetails/LinkInfoCard/LinkInfoCard'
 import { LinkItem } from '@/types/links'
+import cn from 'classnames'
 
 interface LinkDetailsHeaderProps {
 	link: LinkItem
@@ -52,7 +53,9 @@ export default function LinkDetailsHeader({
 				role='tablist'
 			>
 				<button
-					className={`${styles.tab} ${currentTab === 'analytics' ? styles.active : ''}`}
+					className={cn(styles.tab, {
+						[styles.active]: currentTab === 'analytics'
+					})}
 					onClick={() =>
 						safeNavigate(`/links/${linkId}?tab=analytics`)
 					}
@@ -62,7 +65,9 @@ export default function LinkDetailsHeader({
 					Аналитика
 				</button>
 				<button
-					className={`${styles.tab} ${currentTab === 'edit' ? styles.active : ''}`}
+					className={cn(styles.tab, {
+						[styles.active]: currentTab === 'edit'
+					})}
 					onClick={() => safeNavigate(`/links/${linkId}?tab=edit`)}
 					role='tab'
 					aria-selected={currentTab === 'edit'}

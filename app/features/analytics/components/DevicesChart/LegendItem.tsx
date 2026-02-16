@@ -1,6 +1,7 @@
 'use client'
 
 import { DeviceStats } from '@/types/charts'
+import cn from 'classnames'
 import styles from './DevicesChart.module.scss'
 
 interface LegendItemProps {
@@ -18,7 +19,9 @@ export default function LegendItem({
 }: LegendItemProps) {
 	return (
 		<div
-			className={`${styles.legendItem} ${isHovered ? styles.active : ''}`}
+			className={cn(styles.legendItem, {
+				[styles.active]: isHovered
+			})}
 			role='listitem'
 			tabIndex={0}
 			onMouseEnter={() => onHover(index)}

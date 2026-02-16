@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'classnames'
 import { LayoutGrid, List } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import styles from './ViewToggle.module.scss'
@@ -46,7 +47,7 @@ export default function ViewToggle({
 		return (
 			<div className={styles.container}>
 				<button
-					className={`${styles.viewBtn} ${styles.active}`}
+					className={cn(styles.viewBtn, styles.active)}
 					onClick={toggleTableVisibility}
 					aria-label='Показать таблицу'
 				>
@@ -60,7 +61,9 @@ export default function ViewToggle({
 		<div className={styles.container}>
 			{(!isMobile || isTableVisible) && (
 				<button
-					className={`${styles.viewBtn} ${viewMode === 'list' ? styles.active : ''}`}
+					className={cn(styles.viewBtn, {
+						[styles.active]: viewMode === 'list'
+					})}
 					onClick={() => {
 						if (isMobile) {
 							setIsTableVisible(true)
@@ -74,7 +77,9 @@ export default function ViewToggle({
 			)}
 
 			<button
-				className={`${styles.viewBtn} ${viewMode === 'grid' ? styles.active : ''}`}
+				className={cn(styles.viewBtn, {
+					[styles.active]: viewMode === 'grid'
+				})}
 				onClick={() => onViewModeChange('grid')}
 				aria-label='Карточки'
 			>

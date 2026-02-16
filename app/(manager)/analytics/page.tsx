@@ -15,13 +15,14 @@ import DevicesChart from '@/app/features/analytics/components/DevicesChart/Devic
 import StatsCards from '@/app/features/analytics/components/StatsCards/StatsCards'
 import TopCountries from '@/app/features/analytics/components/TopCountries/TopCountries'
 import TopReferrers from '@/app/features/analytics/components/TopReferrers/TopReferrers'
+import { useAnalyticsBreakdown } from '@/app/features/analytics/hooks/useAnalyticsBreakdown'
+import { useAnalyticsSummary } from '@/app/features/analytics/hooks/useAnalyticsSummary'
+import { useAnalyticsTopLinks } from '@/app/features/analytics/hooks/useAnalyticsTopLinks'
 import LinksFilters from '@/app/features/links/components/LinksFilters/LinksFilters'
 import LinksTable from '@/app/features/links/components/LinksTable/LinksTable'
-import { useAnalyticsBreakdown } from '@/hooks/analytics/useAnalyticsBreakdown'
-import { useAnalyticsSummary } from '@/hooks/analytics/useAnalyticsSummary'
-import { useAnalyticsTopLinks } from '@/hooks/analytics/useAnalyticsTopLinks'
-import useCsvExport from '@/hooks/useCsvExport'
 import { convertStatsDataToCsv } from '@/utils/csvConverters'
+import { downloadCsv } from '@/utils/downloadCsv'
+import cn from 'classnames'
 import { useMemo, useState } from 'react'
 
 type DashboardPeriod = '24h' | '7d' | '30d' | '90d'
@@ -47,15 +48,20 @@ export default function AnalyticsPage() {
 		period: activePeriod,
 		...analyticsFilters
 	})
-	const { downloadCsv } = useCsvExport()
-
-	const filterError = useMemo(() => breakdown.error ?? null, [breakdown.error])
-	const topLinksError = useMemo(() => topLinks.error ?? null, [topLinks.error])
+	const filterError = useMemo(
+		() => breakdown.error ?? null,
+		[breakdown.error]
+	)
+	const topLinksError = useMemo(
+		() => topLinks.error ?? null,
+		[topLinks.error]
+	)
 	const periodOptions = useMemo(
-		() => periods.filter(p => p.key !== 'custom') as Array<{
-			key: DashboardPeriod
-			label: string
-		}>,
+		() =>
+			periods.filter(p => p.key !== 'custom') as Array<{
+				key: DashboardPeriod
+				label: string
+			}>,
 		[]
 	)
 
@@ -71,10 +77,12 @@ export default function AnalyticsPage() {
 					<div className={styles.periods}>
 						{periodOptions.map(p => (
 							<Button
-								variant='reverseOutline'
+								variant='invertGhost'
 								size='sm'
 								key={p.key}
-								className={`${styles.periodBtn} ${activePeriod === p.key ? styles.active : ''}`}
+								className={cn(styles.periodBtn, {
+									[styles.active]: activePeriod === p.key
+								})}
 								onClick={() => setActivePeriod(p.key)}
 								title={`Период ${p.label}`}
 							>
@@ -100,14 +108,17 @@ export default function AnalyticsPage() {
 
 				{summary.error ? <p>{summary.error}</p> : null}
 
-				<div className={styles.statsCardsWrapper}>
-					{summary.isLoading ? (
+				<div>
+					{summary.isInitialLoading ? (
 						<AnalyticsStatsSkeleton />
 					) : (
-						<StatsCards
-							data={summary.stats}
-							clickable={false}
-						/>
+						<div className={styles.topLinksContent}>
+							<StatsCards
+								data={summary.stats}
+								clickable={false}
+							/>
+							{summary.isRefetching ? <LoadingOverlay /> : null}
+						</div>
 					)}
 				</div>
 
@@ -140,18 +151,25 @@ export default function AnalyticsPage() {
 				{filterError ? <p>{filterError}</p> : null}
 
 				<div className={styles.sideCards}>
-					{breakdown.isLoading ? (
-						<AnalyticsSideCardsSkeleton className={styles.sideCardsSkeleton} />
+					{breakdown.isInitialLoading ? (
+						<AnalyticsSideCardsSkeleton
+							className={styles.sideCardsSkeleton}
+						/>
 					) : (
-						<>
+						<div className={styles.topLinksContent}>
 							<TopCountries countries={breakdown.topCountries} />
 							<DevicesChart
 								deviceStats={breakdown.deviceStats}
-								mainPercentage={breakdown.deviceStats[0]?.percentage ?? 0}
-								mainDeviceType={breakdown.deviceStats[0]?.type ?? '-'}
+								mainPercentage={
+									breakdown.deviceStats[0]?.percentage ?? 0
+								}
+								mainDeviceType={
+									breakdown.deviceStats[0]?.type ?? '-'
+								}
 							/>
 							<TopReferrers referrers={breakdown.topReferrers} />
-						</>
+							{breakdown.isRefetching ? <LoadingOverlay /> : null}
+						</div>
 					)}
 				</div>
 

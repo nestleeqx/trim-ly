@@ -22,22 +22,8 @@
 	margin-top: $spacing-xs;
 }
 
-.actions {
-	display: flex;
-	justify-content: flex-end;
-	margin-top: $spacing-md;
-}
-
 @media (max-width: $breakpoint-md) {
 	.cards {
 		grid-template-columns: 1fr;
-	}
-
-	.actions {
-		justify-content: stretch;
-	}
-
-	.actions :global(*) {
-		width: 100%;
 	}
 }

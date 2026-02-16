@@ -1,4 +1,4 @@
-﻿export type CreateLinkPayload = {
+﻿type CreateLinkPayload = {
 	targetUrl: string
 	slug: string
 	title?: string
@@ -7,7 +7,7 @@
 	password?: string
 }
 
-export type CreateLinkResponse = {
+type CreateLinkResponse = {
 	link: {
 		id: string
 		targetUrl: string
@@ -78,11 +78,11 @@ export type LinkAnalyticsResponse = {
 	}>
 }
 
-export type GetLinkByIdResponse = {
+type GetLinkByIdResponse = {
 	link: LinkListItemDto
 }
 
-export type UpdateLinkPayload = {
+type UpdateLinkPayload = {
 	targetUrl: string
 	slug: string
 	title?: string
@@ -92,7 +92,7 @@ export type UpdateLinkPayload = {
 	password?: string
 }
 
-export type GetLinksResponse = {
+type GetLinksResponse = {
 	links: LinkListItemDto[]
 	meta: {
 		totalAll: number
@@ -103,8 +103,39 @@ export type GetLinksResponse = {
 	}
 }
 
-export type LinkAction = 'pause' | 'resume' | 'restore'
-export type BulkLinkAction = 'pause' | 'resume' | 'delete' | 'restore'
+type LinkAction = 'pause' | 'resume' | 'restore'
+type BulkLinkAction = 'pause' | 'resume' | 'delete' | 'restore'
+
+type ApiErrorResponse = {
+	error?: string
+	affected?: number
+}
+
+function extractApiError(data: unknown): string {
+	if (
+		typeof data === 'object' &&
+		data !== null &&
+		'error' in data &&
+		typeof (data as { error: unknown }).error === 'string'
+	) {
+		return (data as ApiErrorResponse).error || ''
+	}
+
+	return ''
+}
+
+function extractAffected(data: unknown): number {
+	if (
+		typeof data === 'object' &&
+		data !== null &&
+		'affected' in data &&
+		typeof (data as { affected: unknown }).affected === 'number'
+	) {
+		return (data as ApiErrorResponse).affected ?? 0
+	}
+
+	return 0
+}
 
 function emitBillingUpdated() {
 	if (typeof window !== 'undefined') {
@@ -191,7 +222,7 @@ export async function getLinks(params?: {
 
 	const data = await res.json().catch(() => ({}))
 	if (!res.ok) {
-		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+		throw new Error(mapCreateLinkError(extractApiError(data)))
 	}
 
 	const response = data as Partial<GetLinksResponse>
@@ -223,7 +254,7 @@ export async function createLink(
 
 	const data = await res.json().catch(() => ({}))
 	if (!res.ok) {
-		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+		throw new Error(mapCreateLinkError(extractApiError(data)))
 	}
 
 	emitBillingUpdated()
@@ -242,7 +273,7 @@ export async function getLinkById(
 
 	const data = await res.json().catch(() => ({}))
 	if (!res.ok) {
-		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+		throw new Error(mapCreateLinkError(extractApiError(data)))
 	}
 
 	return data as GetLinkByIdResponse
@@ -262,7 +293,9 @@ export async function getLinkAnalytics(
 	if (params?.from) search.set('from', params.from)
 	if (params?.to) search.set('to', params.to)
 	const qs = search.toString()
-	const url = qs ? `/api/links/${id}/analytics?${qs}` : `/api/links/${id}/analytics`
+	const url = qs
+		? `/api/links/${id}/analytics?${qs}`
+		: `/api/links/${id}/analytics`
 
 	const res = await fetch(url, {
 		method: 'GET',
@@ -272,7 +305,7 @@ export async function getLinkAnalytics(
 
 	const data = await res.json().catch(() => ({}))
 	if (!res.ok) {
-		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+		throw new Error(mapCreateLinkError(extractApiError(data)))
 	}
 
 	return data as LinkAnalyticsResponse
@@ -290,7 +323,7 @@ export async function updateLink(
 
 	const data = await res.json().catch(() => ({}))
 	if (!res.ok) {
-		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+		throw new Error(mapCreateLinkError(extractApiError(data)))
 	}
 
 	return data as GetLinkByIdResponse
@@ -308,7 +341,7 @@ export async function patchLinkStatus(
 
 	const data = await res.json().catch(() => ({}))
 	if (!res.ok) {
-		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+		throw new Error(mapCreateLinkError(extractApiError(data)))
 	}
 
 	if (action === 'restore') {
@@ -321,7 +354,7 @@ export async function deleteLink(id: string): Promise<void> {
 	const data = await res.json().catch(() => ({}))
 
 	if (!res.ok) {
-		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+		throw new Error(mapCreateLinkError(extractApiError(data)))
 	}
 
 	emitBillingUpdated()
@@ -339,7 +372,7 @@ export async function bulkLinkAction(
 
 	const data = await res.json().catch(() => ({}))
 	if (!res.ok) {
-		throw new Error(mapCreateLinkError(String((data as any)?.error ?? '')))
+		throw new Error(mapCreateLinkError(extractApiError(data)))
 	}
 
 	if (action === 'delete' || action === 'restore') {
@@ -347,8 +380,6 @@ export async function bulkLinkAction(
 	}
 
 	return {
-		affected: Number((data as any)?.affected ?? 0)
+		affected: extractAffected(data)
 	}
 }
-
-

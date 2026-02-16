@@ -8,7 +8,7 @@ import ChartSummaryStats from '@/app/components/ui/ChartSummaryStats/ChartSummar
 import PeriodSelector, {
 	PeriodOption
 } from '@/app/components/ui/PeriodSelector/PeriodSelector'
-import { useAnalyticsClicks } from '@/hooks/analytics/useAnalyticsClicks'
+import { useAnalyticsClicks } from '@/app/features/analytics/hooks/useAnalyticsClicks'
 import dynamic from 'next/dynamic'
 import { useMemo } from 'react'
 import ChartDatePicker from './ChartDatePicker/ChartDatePicker'

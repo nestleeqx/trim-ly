@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'classnames'
 import { LucideIcon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback } from 'react'
@@ -45,7 +46,9 @@ export default function StatCard({
 
 	return (
 		<div
-			className={`${styles.card} ${clickable ? styles.clickable : ''}`}
+			className={cn(styles.card, {
+				[styles.clickable]: clickable
+			})}
 			onClick={clickable ? handleClick : undefined}
 			role={clickable ? 'button' : undefined}
 			tabIndex={clickable ? 0 : undefined}
@@ -64,7 +67,10 @@ export default function StatCard({
 					<Icon size={20} />
 				</div>
 				<span
-					className={`${styles.change} ${isPositive ? styles.positive : styles.negative}`}
+					className={cn(styles.change, {
+						[styles.positive]: isPositive,
+						[styles.negative]: !isPositive
+					})}
 				>
 					{isPositive ? '+' : ''}
 					{change}%

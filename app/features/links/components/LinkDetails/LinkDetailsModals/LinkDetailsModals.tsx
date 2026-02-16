@@ -2,7 +2,7 @@
 
 import LinkModals from '@/app/features/links/components/LinkDetails/LinkDetailsModals/LinkModals/LinkModals'
 import { ToastState } from '@/hooks/useToast'
-import { getModalConfig, LinkItem } from '@/types/links'
+import { getModalConfig, LinkItem, ModalAction } from '@/types/links'
 
 interface LinkDetailsModalsProps {
 	link: LinkItem | undefined
@@ -12,7 +12,7 @@ interface LinkDetailsModalsProps {
 	onQrDownload: () => void
 	confirmModal: {
 		isOpen: boolean
-		action: string | null
+		action: ModalAction
 	}
 	actionLoading: boolean
 	onConfirmClose: () => void

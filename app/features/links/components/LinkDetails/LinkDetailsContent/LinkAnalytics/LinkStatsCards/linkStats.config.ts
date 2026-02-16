@@ -7,7 +7,7 @@
 	Users
 } from 'lucide-react'
 
-export interface LinkStatCardConfig {
+interface LinkStatCardConfig {
 	id: string
 	icon: LucideIcon
 	label: string

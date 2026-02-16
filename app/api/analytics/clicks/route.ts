@@ -16,9 +16,16 @@ function parsePeriod(req: Request): Period {
 	return '24h'
 }
 
-function parseDate(value: string | null) {
+function parseDate(value: string | null, endOfDay = false) {
 	if (!value) return null
-	const parsed = new Date(value)
+	const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(value)
+	const parsed = isDateOnly
+		? new Date(
+				endOfDay
+					? `${value}T23:59:59.999Z`
+					: `${value}T00:00:00.000Z`
+			)
+		: new Date(value)
 	return Number.isNaN(parsed.getTime()) ? null : parsed
 }
 
@@ -28,7 +35,7 @@ function getRange(req: Request, period: Period) {
 	if (period === 'custom') {
 		const url = new URL(req.url)
 		const fromParam = parseDate(url.searchParams.get('from'))
-		const toParam = parseDate(url.searchParams.get('to'))
+		const toParam = parseDate(url.searchParams.get('to'), true)
 		return {
 			from: fromParam ?? new Date(now.getTime() - 6 * DAY_MS),
 			to: toParam ?? now
@@ -45,13 +52,13 @@ function getRange(req: Request, period: Period) {
 
 function startOfHour(date: Date) {
 	const result = new Date(date)
-	result.setMinutes(0, 0, 0)
+	result.setUTCMinutes(0, 0, 0)
 	return result
 }
 
 function startOfDay(date: Date) {
 	const result = new Date(date)
-	result.setHours(0, 0, 0, 0)
+	result.setUTCHours(0, 0, 0, 0)
 	return result
 }
 

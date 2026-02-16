@@ -6,7 +6,7 @@ import LinkEditViewSkeleton from '@/app/features/links/components/LinkDetails/Li
 import LinkDetailsHeader from '@/app/features/links/components/LinkDetails/LinkDetailsHeader'
 import LinkDetailsHeaderSkeleton from '@/app/features/links/components/LinkDetails/LinkDetailsHeaderSkeleton/LinkDetailsHeaderSkeleton'
 import LinkDetailsModals from '@/app/features/links/components/LinkDetails/LinkDetailsModals/LinkDetailsModals'
-import { UseLinkDetailsPageControllerResult } from '@/hooks/links/useLinkDetailsPageController'
+import { UseLinkDetailsPageControllerResult } from '@/app/features/links/hooks/useLinkDetailsPageController'
 
 interface LinkDetailsPageContentProps {
 	vm: UseLinkDetailsPageControllerResult

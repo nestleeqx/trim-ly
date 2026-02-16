@@ -1,16 +1,11 @@
 'use client'
 
-import { Filter, X } from 'lucide-react'
-import { useEffect, useRef } from 'react'
-import { useFiltersState } from '../../../../../hooks/useFiltersState'
-import CountryFilter from './CountryFilter/CountryFilter'
-import DateFilter from './DateFilter/DateFilter'
-import DeviceFilter from './DeviceFilter/DeviceFilter'
+import { useMemo } from 'react'
+import { useFiltersState } from '@/app/features/links/hooks/useFiltersState'
 import FiltersRight from './FiltersRight/FiltersRight'
-import ReferrerFilter from './ReferrerFilter/ReferrerFilter'
+import LinksFiltersLeft from './LinksFiltersLeft'
+import useEmitLinksFiltersChange from './hooks/useEmitLinksFiltersChange'
 import styles from './LinksFilters.module.scss'
-import StatusFilter from './StatusFilter/StatusFilter'
-import TagsFilter from './TagsFilter/TagsFilter'
 import { EnhancedLinksFiltersProps } from './types'
 
 export default function LinksFilters({
@@ -35,13 +30,8 @@ export default function LinksFilters({
 	const filtersState = useFiltersState()
 	const { handlers, hasActiveFilters } = filtersState
 
-	const onFiltersChangeRef = useRef(onFiltersChange)
-	useEffect(() => {
-		onFiltersChangeRef.current = onFiltersChange
-	}, [onFiltersChange])
-
-	useEffect(() => {
-		onFiltersChangeRef.current?.({
+	const filtersPayload = useMemo(
+		() => ({
 			statuses: filtersState.selectedStatuses,
 			tags: filtersState.selectedTags,
 			datePreset: filtersState.datePreset,
@@ -52,100 +42,63 @@ export default function LinksFilters({
 			referrer: filtersState.selectedReferrer,
 			sort: filtersState.sort,
 			viewMode
-		})
-	}, [
-		filtersState.selectedStatuses,
-		filtersState.selectedTags,
-		filtersState.datePreset,
-		filtersState.createdFrom,
-		filtersState.createdTo,
-		filtersState.selectedCountry,
-		filtersState.selectedDevice,
-		filtersState.selectedReferrer,
-		filtersState.sort,
-		viewMode
-	])
+		}),
+		[
+			filtersState.selectedStatuses,
+			filtersState.selectedTags,
+			filtersState.datePreset,
+			filtersState.createdFrom,
+			filtersState.createdTo,
+			filtersState.selectedCountry,
+			filtersState.selectedDevice,
+			filtersState.selectedReferrer,
+			filtersState.sort,
+			viewMode
+		]
+	)
 
-	const handleViewModeChange = (mode: 'list' | 'grid') => {
-		onViewModeChange?.(mode)
-	}
+	useEmitLinksFiltersChange(onFiltersChange, filtersPayload)
 
 	return (
 		<div className={styles.container}>
-			<div className={styles.filtersLeft}>
-				<span className={styles.filtersLabel}>
-					<Filter size={16} />
-					Фильтры
-				</span>
+			<LinksFiltersLeft
+				showCountry={showCountry}
+				showDevice={showDevice}
+				showDate={showDate}
+				showStatus={showStatus}
+				showTags={showTags}
+				showReferrer={showReferrer}
+				availableTags={availableTags}
+				tagsLoading={tagsLoading}
+				availableCountries={availableCountries}
+				availableDevices={availableDevices}
+				availableReferrers={availableReferrers}
+				hasActiveFilters={hasActiveFilters}
+				selectedTags={filtersState.selectedTags}
+				selectedStatuses={filtersState.selectedStatuses}
+				selectedCountry={filtersState.selectedCountry}
+				selectedDevice={filtersState.selectedDevice}
+				selectedReferrer={filtersState.selectedReferrer}
+				datePreset={filtersState.datePreset}
+				onTagsChange={handlers.setSelectedTags}
+				onStatusChange={handlers.setSelectedStatuses}
+				onCountryChange={handlers.setSelectedCountry}
+				onDeviceChange={handlers.setSelectedDevice}
+				onReferrerChange={handlers.setSelectedReferrer}
+				onDatePresetChange={handlers.setDatePreset}
+				onClearFilters={handlers.clearFilters}
+			/>
 
-				{showTags && (
-					<TagsFilter
-						availableTags={availableTags}
-						isLoading={tagsLoading}
-						selectedTags={filtersState.selectedTags}
-						onTagsChange={handlers.setSelectedTags}
-					/>
-				)}
-
-				{showStatus && (
-					<StatusFilter
-						selectedStatuses={filtersState.selectedStatuses}
-						onStatusChange={handlers.setSelectedStatuses}
-					/>
-				)}
-
-				{showCountry && (
-					<CountryFilter
-						selectedCountry={filtersState.selectedCountry}
-						onCountryChange={handlers.setSelectedCountry}
-						countries={availableCountries}
-					/>
-				)}
-
-				{showDevice && (
-					<DeviceFilter
-						selectedDevice={filtersState.selectedDevice}
-						onDeviceChange={handlers.setSelectedDevice}
-						devices={availableDevices}
-					/>
-				)}
-
-				{showReferrer && (
-					<ReferrerFilter
-						selectedReferrer={filtersState.selectedReferrer}
-						onReferrerChange={handlers.setSelectedReferrer}
-						referrers={availableReferrers}
-					/>
-				)}
-
-				{showDate && (
-					<DateFilter
-						datePreset={filtersState.datePreset}
-						onDatePresetChange={handlers.setDatePreset}
-					/>
-				)}
-
-				{hasActiveFilters && (
-					<button
-						className={styles.clearBtn}
-						onClick={handlers.clearFilters}
-					>
-						<X size={14} />
-						Сбросить
-					</button>
-				)}
-			</div>
-
-			{!hideRight && (
+			{!hideRight ? (
 				<FiltersRight
 					sort={filtersState.sort}
 					onSortChange={handlers.setSort}
 					viewMode={viewMode}
-					onViewModeChange={handleViewModeChange}
+					onViewModeChange={mode => onViewModeChange?.(mode)}
 					onExport={onExport}
 					exportLoading={exportLoading}
 				/>
-			)}
+			) : null}
 		</div>
 	)
 }

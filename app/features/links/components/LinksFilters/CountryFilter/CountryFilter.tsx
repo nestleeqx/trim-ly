@@ -1,6 +1,6 @@
 'use client'
 
-import { mockTopCountries } from '@/data/mockDashboardData'
+import cn from 'classnames'
 import { Check } from 'lucide-react'
 import commonStyles from '../FilterCommon.module.scss'
 import FilterDropdown from '../FilterDropdown/FilterDropdown'
@@ -14,7 +14,7 @@ interface CountryFilterProps {
 export default function CountryFilter({
 	selectedCountry,
 	onCountryChange,
-	countries = mockTopCountries.map(c => ({ code: c.code, name: c.name }))
+	countries = []
 }: CountryFilterProps) {
 	return (
 		<FilterDropdown
@@ -23,7 +23,9 @@ export default function CountryFilter({
 			hasSelection={!!selectedCountry}
 		>
 			<button
-				className={`${commonStyles.dropdownItem} ${!selectedCountry ? commonStyles.selected : ''}`}
+				className={cn(commonStyles.dropdownItem, {
+					[commonStyles.selected]: !selectedCountry
+				})}
 				onClick={() => onCountryChange?.(null)}
 			>
 				<span className={commonStyles.checkbox} />
@@ -33,7 +35,10 @@ export default function CountryFilter({
 			{countries.map(country => (
 				<button
 					key={country.code}
-					className={`${commonStyles.dropdownItem} ${selectedCountry === country.code ? commonStyles.selected : ''}`}
+					className={cn(commonStyles.dropdownItem, {
+						[commonStyles.selected]:
+							selectedCountry === country.code
+					})}
 					onClick={() => onCountryChange?.(country.code)}
 				>
 					<span className={commonStyles.checkbox}>

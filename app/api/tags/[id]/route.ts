@@ -3,9 +3,11 @@ import prisma from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
 
-type Params = { params: { id: string } }
+type RouteContext = {
+	params: Promise<{ id: string }>
+}
 
-export async function DELETE(_: Request, { params }: Params) {
+export async function DELETE(_: Request, context: RouteContext) {
 	const session = await getServerSession(authOptions)
 	const userId = session?.user?.id
 
@@ -13,12 +15,9 @@ export async function DELETE(_: Request, { params }: Params) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
 
-	const id = params.id
+	const { id } = await context.params
 	if (!id) {
-		return NextResponse.json(
-			{ error: 'Tag id is required' },
-			{ status: 400 }
-		)
+		return NextResponse.json({ error: 'Tag id is required' }, { status: 400 })
 	}
 
 	const tag = await prisma.tag.findFirst({

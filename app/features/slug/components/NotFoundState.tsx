@@ -1,4 +1,5 @@
 import Button from '@/app/components/ui/Button/Button'
+import cn from 'classnames'
 import { Link2Off } from 'lucide-react'
 import Link from 'next/link'
 import styles from './StatesCommon.module.scss'
@@ -6,7 +7,7 @@ import styles from './StatesCommon.module.scss'
 export default function NotFoundState() {
 	return (
 		<div className={styles.card}>
-			<div className={`${styles.stateIcon} ${styles.stateIconRed}`}>
+			<div className={cn(styles.stateIcon, styles.stateIconRed)}>
 				<Link2Off size={24} />
 			</div>
 

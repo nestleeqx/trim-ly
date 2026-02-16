@@ -1,4 +1,4 @@
-export const isValidUrl = (url: string): boolean => {
+const isValidUrl = (url: string): boolean => {
 	try {
 		new URL(url)
 		return true
@@ -35,5 +35,3 @@ export const validateExpirationDate = (date: string): string | undefined => {
 	}
 	return undefined
 }
-
-export const stripCyrillic = (s: string) => s.replace(/[А-Яа-яЁё]/g, '')

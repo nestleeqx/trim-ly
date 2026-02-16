@@ -1,6 +1,7 @@
 'use client'
 
 import Skeleton from '@/app/components/ui/Skeleton/Skeleton'
+import cn from 'classnames'
 import styles from './LinksPageSkeleton.module.scss'
 
 interface LinksPageSkeletonProps {
@@ -18,7 +19,9 @@ export default function LinksPageSkeleton({
 }: LinksPageSkeletonProps) {
 	return (
 		<div
-			className={`${styles.container} ${embedded ? styles.embedded : ''}`}
+			className={cn(styles.container, {
+				[styles.embedded]: embedded
+			})}
 		>
 			{showFilters && (
 				<div className={styles.filters}>

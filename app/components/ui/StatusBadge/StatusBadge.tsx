@@ -1,4 +1,5 @@
 import { LinkStatus } from '@/types/links'
+import cn from 'classnames'
 import { statusConfig } from './StatusBadge.config'
 import styles from './StatusBadge.module.scss'
 
@@ -12,7 +13,11 @@ export default function StatusBadge({ status, className }: StatusBadgeProps) {
 
 	return (
 		<span
-			className={`${styles.statusBadge} ${styles[config.className]} ${className}`}
+			className={cn(
+				styles.statusBadge,
+				styles[config.className],
+				className
+			)}
 		>
 			{config.label}
 		</span>

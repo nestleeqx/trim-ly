@@ -24,25 +24,7 @@ export const defaultFormData: LinkEditFormData = {
 	password: ''
 }
 
-export const existingTags = [
-	'marketing',
-	'social',
-	'campaign',
-	'promo',
-	'email',
-	'ads',
-	'organic',
-	'referral'
-]
-
 export const takenAliases = ['demo', 'test', 'admin', 'api', 'app']
-
-export const folderOptions = [
-	{ value: 'General', label: 'Общая' },
-	{ value: 'Marketing', label: 'Маркетинг' },
-	{ value: 'Social', label: 'Соцсети' },
-	{ value: 'Campaigns', label: 'Кампании' }
-]
 
 export const SHORT_LINK_DOMAIN = buildShortLink()
 

@@ -26,7 +26,16 @@ export type BillingResponse = {
 
 async function parseJson<T>(res: Response): Promise<T> {
 	const data = await res.json().catch(() => ({}))
-	if (!res.ok) throw new Error((data as any)?.error ?? 'Request failed')
+	if (!res.ok) {
+		const errorMessage =
+			typeof data === 'object' &&
+			data !== null &&
+			'error' in data &&
+			typeof (data as { error: unknown }).error === 'string'
+				? (data as { error: string }).error
+				: 'Request failed'
+		throw new Error(errorMessage)
+	}
 	return data as T
 }
 

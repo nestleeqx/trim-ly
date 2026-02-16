@@ -1,8 +1,8 @@
-﻿export interface PlanFeature {
+﻿interface PlanFeature {
 	text: string
 }
 
-export interface Plan {
+interface Plan {
 	id: 'free' | 'pro' | 'team'
 	name: string
 	monthlyPrice: string
@@ -74,7 +74,7 @@ export const plans: Plan[] = [
 	}
 ]
 
-export interface DashboardPlan {
+interface DashboardPlan {
 	id: 'free' | 'pro' | 'team'
 	name: string
 	description: string
@@ -197,7 +197,7 @@ export const testimonials: Testimonial[] = [
 	}
 ]
 
-export interface FAQItem {
+interface FAQItem {
 	question: string
 	answer: string
 }

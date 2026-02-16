@@ -20,10 +20,3 @@ export function getSoftDeleteCutoffDate(now = new Date()) {
 	cutoff.setDate(cutoff.getDate() - days)
 	return cutoff
 }
-
-export function getDeletionPlannedAt(deletedAt: Date) {
-	const days = getSoftDeleteRetentionDays()
-	const planned = new Date(deletedAt)
-	planned.setDate(planned.getDate() + days)
-	return planned
-}

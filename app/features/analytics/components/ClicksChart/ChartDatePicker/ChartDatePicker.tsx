@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import styles from './ChartDatePicker.module.scss'
 
 interface ChartDatePickerProps {
@@ -54,13 +55,19 @@ export default function ChartDatePicker({
 				{error ? <p className={styles.dateError}>{error}</p> : null}
 				<div className={styles.datePickerActions}>
 					<button
-						className={`${styles.datePickerBtn} ${styles.datePickerBtnCancel}`}
+						className={cn(
+							styles.datePickerBtn,
+							styles.datePickerBtnCancel
+						)}
 						onClick={onCancel}
 					>
 						Отмена
 					</button>
 					<button
-						className={`${styles.datePickerBtn} ${styles.datePickerBtnApply}`}
+						className={cn(
+							styles.datePickerBtn,
+							styles.datePickerBtnApply
+						)}
 						onClick={onApply}
 						disabled={!startDate || !endDate}
 					>

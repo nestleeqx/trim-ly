@@ -1,4 +1,4 @@
-import classNames from 'classnames'
+import cn from 'classnames'
 import React from 'react'
 import styles from './Button.module.scss'
 
@@ -34,7 +34,7 @@ export default function Button({
 		<button
 			type={type}
 			onClick={onClick}
-			className={classNames(
+			className={cn(
 				styles.button,
 				styles[variant],
 				styles[size],

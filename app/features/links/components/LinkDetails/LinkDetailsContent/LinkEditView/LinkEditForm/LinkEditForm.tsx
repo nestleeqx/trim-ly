@@ -1,8 +1,8 @@
 'use client'
 import { LinkEditFormData } from '@/app/features/links/components/LinkEdit/linkEdit.config'
-import { useLinkForm } from '@/hooks/useLinkForm'
+import { useLinkForm } from '@/app/features/links/hooks/useLinkForm'
 import { LinkItem } from '@/types/links'
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import AdvancedSettings from '../../../../LinkEdit/AdvancedSettings'
 import FormActions from '../../../../LinkEdit/FormActions'
 import FormFields from '../../../../LinkEdit/FormFields'
@@ -35,7 +35,6 @@ export default function LinkEditForm({
 		isDirty,
 		advancedOpen,
 		aliasCheck,
-		setAdvancedOpen,
 		handleFieldChange,
 		handleDestinationError,
 		handleExpirationChange,
@@ -47,7 +46,7 @@ export default function LinkEditForm({
 	} = useLinkForm({ link, onChange })
 
 	const handleSubmit = useCallback(
-		(e: React.FormEvent) => {
+		(e: { preventDefault: () => void }) => {
 			e.preventDefault()
 			if (validateForm()) {
 				onSave(getNormalizedData())

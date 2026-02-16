@@ -1,4 +1,5 @@
 import { validateProfile } from '@/app/features/profile/validation/profileValidation'
+import { Prisma } from '@/app/generated/prisma/client'
 import { authOptions } from '@/auth'
 import prisma from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
@@ -53,34 +54,34 @@ export async function PATCH(req: Request) {
 	const normalizedName = result.normalized.name
 	const normalizedUsername = result.normalized.username
 
-	const existingByUsername = await prisma.user.findUnique({
-		where: { username: normalizedUsername },
-		select: { id: true }
-	})
-
-	if (existingByUsername && existingByUsername.id !== userId) {
-		return NextResponse.json(
-			{
-				error: 'Username already taken',
-				errors: { username: 'Username уже занят.' }
+	try {
+		const updated = await prisma.user.update({
+			where: { id: userId },
+			data: {
+				name: normalizedName,
+				username: normalizedUsername
 			},
-			{ status: 409 }
-		)
-	}
+			select: {
+				name: true,
+				username: true,
+				email: true,
+				avatarURL: true
+			}
+		})
 
-	const updated = await prisma.user.update({
-		where: { id: userId },
-		data: {
-			name: normalizedName,
-			username: normalizedUsername
-		},
-		select: {
-			name: true,
-			username: true,
-			email: true,
-			avatarURL: true
+		return NextResponse.json(updated)
+	} catch (error) {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			if (error.code === 'P2002') {
+				return NextResponse.json(
+					{
+						error: 'Username already taken',
+						errors: { username: 'Username уже занят.' }
+					},
+					{ status: 409 }
+				)
+			}
 		}
-	})
-
-	return NextResponse.json(updated)
+		return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+	}
 }

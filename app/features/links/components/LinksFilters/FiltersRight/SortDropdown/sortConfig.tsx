@@ -9,7 +9,7 @@ import {
 	Hash
 } from 'lucide-react'
 
-export interface SortOptionConfig {
+interface SortOptionConfig {
 	field: SortField
 	label: string
 	icon: React.ReactNode

@@ -7,17 +7,9 @@ export type SignupPayload = {
 	username?: string
 }
 
-export type SignupResponse = {
+type SignupResponse = {
 	id: string
 	email: string
-}
-
-export class ApiError extends Error {
-	status: number
-	constructor(message: string, status: number) {
-		super(message)
-		this.status = status
-	}
 }
 
 export async function signup(payload: SignupPayload): Promise<SignupResponse> {
@@ -29,8 +21,16 @@ export async function signup(payload: SignupPayload): Promise<SignupResponse> {
 	const data = await res.json().catch(() => ({}))
 
 	if (!res.ok) {
+		const errorMessage =
+			typeof data === 'object' &&
+			data !== null &&
+			'error' in data &&
+			typeof (data as { error: unknown }).error === 'string'
+				? (data as { error: string }).error
+				: ''
+
 		const mapped = mapAuthApiError(
-			String((data as any)?.error ?? ''),
+			errorMessage,
 			'Не удалось создать аккаунт.'
 		)
 		throw new Error(mapped.message)

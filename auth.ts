@@ -1,6 +1,8 @@
 import prisma from '@/lib/prisma'
+import type { Prisma } from '@/app/generated/prisma/client'
 import bcrypt from 'bcryptjs'
-import type { NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions, Profile } from 'next-auth'
+import type { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import YandexProvider from 'next-auth/providers/yandex'
@@ -8,6 +10,25 @@ import { generateUniqueUsername } from './lib/auth'
 
 const ONE_DAY = 60 * 60 * 24
 const THIRTY_DAYS = 60 * 60 * 24 * 30
+
+type AuthUserMeta = {
+	dbId?: string
+	remember?: boolean
+}
+
+type JwtMeta = JWT & {
+	userId?: string
+	remember?: boolean
+}
+
+function getOAuthBaseName(profile: Profile | undefined, fallback: string): string {
+	const p = (profile ?? {}) as Record<string, unknown>
+	const login = typeof p.login === 'string' ? p.login : ''
+	const displayName =
+		typeof p.display_name === 'string' ? p.display_name : ''
+
+	return login || displayName || fallback
+}
 
 export const authOptions: NextAuthOptions = {
 	session: { strategy: 'jwt', maxAge: THIRTY_DAYS },
@@ -40,8 +61,9 @@ export const authOptions: NextAuthOptions = {
 					email: user.email,
 					name: user.name ?? user.username ?? undefined,
 					image: user.avatarURL ?? undefined,
+					dbId: user.id,
 					remember
-				} as any
+				}
 			}
 		}),
 		GoogleProvider({
@@ -60,11 +82,15 @@ export const authOptions: NextAuthOptions = {
 			const provider = account.provider
 			const providerId = account.providerAccountId
 			const email = (user.email ?? '').trim().toLowerCase() || null
+			const userWithMeta = user as typeof user & AuthUserMeta
 
 			const pickBase = () => {
-				const p: any = profile ?? {}
+				const baseFromOAuth =
+					provider === 'yandex'
+						? getOAuthBaseName(profile, '')
+						: ''
 				return (
-					(provider === 'yandex' && (p.login || p.display_name)) ||
+					baseFromOAuth ||
 					user.name ||
 					(email ? email.split('@')[0] : 'user')
 				)
@@ -85,7 +111,7 @@ export const authOptions: NextAuthOptions = {
 					})
 				}
 
-				;(user as any).dbId = byProvider.id
+				userWithMeta.dbId = byProvider.id
 				return true
 			}
 
@@ -95,7 +121,7 @@ export const authOptions: NextAuthOptions = {
 				})
 
 				if (byEmail) {
-					const dataToUpdate: any = {
+					const dataToUpdate: Prisma.UserUpdateInput = {
 						provider,
 						providerId,
 						emailVerified: byEmail.emailVerified ?? new Date(),
@@ -113,7 +139,7 @@ export const authOptions: NextAuthOptions = {
 						where: { id: byEmail.id },
 						data: dataToUpdate
 					})
-					;(user as any).dbId = byEmail.id
+					userWithMeta.dbId = byEmail.id
 					return true
 				}
 			}
@@ -137,43 +163,44 @@ export const authOptions: NextAuthOptions = {
 			})
 
 			await prisma.userUsage.create({ data: { userId: created.id } })
-			;(user as any).dbId = created.id
+			userWithMeta.dbId = created.id
 			return true
 		},
 
 		async jwt({ token, user, trigger, session }) {
 			const now = Math.floor(Date.now() / 1000)
+			const tokenWithMeta = token as JwtMeta
 
 			if (user) {
-				token.userId = (user as any).dbId ?? user.id
-				token.remember = (user as any).remember ?? false
-				token.exp =
-					now + ((token as any).remember ? THIRTY_DAYS : ONE_DAY)
-				return token
+				const userWithMeta = user as typeof user & AuthUserMeta
+				tokenWithMeta.userId = userWithMeta.dbId ?? user.id
+				tokenWithMeta.remember = userWithMeta.remember ?? false
+				tokenWithMeta.exp =
+					now + (tokenWithMeta.remember ? THIRTY_DAYS : ONE_DAY)
+				return tokenWithMeta
 			}
 
 			if (trigger === 'update' && session) {
-				if (typeof session.name === 'string') token.name = session.name
+				if (typeof session.name === 'string') tokenWithMeta.name = session.name
 				if (typeof session.image === 'string')
-					token.picture = session.image
-				if (session.image === null) delete token.picture
+					tokenWithMeta.picture = session.image
+				if (session.image === null) delete tokenWithMeta.picture
 			}
 
-			if (typeof token.exp === 'number' && token.exp < now) {
-				// токен истёк — заставляем next-auth считать сессию невалидной
-				return {} as any
+			if (typeof tokenWithMeta.exp === 'number' && tokenWithMeta.exp < now) {
+				// ????? ????? ? ?????????? next-auth ??????? ?????? ??????????.
+				return {} as typeof token
 			}
 
-			if (typeof token.exp !== 'number') {
-				token.exp = now + THIRTY_DAYS
+			if (typeof tokenWithMeta.exp !== 'number') {
+				tokenWithMeta.exp = now + THIRTY_DAYS
 			}
 
-			return token
+			return tokenWithMeta
 		},
 		async session({ session, token }) {
 			if (session.user) {
-				// @ts-expect-error расширяем тип
-				session.user.id = token.userId as string
+				session.user.id = ((token as JwtMeta).userId ?? '') as string
 				if (typeof token.name === 'string')
 					session.user.name = token.name
 				if (typeof token.email === 'string')

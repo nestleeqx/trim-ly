@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import styles from './ChartLoadingOverlay.module.scss'
 
 interface ChartLoadingOverlayProps {
@@ -9,7 +10,7 @@ export default function ChartLoadingOverlay({
 }: ChartLoadingOverlayProps) {
 	return (
 		<div
-			className={`${styles.overlay} ${className ?? ''}`.trim()}
+			className={cn(styles.overlay, className)}
 			aria-hidden='true'
 		>
 			<div className={styles.spinner} />

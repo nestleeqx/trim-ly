@@ -5,6 +5,8 @@ import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import { NextResponse } from 'next/server'
 
+class TokenAlreadyUsedOrExpiredError extends Error {}
+
 function hashToken(token: string) {
 	return crypto.createHash('sha256').update(token).digest('hex')
 }
@@ -102,24 +104,45 @@ export async function POST(req: Request) {
 
 	const passwordHash = await bcrypt.hash(password, 10)
 
-	await prisma.$transaction([
-		prisma.user.update({
-			where: { id: record.userId },
-			data: { passwordHash }
-		}),
-		prisma.passwordResetToken.update({
-			where: { id: record.id },
-			data: { usedAt: new Date() }
-		}),
-		prisma.passwordResetToken.updateMany({
-			where: {
-				userId: record.userId,
-				usedAt: null,
-				id: { not: record.id }
-			},
-			data: { usedAt: new Date() }
+	try {
+		await prisma.$transaction(async tx => {
+			const now = new Date()
+			const claimed = await tx.passwordResetToken.updateMany({
+				where: {
+					id: record.id,
+					usedAt: null,
+					expiresAt: { gt: now }
+				},
+				data: { usedAt: now }
+			})
+
+			if (claimed.count === 0) {
+				throw new TokenAlreadyUsedOrExpiredError()
+			}
+
+			await tx.user.update({
+				where: { id: record.userId },
+				data: { passwordHash }
+			})
+
+			await tx.passwordResetToken.updateMany({
+				where: {
+					userId: record.userId,
+					usedAt: null,
+					id: { not: record.id }
+				},
+				data: { usedAt: now }
+			})
 		})
-	])
+	} catch (error) {
+		if (error instanceof TokenAlreadyUsedOrExpiredError) {
+			return NextResponse.json(
+				{ error: 'Token already used or expired' },
+				{ status: 400 }
+			)
+		}
+		return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+	}
 
 	return NextResponse.json({ ok: true })
 }

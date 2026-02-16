@@ -1,6 +1,6 @@
 import { ClickEvent, LinkItem } from '@/types/links'
 
-const escapeCsvValue = (value: any): string => {
+const escapeCsvValue = (value: unknown): string => {
 	if (value === null || value === undefined) return ''
 	const str = String(value)
 	if (str.includes(',') || str.includes('"') || str.includes('\n')) {

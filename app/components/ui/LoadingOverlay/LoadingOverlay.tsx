@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import styles from './LoadingOverlay.module.scss'
 
 interface LoadingOverlayProps {
@@ -7,7 +8,7 @@ interface LoadingOverlayProps {
 export default function LoadingOverlay({ className }: LoadingOverlayProps) {
 	return (
 		<div
-			className={`${styles.loadingOverlay} ${className ?? ''}`.trim()}
+			className={cn(styles.loadingOverlay, className)}
 			aria-hidden='true'
 		>
 			<div className={styles.linearLoader} />

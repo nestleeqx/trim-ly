@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'classnames'
 import { AlertCircle, Calendar, X } from 'lucide-react'
 import React, { useCallback } from 'react'
 import styles from './LinkEdit.module.scss'
@@ -37,9 +38,9 @@ export default function ExpirationSettings({
 					name='expirationDate'
 					value={expirationDate}
 					onChange={handleExpirationChange}
-					className={`${styles.input} ${
-						expirationError ? styles.error : ''
-					}`}
+					className={cn(styles.input, {
+						[styles.error]: expirationError
+					})}
 				/>
 				{expirationDate && (
 					<button

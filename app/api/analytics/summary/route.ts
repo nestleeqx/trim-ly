@@ -143,7 +143,7 @@ export async function GET(req: Request) {
 				id: 'qr',
 				value: formatNumber(qrScans),
 				change: calcChange(qrScans, prevQrScans)
-			},
+			}
 		]
 	})
 }

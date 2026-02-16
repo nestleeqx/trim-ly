@@ -1,5 +1,5 @@
-import { authOptions } from '@/auth'
 import { buildShortLink } from '@/app/features/links/utils/shortLink'
+import { authOptions } from '@/auth'
 import prisma from '@/lib/prisma'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
@@ -36,10 +36,18 @@ function normalizeDevice(
 
 	const ua = userAgent.toLowerCase()
 	if (ua.includes('ipad') || ua.includes('tablet')) return 'Tablet'
-	if (ua.includes('mobi') || ua.includes('android') || ua.includes('iphone')) {
+	if (
+		ua.includes('mobi') ||
+		ua.includes('android') ||
+		ua.includes('iphone')
+	) {
 		return 'Mobile'
 	}
-	if (ua.includes('macintosh') || ua.includes('windows') || ua.includes('linux')) {
+	if (
+		ua.includes('macintosh') ||
+		ua.includes('windows') ||
+		ua.includes('linux')
+	) {
 		return 'Desktop'
 	}
 	return 'Other'
@@ -64,7 +72,9 @@ function extractReferrerHost(value: string | null) {
 	const input = value.trim()
 	if (!input) return 'direct'
 	try {
-		const url = new URL(input.startsWith('http') ? input : `https://${input}`)
+		const url = new URL(
+			input.startsWith('http') ? input : `https://${input}`
+		)
 		return url.hostname.replace(/^www\./, '')
 	} catch {
 		return input.replace(/^www\./, '')
@@ -80,7 +90,8 @@ export async function GET(req: Request) {
 
 	const url = new URL(req.url)
 	const period = parsePeriod(req)
-	const selectedCountry = (url.searchParams.get('country') || '').trim() || null
+	const selectedCountry =
+		(url.searchParams.get('country') || '').trim() || null
 	const selectedDevice = (url.searchParams.get('device') || '').trim() || null
 	const selectedReferrer =
 		(url.searchParams.get('referrer') || '').trim() || null
@@ -114,7 +125,10 @@ export async function GET(req: Request) {
 		if (selectedDevice && selectedDevice !== device) continue
 		if (selectedReferrer && selectedReferrer !== eventReferrer) continue
 
-		clicksByLink.set(event.linkId, (clicksByLink.get(event.linkId) || 0) + 1)
+		clicksByLink.set(
+			event.linkId,
+			(clicksByLink.get(event.linkId) || 0) + 1
+		)
 	}
 
 	const top = [...clicksByLink.entries()]

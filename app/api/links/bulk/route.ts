@@ -49,7 +49,10 @@ export async function POST(req: Request) {
 	})
 
 	if (ownedLinks.length !== ids.length) {
-		return NextResponse.json({ error: 'Some links are invalid' }, { status: 400 })
+		return NextResponse.json(
+			{ error: 'Some links are invalid' },
+			{ status: 400 }
+		)
 	}
 
 	if (action === 'pause') {

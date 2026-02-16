@@ -2,6 +2,7 @@
 
 import ToggleSwitch from '@/app/components/ui/ToggleSwitch/ToggleSwitch'
 import { usePasswordToggle } from '@/hooks/usePasswordToggle'
+import cn from 'classnames'
 import { Eye, EyeOff, Lock } from 'lucide-react'
 import React, { useCallback } from 'react'
 import styles from './LinkEdit.module.scss'
@@ -52,7 +53,10 @@ export default function PasswordSettings({
 								value={password}
 								onChange={handlePasswordChange}
 								placeholder='Установить новый пароль'
-								className={`${styles.input} ${styles.passwordInput}`}
+								className={cn(
+									styles.input,
+									styles.passwordInput
+								)}
 							/>
 							<button
 								type='button'

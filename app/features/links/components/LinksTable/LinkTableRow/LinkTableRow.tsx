@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'classnames'
 import sharedStyles from '../shared.module.scss'
 import ActionsCell from './ActionsCell'
 import ClicksCell from './ClicksCell'
@@ -31,7 +32,9 @@ export default function LinkTableRow({
 
 	return (
 		<tr
-			className={`${styles.row} ${isSelected ? styles.selected : ''}`}
+			className={cn(styles.row, {
+				[styles.selected]: isSelected
+			})}
 			onClick={e => actions.handleItemClick(e)}
 		>
 			{allowSelection ? (

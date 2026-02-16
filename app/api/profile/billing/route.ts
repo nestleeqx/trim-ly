@@ -93,19 +93,20 @@ export async function PATCH(req: Request) {
 		return NextResponse.json({ error: 'Plan not found' }, { status: 404 })
 	}
 
-	await prisma.user.update({
-		where: { id: userId },
-		data: {
-			planId: plan.id,
-			subscriptionStatus: 'active'
-		}
-	})
-
-	await prisma.userUsage.upsert({
-		where: { userId },
-		create: { userId },
-		update: {}
-	})
+	await prisma.$transaction([
+		prisma.user.update({
+			where: { id: userId },
+			data: {
+				planId: plan.id,
+				subscriptionStatus: 'active'
+			}
+		}),
+		prisma.userUsage.upsert({
+			where: { userId },
+			create: { userId },
+			update: {}
+		})
+	])
 
 	const response = await buildBillingResponse(userId)
 	if (!response) {

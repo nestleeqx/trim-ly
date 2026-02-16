@@ -2,6 +2,7 @@
 
 import { DatePreset } from '@/types/filterLinks'
 import { formatDateRange } from '@/utils/formatters'
+import cn from 'classnames'
 import { Calendar } from 'lucide-react'
 import { useState } from 'react'
 import commonStyles from '../FilterCommon.module.scss'
@@ -64,7 +65,9 @@ export default function DateFilter({
 					<button
 						type='button'
 						key={String(value)}
-						className={`${commonStyles.dropdownItem} ${datePreset === value ? commonStyles.selected : ''}`}
+						className={cn(commonStyles.dropdownItem, {
+							[commonStyles.selected]: datePreset === value
+						})}
 						onClick={() => handlePresetSelect(value)}
 					>
 						{label}
@@ -73,7 +76,9 @@ export default function DateFilter({
 				<div className={commonStyles.divider} />
 				<button
 					type='button'
-					className={`${commonStyles.dropdownItem} ${datePreset === 'custom' ? commonStyles.selected : ''}`}
+					className={cn(commonStyles.dropdownItem, {
+						[commonStyles.selected]: datePreset === 'custom'
+					})}
 					onClick={() => handlePresetSelect('custom')}
 				>
 					<Calendar size={14} />

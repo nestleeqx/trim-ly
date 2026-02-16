@@ -1,6 +1,7 @@
 'use client'
 
 import { getPageNumbers } from '@/utils/pagination'
+import cn from 'classnames'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useMemo } from 'react'
 import ItemsPerPageDropdown from './ItemsPerPageDropdown/ItemsPerPageDropdown'
@@ -23,15 +24,16 @@ export default function Pagination({
 	onPageChange,
 	onItemsPerPageChange
 }: PaginationProps) {
-	if (totalItems === 0) return null
-
-	const safeCurrentPage = Math.min(Math.max(currentPage, 1), totalPages)
+	const safeTotalPages = Math.max(totalPages, 1)
+	const safeCurrentPage = Math.min(Math.max(currentPage, 1), safeTotalPages)
 	const startItem = (safeCurrentPage - 1) * itemsPerPage + 1
 	const endItem = Math.min(safeCurrentPage * itemsPerPage, totalItems)
 	const pages = useMemo(
-		() => getPageNumbers(safeCurrentPage, totalPages),
-		[safeCurrentPage, totalPages]
+		() => getPageNumbers(safeCurrentPage, safeTotalPages),
+		[safeCurrentPage, safeTotalPages]
 	)
+
+	if (totalItems === 0) return null
 
 	return (
 		<div className={styles.pagination}>
@@ -52,7 +54,9 @@ export default function Pagination({
 				<button
 					type='button'
 					className={styles.navBtn}
-					onClick={() => onPageChange(Math.max(safeCurrentPage - 1, 1))}
+					onClick={() =>
+						onPageChange(Math.max(safeCurrentPage - 1, 1))
+					}
 					disabled={safeCurrentPage === 1}
 					aria-label='Предыдущая страница'
 				>
@@ -65,7 +69,9 @@ export default function Pagination({
 							<button
 								type='button'
 								key={index}
-								className={`${styles.pageBtn} ${safeCurrentPage === page ? styles.active : ''}`}
+								className={cn(styles.pageBtn, {
+									[styles.active]: safeCurrentPage === page
+								})}
 								onClick={() => onPageChange(page)}
 							>
 								{page}
@@ -85,9 +91,11 @@ export default function Pagination({
 					type='button'
 					className={styles.navBtn}
 					onClick={() =>
-						onPageChange(Math.min(safeCurrentPage + 1, totalPages))
+						onPageChange(
+							Math.min(safeCurrentPage + 1, safeTotalPages)
+						)
 					}
-					disabled={safeCurrentPage === totalPages}
+					disabled={safeCurrentPage === safeTotalPages}
 					aria-label='Следующая страница'
 				>
 					<ChevronRight size={18} />
