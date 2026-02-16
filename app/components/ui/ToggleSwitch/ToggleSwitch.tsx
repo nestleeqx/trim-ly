@@ -22,6 +22,12 @@ export default function ToggleSwitch({
 		onChange(e.target.checked)
 	}
 
+	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+		if (e.key !== 'Enter') return
+		e.preventDefault()
+		onChange(!checked)
+	}
+
 	return (
 		<label className={styles.toggle}>
 			{label && <span className={styles.label}>{label}</span>}
@@ -29,6 +35,7 @@ export default function ToggleSwitch({
 				type='checkbox'
 				checked={checked}
 				onChange={handleChange}
+				onKeyDown={handleKeyDown}
 				className={styles.toggleInput}
 			/>
 			<span className={styles.toggleSlider}></span>

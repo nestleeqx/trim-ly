@@ -43,15 +43,24 @@
 .cardTitle {
 	font-size: $font-size-base;
 	font-weight: $font-weight-semibold;
-	color: var(--color-text-primary);
 	margin: 0;
 	line-height: 1.4;
-	cursor: pointer;
-	transition: $transition-fast;
 	max-width: max-content;
+}
+
+.cardTitleLink {
+	color: var(--color-text-primary);
+	text-decoration: none;
+	transition: $transition-fast;
 
 	&:hover {
 		color: var(--color-primary);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+		border-radius: 4px;
 	}
 }
 

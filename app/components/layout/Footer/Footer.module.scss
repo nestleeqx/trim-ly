@@ -43,6 +43,7 @@
 }
 
 .logo {
+	max-width: max-content;
 	@media (max-width: $breakpoint-md) {
 		display: flex;
 		justify-content: center;
@@ -238,8 +239,4 @@
 			font-size: $font-size-xs;
 		}
 	}
-}
-
-.language {
-	cursor: default;
 }

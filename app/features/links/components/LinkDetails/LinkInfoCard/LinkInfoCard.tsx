@@ -1,6 +1,7 @@
 'use client'
 
 import StatusBadge from '@/app/components/ui/StatusBadge/StatusBadge'
+import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
 import { LinkItem } from '@/types/links'
 import { Copy } from 'lucide-react'
 import { useCallback } from 'react'
@@ -45,9 +46,14 @@ export default function LinkInfoCard({
 
 					<div className={styles.urls}>
 						<div className={styles.shortUrl}>
-							<span className={styles.shortUrlText}>
+							<a
+								href={toShortLinkHref(link.shortUrl)}
+								target='_blank'
+								rel='noopener noreferrer'
+								className={styles.shortUrlText}
+							>
 								{link.shortUrl}
-							</span>
+							</a>
 							<button
 								className={styles.copyBtn}
 								onClick={handleCopyShortUrl}

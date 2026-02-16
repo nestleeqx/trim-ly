@@ -1,4 +1,8 @@
+'use client'
+
 import cn from 'classnames'
+import { useFocusTrap } from '@/app/features/shared/hooks/useFocusTrap'
+import { useRef } from 'react'
 import styles from './ChartDatePicker.module.scss'
 
 interface ChartDatePickerProps {
@@ -22,6 +26,9 @@ export default function ChartDatePicker({
 	onApply,
 	onCancel
 }: ChartDatePickerProps) {
+	const pickerRef = useRef<HTMLDivElement | null>(null)
+	useFocusTrap(pickerRef, { enabled: show })
+
 	if (!show) return null
 
 	return (
@@ -30,7 +37,14 @@ export default function ChartDatePicker({
 				className={styles.datePickerOverlay}
 				onClick={onCancel}
 			/>
-			<div className={styles.datePicker}>
+			<div
+				ref={pickerRef}
+				className={styles.datePicker}
+				role='dialog'
+				aria-modal='true'
+				aria-label='Выберите период'
+				tabIndex={-1}
+			>
 				<div className={styles.datePickerTitle}>Выберите период</div>
 				<div className={styles.dateInputs}>
 					<div className={styles.dateField}>

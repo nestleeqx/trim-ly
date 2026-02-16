@@ -12,6 +12,10 @@
 }
 
 .linkTitle {
+	padding: 0;
+	background: transparent;
+	border: none;
+	text-align: left;
 	font-size: $font-size-sm;
 	font-weight: $font-weight-medium;
 	color: var(--color-text-primary);
@@ -23,6 +27,12 @@
 
 		&:hover {
 			color: var(--color-primary);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--color-primary);
+			outline-offset: 2px;
+			border-radius: 4px;
 		}
 	}
 }

@@ -8,6 +8,27 @@ import Hero from '@/app/components/sections/Hero/Hero'
 import Pricing from '@/app/components/sections/Pricing/Pricing'
 import TrustedBy from '@/app/components/sections/TrustedBy/TrustedBy'
 import ScrollToTop from '@/app/components/ui/ScrollToTop/ScrollToTop'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Главная',
+	description:
+		'Сокращайте ссылки, создавайте QR-коды и отслеживайте аналитику в одном сервисе.',
+	alternates: {
+		canonical: '/'
+	},
+	openGraph: {
+		title: 'trim.ly — сокращатель ссылок с аналитикой',
+		description:
+			'Сокращайте ссылки, создавайте QR-коды и отслеживайте аналитику в одном сервисе.',
+		url: '/'
+	},
+	twitter: {
+		title: 'trim.ly — сокращатель ссылок с аналитикой',
+		description:
+			'Сокращайте ссылки, создавайте QR-коды и отслеживайте аналитику в одном сервисе.'
+	}
+}
 
 export default function Home() {
 	return (

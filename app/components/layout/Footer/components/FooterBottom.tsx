@@ -19,7 +19,7 @@ export default function FooterBottom() {
 						{link.label}
 					</Link>
 				))}
-				<span className={styles.language}>Русский (RU)</span>
+				<Link href='#'>Русский (RU)</Link>
 			</div>
 		</div>
 	)

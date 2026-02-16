@@ -10,39 +10,39 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-	title: 'Сокращайте ссылки умнее - trim.ly',
+	metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+	title: {
+		default: 'trim.ly',
+		template: '%s | trim.ly'
+	},
 	description:
-		'Создавайте брендированные короткие ссылки, генерируйте QR-коды и анализируйте эффективность с помощью аналитики в реальном времени.',
-	keywords: [
-		'сокращение ссылок',
-		'короткие ссылки',
-		'QR-коды',
-		'аналитика ссылок',
-		'брендированные ссылки',
-		'link shortener',
-		'URL shortener'
-	],
-	authors: [{ name: 'trim.ly' }],
-	creator: 'trim.ly',
-	publisher: 'trim.ly',
+		'Создавайте короткие ссылки, QR-коды и отслеживайте статистику переходов.',
+	applicationName: 'trim.ly',
 	robots: {
 		index: true,
 		follow: true
 	},
+	alternates: {
+		canonical: '/'
+	},
+	icons: {
+		icon: '/favicon.ico',
+		apple: '/apple-touch-icon.png'
+	},
 	openGraph: {
 		type: 'website',
 		locale: 'ru_RU',
-		url: 'https://trim.ly',
+		url: '/',
 		siteName: 'trim.ly',
-		title: 'Сокращайте ссылки умнее - trim.ly',
+		title: 'trim.ly',
 		description:
-			'Создавайте брендированные короткие ссылки, генерируйте QR-коды и анализируйте эффективность с помощью аналитики в реальном времени.'
+			'Создавайте короткие ссылки, QR-коды и отслеживайте статистику переходов.'
 	},
 	twitter: {
 		card: 'summary_large_image',
-		title: 'Сокращайте ссылки умнее - trim.ly',
+		title: 'trim.ly',
 		description:
-			'Создавайте брендированные короткие ссылки, генерируйте QR-коды и анализируйте эффективность с помощью аналитики в реальном времени.'
+			'Создавайте короткие ссылки, QR-коды и отслеживайте статистику переходов.'
 	}
 }
 
@@ -62,10 +62,7 @@ export default function RootLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<html
-			lang='ru'
-			suppressHydrationWarning
-		>
+		<html lang='ru' suppressHydrationWarning>
 			<body className={inter.variable}>
 				<AuthProvider>
 					<ThemeProvider>{children}</ThemeProvider>

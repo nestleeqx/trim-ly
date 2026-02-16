@@ -1,7 +1,8 @@
 'use client'
 
 import Button from '@/app/components/ui/Button/Button'
-import { useState } from 'react'
+import { useFocusTrap } from '@/app/features/shared/hooks/useFocusTrap'
+import { useRef, useState } from 'react'
 import styles from './DateRangePicker.module.scss'
 
 interface DateRangePickerProps {
@@ -13,8 +14,10 @@ export default function DateRangePicker({
 	onApply,
 	onCancel
 }: DateRangePickerProps) {
+	const pickerRef = useRef<HTMLDivElement | null>(null)
 	const [startDate, setStartDate] = useState('')
 	const [endDate, setEndDate] = useState('')
+	useFocusTrap(pickerRef)
 
 	return (
 		<>
@@ -23,9 +26,14 @@ export default function DateRangePicker({
 				onMouseDown={onCancel}
 			/>
 			<div
+				ref={pickerRef}
 				className={styles.picker}
 				onMouseDown={e => e.stopPropagation()}
 				onClick={e => e.stopPropagation()}
+				role='dialog'
+				aria-modal='true'
+				aria-label='Выберите период'
+				tabIndex={-1}
 			>
 				<div className={styles.title}>Выберите период</div>
 				<div className={styles.inputs}>

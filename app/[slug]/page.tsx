@@ -7,6 +7,7 @@ import PasswordState from '@/app/features/slug/components/PasswordState'
 import PausedState from '@/app/features/slug/components/PausedState'
 import { registerPublicClick, resolvePublicLink } from '@/lib/links/publicLink'
 import { ShieldCheck } from 'lucide-react'
+import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -20,6 +21,15 @@ interface SlugPageProps {
 }
 
 export const dynamic = 'force-dynamic'
+export const metadata: Metadata = {
+	title: 'Переход по ссылке',
+	description: 'Служебная страница перехода по короткой ссылке.',
+	robots: {
+		index: false,
+		follow: false,
+		noarchive: true
+	}
+}
 
 export default async function SlugPage({ params, searchParams }: SlugPageProps) {
 	const { slug } = await params

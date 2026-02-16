@@ -1,5 +1,7 @@
+'use client'
+
 import Button from '@/app/components/ui/Button/Button'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import styles from '../../BillingTab.module.scss'
 
 interface CurrentPlanCardProps {
@@ -11,6 +13,8 @@ export default function CurrentPlanCard({
 	planName,
 	status
 }: CurrentPlanCardProps) {
+	const router = useRouter()
+
 	return (
 		<div className={styles.planCard}>
 			<div>
@@ -22,16 +26,18 @@ export default function CurrentPlanCard({
 					<div className={styles.badge}>{status}</div>
 				</div>
 				<p className={styles.planDesc}>
-					Здесь вы видите текущий тариф, лимиты и историю платежей.
-					Для портфолио-проекта блок обновления можно оставить в
-					демо-режиме.
+					Здесь вы видите текущий тариф, лимиты и историю платежей. Для
+					портфолио-проекта блок обновления можно оставить в демо-режиме.
 				</p>
 			</div>
 
 			<div className={styles.planAction}>
-				<Link href='/pricing'>
-					<Button variant='primary'>Обновить до PRO</Button>
-				</Link>
+				<Button
+					variant='primary'
+					onClick={() => router.push('/pricing')}
+				>
+					Обновить до PRO
+				</Button>
 			</div>
 		</div>
 	)

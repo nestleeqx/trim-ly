@@ -1,24 +1,25 @@
 'use client'
 
 import cn from 'classnames'
-import React from 'react'
+import Link from 'next/link'
 import styles from './LinkTableRow.module.scss'
 
 interface TitleCellProps {
 	title: string
-	onTitleClick: (e: React.MouseEvent) => void
+	href: string
 }
 
-export default function TitleCell({ title, onTitleClick }: TitleCellProps) {
+export default function TitleCell({ title, href }: TitleCellProps) {
 	return (
 		<td>
 			<div className={styles.titleCell}>
-				<span
+				<Link
+					href={href}
 					className={cn(styles.linkTitle, styles.clickableTitle)}
-					onClick={onTitleClick}
+					aria-label={`Открыть ссылку ${title}`}
 				>
 					{title}
-				</span>
+				</Link>
 			</div>
 		</td>
 	)

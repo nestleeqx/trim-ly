@@ -22,6 +22,8 @@ export default function AvatarSection({
 	onSetAvatar,
 	onRemoveAvatar
 }: Props) {
+	const canRemoveAvatar = Boolean(avatarURL) && !isAvatarSaving
+
 	return (
 		<div className={styles.avatarRow}>
 			{avatarURL ? (
@@ -64,8 +66,12 @@ export default function AvatarSection({
 					</button>
 					<button
 						className={cn(styles.linkBtn, styles.remove)}
-						onClick={onRemoveAvatar}
-						disabled={isAvatarSaving || !avatarURL}
+						onClick={() => {
+							if (!canRemoveAvatar) return
+							onRemoveAvatar()
+						}}
+						disabled={isAvatarSaving}
+						aria-disabled={!canRemoveAvatar}
 						type='button'
 					>
 						Удалить

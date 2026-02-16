@@ -5,7 +5,7 @@
 	width: 100%;
 	border-radius: $border-radius-lg;
 	overflow: hidden;
-	min-height: 200px;
+	min-height: 250px;
 
 	@media (max-width: $breakpoint-sm) {
 		aspect-ratio: 4 / 3;
@@ -41,8 +41,7 @@
 }
 
 .playButton {
-	width: 80px;
-	height: 80px;
+	padding: $spacing-md;
 	background: var(--color-primary);
 	border-radius: 50%;
 	display: flex;
@@ -58,8 +57,12 @@
 	}
 
 	&:hover {
-		transform: scale(1.1);
+		transform: translateY(-2px);
 		box-shadow: 0 6px 25px rgba(79, 70, 229, 0.5);
+	}
+
+	&:active {
+		transform: translateY(0);
 	}
 
 	@media (max-width: $breakpoint-sm) {

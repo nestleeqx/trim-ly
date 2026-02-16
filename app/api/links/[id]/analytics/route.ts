@@ -150,6 +150,10 @@ function toCountryName(value: string | null) {
 	return value
 }
 
+function toCompactCountryLabel(value: string) {
+	return value === 'Неизвестно' ? '-' : value
+}
+
 export async function GET(req: Request, context: RouteContext) {
 	const session = await getServerSession(authOptions)
 	const userId = session?.user?.id
@@ -333,7 +337,7 @@ export async function GET(req: Request, context: RouteContext) {
 	}))
 
 	const topCountryLabel = topCountries[0]
-		? `${topCountries[0].name} (${topCountries[0].percentage}%)`
+		? `${toCompactCountryLabel(topCountries[0].name)} (${topCountries[0].percentage}%)`
 		: '—'
 	const topCountryClicks = topCountries[0]?.clicks ?? 0
 	const prevCountryCounts = new Map<string, number>()

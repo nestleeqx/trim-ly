@@ -6,8 +6,11 @@ import Button from '@/app/components/ui/Button/Button'
 import AuthCard from '@/app/features/auth/components/AuthCard/AuthCard'
 import { Mail } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function CheckEmailPage() {
+	const router = useRouter()
+
 	return (
 		<AuthPageLayout isBackButton={false}>
 			<AuthCard
@@ -18,33 +21,24 @@ export default function CheckEmailPage() {
 					<Mail size={32} />
 				</div>
 				<div className={styles.actions}>
-					<Link
-						href='/login'
+					<Button
+						variant='primary'
+						size='lg'
 						className={styles.submitBtn}
+						onClick={() => router.push('/login')}
 					>
-						<Button
-							variant='primary'
-							size='lg'
-						>
-							Вернуться ко входу
-						</Button>
-					</Link>
+						Вернуться ко входу
+					</Button>
 
 					<p className={styles.footerText}>
 						Не получили письмо?{' '}
-						<Link
-							href='/forgot-password'
-							className={styles.link}
-						>
+						<Link href='/forgot-password' className={styles.link}>
 							Отправить повторно
 						</Link>
 					</p>
 					<p className={styles.footerText}>
 						Вспомнили пароль?{' '}
-						<Link
-							href='/login'
-							className={styles.link}
-						>
+						<Link href='/login' className={styles.link}>
 							Вернуться ко входу
 						</Link>
 					</p>

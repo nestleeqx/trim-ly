@@ -46,11 +46,15 @@ export default function LinkCard({
 				actions={actions}
 			/>
 
-			<h3
-				className={styles.cardTitle}
-				onClick={e => actions.handleTitleClick(link.id, e)}
-			>
-				{link.title}
+			<h3 className={styles.cardTitle}>
+				<a
+					href={`/links/${link.id}`}
+					className={styles.cardTitleLink}
+					onClick={stop}
+					aria-label={`Открыть ссылку ${link.title}`}
+				>
+					{link.title}
+				</a>
 			</h3>
 
 			<a

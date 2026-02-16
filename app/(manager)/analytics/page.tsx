@@ -112,7 +112,7 @@ export default function AnalyticsPage() {
 					{summary.isInitialLoading ? (
 						<AnalyticsStatsSkeleton />
 					) : (
-						<div className={styles.topLinksContent}>
+						<div className={styles.topLinksCardContent}>
 							<StatsCards
 								data={summary.stats}
 								clickable={false}

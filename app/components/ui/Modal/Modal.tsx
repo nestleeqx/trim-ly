@@ -18,11 +18,46 @@ export default function Modal({
 	title
 }: ModalProps) {
 	const mouseDownTarget = useRef<EventTarget | null>(null)
+	const modalRef = useRef<HTMLDivElement | null>(null)
+	const previouslyFocusedRef = useRef<HTMLElement | null>(null)
 
-	const handleEscapeKey = useCallback(
+	const handleKeyDown = useCallback(
 		(event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
 				onClose()
+				return
+			}
+
+			if (event.key !== 'Tab') return
+
+			const root = modalRef.current
+			if (!root) return
+
+			const focusable = root.querySelectorAll<HTMLElement>(
+				'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+			)
+
+			if (focusable.length === 0) {
+				event.preventDefault()
+				root.focus()
+				return
+			}
+
+			const first = focusable[0]
+			const last = focusable[focusable.length - 1]
+			const active = document.activeElement as HTMLElement | null
+
+			if (event.shiftKey) {
+				if (active === first || !root.contains(active)) {
+					event.preventDefault()
+					last.focus()
+				}
+				return
+			}
+
+			if (active === last) {
+				event.preventDefault()
+				first.focus()
 			}
 		},
 		[onClose]
@@ -30,15 +65,34 @@ export default function Modal({
 
 	useEffect(() => {
 		if (isOpen) {
-			document.addEventListener('keydown', handleEscapeKey)
+			previouslyFocusedRef.current =
+				document.activeElement as HTMLElement | null
+
+			document.addEventListener('keydown', handleKeyDown)
 			document.body.style.overflow = 'hidden'
+
+			requestAnimationFrame(() => {
+				const root = modalRef.current
+				if (!root) return
+
+				const firstFocusable = root.querySelector<HTMLElement>(
+					'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+				)
+
+				if (firstFocusable) {
+					firstFocusable.focus()
+				} else {
+					root.focus()
+				}
+			})
 		}
 
 		return () => {
-			document.removeEventListener('keydown', handleEscapeKey)
+			document.removeEventListener('keydown', handleKeyDown)
 			document.body.style.overflow = 'unset'
+			previouslyFocusedRef.current?.focus()
 		}
-	}, [isOpen, handleEscapeKey])
+	}, [isOpen, handleKeyDown])
 
 	const handleMouseDown = (e: React.MouseEvent) => {
 		mouseDownTarget.current = e.target
@@ -62,7 +116,14 @@ export default function Modal({
 			onMouseDown={handleMouseDown}
 			onMouseUp={handleMouseUp}
 		>
-			<div className={styles.modal}>
+			<div
+				ref={modalRef}
+				className={styles.modal}
+				role='dialog'
+				aria-modal='true'
+				aria-label={title || 'Dialog'}
+				tabIndex={-1}
+			>
 				<div className={styles.header}>
 					{title && <h3 className={styles.title}>{title}</h3>}
 					<button

@@ -1,11 +1,20 @@
-'use client'
-
 import Button from '@/app/components/ui/Button/Button'
 import Logo from '@/app/components/ui/Logo/Logo'
 import styles from '@/app/not-found.module.scss'
 import cn from 'classnames'
 import { CreditCard, Home, Search, Zap } from 'lucide-react'
 import Link from 'next/link'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: '404 — Страница не найдена',
+	description: 'Запрошенная страница не найдена.',
+	robots: {
+		index: false,
+		follow: false,
+		noarchive: true
+	}
+}
 
 export default function NotFound() {
 	return (

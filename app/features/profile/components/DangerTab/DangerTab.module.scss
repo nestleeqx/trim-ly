@@ -82,6 +82,11 @@
 	border: none;
 	box-shadow: 0 6px 18px rgba(239, 68, 68, 0.12);
 
+	&:focus-visible {
+		outline: 2px solid #ef4444 !important;
+		outline-offset: 2px;
+	}
+
 	&:hover {
 		background: #d42d2d !important;
 		color: #fff !important;

@@ -67,13 +67,7 @@ export default function RawClickEvents({
 								paginatedData.map((event, idx) => (
 									<tr key={`${event.time}-${idx}`}>
 										<td>{event.time}</td>
-										<td>
-											<span
-												className={styles.countryName}
-											>
-												{event.country.name}
-											</span>
-										</td>
+										<td>{event.country.name}</td>
 										<td>{event.device.name}</td>
 										<td>{event.browser}</td>
 										<td>

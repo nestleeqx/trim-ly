@@ -7,6 +7,7 @@ import UserMenu from '@/app/components/layout/DashboardHeader/components/UserMen
 import Button from '@/app/components/ui/Button/Button'
 import { ArrowLeft, Plus, Search as SearchIcon } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import styles from './DashboardHeader.module.scss'
 import { SearchConfig } from './types'
@@ -30,6 +31,7 @@ export default function DashboardHeader({
 	backHref,
 	showCreateButton = true
 }: DashboardHeaderProps) {
+	const router = useRouter()
 	const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
 
 	useEffect(() => {
@@ -96,18 +98,15 @@ export default function DashboardHeader({
 					)}
 					{actions}
 					{showCreateButton && (
-						<Link
-							href='/links/new'
+						<Button
+							variant='primary'
+							size='sm'
 							className={styles.createBtn}
+							onClick={() => router.push('/links/new')}
 						>
-							<Button
-								variant='primary'
-								size='sm'
-							>
-								<Plus size={18} />
-								<span>Создать ссылку</span>
-							</Button>
-						</Link>
+							<Plus size={18} />
+							<span>Создать ссылку</span>
+						</Button>
 					)}
 					<NotificationBell />
 					<UserMenu />

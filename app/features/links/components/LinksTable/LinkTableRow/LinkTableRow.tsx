@@ -52,7 +52,7 @@ export default function LinkTableRow({
 			) : null}
 			<TitleCell
 				title={link.title}
-				onTitleClick={e => actions.handleTitleClick(link.id, e)}
+				href={`/links/${link.id}`}
 			/>
 			<ShortUrlCell shortUrl={link.shortUrl} />
 			<ClicksCell clicks={link.clicks} />

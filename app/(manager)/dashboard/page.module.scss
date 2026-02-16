@@ -79,4 +79,12 @@
 
 .loadingArea {
 	position: relative;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: $spacing-md;
+	align-items: start;
+
+	@media (max-width: $breakpoint-md) {
+		gap: $spacing-sm;
+	}
 }
