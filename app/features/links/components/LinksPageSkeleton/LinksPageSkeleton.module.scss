@@ -18,10 +18,10 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr auto;
 	gap: $spacing-md;
-	background: $color-bg-light;
+	background: var(--color-bg-secondary);
 	height: 69px;
 	border-radius: $border-radius-xl;
-	border: 1px solid $color-border;
+	border: 1px solid var(--color-border);
 	padding: $spacing-md;
 	margin-top: 8px;
 }
@@ -35,8 +35,7 @@
 }
 
 .tableCard {
-	background: var(--color-bg);
-	border: 1px solid $color-border;
+	border: 1px solid var(--color-border);
 	border-radius: $border-radius-xl;
 	overflow: hidden;
 	margin-top: $spacing-xl;
@@ -52,11 +51,11 @@
 }
 
 .tableHeader {
-	border-bottom: 1px solid $color-border;
+	border-bottom: 1px solid var(--color-border);
 }
 
 .body .row {
-	border-bottom: 1px solid $color-border;
+	border-bottom: 1px solid var(--color-border);
 }
 
 .body .row:last-child {

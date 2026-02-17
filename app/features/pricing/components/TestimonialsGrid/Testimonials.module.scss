@@ -5,7 +5,7 @@
 	max-width: 1100px;
 	margin-top: $spacing-3xl;
 	padding-top: $spacing-3xl;
-	border-top: 1px solid $color-border;
+	border-top: 1px solid var(--color-border);
 }
 
 .testimonialsGrid {
@@ -21,8 +21,8 @@
 }
 
 .testimonialCard {
-	background: $color-bg-light;
-	border: 1px solid $color-border;
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
 	border-radius: $border-radius-xl;
 	padding: $spacing-xl;
 	display: flex;
@@ -36,12 +36,12 @@
 }
 
 .star {
-	color: #f59e0b;
+	color: var(--color-warning);
 }
 
 .testimonialQuote {
 	font-size: $font-size-sm;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	line-height: 1.6;
 	font-style: italic;
 	margin: 0;
@@ -59,7 +59,7 @@
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
-	background: $color-bg-dark;
+	background: var(--color-bg);
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -80,10 +80,10 @@
 .authorName {
 	font-size: $font-size-sm;
 	font-weight: $font-weight-semibold;
-	color: $color-text-primary;
+	color: var(--color-text-primary);
 }
 
 .authorRole {
 	font-size: $font-size-xs;
-	color: $color-primary;
+	color: var(--color-primary);
 }

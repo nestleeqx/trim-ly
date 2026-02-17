@@ -10,7 +10,7 @@ export default function EmptyDashboard() {
 		<div className={styles.empty}>
 			<div className={styles.illustration}>
 				<div className={styles.iconWrapper}>
-					<LinkIcon size={48} />
+					<LinkIcon size={56} />
 				</div>
 				<div className={styles.decorations}>
 					<span className={styles.dot} />

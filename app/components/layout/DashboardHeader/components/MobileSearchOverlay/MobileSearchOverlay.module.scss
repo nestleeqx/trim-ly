@@ -22,7 +22,7 @@
 	gap: $spacing-sm;
 	width: 100%;
 	padding: $spacing-md;
-	background-color: $color-bg-light;
+	background-color: var(--color-bg-secondary);
 	border-radius: $border-radius-xl;
 	box-shadow: $shadow-xl;
 
@@ -39,15 +39,15 @@
 	width: 40px;
 	height: 40px;
 	padding: 0;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	background: transparent;
 	border: none;
 	border-radius: $border-radius-lg;
 	cursor: pointer;
 
 	&:hover {
-		color: $color-text-primary;
-		background-color: $color-bg-dark;
+		color: var(--color-text-primary);
+		background-color: var(--color-bg);
 	}
 }
 

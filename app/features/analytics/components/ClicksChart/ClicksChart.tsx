@@ -9,6 +9,7 @@ import PeriodSelector, {
 	PeriodOption
 } from '@/app/components/ui/PeriodSelector/PeriodSelector'
 import { useAnalyticsClicks } from '@/app/features/analytics/hooks/useAnalyticsClicks'
+import cn from 'classnames'
 import dynamic from 'next/dynamic'
 import { useMemo } from 'react'
 import ChartDatePicker from './ChartDatePicker/ChartDatePicker'
@@ -120,7 +121,11 @@ export default function ClicksChart() {
 
 			{error ? <div className={styles.error}>{error}</div> : null}
 
-			<div className={styles.chartContainer}>
+			<div
+				className={cn(styles.chartContainer, {
+					[styles.chartContainerLoading]: isRefetching
+				})}
+			>
 				{isRefetching ? <ChartLoadingOverlay /> : null}
 				<RechartsAreaBundle
 					data={chartData}

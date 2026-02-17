@@ -39,7 +39,7 @@
 	}
 
 	&.open {
-		border-color: $color-primary;
+		border-color: var(--color-primary);
 		color: var(--color-text-primary);
 	}
 }
@@ -96,8 +96,8 @@
 	}
 
 	&.selected {
-		color: $color-primary;
-		background-color: rgba($color-primary, 0.1);
+		color: var(--color-primary);
+		background-color: rgba(var(--color-primary), 0.1);
 	}
 }
 
@@ -115,8 +115,9 @@
 
 	&.selected {
 		.sortItemContent {
+			color: var(--color-primary);
 			svg {
-				color: $color-primary;
+				color: var(--color-primary);
 			}
 		}
 	}
@@ -143,7 +144,7 @@
 }
 
 .currentSortLabel {
-	color: $color-primary;
+	color: var(--color-primary);
 	font-weight: $font-weight-medium;
 	margin-left: $spacing-xs;
 }

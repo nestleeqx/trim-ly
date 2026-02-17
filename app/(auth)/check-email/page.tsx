@@ -18,7 +18,7 @@ export default function CheckEmailPage() {
 				subtitle='Если email существует, мы отправили ссылку для сброса пароля.'
 			>
 				<div className={styles.iconWrapper}>
-					<Mail size={32} />
+					<Mail size={46} />
 				</div>
 				<div className={styles.actions}>
 					<Button
@@ -32,13 +32,19 @@ export default function CheckEmailPage() {
 
 					<p className={styles.footerText}>
 						Не получили письмо?{' '}
-						<Link href='/forgot-password' className={styles.link}>
+						<Link
+							href='/forgot-password'
+							className={styles.link}
+						>
 							Отправить повторно
 						</Link>
 					</p>
 					<p className={styles.footerText}>
 						Вспомнили пароль?{' '}
-						<Link href='/login' className={styles.link}>
+						<Link
+							href='/login'
+							className={styles.link}
+						>
 							Вернуться ко входу
 						</Link>
 					</p>

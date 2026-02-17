@@ -60,10 +60,7 @@ export default function StatCard({
 			}
 		>
 			<div className={styles.header}>
-				<div
-					className={styles.iconWrapper}
-					style={{ backgroundColor: iconBgColor }}
-				>
+				<div className={styles.iconWrapper}>
 					<Icon size={20} />
 				</div>
 				<span

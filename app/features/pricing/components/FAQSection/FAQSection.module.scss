@@ -5,7 +5,7 @@
 	max-width: 900px;
 	margin-top: $spacing-3xl;
 	padding-top: $spacing-3xl;
-	border-top: 1px solid $color-border;
+	border-top: 1px solid var(--color-border);
 }
 
 .faqHeader {
@@ -16,7 +16,7 @@
 .faqTitle {
 	font-size: $font-size-3xl;
 	font-weight: $font-weight-bold;
-	color: $color-text-primary;
+	color: var(--color-text-primary);
 	margin: 0 0 $spacing-sm 0;
 
 	@media (max-width: $breakpoint-md) {

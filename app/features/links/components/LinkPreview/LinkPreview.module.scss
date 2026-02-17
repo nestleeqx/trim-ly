@@ -1,8 +1,8 @@
 @use 'variables' as *;
 
 .preview {
-	background: $color-bg-light;
-	border: 1px solid $color-border;
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
 	border-radius: $border-radius-xl;
 	padding: $spacing-xl;
 	display: flex;
@@ -22,7 +22,7 @@
 .previewTitle {
 	font-size: $font-size-lg;
 	font-weight: $font-weight-semibold;
-	color: $color-text-primary;
+	color: var(--color-text-primary);
 	margin: 0;
 }
 
@@ -30,7 +30,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-lg;
-	border: 1px solid $color-border;
+	border: 1px solid var(--color-border);
 	border-radius: $border-radius-xl;
 	padding: $spacing-lg;
 }
@@ -49,7 +49,7 @@
 .previewLabel {
 	font-size: $font-size-xs;
 	font-weight: $font-weight-semibold;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
 }
@@ -59,7 +59,7 @@
 	align-items: center;
 	gap: $spacing-md;
 	padding: $spacing-md 0;
-	background: $color-bg-dark;
+	background: var(--color-bg-secondary);
 	border-radius: $border-radius-lg;
 	padding: $spacing-md;
 }
@@ -70,21 +70,21 @@
 	justify-content: center;
 	width: 36px;
 	height: 36px;
-	background: $color-bg-dark;
+	background: var(--color-bg-secondary);
 	border-radius: $border-radius-md;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 }
 
 .previewRowLabel {
 	flex: 1;
 	font-size: $font-size-sm;
 	font-weight: $font-weight-medium;
-	color: $color-text-primary;
+	color: var(--color-text-primary);
 }
 
 .previewRowValue {
 	font-size: $font-size-sm;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 }
 
 .originalUrl {
@@ -103,7 +103,7 @@
 .shortLinkText {
 	font-size: $font-size-xl;
 	font-weight: $font-weight-semibold;
-	color: $color-primary;
+	color: var(--color-primary);
 }
 
 .copyBtn {
@@ -112,21 +112,21 @@
 	justify-content: center;
 	padding: $spacing-sm;
 	background: transparent;
-	border: 1px solid $color-border;
+	border: 1px solid var(--color-border);
 	border-radius: $border-radius-md;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	cursor: pointer;
 	transition: $transition-fast;
 
 	&:hover {
-		color: $color-text-primary;
-		background: $color-bg-dark;
+		color: var(--color-text-primary);
+		background: var(--color-bg);
 	}
 }
 
 .copiedText {
 	font-size: $font-size-xs;
-	color: $color-success;
+	color: var(--color-success);
 }
 
 .qrSection {
@@ -134,7 +134,7 @@
 	align-items: center;
 	justify-content: space-between;
 	padding: $spacing-lg 0 0 0;
-	border-top: 1px solid $color-border;
+	border-top: 1px solid var(--color-border);
 }
 
 .qrInfo {
@@ -144,7 +144,7 @@
 }
 
 .qrIcon {
-	color: $color-primary;
+	color: var(--color-primary);
 }
 
 .qrText {
@@ -156,10 +156,10 @@
 .qrTitle {
 	font-size: $font-size-sm;
 	font-weight: $font-weight-medium;
-	color: $color-text-primary;
+	color: var(--color-text-primary);
 }
 
 .qrSubtitle {
 	font-size: $font-size-xs;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 }

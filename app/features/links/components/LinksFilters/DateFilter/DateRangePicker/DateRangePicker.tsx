@@ -6,18 +6,56 @@ import { useRef, useState } from 'react'
 import styles from './DateRangePicker.module.scss'
 
 interface DateRangePickerProps {
+	startDate?: string
+	endDate?: string
+	error?: string | null
+	title?: string
+	cancelLabel?: string
+	applyLabel?: string
+	onStartDateChange?: (value: string) => void
+	onEndDateChange?: (value: string) => void
 	onApply: (startDate: string, endDate: string) => void
 	onCancel: () => void
 }
 
 export default function DateRangePicker({
+	startDate,
+	endDate,
+	error,
+	title = 'Выберите период',
+	cancelLabel = 'Отмена',
+	applyLabel = 'Применить',
+	onStartDateChange,
+	onEndDateChange,
 	onApply,
 	onCancel
 }: DateRangePickerProps) {
 	const pickerRef = useRef<HTMLDivElement | null>(null)
-	const [startDate, setStartDate] = useState('')
-	const [endDate, setEndDate] = useState('')
+	const [localStartDate, setLocalStartDate] = useState('')
+	const [localEndDate, setLocalEndDate] = useState('')
+
 	useFocusTrap(pickerRef)
+
+	const isControlled =
+		typeof startDate === 'string' && typeof endDate === 'string'
+	const currentStartDate = isControlled ? startDate : localStartDate
+	const currentEndDate = isControlled ? endDate : localEndDate
+
+	const handleStartDateChange = (value: string) => {
+		if (isControlled) {
+			onStartDateChange?.(value)
+			return
+		}
+		setLocalStartDate(value)
+	}
+
+	const handleEndDateChange = (value: string) => {
+		if (isControlled) {
+			onEndDateChange?.(value)
+			return
+		}
+		setLocalEndDate(value)
+	}
 
 	return (
 		<>
@@ -35,15 +73,15 @@ export default function DateRangePicker({
 				aria-label='Выберите период'
 				tabIndex={-1}
 			>
-				<div className={styles.title}>Выберите период</div>
+				<div className={styles.title}>{title}</div>
 				<div className={styles.inputs}>
 					<div className={styles.field}>
 						<label className={styles.label}>Начало</label>
 						<input
 							type='date'
 							className={styles.input}
-							value={startDate}
-							onChange={e => setStartDate(e.target.value)}
+							value={currentStartDate}
+							onChange={e => handleStartDateChange(e.target.value)}
 						/>
 					</div>
 					<div className={styles.field}>
@@ -51,26 +89,29 @@ export default function DateRangePicker({
 						<input
 							type='date'
 							className={styles.input}
-							value={endDate}
-							onChange={e => setEndDate(e.target.value)}
+							value={currentEndDate}
+							onChange={e => handleEndDateChange(e.target.value)}
 						/>
 					</div>
 				</div>
+				{error ? <p className={styles.error}>{error}</p> : null}
 				<div className={styles.actions}>
 					<Button
 						variant='outline'
 						size='sm'
 						onClick={onCancel}
 					>
-						Отмена
+						{cancelLabel}
 					</Button>
 					<Button
 						variant='primary'
 						size='sm'
-						onClick={() => onApply(startDate, endDate)}
-						disabled={!startDate || !endDate}
+						onClick={() =>
+							onApply(currentStartDate, currentEndDate)
+						}
+						disabled={!currentStartDate || !currentEndDate}
 					>
-						Применить
+						{applyLabel}
 					</Button>
 				</div>
 			</div>

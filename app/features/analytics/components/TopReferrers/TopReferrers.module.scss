@@ -1,30 +1,18 @@
 @use 'variables' as *;
 
 .card {
-	background: var(--color-bg);
-	border-radius: $border-radius-xl;
-	border: 1px solid $color-border;
-	padding: $spacing-lg;
+	composes: card from '../common/AnalyticsCard.module.scss';
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-md;
 
 	@media (max-width: $breakpoint-md) {
-		padding: $spacing-md;
-		border-radius: $border-radius-lg;
 		margin-top: $spacing-md;
 	}
 }
 
 .title {
-	font-size: $font-size-lg;
-	font-weight: $font-weight-semibold;
-	color: var(--color-text-primary);
-	margin: 0;
-
-	@media (max-width: $breakpoint-sm) {
-		font-size: $font-size-base;
-	}
+	composes: title from '../common/AnalyticsCard.module.scss';
 }
 
 .list {

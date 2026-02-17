@@ -77,9 +77,25 @@
 	}
 
 	&:focus {
-		border-color: $color-primary;
-		box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+		border-color: var(--color-primary);
+		box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 20%, transparent);
 	}
+
+	&::-webkit-calendar-picker-indicator {
+		cursor: pointer;
+		opacity: 0.8;
+		transition: opacity 0.15s ease;
+	}
+
+	&:hover::-webkit-calendar-picker-indicator {
+		opacity: 1;
+	}
+}
+
+.error {
+	margin-top: $spacing-sm;
+	color: var(--color-danger);
+	font-size: $font-size-xs;
 }
 
 .actions {
@@ -87,4 +103,20 @@
 	justify-content: flex-end;
 	gap: $spacing-sm;
 	margin-top: $spacing-lg;
+}
+
+[data-theme='dark'] {
+	.input {
+		color-scheme: dark;
+
+		&::-webkit-calendar-picker-indicator {
+			filter: invert(1) brightness(1.15);
+		}
+	}
+}
+
+[data-theme='light'] {
+	.input {
+		color-scheme: light;
+	}
 }

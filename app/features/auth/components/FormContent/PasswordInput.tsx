@@ -1,6 +1,5 @@
-﻿import BaseFormField from '@/app/components/ui/FormField'
+import BaseFormField from '@/app/components/ui/FormField'
 import { usePasswordToggle } from '@/hooks/usePasswordToggle'
-import cn from 'classnames'
 import { Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
 import styles from './FormContent.module.scss'
@@ -34,6 +33,8 @@ export default function PasswordInput({
 	forgotLinkClassName,
 	error
 }: PasswordInputProps) {
+	void labelStyle
+
 	const { showPassword, togglePassword } = usePasswordToggle()
 
 	const labelAccessory = showForgotLink ? (
@@ -57,11 +58,7 @@ export default function PasswordInput({
 			autoComplete={autoComplete}
 			error={error}
 			className={styles.formGroup}
-			labelClassName={cn(styles.label, {
-				[styles.labelPrimary]: labelStyle === 'primary',
-				[styles.labelSecondary]: labelStyle === 'secondary'
-			})}
-			inputClassName={cn(styles.input, styles.inputWithAdornment)}
+			inputClassName={`${styles.input} ${styles.inputWithAdornment}`}
 			rightAdornment={
 				<button
 					type='button'

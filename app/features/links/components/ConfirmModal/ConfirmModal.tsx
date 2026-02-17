@@ -48,13 +48,13 @@ export default function ConfirmModal({
 					>
 						{cancelText}
 					</Button>
-					<button
+					<Button
 						className={cn(styles.confirmButton, styles[variant])}
 						onClick={onConfirm}
 						disabled={loading}
 					>
 						{loading ? 'Загрузка...' : confirmText}
-					</button>
+					</Button>
 				</div>
 			</div>
 		</Modal>

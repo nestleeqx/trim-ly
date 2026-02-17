@@ -2,7 +2,10 @@
 
 .row {
 	&.selected {
-		background: rgba($color-primary, 0.05);
+		background: rgba(var(--color-primary), 0.05);
+	}
+	& > td > span {
+		font-size: $font-size-sm;
 	}
 }
 
@@ -54,9 +57,9 @@
 }
 
 .trendPositive {
-	color: $color-success;
+	color: var(--color-success);
 }
 
 .trendNegative {
-	color: $color-red;
+	color: var(--color-danger);
 }

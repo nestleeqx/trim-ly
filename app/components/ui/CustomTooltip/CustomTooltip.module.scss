@@ -1,8 +1,8 @@
 @use 'variables' as *;
 
 .customTooltip {
-	background: $color-bg-light;
-	border: 1px solid $color-border;
+	background: var(--color-bg-secondary);
+	border: 1px solid var(--color-border);
 	border-radius: $border-radius-lg;
 	padding: $spacing-md;
 	box-shadow: $shadow-lg;
@@ -12,10 +12,10 @@
 .tooltipDate {
 	font-size: $font-size-sm;
 	font-weight: $font-weight-semibold;
-	color: $color-text-primary;
+	color: var(--color-text-primary);
 	margin-bottom: $spacing-sm;
 	padding-bottom: $spacing-sm;
-	border-bottom: 1px solid $color-border;
+	border-bottom: 1px solid var(--color-border);
 }
 
 .tooltipRow {
@@ -28,15 +28,15 @@
 
 .tooltipLabel {
 	font-size: $font-size-xs;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 }
 
 .tooltipValue {
 	font-size: $font-size-sm;
 	font-weight: $font-weight-semibold;
-	color: $color-text-primary;
+	color: var(--color-text-primary);
 }
 
 .tooltipValuePrimary {
-	color: $color-primary;
+	color: var(--color-primary);
 }

@@ -179,6 +179,36 @@ function calculateTrendPercent(current: number, previous: number): number {
 	return Math.round(((current - previous) / previous) * 100)
 }
 
+function isTransientDbError(error: unknown): boolean {
+	if (!(error instanceof Error)) return false
+	const message = error.message.toLowerCase()
+	return (
+		message.includes('econnreset') ||
+		message.includes('connection timeout') ||
+		message.includes('server has closed the connection') ||
+		message.includes('fetch failed')
+	)
+}
+
+async function withRetry<T>(
+	task: () => Promise<T>,
+	maxAttempts = 2
+): Promise<T> {
+	let lastError: unknown
+	for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+		try {
+			return await task()
+		} catch (error) {
+			lastError = error
+			if (!isTransientDbError(error) || attempt >= maxAttempts) {
+				throw error
+			}
+			await new Promise(resolve => setTimeout(resolve, 150 * attempt))
+		}
+	}
+	throw lastError
+}
+
 export async function GET(req: Request) {
 	const session = await getServerSession(authOptions)
 	const userId = session?.user?.id
@@ -212,7 +242,9 @@ export async function GET(req: Request) {
 		? {
 				OR: [
 					...(statusFilters.includes('deleted')
-						? ([{ deletedAt: { not: null } }] as Prisma.LinkWhereInput[])
+						? ([
+								{ deletedAt: { not: null } }
+							] as Prisma.LinkWhereInput[])
 						: []),
 					...(statusFilters.includes('active')
 						? ([
@@ -300,106 +332,122 @@ export async function GET(req: Request) {
 							]
 						: [{ createdAt: sortOrder }]
 
-	const [links, totalAll, totalFiltered] = await Promise.all([
-		prisma.link.findMany({
-			where,
-			orderBy,
-			skip: (page - 1) * pageSize,
-			take: pageSize,
-			select: {
-				id: true,
-				title: true,
-				slug: true,
-				targetUrl: true,
-				clicksTotal: true,
-				status: true,
-				createdAt: true,
-				expiresAt: true,
-				deletedAt: true,
-				passwordHash: true,
-				tags: {
+	try {
+		const [links, totalAll, totalFiltered] = await withRetry(() =>
+			Promise.all([
+				prisma.link.findMany({
+					where,
+					orderBy,
+					skip: (page - 1) * pageSize,
+					take: pageSize,
 					select: {
-						tag: {
+						id: true,
+						title: true,
+						slug: true,
+						targetUrl: true,
+						clicksTotal: true,
+						status: true,
+						createdAt: true,
+						expiresAt: true,
+						deletedAt: true,
+						passwordHash: true,
+						tags: {
 							select: {
-								name: true
+								tag: {
+									select: {
+										name: true
+									}
+								}
 							}
 						}
 					}
-				}
-			}
-		}),
-		prisma.link.count({ where: { userId } }),
-		prisma.link.count({ where })
-	])
-
-	const linkIds = links.map(link => link.id)
-	const nowDate = new Date()
-	const currentFrom = new Date(
-		nowDate.getTime() - TREND_WINDOW_DAYS * 24 * 60 * 60 * 1000
-	)
-	const previousFrom = new Date(
-		currentFrom.getTime() - TREND_WINDOW_DAYS * 24 * 60 * 60 * 1000
-	)
-
-	const [currentCounts, previousCounts] = linkIds.length
-		? await Promise.all([
-				prisma.linkClickEvent.groupBy({
-					by: ['linkId'],
-					where: {
-						linkId: { in: linkIds },
-						clickedAt: { gte: currentFrom, lt: nowDate }
-					},
-					_count: { _all: true }
 				}),
-				prisma.linkClickEvent.groupBy({
-					by: ['linkId'],
-					where: {
-						linkId: { in: linkIds },
-						clickedAt: { gte: previousFrom, lt: currentFrom }
-					},
-					_count: { _all: true }
-				})
+				prisma.link.count({ where: { userId } }),
+				prisma.link.count({ where })
 			])
-		: [[], []]
+		)
 
-	const currentMap = new Map(
-		currentCounts.map(item => [item.linkId, item._count._all])
-	)
-	const previousMap = new Map(
-		previousCounts.map(item => [item.linkId, item._count._all])
-	)
+		const linkIds = links.map(link => link.id)
+		const nowDate = new Date()
+		const currentFrom = new Date(
+			nowDate.getTime() - TREND_WINDOW_DAYS * 24 * 60 * 60 * 1000
+		)
+		const previousFrom = new Date(
+			currentFrom.getTime() - TREND_WINDOW_DAYS * 24 * 60 * 60 * 1000
+		)
 
-	const totalPages = Math.max(1, Math.ceil(totalFiltered / pageSize))
+		const [currentCounts, previousCounts] = linkIds.length
+			? await withRetry(() =>
+					Promise.all([
+						prisma.linkClickEvent.groupBy({
+							by: ['linkId'],
+							where: {
+								linkId: { in: linkIds },
+								clickedAt: { gte: currentFrom, lt: nowDate }
+							},
+							_count: { _all: true }
+						}),
+						prisma.linkClickEvent.groupBy({
+							by: ['linkId'],
+							where: {
+								linkId: { in: linkIds },
+								clickedAt: {
+									gte: previousFrom,
+									lt: currentFrom
+								}
+							},
+							_count: { _all: true }
+						})
+					])
+				)
+			: [[], []]
 
-	return NextResponse.json({
-		links: links.map(link => ({
-			trend: calculateTrendPercent(
-				currentMap.get(link.id) ?? 0,
-				previousMap.get(link.id) ?? 0
-			),
-			id: link.id,
-			title: link.title || 'Без названия',
-			shortUrl: buildShortLink(link.slug),
-			destination: link.targetUrl,
-			clicks: link.clicksTotal,
-			status: mapStatus({
-				status: link.status,
-				expiresAt: link.expiresAt,
-				deletedAt: link.deletedAt
-			}),
-			tags: link.tags.map(tagRel => tagRel.tag.name),
-			createdAt: link.createdAt.toISOString(),
-			expirationDate: link.expiresAt?.toISOString() ?? null,
-			hasPassword: !!link.passwordHash
-		})),
-		meta: {
-			totalAll,
-			totalFiltered,
-			page,
-			pageSize,
-			totalPages
-		}
-	})
+		const currentMap = new Map(
+			currentCounts.map(item => [item.linkId, item._count._all])
+		)
+		const previousMap = new Map(
+			previousCounts.map(item => [item.linkId, item._count._all])
+		)
+
+		const totalPages = Math.max(1, Math.ceil(totalFiltered / pageSize))
+
+		return NextResponse.json({
+			links: links.map(link => ({
+				trend: calculateTrendPercent(
+					currentMap.get(link.id) ?? 0,
+					previousMap.get(link.id) ?? 0
+				),
+				id: link.id,
+				title: link.title || 'Без названия',
+				shortUrl: buildShortLink(link.slug),
+				destination: link.targetUrl,
+				clicks: link.clicksTotal,
+				status: mapStatus({
+					status: link.status,
+					expiresAt: link.expiresAt,
+					deletedAt: link.deletedAt
+				}),
+				tags: link.tags.map(tagRel => tagRel.tag.name),
+				createdAt: link.createdAt.toISOString(),
+				expirationDate: link.expiresAt?.toISOString() ?? null,
+				hasPassword: !!link.passwordHash
+			})),
+			meta: {
+				totalAll,
+				totalFiltered,
+				page,
+				pageSize,
+				totalPages
+			}
+		})
+	} catch {
+		return NextResponse.json(
+			{
+				error: 'Временная ошибка соединения с базой данных. Повторите попытку.'
+			},
+			{ status: 503 }
+		)
+	}
 }
 
 export async function POST(req: Request) {
@@ -551,7 +599,10 @@ export async function POST(req: Request) {
 			error instanceof Prisma.PrismaClientKnownRequestError &&
 			error.code === 'P2002'
 		) {
-			return NextResponse.json({ error: 'Slug already taken' }, { status: 409 })
+			return NextResponse.json(
+				{ error: 'Slug already taken' },
+				{ status: 409 }
+			)
 		}
 
 		return NextResponse.json({ error: 'Internal error' }, { status: 500 })

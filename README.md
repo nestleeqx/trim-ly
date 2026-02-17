@@ -55,3 +55,36 @@ Manual local run example:
 curl -X POST http://localhost:3000/api/cron/links-purge \
   -H "Authorization: Bearer your_secret"
 ```
+
+## Local Database (when VPN is unavailable)
+
+If your remote Postgres is not reachable (for example, only HTTP proxy is available), run local Postgres in Docker for Prisma CLI (`migrate`, `studio`, `seed`).
+
+1. Start local DB:
+
+```bash
+npm run db:up
+```
+
+2. Use local connection in `.env.local` / `.env`:
+
+```env
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/trimly?schema=public"
+```
+
+3. Keep `PRISMA_DATABASE_URL` (Accelerate) for app runtime if needed.
+
+4. Run Prisma commands:
+
+```bash
+npm run prisma:generate
+npm run prisma:migrate
+npm run db:seed
+npm run prisma:studio
+```
+
+5. Stop local DB:
+
+```bash
+npm run db:down
+```

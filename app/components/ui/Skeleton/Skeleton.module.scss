@@ -3,9 +3,9 @@
 .skeleton {
 	background: linear-gradient(
 		90deg,
-		$color-bg-dark 0%,
-		$color-secondary 50%,
-		$color-bg-dark 100%
+		var(--color-skeleton-base) 0%,
+		var(--color-skeleton-highlight) 50%,
+		var(--color-skeleton-base) 100%
 	);
 	background-size: 220% 100%;
 	animation: skeletonShimmer 1.2s ease-in-out infinite;

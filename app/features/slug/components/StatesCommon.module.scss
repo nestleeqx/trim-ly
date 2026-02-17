@@ -4,8 +4,8 @@
 .card {
 	width: 100%;
 	max-width: 460px;
-	background: $color-bg-light;
-	border: 1px solid $color-border;
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
 	border-radius: $border-radius-xl;
 	padding: $spacing-2xl;
 	margin: auto 0;
@@ -22,13 +22,13 @@
 .cardTitle {
 	font-size: $font-size-xl;
 	font-weight: $font-weight-bold;
-	color: $color-text-primary;
+	color: var(--color-text-primary);
 	margin: 0 0 $spacing-sm 0;
 }
 
 .cardSubtitle {
 	font-size: $font-size-sm;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	margin: 0 0 $spacing-xl 0;
 }
 
@@ -43,23 +43,23 @@
 }
 
 .stateIconPurple {
-	background: rgba($color-primary, 0.1);
-	color: $color-primary;
+	background: rgba(var(--color-primary), 0.1);
+	color: var(--color-primary);
 }
 
 .stateIconOrange {
-	background: rgba(#f59e0b, 0.1);
-	color: #f59e0b;
+	background: rgba(var(--color-warning), 0.1);
+	color: var(--color-warning);
 }
 
 .stateIconGray {
-	background: rgba($color-text-secondary, 0.1);
-	color: $color-text-secondary;
+	background: rgba(var(--color-text-secondary), 0.1);
+	color: var(--color-text-secondary);
 }
 
 .stateIconRed {
-	background: rgba($color-red, 0.1);
-	color: $color-red;
+	background: var(--color-danger-bg);
+	color: var(--color-danger);
 }
 
 .form {
@@ -78,11 +78,11 @@
 	width: 100%;
 	padding: 14px $spacing-md;
 	padding-right: 44px;
-	border: 1px solid $color-border;
+	border: 1px solid var(--color-border);
 	border-radius: $border-radius-md;
 	font-size: $font-size-base;
-	color: $color-text-primary;
-	background: $color-bg-light;
+	color: var(--color-text-primary);
+	background: var(--color-bg-secondary);
 	outline: none;
 	transition: $transition-fast;
 	text-align: center;
@@ -94,8 +94,8 @@
 	}
 
 	&:focus {
-		border-color: $color-primary;
-		box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+		border-color: var(--color-primary);
+		box-shadow: 0 0 0 3px rgba(var(--color-primary), 0.1);
 	}
 }
 
@@ -106,7 +106,7 @@
 	transform: translateY(-50%);
 	background: none;
 	border: none;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	cursor: pointer;
 	padding: 4px;
 	display: flex;
@@ -114,7 +114,7 @@
 	justify-content: center;
 
 	&:hover {
-		color: $color-text-primary;
+		color: var(--color-text-primary);
 	}
 }
 
@@ -130,7 +130,7 @@
 	width: 100%;
 	& > button {
 		width: 100%;
-		background: $color-text-primary;
+		background: var(--color-text-primary);
 		color: white;
 		&:hover {
 			background: color.adjust(
@@ -150,17 +150,17 @@
 
 .goBackLink {
 	font-size: $font-size-sm;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	text-decoration: none;
 	font-weight: $font-weight-medium;
 
 	&:hover {
-		color: $color-text-primary;
+		color: var(--color-text-primary);
 	}
 }
 
 .formError {
 	margin: 0;
 	font-size: $font-size-sm;
-	color: $color-red;
+	color: var(--color-danger);
 }

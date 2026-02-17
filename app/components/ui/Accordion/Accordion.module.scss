@@ -1,7 +1,7 @@
 @use 'variables' as *;
 
 .accordion {
-	border: 1px solid $color-border;
+	border: 1px solid var(--color-border);
 	border-radius: $border-radius-lg;
 	overflow: hidden;
 }
@@ -14,14 +14,14 @@
 	padding: $spacing-md;
 	font-size: $font-size-sm;
 	font-weight: $font-weight-medium;
-	color: $color-text-primary;
-	background: $color-bg-light;
+	color: var(--color-text-primary);
+	background: var(--color-bg);
 	border: none;
 	cursor: pointer;
 	transition: $transition-fast;
 
 	&:hover {
-		background: $color-bg-dark;
+		background: var(--color-bg);
 	}
 }
 
@@ -33,8 +33,8 @@
 
 .accordionContent {
 	padding: $spacing-lg;
-	background: $color-bg-light;
-	border-top: 1px solid $color-border;
+	background: var(--color-bg);
+	border-top: 1px solid var(--color-border);
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-lg;

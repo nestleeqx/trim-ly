@@ -26,14 +26,14 @@
 	}
 
 	&.open {
-		border-color: $color-primary;
+		border-color: var(--color-primary);
 		color: var(--color-text-primary);
 	}
 
 	&.hasSelection {
-		background-color: rgba($color-primary, 0.1);
-		border-color: $color-primary;
-		color: $color-primary;
+		background-color: rgba(var(--color-primary), 0.1);
+		border-color: var(--color-primary);
+		color: var(--color-primary);
 	}
 }
 
@@ -47,7 +47,7 @@
 	font-size: $font-size-xs;
 	font-weight: $font-weight-semibold;
 	color: white;
-	background-color: $color-primary;
+	background-color: var(--color-primary);
 	border-radius: 9999px;
 }
 

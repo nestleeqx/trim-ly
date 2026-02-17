@@ -1,12 +1,14 @@
 'use client'
 
 import Button from '@/app/components/ui/Button/Button'
+import LoadingOverlay from '@/app/components/ui/LoadingOverlay/LoadingOverlay'
 import Pagination from '@/app/components/ui/Pagination/Pagination'
 import { toShortLinkHref } from '@/app/features/links/utils/shortLink'
 import { usePagination } from '@/hooks/usePagination'
 import { ClickEvent } from '@/types/links'
 import { convertClickEventsToCsv } from '@/utils/csvConverters'
 import { downloadCsv } from '@/utils/downloadCsv'
+import cn from 'classnames'
 import styles from './RawClickEvents.module.scss'
 
 interface RawClickEventsProps {
@@ -51,7 +53,11 @@ export default function RawClickEvents({
 						Скачать CSV
 					</Button>
 				</div>
-				<div className={styles.tableWrapper}>
+				<div
+					className={cn(styles.tableWrapper, {
+						[styles.loading]: isLoading
+					})}
+				>
 					<table className={styles.table}>
 						<thead>
 							<tr>
@@ -104,18 +110,17 @@ export default function RawClickEvents({
 							)}
 						</tbody>
 					</table>
+					{isLoading ? <LoadingOverlay /> : null}
 				</div>
 			</div>
-			<div className={styles.paginationWrapper}>
-				<Pagination
-					currentPage={currentPage}
-					totalPages={totalPages}
-					totalItems={totalItems}
-					itemsPerPage={itemsPerPage}
-					onPageChange={handlePageChange}
-					onItemsPerPageChange={handleItemsPerPageChange}
-				/>
-			</div>
+			<Pagination
+				currentPage={currentPage}
+				totalPages={totalPages}
+				totalItems={totalItems}
+				itemsPerPage={itemsPerPage}
+				onPageChange={handlePageChange}
+				onItemsPerPageChange={handleItemsPerPageChange}
+			/>
 		</>
 	)
 }

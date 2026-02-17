@@ -180,8 +180,9 @@
 	border-radius: 999px;
 	font-size: $font-size-xs;
 	font-weight: $font-weight-medium;
-	background: rgba($color-warning, 0.12);
-	color: $color-warning;
-	border: 1px solid rgba($color-warning, 0.35);
+	background: color-mix(in srgb, var(--color-warning) 12%, transparent);
+	color: var(--color-warning);
+	border: 1px solid
+		color-mix(in srgb, var(--color-warning) 35%, transparent);
 	margin-bottom: $spacing-md;
 }

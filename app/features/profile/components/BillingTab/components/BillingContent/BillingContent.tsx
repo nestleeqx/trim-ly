@@ -16,9 +16,11 @@ type Props = {
 
 export default function BillingContent({ data }: Props) {
 	const isLinksLimitReached =
-		data.usage.linksLimit > 0 && data.usage.linksCreated >= data.usage.linksLimit
+		data.usage.linksLimit > 0 &&
+		data.usage.linksCreated >= data.usage.linksLimit
 	const isClicksLimitReached =
-		data.usage.clicksLimit > 0 && data.usage.clicksTotal >= data.usage.clicksLimit
+		data.usage.clicksLimit > 0 &&
+		data.usage.clicksTotal >= data.usage.clicksLimit
 	const limitNotice =
 		isLinksLimitReached || isClicksLimitReached
 			? 'Вы достигли лимита. Нужен тариф выше.'

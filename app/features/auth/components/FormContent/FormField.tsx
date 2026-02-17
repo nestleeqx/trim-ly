@@ -1,5 +1,4 @@
 import BaseFormField from '@/app/components/ui/FormField'
-import cn from 'classnames'
 import styles from './FormContent.module.scss'
 
 interface FormFieldProps {
@@ -27,6 +26,8 @@ export default function FormField({
 	disabled = false,
 	error
 }: FormFieldProps) {
+	void labelStyle
+
 	return (
 		<BaseFormField
 			id={id}
@@ -39,10 +40,6 @@ export default function FormField({
 			disabled={disabled}
 			error={error}
 			className={styles.formGroup}
-			labelClassName={cn(styles.label, {
-				[styles.labelPrimary]: labelStyle === 'primary',
-				[styles.labelSecondary]: labelStyle === 'secondary'
-			})}
 			inputClassName={styles.input}
 		/>
 	)

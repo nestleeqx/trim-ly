@@ -14,7 +14,7 @@
 .comparisonTitle {
 	font-size: $font-size-3xl;
 	font-weight: $font-weight-bold;
-	color: $color-text-primary;
+	color: var(--color-text-primary);
 	margin: 0 0 $spacing-sm 0;
 
 	@media (max-width: $breakpoint-md) {
@@ -24,23 +24,23 @@
 
 .comparisonSubtitle {
 	font-size: $font-size-base;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	margin: 0;
 }
 
 .comparisonTable {
 	width: 100%;
-	border: 1px solid $color-border;
+	border: 1px solid var(--color-border);
 	border-radius: $border-radius-xl;
 	overflow: hidden;
-	background: $color-bg-light;
+	background: var(--color-bg);
 }
 
 .tableHeader {
 	display: grid;
 	grid-template-columns: 2fr 1fr 1fr 1fr;
-	background: $color-bg-dark;
-	border-bottom: 1px solid $color-border;
+	background: var(--color-bg);
+	border-bottom: 1px solid var(--color-border);
 
 	@media (max-width: $breakpoint-md) {
 		grid-template-columns: 1.5fr 1fr 1fr 1fr;
@@ -51,12 +51,12 @@
 	padding: $spacing-lg $spacing-xl;
 	font-size: $font-size-xs;
 	font-weight: $font-weight-bold;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
 
 	&.highlight {
-		color: $color-primary;
+		color: var(--color-primary);
 	}
 
 	@media (max-width: $breakpoint-md) {

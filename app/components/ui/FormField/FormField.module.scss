@@ -7,9 +7,11 @@
 }
 
 .label {
-	font-size: $font-size-sm;
-	font-weight: $font-weight-medium;
-	color: var(--color-text-secondary);
+	font-size: var(--form-field-label-size, #{$font-size-sm});
+	font-weight: var(--form-field-label-weight, #{$font-weight-medium});
+	color: var(--form-field-label-color, var(--color-text-secondary));
+	text-transform: var(--form-field-label-transform, none);
+	letter-spacing: var(--form-field-label-tracking, normal);
 }
 
 .labelRow {
@@ -83,15 +85,15 @@
 }
 
 .controlError {
-	border-color: $color-red;
+	border-color: var(--color-danger);
 
 	&:focus {
-		box-shadow: 0 0 0 2px rgba($color-red-opacity, 0.1);
+		box-shadow: 0 0 0 2px rgba(var(--color-danger-bg), 0.1);
 	}
 }
 
 .error {
-	color: $color-red;
+	color: var(--color-danger);
 	font-size: $font-size-xs;
 	margin-top: 2px;
 }

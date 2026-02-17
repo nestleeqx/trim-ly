@@ -57,9 +57,9 @@
 	}
 
 	&.danger {
-		color: $color-red;
+		color: var(--color-danger);
 		&:hover {
-			background: $color-red-opacity;
+			background: var(--color-danger-bg);
 		}
 	}
 

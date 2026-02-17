@@ -16,8 +16,8 @@
 	}
 
 	&.selected {
-		border-color: $color-primary;
-		background: rgba($color-primary, 0.02);
+		border-color: var(--color-primary);
+		background: rgba(var(--color-primary), 0.02);
 	}
 
 	@media (max-width: $breakpoint-sm) {

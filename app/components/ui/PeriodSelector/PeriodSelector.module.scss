@@ -3,7 +3,7 @@
 .periods {
 	display: flex;
 	gap: $spacing-xs;
-	background: $color-bg-dark;
+	background: var(--color-bg-secondary);
 	padding: $spacing-xs;
 	border-radius: $border-radius-lg;
 	flex-wrap: wrap;
@@ -25,12 +25,12 @@
 	font-family: $font-family-base;
 	font-size: $font-size-sm;
 	font-weight: $font-weight-medium;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	cursor: pointer;
 	transition: $transition-fast;
 
 	&:hover {
-		color: $color-text-primary;
+		color: var(--color-text-primary);
 	}
 
 	&:disabled {
@@ -39,8 +39,8 @@
 	}
 
 	&.active {
-		background: $color-bg-light;
-		color: $color-text-primary;
+		background: var(--color-bg);
+		color: var(--color-text-primary);
 		box-shadow: $shadow-sm;
 	}
 

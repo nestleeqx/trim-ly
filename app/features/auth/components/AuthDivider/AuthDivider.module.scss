@@ -10,12 +10,12 @@
 .dividerLine {
 	flex: 1;
 	height: 1px;
-	background: $color-border;
+	background: var(--color-border);
 }
 
 .dividerText {
 	font-size: $font-size-xs;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
 	white-space: nowrap;

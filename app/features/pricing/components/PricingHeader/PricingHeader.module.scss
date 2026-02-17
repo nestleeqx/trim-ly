@@ -13,7 +13,7 @@
 .title {
 	font-size: $font-size-4xl;
 	font-weight: $font-weight-bold;
-	color: $color-text-primary;
+	color: var(--color-text-primary);
 	margin: 0 0 $spacing-md 0;
 
 	@media (max-width: $breakpoint-md) {
@@ -27,7 +27,7 @@
 
 .subtitle {
 	font-size: $font-size-base;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	margin: 0 0 $spacing-xl 0;
 	line-height: 1.6;
 }

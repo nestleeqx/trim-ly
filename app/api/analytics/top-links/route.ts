@@ -81,6 +81,36 @@ function extractReferrerHost(value: string | null) {
 	}
 }
 
+function isTransientDbError(error: unknown): boolean {
+	if (!(error instanceof Error)) return false
+	const message = error.message.toLowerCase()
+	return (
+		message.includes('econnreset') ||
+		message.includes('connection timeout') ||
+		message.includes('server has closed the connection') ||
+		message.includes('fetch failed')
+	)
+}
+
+async function withRetry<T>(
+	task: () => Promise<T>,
+	maxAttempts = 2
+): Promise<T> {
+	let lastError: unknown
+	for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+		try {
+			return await task()
+		} catch (error) {
+			lastError = error
+			if (!isTransientDbError(error) || attempt >= maxAttempts) {
+				throw error
+			}
+			await new Promise(resolve => setTimeout(resolve, 150 * attempt))
+		}
+	}
+	throw lastError
+}
+
 export async function GET(req: Request) {
 	const session = await getServerSession(authOptions)
 	const userId = session?.user?.id
@@ -97,105 +127,119 @@ export async function GET(req: Request) {
 		(url.searchParams.get('referrer') || '').trim() || null
 	const { from, to } = getRange(period)
 
-	const events = await prisma.linkClickEvent.findMany({
-		where: {
-			clickedAt: { gte: from, lte: to },
-			link: { userId, deletedAt: null }
-		},
-		select: {
-			linkId: true,
-			country: true,
-			referrer: true,
-			userAgent: true,
-			deviceType: true
-		}
-	})
-
-	const clicksByLink = new Map<string, number>()
-
-	for (const event of events) {
-		const countryCode =
-			event.country && event.country.length === 2
-				? event.country.toUpperCase()
-				: '--'
-		const device = normalizeDevice(event.deviceType, event.userAgent)
-		const eventReferrer = extractReferrerHost(event.referrer)
-
-		if (selectedCountry && selectedCountry !== countryCode) continue
-		if (selectedDevice && selectedDevice !== device) continue
-		if (selectedReferrer && selectedReferrer !== eventReferrer) continue
-
-		clicksByLink.set(
-			event.linkId,
-			(clicksByLink.get(event.linkId) || 0) + 1
-		)
-	}
-
-	const top = [...clicksByLink.entries()]
-		.sort((a, b) => b[1] - a[1])
-		.slice(0, 10)
-
-	if (top.length === 0) {
-		return NextResponse.json({
-			period,
-			links: []
-		})
-	}
-
-	const topIds = top.map(([id]) => id)
-	const links = await prisma.link.findMany({
-		where: {
-			id: { in: topIds },
-			userId,
-			deletedAt: null
-		},
-		select: {
-			id: true,
-			title: true,
-			slug: true,
-			targetUrl: true,
-			status: true,
-			createdAt: true,
-			expiresAt: true,
-			deletedAt: true,
-			passwordHash: true,
-			tags: {
+	try {
+		const events = await withRetry(() =>
+			prisma.linkClickEvent.findMany({
+				where: {
+					clickedAt: { gte: from, lte: to },
+					link: { userId, deletedAt: null }
+				},
 				select: {
-					tag: {
+					linkId: true,
+					country: true,
+					referrer: true,
+					userAgent: true,
+					deviceType: true
+				}
+			})
+		)
+
+		const clicksByLink = new Map<string, number>()
+
+		for (const event of events) {
+			const countryCode =
+				event.country && event.country.length === 2
+					? event.country.toUpperCase()
+					: '--'
+			const device = normalizeDevice(event.deviceType, event.userAgent)
+			const eventReferrer = extractReferrerHost(event.referrer)
+
+			if (selectedCountry && selectedCountry !== countryCode) continue
+			if (selectedDevice && selectedDevice !== device) continue
+			if (selectedReferrer && selectedReferrer !== eventReferrer) continue
+
+			clicksByLink.set(
+				event.linkId,
+				(clicksByLink.get(event.linkId) || 0) + 1
+			)
+		}
+
+		const top = [...clicksByLink.entries()]
+			.sort((a, b) => b[1] - a[1])
+			.slice(0, 10)
+
+		if (top.length === 0) {
+			return NextResponse.json({
+				period,
+				links: []
+			})
+		}
+
+		const topIds = top.map(([id]) => id)
+		const links = await withRetry(() =>
+			prisma.link.findMany({
+				where: {
+					id: { in: topIds },
+					userId,
+					deletedAt: null
+				},
+				select: {
+					id: true,
+					title: true,
+					slug: true,
+					targetUrl: true,
+					status: true,
+					createdAt: true,
+					expiresAt: true,
+					deletedAt: true,
+					passwordHash: true,
+					tags: {
 						select: {
-							name: true
+							tag: {
+								select: {
+									name: true
+								}
+							}
 						}
 					}
 				}
-			}
-		}
-	})
-
-	const linkById = new Map(links.map(link => [link.id, link]))
-
-	return NextResponse.json({
-		period,
-		links: top
-			.map(([id, clicks]) => {
-				const link = linkById.get(id)
-				if (!link) return null
-				return {
-					id: link.id,
-					title: link.title || 'Без названия',
-					shortUrl: buildShortLink(link.slug),
-					destination: link.targetUrl,
-					clicks,
-					status: mapStatus({
-						status: link.status,
-						expiresAt: link.expiresAt,
-						deletedAt: link.deletedAt
-					}),
-					tags: link.tags.map(tagRel => tagRel.tag.name),
-					createdAt: link.createdAt.toISOString(),
-					expirationDate: link.expiresAt?.toISOString() ?? null,
-					hasPassword: !!link.passwordHash
-				}
 			})
-			.filter(Boolean)
-	})
+		)
+
+		const linkById = new Map(links.map(link => [link.id, link]))
+
+		return NextResponse.json({
+			period,
+			links: top
+				.map(([id, clicks]) => {
+					const link = linkById.get(id)
+					if (!link) return null
+					return {
+						id: link.id,
+						title: link.title || 'Без названия',
+						shortUrl: buildShortLink(link.slug),
+						destination: link.targetUrl,
+						clicks,
+						status: mapStatus({
+							status: link.status,
+							expiresAt: link.expiresAt,
+							deletedAt: link.deletedAt
+						}),
+						tags: link.tags.map(tagRel => tagRel.tag.name),
+						createdAt: link.createdAt.toISOString(),
+						expirationDate: link.expiresAt?.toISOString() ?? null,
+						hasPassword: !!link.passwordHash
+					}
+				})
+				.filter(Boolean)
+		})
+	} catch {
+		return NextResponse.json(
+			{
+				error:
+					'Временная ошибка соединения с базой данных. Повторите попытку.'
+			},
+			{ status: 503 }
+		)
+	}
 }

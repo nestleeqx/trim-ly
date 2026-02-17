@@ -3,7 +3,7 @@
 .container {
 	display: flex;
 	padding: $spacing-xs;
-	background-color: $color-bg-dark;
+	background-color: var(--color-bg);
 	border-radius: $border-radius-lg;
 }
 
@@ -14,7 +14,7 @@
 	width: 36px;
 	height: 36px;
 	padding: 0;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	background: transparent;
 	border: none;
 	border-radius: $border-radius-md;
@@ -22,12 +22,12 @@
 	transition: $transition-fast;
 
 	&:hover {
-		color: $color-text-primary;
+		color: var(--color-text-primary);
 	}
 
 	&.active {
-		color: $color-text-primary;
-		background-color: $color-bg-light;
+		color: var(--color-text-primary);
+		background-color: var(--color-bg);
 		box-shadow: $shadow-sm;
 	}
 }

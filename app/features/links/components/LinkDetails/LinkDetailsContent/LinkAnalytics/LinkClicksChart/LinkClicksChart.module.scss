@@ -1,8 +1,8 @@
 @use 'variables' as *;
 
 .card {
-	background: $color-bg-light;
-	border: 1px solid $color-border;
+	background: var(--color-bg);
+	border: 1px solid var(--color-border);
 	border-radius: $border-radius-lg;
 	padding: $spacing-lg;
 	display: flex;
@@ -26,11 +26,19 @@
 
 .subtitle {
 	margin: 4px 0 0;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	font-size: $font-size-sm;
 }
 
 .chartContainer {
 	height: 320px;
 	position: relative;
+}
+
+.chartContainerLoading {
+	:global(.recharts-responsive-container),
+	:global(.recharts-wrapper) {
+		opacity: 0.2;
+		transition: opacity 0.15s ease;
+	}
 }

@@ -6,22 +6,23 @@
 	font-size: $font-size-sm;
 	line-height: 1.4;
 	border: 1px solid transparent;
+	overflow: hidden;
 }
 
 .success {
-	background: rgba($color-success, 0.1);
-	border-color: rgba($color-success, 0.25);
-	color: $color-success;
+	background: rgba(var(--color-success), 0.1);
+	border-color: rgba(var(--color-success), 0.25);
+	color: var(--color-success);
 }
 
 .error {
-	background: rgba($color-red, 0.08);
-	border-color: rgba($color-red, 0.24);
-	color: $color-red;
+	background: rgba(var(--color-danger), 0.08);
+	border-color: rgba(var(--color-danger), 0.24);
+	color: var(--color-danger);
 }
 
 .info {
-	background: rgba($color-primary, 0.08);
-	border-color: rgba($color-primary, 0.24);
-	color: $color-primary;
+	background: rgba(var(--color-primary), 0.08);
+	border-color: rgba(var(--color-primary), 0.24);
+	color: var(--color-primary);
 }

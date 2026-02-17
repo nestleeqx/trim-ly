@@ -8,6 +8,7 @@ import PeriodSelector, {
 import ChartDatePicker from '@/app/features/analytics/components/ClicksChart/ChartDatePicker/ChartDatePicker'
 import RechartsAreaBundle from '@/app/features/analytics/components/ClicksChart/RechartsAreaBundle'
 import { ChartDataPoint } from '@/types/charts'
+import cn from 'classnames'
 import { useMemo } from 'react'
 import styles from './LinkClicksChart.module.scss'
 
@@ -111,7 +112,11 @@ export default function LinkClicksChart({
 				onCancel={onCancelDatePicker}
 			/>
 
-			<div className={styles.chartContainer}>
+			<div
+				className={cn(styles.chartContainer, {
+					[styles.chartContainerLoading]: isLoading
+				})}
+			>
 				{isLoading ? <ChartLoadingOverlay /> : null}
 				<RechartsAreaBundle
 					data={data}

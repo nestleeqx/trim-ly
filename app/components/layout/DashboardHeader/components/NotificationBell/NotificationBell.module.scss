@@ -2,7 +2,7 @@
 
 .wrapper {
 	position: relative;
-	border-right: 1px solid $color-border;
+	border-right: 1px solid var(--color-border);
 	padding-right: $spacing-md;
 }
 
@@ -13,7 +13,7 @@
 	width: 40px;
 	height: 40px;
 	padding: 0;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	background: transparent;
 	border: none;
 	border-radius: $border-radius-lg;
@@ -21,12 +21,12 @@
 	transition: $transition-fast;
 
 	&:hover {
-		color: $color-text-primary;
-		background-color: $color-bg-dark;
+		color: var(--color-text-primary);
+		background-color: var(--color-bg-secondary);
 	}
 
 	&:focus-visible {
-		outline: 2px solid $color-primary;
+		outline: 2px solid var(--color-primary);
 		outline-offset: 2px;
 	}
 }
@@ -35,19 +35,19 @@
 	position: absolute;
 	top: calc(100% + $spacing-sm);
 	right: 0;
-	background-color: $color-bg-light;
+	background-color: var(--color-bg);
 	border-radius: $border-radius-xl;
 	box-shadow: $shadow-lg;
 	min-width: 220px;
 	z-index: 100;
 	padding: $spacing-lg;
-	border: 1px solid $color-border;
+	border: 1px solid var(--color-border);
 }
 
 .empty {
 	margin: 0;
 	font-size: $font-size-sm;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	text-align: center;
 }
 

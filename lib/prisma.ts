@@ -2,21 +2,42 @@ import { PrismaPg } from '@prisma/adapter-pg'
 import { Pool } from 'pg'
 import { PrismaClient } from '../app/generated/prisma/client'
 
-const globalForPrisma = global as unknown as {
-	prisma: PrismaClient
+const globalForPrisma = globalThis as unknown as {
+	prisma?: PrismaClient
+	pgPool?: Pool
 }
 
-const pool = new Pool({
-	connectionString: process.env.DATABASE_URL
-})
+const accelerateUrl = process.env.PRISMA_DATABASE_URL
+const dbUrl = process.env.DATABASE_URL
 
-const adapter = new PrismaPg(pool)
+const prisma = globalForPrisma.prisma ?? (() => {
+	if (accelerateUrl) {
+		return new PrismaClient({ accelerateUrl })
+	}
 
-const prisma =
-	globalForPrisma.prisma ||
-	new PrismaClient({
-		adapter
+	if (!dbUrl) {
+		throw new Error('DATABASE_URL is not set')
+	}
+
+	const pgPool =
+		globalForPrisma.pgPool ??
+		new Pool({
+			connectionString: dbUrl,
+			max: 10,
+			idleTimeoutMillis: 30_000,
+			connectionTimeoutMillis: 10_000,
+			allowExitOnIdle: true,
+			keepAlive: true
+		})
+
+	if (process.env.NODE_ENV !== 'production') {
+		globalForPrisma.pgPool = pgPool
+	}
+
+	return new PrismaClient({
+		adapter: new PrismaPg(pgPool)
 	})
+})()
 
 if (process.env.NODE_ENV !== 'production') {
 	globalForPrisma.prisma = prisma

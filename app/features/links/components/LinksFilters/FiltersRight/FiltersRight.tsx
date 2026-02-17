@@ -1,5 +1,6 @@
 'use client'
 
+import Button from '@/app/components/ui/Button/Button'
 import { SortState } from '@/types/filterLinks'
 import cn from 'classnames'
 import { Download } from 'lucide-react'
@@ -43,7 +44,8 @@ export default function FiltersRight({
 				onViewModeChange={onViewModeChange}
 			/>
 
-			<button
+			<Button
+				variant='ghost'
 				type='button'
 				className={cn(styles.exportBtn, {
 					[styles.loading]: exportLoading
@@ -54,7 +56,7 @@ export default function FiltersRight({
 			>
 				<Download size={16} />
 				<span>{exportLoading ? 'Экспорт...' : 'Экспорт CSV'}</span>
-			</button>
+			</Button>
 		</div>
 	)
 }

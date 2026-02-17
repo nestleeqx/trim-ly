@@ -1,5 +1,6 @@
 'use client'
 
+import LoadingOverlay from '@/app/components/ui/LoadingOverlay/LoadingOverlay'
 import Toast from '@/app/components/ui/Toast/Toast'
 import ConfirmModal from '@/app/features/links/components/ConfirmModal/ConfirmModal'
 import LinksPageSkeleton from '@/app/features/links/components/LinksPageSkeleton/LinksPageSkeleton'
@@ -37,7 +38,7 @@ export default function RecentLinks({
 					ctaText='Повторить'
 					onRetry={vm.handleRetry}
 				/>
-			) : vm.resolvedLoading ? (
+			) : vm.resolvedInitialLoading ? (
 				<LinksPageSkeleton
 					rows={vm.limit}
 					showFilters={false}
@@ -45,23 +46,26 @@ export default function RecentLinks({
 					embedded
 				/>
 			) : (
-				<LinksTable
-					links={vm.links}
-					selectedLinks={[]}
-					onSelectAll={() => {}}
-					onSelectLink={() => {}}
-					onCopy={vm.handleCopy}
-					onEdit={vm.handleEdit}
-					onDelete={id => vm.openConfirm('delete', id)}
-					onPause={id => vm.openConfirm('pause', id)}
-					onResume={id => vm.openConfirm('resume', id)}
-					onRestore={id => vm.openConfirm('restore', id)}
-					allowSelection={false}
-					showTrend={false}
-					showActions
-					title='Последние ссылки'
-					allLinksHref='/links'
-				/>
+				<div className={styles.tableArea}>
+					<LinksTable
+						links={vm.links}
+						selectedLinks={[]}
+						onSelectAll={() => {}}
+						onSelectLink={() => {}}
+						onCopy={vm.handleCopy}
+						onEdit={vm.handleEdit}
+						onDelete={id => vm.openConfirm('delete', id)}
+						onPause={id => vm.openConfirm('pause', id)}
+						onResume={id => vm.openConfirm('resume', id)}
+						onRestore={id => vm.openConfirm('restore', id)}
+						allowSelection={false}
+						showTrend={false}
+						showActions
+						title='Последние ссылки'
+						allLinksHref='/links'
+					/>
+					{vm.resolvedRefetching ? <LoadingOverlay /> : null}
+				</div>
 			)}
 
 			<ConfirmModal

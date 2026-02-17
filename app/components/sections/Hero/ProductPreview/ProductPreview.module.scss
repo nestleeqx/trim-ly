@@ -249,6 +249,12 @@
 			color: var(--color-primary-hover);
 		}
 	}
+
+	@media (max-width: $breakpoint-sm) {
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: flex-start;
+	}
 }
 
 .qrBadge {

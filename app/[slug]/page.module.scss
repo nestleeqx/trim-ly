@@ -5,7 +5,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	background: $color-bg-dark;
+	background: var(--color-bg);
 	padding: $spacing-2xl $spacing-md $spacing-xl;
 }
 
@@ -23,7 +23,7 @@
 	align-items: center;
 	gap: $spacing-sm;
 	font-size: $font-size-xs;
-	color: $color-text-secondary;
+	color: var(--color-text-secondary);
 	text-transform: uppercase;
 	letter-spacing: 0.5px;
 }

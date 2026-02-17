@@ -9,7 +9,7 @@ import { mapLinkDtoToItem } from '@/app/features/links/mappers/linkMappers'
 import { useToast } from '@/hooks/useToast'
 import { LinkItem } from '@/types/links'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
 	RECENT_LINKS_CONFIRM_CONTENT,
 	type RecentLinksConfirmAction
@@ -56,9 +56,11 @@ export default function useRecentLinksController({
 	const [reloadKey, setReloadKey] = useState(0)
 	const [confirmModal, setConfirmModal] = useState(initialConfirmModalState)
 	const [actionLoading, setActionLoading] = useState(false)
+	const requestIdRef = useRef(0)
 
 	const loadRecentLinks = useCallback(
 		async (signal?: AbortSignal) => {
+			const requestId = ++requestIdRef.current
 			setIsFetching(true)
 			setFetchError(null)
 			try {
@@ -80,7 +82,7 @@ export default function useRecentLinksController({
 					error instanceof Error ? error.message : DEFAULT_FETCH_ERROR
 				)
 			} finally {
-				if (signal?.aborted) return
+				if (signal?.aborted || requestId !== requestIdRef.current) return
 				setHasFetchedOnce(true)
 				setIsFetching(false)
 			}
@@ -90,8 +92,6 @@ export default function useRecentLinksController({
 
 	useEffect(() => {
 		if (externalLinks || pathname !== '/dashboard') return
-		setHasFetchedOnce(false)
-		setIsFetching(true)
 		const controller = new AbortController()
 		void loadRecentLinks(controller.signal)
 		return () => controller.abort()
@@ -101,11 +101,18 @@ export default function useRecentLinksController({
 		() => (externalLinks ?? fetchedLinks).slice(0, limit),
 		[externalLinks, fetchedLinks, limit]
 	)
-	const resolvedLoading = externalLinks
+	const resolvedInitialLoading = externalLinks
 		? isLoading
-		: isFetching || !hasFetchedOnce
+		: !hasFetchedOnce && isFetching
+	const resolvedRefetching = externalLinks
+		? false
+		: hasFetchedOnce && isFetching
 	const resolvedEmpty =
-		isEmpty || (!resolvedLoading && hasFetchedOnce && links.length === 0)
+		isEmpty ||
+		(!resolvedInitialLoading &&
+			!resolvedRefetching &&
+			hasFetchedOnce &&
+			links.length === 0)
 
 	const getLinkTitle = useCallback(
 		(id: string) => links.find(link => link.id === id)?.title || DEFAULT_LINK_TITLE,
@@ -159,7 +166,8 @@ export default function useRecentLinksController({
 		links,
 		limit,
 		fetchError,
-		resolvedLoading,
+		resolvedInitialLoading,
+		resolvedRefetching,
 		resolvedEmpty,
 		confirmModal,
 		actionLoading,
