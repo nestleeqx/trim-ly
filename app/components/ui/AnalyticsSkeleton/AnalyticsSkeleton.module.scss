@@ -2,8 +2,12 @@
 
 .statsGrid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
 	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-md) {
+		grid-template-columns: repeat(2, 1fr);
+	}
 }
 
 .statsCard,
@@ -29,13 +33,39 @@
 	margin-bottom: $spacing-sm;
 }
 
+.statCardDescription {
+	width: 100%;
+	max-width: 210px;
+}
+
 .chartCard {
 	height: 460px;
+
+	@media (max-width: $breakpoint-md) {
+		height: 400px;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		height: 340px;
+		padding: $spacing-md;
+		border-radius: $border-radius-lg;
+	}
+
+	@media (max-width: 320px) {
+		height: 300px;
+		padding: $spacing-sm;
+	}
 }
 
 .chartCardHeader {
 	display: flex;
 	justify-content: space-between;
+	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-xs) {
+		flex-direction: column;
+		gap: $spacing-sm;
+	}
 }
 
 .chartCardTitle {
@@ -47,22 +77,58 @@
 	width: 100%;
 	height: 280px;
 	border-radius: $border-radius-xl;
+
+	@media (max-width: $breakpoint-xs) {
+		border-radius: $border-radius-lg;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		height: 200px;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		height: 130px;
+	}
+
+	@media (max-width: 321px) {
+		height: 120px;
+	}
 }
 
 .chartContentDetails {
 	display: flex;
 	margin-top: $spacing-md;
 	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-xs) {
+		margin-top: $spacing-sm;
+		gap: $spacing-sm;
+	}
 }
 
 .sideCharts {
 	display: flex;
 	gap: $spacing-lg;
+
+	@media (max-width: $breakpoint-lg) {
+		gap: $spacing-md;
+		flex-direction: column;
+	}
 }
 
 .sideCard {
 	flex: 1;
 	height: 260px;
+
+	@media (max-width: $breakpoint-xs) {
+		height: 220px;
+		padding: $spacing-md;
+	}
+
+	@media (max-width: 320px) {
+		height: 200px;
+		padding: $spacing-sm;
+	}
 }
 
 .sideCardContent {
@@ -76,6 +142,10 @@
 
 .tableSkeleton {
 	min-height: 380px;
+
+	@media (max-width: $breakpoint-xs) {
+		min-height: 320px;
+	}
 }
 
 @media (max-width: $breakpoint-lg) {
@@ -84,8 +154,9 @@
 	}
 }
 
-@media (max-width: $breakpoint-md) {
-	.sideCharts {
-		flex-direction: column;
+@media (max-width: $breakpoint-xs) {
+	.statsCard {
+		padding: $spacing-md;
+		border-radius: $border-radius-lg;
 	}
 }

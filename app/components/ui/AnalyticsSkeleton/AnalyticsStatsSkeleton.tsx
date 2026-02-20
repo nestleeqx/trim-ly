@@ -1,7 +1,7 @@
 import Skeleton from '@/app/components/ui/Skeleton/Skeleton'
 import cn from 'classnames'
-import type { SkeletonBlockProps } from './types'
 import styles from './AnalyticsSkeleton.module.scss'
+import type { SkeletonBlockProps } from './types'
 
 export function AnalyticsStatsSkeleton({
 	className,
@@ -31,7 +31,7 @@ export function AnalyticsStatsSkeleton({
 						height={30}
 					/>
 					<Skeleton
-						width={150}
+						className={styles.statCardDescription}
 						height={20}
 					/>
 				</div>

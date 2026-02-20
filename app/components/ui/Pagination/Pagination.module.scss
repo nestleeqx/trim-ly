@@ -11,10 +11,15 @@
 	gap: $spacing-md;
 
 	@media (max-width: $breakpoint-md) {
-		flex-direction: column;
+		flex-wrap: wrap;
 		padding: $spacing-md;
 		border-radius: $border-radius-lg;
-		gap: $spacing-md;
+		gap: $spacing-sm;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: 10px;
+		gap: 10px;
 	}
 }
 
@@ -22,21 +27,28 @@
 	display: flex;
 	align-items: center;
 	gap: $spacing-lg;
+	min-width: 0;
 
 	@media (max-width: $breakpoint-md) {
-		flex-direction: column;
+		flex-direction: row;
 		gap: $spacing-sm;
-		width: 100%;
+		align-items: center;
+		min-width: 0;
 	}
 }
 
 .showing {
 	font-size: $font-size-sm;
 	color: var(--color-text-secondary);
+	white-space: nowrap;
 
 	strong {
 		color: var(--color-text-primary);
 		font-weight: $font-weight-semibold;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
 	}
 }
 
@@ -44,6 +56,11 @@
 	display: flex;
 	align-items: center;
 	gap: $spacing-xs;
+	min-width: 0;
+
+	@media (max-width: $breakpoint-sm) {
+		margin-left: auto;
+	}
 }
 
 .navBtn {
@@ -74,6 +91,14 @@
 	display: flex;
 	align-items: center;
 	gap: $spacing-xs;
+	min-width: 0;
+	overflow-x: auto;
+	scrollbar-width: thin;
+
+	@media (max-width: $breakpoint-sm) {
+		flex: 1;
+		justify-content: flex-end;
+	}
 }
 
 .pageBtn {
@@ -99,6 +124,13 @@
 	&.active {
 		background: var(--color-primary);
 		color: white;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		min-width: 32px;
+		height: 32px;
+		padding: 0 $spacing-xs;
+		font-size: $font-size-xs;
 	}
 }
 

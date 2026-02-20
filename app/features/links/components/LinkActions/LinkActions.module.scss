@@ -11,6 +11,21 @@
 		gap: $spacing-sm;
 		white-space: nowrap;
 	}
+
+	@media (max-width: $breakpoint-md) {
+		width: 100%;
+
+		button {
+			flex: 1 1 calc(50% - #{$spacing-sm});
+			justify-content: center;
+		}
+	}
+
+	@media (max-width: 420px) {
+		button {
+			flex: 1 1 100%;
+		}
+	}
 }
 
 .deleteBtn {

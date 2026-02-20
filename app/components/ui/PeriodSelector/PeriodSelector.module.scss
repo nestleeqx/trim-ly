@@ -39,9 +39,13 @@
 	}
 
 	&.active {
-		background: var(--color-bg);
-		color: var(--color-text-primary);
+		background: var(--color-primary);
+		color: #fff;
 		box-shadow: $shadow-sm;
+
+		&:hover {
+			color: #fff;
+		}
 	}
 
 	@media (max-width: $breakpoint-sm) {

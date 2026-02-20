@@ -8,6 +8,10 @@
 	cursor: pointer;
 	margin-top: 2px;
 	flex-shrink: 0;
+
+	@media (max-width: $breakpoint-xs) {
+		margin-top: 1px;
+	}
 }
 
 .termsLabel {
@@ -15,4 +19,8 @@
 	color: var(--color-text-secondary);
 	cursor: pointer;
 	line-height: 1.5;
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
+	}
 }

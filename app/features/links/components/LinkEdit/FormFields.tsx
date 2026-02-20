@@ -15,6 +15,7 @@ interface FormFieldsProps {
 	initialData: LinkEditFormData
 	aliasChecking: boolean
 	aliasAvailable: boolean
+	aliasSuggestions: string[]
 	isCreateMode: boolean
 	onFieldChange: <K extends keyof LinkEditFormData>(
 		field: K,
@@ -30,6 +31,7 @@ export default function FormFields({
 	initialData,
 	aliasChecking,
 	aliasAvailable,
+	aliasSuggestions,
 	isCreateMode,
 	onFieldChange,
 	onDestinationError
@@ -67,6 +69,7 @@ export default function FormFields({
 					initialValue={initialData.shortLink}
 					aliasChecking={aliasChecking}
 					aliasAvailable={aliasAvailable}
+					aliasSuggestions={aliasSuggestions}
 					isEditMode={!isCreateMode}
 					onChange={value => onFieldChange('shortLink', value)}
 				/>
@@ -76,6 +79,7 @@ export default function FormFields({
 					type='text'
 					name='title'
 					value={formData.title}
+					error={errors.title}
 					onChange={handleTitleChange}
 					placeholder='Example: Black Friday campaign'
 					hint='Видите только вы.'

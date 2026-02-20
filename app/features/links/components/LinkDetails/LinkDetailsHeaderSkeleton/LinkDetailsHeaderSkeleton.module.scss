@@ -13,13 +13,24 @@
 	height: 137px;
 	padding: $spacing-lg;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	gap: $spacing-lg;
 
-	@media (min-width: $breakpoint-md) {
+	@media (min-width: $breakpoint-lg) {
 		flex-direction: row;
-		justify-content: space-between;
 		align-items: center;
+	}
+
+	@media (max-width: $breakpoint-lg) {
+		height: 100%;
+		flex-direction: column;
+		align-items: normal;
+		padding: $spacing-md;
+		gap: $spacing-md;
+	}
+
+	@media (max-width: 320px) {
+		padding: $spacing-sm;
 	}
 }
 
@@ -36,6 +47,8 @@
 
 	.infoBody {
 		display: flex;
+		flex-wrap: wrap;
+		gap: $spacing-sm;
 	}
 }
 
@@ -62,23 +75,46 @@
 .destination {
 	width: 30%;
 	margin-left: $spacing-md;
+
+	@media (max-width: $breakpoint-md) {
+		width: min(240px, 70%);
+		margin-left: 0;
+	}
 }
 
 .actions {
 	display: flex;
 	gap: $spacing-sm;
+
+	@media (max-width: $breakpoint-sm) {
+		flex-wrap: wrap;
+	}
 }
 
 .actionBtn {
 	width: 130px;
 	height: 40px;
 	border-radius: 12;
+
+	@media (max-width: $breakpoint-sm) {
+		width: 48%;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		width: 100%;
+	}
 }
 
 .tabs {
 	display: flex;
 	gap: $spacing-md;
 	margin-top: $spacing-xl;
+
+	@media (max-width: $breakpoint-md) {
+		overflow-x: auto;
+		white-space: nowrap;
+		margin-top: $spacing-md;
+	}
 }
 
 .tab {

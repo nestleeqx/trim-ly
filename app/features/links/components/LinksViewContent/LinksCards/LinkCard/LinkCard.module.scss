@@ -8,6 +8,7 @@
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-md;
+	min-width: 0;
 	cursor: pointer;
 	transition: $transition-fast;
 
@@ -30,6 +31,7 @@
 	display: flex;
 	align-items: center;
 	gap: $spacing-sm;
+	min-width: 0;
 }
 
 .checkboxWrapper {
@@ -45,13 +47,20 @@
 	font-weight: $font-weight-semibold;
 	margin: 0;
 	line-height: 1.4;
-	max-width: max-content;
+	max-width: 100%;
+	min-width: 0;
+	overflow-wrap: anywhere;
+	word-break: break-word;
 }
 
 .cardTitleLink {
+	display: inline-block;
+	max-width: 100%;
 	color: var(--color-text-primary);
 	text-decoration: none;
 	transition: $transition-fast;
+	overflow-wrap: anywhere;
+	word-break: break-word;
 
 	&:hover {
 		color: var(--color-primary);
@@ -70,6 +79,12 @@
 	padding: $spacing-md 0;
 	border-top: 1px solid var(--color-border);
 	border-bottom: 1px solid var(--color-border);
+
+	@media (max-width: $breakpoint-xs) {
+		gap: $spacing-sm;
+		flex-wrap: wrap;
+		justify-content: space-between;
+	}
 }
 
 .statItem {
@@ -95,10 +110,15 @@
 	display: flex;
 	gap: $spacing-sm;
 	position: relative;
+
+	@media (max-width: $breakpoint-xs) {
+		flex-wrap: wrap;
+	}
 }
 
 .quickActionBtn {
 	flex: 1;
+	min-width: 0;
 	display: flex;
 	align-items: center;
 	justify-content: center;

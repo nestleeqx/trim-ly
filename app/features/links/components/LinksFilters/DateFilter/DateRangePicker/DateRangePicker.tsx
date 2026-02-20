@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Button from '@/app/components/ui/Button/Button'
 import { useFocusTrap } from '@/app/features/shared/hooks/useFocusTrap'
@@ -106,9 +106,7 @@ export default function DateRangePicker({
 					<Button
 						variant='primary'
 						size='sm'
-						onClick={() =>
-							onApply(currentStartDate, currentEndDate)
-						}
+						onClick={() => onApply(currentStartDate, currentEndDate)}
 						disabled={!currentStartDate || !currentEndDate}
 					>
 						{applyLabel}

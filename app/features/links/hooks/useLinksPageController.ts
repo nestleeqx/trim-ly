@@ -26,6 +26,7 @@ export function useLinksPageController() {
 	const hasLoadedOnceRef = useRef(false)
 	const [filtersUiKey, setFiltersUiKey] = useState(0)
 	const [reloadKey, setReloadKey] = useState(0)
+	const [isClearingFilters, setIsClearingFilters] = useState(false)
 
 	const handleOperationsSuccess = useCallback(
 		() => setReloadKey(prev => prev + 1),
@@ -95,6 +96,8 @@ export function useLinksPageController() {
 					datePreset: state.filters.datePreset,
 					createdFrom: state.filters.createdFrom || null,
 					createdTo: state.filters.createdTo || null,
+					includeTrend: true,
+					includeCounts: true,
 					signal: controller.signal
 				})
 
@@ -175,9 +178,16 @@ export function useLinksPageController() {
 	}, [])
 
 	const handleEmptyStateClearFilters = useCallback(() => {
+		setIsClearingFilters(true)
 		handlers.handleClearFilters()
 		setFiltersUiKey(prev => prev + 1)
 	}, [handlers])
+
+	useEffect(() => {
+		if (!isLoadingLinks) {
+			setIsClearingFilters(false)
+		}
+	}, [isLoadingLinks])
 
 	const isInitialLoading = isLoadingLinks && !hasLoadedOnce
 	const isRefetchingRaw = isLoadingLinks && hasLoadedOnce
@@ -193,6 +203,7 @@ export function useLinksPageController() {
 		loadError,
 		clearLoadError,
 		filtersUiKey,
+		isClearingFilters,
 		canPauseBulk,
 		canResumeBulk,
 		canRestoreBulk,

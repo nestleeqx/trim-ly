@@ -11,39 +11,33 @@ interface LinkStatCardConfig {
 	id: string
 	icon: LucideIcon
 	label: string
-	iconBgColor: string
 }
 
 export const linkStatsConfig: LinkStatCardConfig[] = [
 	{
 		id: 'clicks',
 		icon: MousePointerClick,
-		label: 'Всего кликов',
-		iconBgColor: '#eef2ff'
+		label: 'Всего кликов'
 	},
 	{
 		id: 'visitors',
 		icon: Users,
-		label: 'Уникальные посетители',
-		iconBgColor: '#eef2ff'
+		label: 'Уникальные посетители'
 	},
 	{
 		id: 'avgPerDay',
 		icon: Calendar,
-		label: 'Среднее в день',
-		iconBgColor: '#f5f5f5'
+		label: 'Среднее в день'
 	},
 	{
 		id: 'topCountry',
 		icon: Globe,
-		label: 'Топ страна',
-		iconBgColor: '#eef2ff'
+		label: 'Топ страна'
 	},
 	{
 		id: 'qrScans',
 		icon: QrCode,
-		label: 'QR-сканирования',
-		iconBgColor: '#eef2ff'
+		label: 'QR-сканирования'
 	}
 ]
 

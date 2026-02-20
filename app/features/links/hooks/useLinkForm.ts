@@ -5,7 +5,10 @@ import {
 	LinkEditFormData
 } from '@/app/features/links/components/LinkEdit/linkEdit.config'
 import { extractSlugFromShortLink } from '@/app/features/links/utils/shortLink'
-import { validateSlug } from '@/app/features/links/validation/createLinkValidation'
+import {
+	validateSlug,
+	validateTitle
+} from '@/app/features/links/validation/createLinkValidation'
 import { LinkItem } from '@/types/links'
 import {
 	normalizeUrl,
@@ -108,6 +111,13 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 				return
 			}
 
+			if (field === 'title' && typeof value === 'string') {
+				setFormData(prev => ({ ...prev, title: value }))
+				setTouched(prev => ({ ...prev, title: true }))
+				setErrors(prev => ({ ...prev, title: validateTitle(value) }))
+				return
+			}
+
 			setFormData(prev => ({ ...prev, [field]: value }))
 			setTouched(prev => ({ ...prev, [field]: true }))
 			if (field === 'password') {
@@ -150,6 +160,7 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 
 		const localShortLinkError = validateSlug(formData.shortLink)
 		const shortLinkError = localShortLinkError ?? errors.shortLink
+		const titleError = validateTitle(formData.title)
 
 		let passwordError: string | undefined
 		if (formData.passwordEnabled) {
@@ -166,6 +177,7 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 			destinationUrl: urlError,
 			expirationDate: dateError,
 			shortLink: shortLinkError,
+			title: titleError,
 			password: passwordError
 		}
 
@@ -175,6 +187,7 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 		formData.destinationUrl,
 		formData.expirationDate,
 		formData.shortLink,
+		formData.title,
 		formData.passwordEnabled,
 		formData.password,
 		link.hasPassword,

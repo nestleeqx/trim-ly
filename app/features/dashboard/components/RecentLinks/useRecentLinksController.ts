@@ -69,6 +69,8 @@ export default function useRecentLinksController({
 					pageSize: limit,
 					sort: 'created_date',
 					order: 'desc',
+					includeTrend: false,
+					includeCounts: false,
 					signal
 				})
 				setFetchedLinks(response.links.map(mapLinkDtoToItem))

@@ -7,6 +7,16 @@ interface TopCountriesProps {
 	countries: TopCountry[]
 }
 
+function formatClicksLabel(value: number) {
+	const abs = Math.abs(value) % 100
+	const mod10 = abs % 10
+
+	if (abs > 10 && abs < 20) return `${value} кликов`
+	if (mod10 === 1) return `${value} клик`
+	if (mod10 >= 2 && mod10 <= 4) return `${value} клика`
+	return `${value} кликов`
+}
+
 export default function TopCountries({ countries }: TopCountriesProps) {
 	const hasData = countries.length > 0
 
@@ -31,7 +41,7 @@ export default function TopCountries({ countries }: TopCountriesProps) {
 								/>
 							</div>
 							<span className={styles.percentage}>
-								{country.clicks} кликов
+								{formatClicksLabel(country.clicks)}
 							</span>
 						</div>
 					))

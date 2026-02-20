@@ -107,6 +107,7 @@ export default function PasswordState({ slug }: PasswordStateProps) {
 					type='submit'
 					size='lg'
 					disabled={!password || isSubmitting}
+					className={styles.confirmBtn}
 				>
 					{isSubmitting ? 'Проверяем...' : 'Разблокировать ссылку'}
 				</Button>

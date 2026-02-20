@@ -5,15 +5,33 @@ import { useRouter } from 'next/navigation'
 import styles from '../../BillingTab.module.scss'
 
 interface CurrentPlanCardProps {
+	planId: string
 	planName: string
 	status: string
 }
 
 export default function CurrentPlanCard({
+	planId,
 	planName,
 	status
 }: CurrentPlanCardProps) {
 	const router = useRouter()
+	const normalizedPlanId = planId.trim().toLowerCase()
+
+	const actionLabel =
+		normalizedPlanId === 'free'
+			? 'Обновить до PRO'
+			: normalizedPlanId === 'pro'
+				? 'Посмотреть тарифы'
+				: 'Связаться с нами'
+
+	const handleActionClick = () => {
+		if (normalizedPlanId === 'team') {
+			router.push('/pricing#contact')
+			return
+		}
+		router.push('/pricing')
+	}
 
 	return (
 		<div className={styles.planCard}>
@@ -34,9 +52,9 @@ export default function CurrentPlanCard({
 			<div className={styles.planAction}>
 				<Button
 					variant='primary'
-					onClick={() => router.push('/pricing')}
+					onClick={handleActionClick}
 				>
-					Обновить до PRO
+					{actionLabel}
 				</Button>
 			</div>
 		</div>

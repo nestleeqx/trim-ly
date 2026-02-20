@@ -27,13 +27,15 @@ export default function AvatarSection({
 	return (
 		<div className={styles.avatarRow}>
 			{avatarURL ? (
-				<Image
-					src={avatarURL}
-					alt='Аватар'
-					width={80}
-					height={80}
-					objectFit='cover'
-				/>
+				<div className={styles.avatarImgWrap}>
+					<Image
+						src={avatarURL}
+						alt='Аватар'
+						width={80}
+						height={80}
+						style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+					/>
+				</div>
 			) : (
 				<div className={styles.avatarFallback}>
 					<span>{fallbackInitial}</span>

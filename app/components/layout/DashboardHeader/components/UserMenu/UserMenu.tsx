@@ -5,7 +5,7 @@ import { ChevronDown, LogOut, User } from 'lucide-react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styles from './UserMenu.module.scss'
 
 export default function UserMenu() {
@@ -22,6 +22,17 @@ export default function UserMenu() {
 		return source.charAt(0).toUpperCase()
 	}, [session?.user?.email, session?.user?.name])
 
+	useEffect(() => {
+		if (!isDropdownOpen) return
+
+		const onKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') setIsDropdownOpen(false)
+		}
+
+		window.addEventListener('keydown', onKeyDown)
+		return () => window.removeEventListener('keydown', onKeyDown)
+	}, [isDropdownOpen])
+
 	return (
 		<div
 			className={styles.userWrapper}
@@ -32,6 +43,7 @@ export default function UserMenu() {
 				onClick={() => setIsDropdownOpen(!isDropdownOpen)}
 				aria-label='Меню пользователя'
 				aria-expanded={isDropdownOpen}
+				aria-haspopup='menu'
 			>
 				<div className={styles.avatar}>
 					{avatarUrl ? (
@@ -58,10 +70,6 @@ export default function UserMenu() {
 
 			{isDropdownOpen && (
 				<>
-					<div
-						className={styles.overlay}
-						onClick={() => setIsDropdownOpen(false)}
-					/>
 					<div className={styles.dropdown}>
 						<Link
 							href='/profile'

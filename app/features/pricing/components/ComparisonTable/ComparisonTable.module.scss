@@ -4,6 +4,11 @@
 	width: 100%;
 	max-width: 1100px;
 	margin-top: $spacing-xl;
+	margin-inline: auto;
+
+	@media (max-width: $breakpoint-xs) {
+		margin-top: $spacing-md;
+	}
 }
 
 .comparisonHeader {
@@ -32,18 +37,25 @@
 	width: 100%;
 	border: 1px solid var(--color-border);
 	border-radius: $border-radius-xl;
-	overflow: hidden;
+	overflow-x: auto;
+	overflow-y: hidden;
+	-webkit-overflow-scrolling: touch;
 	background: var(--color-bg);
 }
 
 .tableHeader {
 	display: grid;
 	grid-template-columns: 2fr 1fr 1fr 1fr;
+	min-width: 640px;
 	background: var(--color-bg);
 	border-bottom: 1px solid var(--color-border);
 
 	@media (max-width: $breakpoint-md) {
 		grid-template-columns: 1.5fr 1fr 1fr 1fr;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		min-width: 560px;
 	}
 }
 
@@ -62,6 +74,10 @@
 	@media (max-width: $breakpoint-md) {
 		padding: $spacing-md;
 		font-size: 10px;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: $spacing-sm;
 	}
 }
 

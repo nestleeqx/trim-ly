@@ -76,11 +76,7 @@ export default function ProductPreview() {
 
 			<div className={styles.dashboard}>
 				<div className={styles.dashboardHeader}>
-					<PreviewTabs
-						activeTab={activeTab}
-						onTabChange={setActiveTab}
-						onAnalyticsClick={scrollToAnalytics}
-					/>
+					<PreviewTabs onAnalyticsClick={scrollToAnalytics} />
 				</div>
 
 				<UrlInput onShorten={handleCreate} />

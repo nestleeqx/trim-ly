@@ -16,6 +16,7 @@ interface PasswordInputProps {
 	forgotLinkHref?: string
 	forgotLinkText?: string
 	forgotLinkClassName?: string
+	disabled?: boolean
 	error?: string
 }
 
@@ -31,6 +32,7 @@ export default function PasswordInput({
 	forgotLinkHref = '/forgot-password',
 	forgotLinkText = 'Забыли пароль?',
 	forgotLinkClassName,
+	disabled = false,
 	error
 }: PasswordInputProps) {
 	void labelStyle
@@ -56,6 +58,7 @@ export default function PasswordInput({
 			value={value}
 			onChange={onChange}
 			autoComplete={autoComplete}
+			disabled={disabled}
 			error={error}
 			className={styles.formGroup}
 			inputClassName={`${styles.input} ${styles.inputWithAdornment}`}
@@ -64,6 +67,7 @@ export default function PasswordInput({
 					type='button'
 					className={styles.passwordToggle}
 					onClick={togglePassword}
+					disabled={disabled}
 					aria-label={
 						showPassword ? 'Скрыть пароль' : 'Показать пароль'
 					}

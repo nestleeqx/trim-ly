@@ -1,12 +1,15 @@
-@use 'variables' as *;
+﻿@use 'variables' as *;
 
 .content {
 	max-width: $dashboard-max-width;
+	width: 100%;
+	margin: 0 auto;
 	padding: $spacing-lg;
 	min-height: calc(100vh - 80px);
 	display: flex;
 	flex-direction: column;
-	gap: $spacing-sm;
+	gap: $spacing-md;
+	overflow-x: clip;
 
 	.contentSkeleton {
 		margin-bottom: $spacing-md;
@@ -20,54 +23,89 @@
 	@media (max-width: $breakpoint-sm) {
 		padding: $spacing-sm;
 	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: 10px;
+		gap: 10px;
+	}
+
+	@media (max-width: 360px) {
+		padding: 8px;
+		gap: 8px;
+	}
 }
 
 .chartsGrid {
 	display: grid;
 	grid-template-columns: 2fr 1fr;
+	grid-template-areas:
+		'clicks side'
+		'recent side';
 	gap: $spacing-md;
 	align-items: start;
 
 	@media (max-width: $breakpoint-xl) {
 		grid-template-columns: 1fr;
+		grid-template-areas:
+			'clicks'
+			'side'
+			'recent';
+		gap: $spacing-md;
 	}
 
 	@media (max-width: $breakpoint-md) {
 		gap: $spacing-sm;
 	}
-}
 
-.chartsTop {
-	display: flex;
-	flex-direction: column;
-	gap: $spacing-md;
-
-	@media (max-width: $breakpoint-md) {
-		gap: $spacing-md;
+	@media (max-width: $breakpoint-xs) {
+		grid-template-columns: 1fr;
+		grid-template-areas:
+			'clicks'
+			'side'
+			'recent';
+		gap: 10px;
 	}
 }
 
+.clicksBlock {
+	grid-area: clicks;
+	min-width: 0;
+}
+
+.recentLinksBlock {
+	grid-area: recent;
+	min-width: 0;
+}
+
 .sideCharts {
-	display: flex;
-	flex-direction: column;
-	gap: $spacing-md;
+	grid-area: side;
+	min-width: 0;
 
 	.sideChartsSkeleton {
 		display: flex;
 		flex-direction: column;
 	}
+}
 
-	@media (max-width: $breakpoint-xl) {
-		display: grid;
-		grid-template-columns: repeat(3, 1fr);
-	}
+.sideChartsContent {
+	position: relative;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: $spacing-md;
+	align-items: start;
+	min-width: 0;
 
-	@media (max-width: $breakpoint-lg) {
-		grid-template-columns: repeat(2, 1fr);
+	@media (max-width: calc(#{$breakpoint-lg} - 1px)) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 
 	@media (max-width: $breakpoint-md) {
 		grid-template-columns: 1fr;
+		gap: $spacing-sm;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		gap: 10px;
 	}
 }
 
@@ -83,8 +121,13 @@
 	grid-template-columns: 1fr;
 	gap: $spacing-md;
 	align-items: start;
+	min-width: 0;
 
 	@media (max-width: $breakpoint-md) {
 		gap: $spacing-sm;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		gap: 10px;
 	}
 }

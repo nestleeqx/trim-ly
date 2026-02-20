@@ -1,7 +1,7 @@
 'use client'
 
 import { X } from 'lucide-react'
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useLayoutEffect, useRef } from 'react'
 import styles from './Modal.module.scss'
 
 interface ModalProps {
@@ -20,6 +20,10 @@ export default function Modal({
 	const mouseDownTarget = useRef<EventTarget | null>(null)
 	const modalRef = useRef<HTMLDivElement | null>(null)
 	const previouslyFocusedRef = useRef<HTMLElement | null>(null)
+	const previousOverflowRef = useRef<string>('')
+	const previousOverflowXRef = useRef<string>('')
+	const previousHtmlOverflowRef = useRef<string>('')
+	const previousBodyPaddingRightRef = useRef<string>('')
 
 	const handleKeyDown = useCallback(
 		(event: KeyboardEvent) => {
@@ -63,13 +67,27 @@ export default function Modal({
 		[onClose]
 	)
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (isOpen) {
 			previouslyFocusedRef.current =
 				document.activeElement as HTMLElement | null
 
+			const html = document.documentElement
+			const body = document.body
+
 			document.addEventListener('keydown', handleKeyDown)
-			document.body.style.overflow = 'hidden'
+			previousHtmlOverflowRef.current = html.style.overflow
+			previousOverflowRef.current = body.style.overflow
+			previousOverflowXRef.current = body.style.overflowX
+			previousBodyPaddingRightRef.current = body.style.paddingRight
+
+			const scrollbarWidth = window.innerWidth - html.clientWidth
+			html.style.overflow = 'hidden'
+			body.style.overflow = 'hidden'
+			body.style.overflowX = 'hidden'
+			if (scrollbarWidth > 0) {
+				body.style.paddingRight = `${scrollbarWidth}px`
+			}
 
 			requestAnimationFrame(() => {
 				const root = modalRef.current
@@ -89,7 +107,10 @@ export default function Modal({
 
 		return () => {
 			document.removeEventListener('keydown', handleKeyDown)
-			document.body.style.overflow = 'unset'
+			document.documentElement.style.overflow = previousHtmlOverflowRef.current
+			document.body.style.overflow = previousOverflowRef.current
+			document.body.style.overflowX = previousOverflowXRef.current
+			document.body.style.paddingRight = previousBodyPaddingRightRef.current
 			previouslyFocusedRef.current?.focus()
 		}
 	}, [isOpen, handleKeyDown])

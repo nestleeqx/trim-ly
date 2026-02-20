@@ -1,4 +1,4 @@
-import { SortState } from '@/types/filterLinks'
+﻿import { SortState } from '@/types/filterLinks'
 import cn from 'classnames'
 import { SORT_OPTIONS, SORT_ORDER_ICONS } from './sortConfig'
 import styles from './SortDropdown.module.scss'
@@ -20,6 +20,7 @@ export default function MainMenu({ sort, setSelectedField }: MainMenuProps) {
 
 				return (
 					<button
+						type='button'
 						key={opt.field}
 						className={cn(styles.dropdownItem, styles.sortItem, {
 							[styles.selected]: isActive
@@ -34,9 +35,7 @@ export default function MainMenu({ sort, setSelectedField }: MainMenuProps) {
 						{isActive && current && (
 							<div className={styles.sortIndicator}>
 								{SORT_ORDER_ICONS[sort.order]}
-								<span className={styles.currentSortLabel}>
-									{current}
-								</span>
+								<span className={styles.currentSortLabel}>{current}</span>
 							</div>
 						)}
 					</button>

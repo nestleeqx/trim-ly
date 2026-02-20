@@ -18,6 +18,7 @@ interface LinksPageMainContentProps {
 	isRefetching: boolean
 	isLoadingTags: boolean
 	filtersUiKey: number
+	isClearingFilters: boolean
 	canPauseBulk: boolean
 	canResumeBulk: boolean
 	canRestoreBulk: boolean
@@ -42,6 +43,7 @@ export default function LinksPageMainContent({
 	isRefetching,
 	isLoadingTags,
 	filtersUiKey,
+	isClearingFilters,
 	canPauseBulk,
 	canResumeBulk,
 	canRestoreBulk,
@@ -82,13 +84,17 @@ export default function LinksPageMainContent({
 				<LinksPageSkeleton
 					showFilters={false}
 					showPagination={false}
+					showMobileCards
 				/>
 			) : (
-				<>
-					{resultsInfo.show ? (
+				<div id='links-table-section'>
+					{state.totalItems > 0 ? (
 						<LinksResultsInfo
 							totalFound={resultsInfo.totalFound}
 							searchQuery={resultsInfo.searchQuery}
+							hideOnDesktopWhenSelected={
+								state.selectedLinks.length > 0
+							}
 						/>
 					) : null}
 
@@ -96,8 +102,12 @@ export default function LinksPageMainContent({
 						<LinksEmptyState
 							hasLinks={emptyState.hasLinks}
 							hasFilteredLinks={emptyState.hasFilteredLinks}
-							hasActiveFilters={state.hasActiveFilters || isRefetching}
-							isLoading={isRefetching}
+							hasActiveFilters={
+								state.hasActiveFilters ||
+								isRefetching ||
+								isClearingFilters
+							}
+							isLoading={isRefetching || isClearingFilters}
 							onClearFilters={handleEmptyStateClearFilters}
 						/>
 					) : (
@@ -118,10 +128,12 @@ export default function LinksPageMainContent({
 							onResume={handlers.handleResumeItem}
 							onRestore={handlers.handleRestoreItem}
 							onPageChange={handlers.handlePageChange}
-							onItemsPerPageChange={handlers.handleItemsPerPageChange}
+							onItemsPerPageChange={
+								handlers.handleItemsPerPageChange
+							}
 						/>
 					)}
-				</>
+				</div>
 			)}
 		</div>
 	)

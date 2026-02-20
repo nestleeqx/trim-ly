@@ -62,9 +62,7 @@ export default function LinkInfoCard({
 								<Copy size={14} />
 							</button>
 						</div>
-						<span className={styles.destination}>
-							{link.destination}
-						</span>
+						<span className={styles.destination}>{link.destination}</span>
 					</div>
 				</div>
 

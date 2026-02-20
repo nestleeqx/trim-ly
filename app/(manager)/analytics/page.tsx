@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import styles from '@/app/(manager)/analytics/page.module.scss'
 import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
@@ -48,6 +48,7 @@ export default function AnalyticsPage() {
 		period: activePeriod,
 		...analyticsFilters
 	})
+
 	const filterError = useMemo(
 		() => breakdown.error ?? null,
 		[breakdown.error]
@@ -93,6 +94,7 @@ export default function AnalyticsPage() {
 					<Button
 						variant='invertGhost'
 						size='md'
+						className={styles.exportBtn}
 						disabled={summary.isLoading || !!summary.error}
 						onClick={() =>
 							downloadCsv({
@@ -106,7 +108,9 @@ export default function AnalyticsPage() {
 					</Button>
 				</div>
 
-				{summary.error ? <p>{summary.error}</p> : null}
+				{summary.error ? (
+					<p className={styles.errorText}>{summary.error}</p>
+				) : null}
 
 				<div>
 					{summary.isInitialLoading ? (
@@ -148,7 +152,9 @@ export default function AnalyticsPage() {
 					/>
 				</div>
 
-				{filterError ? <p>{filterError}</p> : null}
+				{filterError ? (
+					<p className={styles.errorText}>{filterError}</p>
+				) : null}
 
 				<div className={styles.sideCards}>
 					{breakdown.isInitialLoading ? (
@@ -173,7 +179,9 @@ export default function AnalyticsPage() {
 					)}
 				</div>
 
-				{topLinksError ? <p>{topLinksError}</p> : null}
+				{topLinksError ? (
+					<p className={styles.errorText}>{topLinksError}</p>
+				) : null}
 
 				<div className={styles.topLinksBlock}>
 					{topLinks.isInitialLoading ? (

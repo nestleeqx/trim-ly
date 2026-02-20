@@ -4,9 +4,10 @@
 	background: var(--color-bg);
 	border-radius: $border-radius-xl;
 	border: 1px solid var(--color-border);
+	min-width: 0;
 
 	@media (max-width: $breakpoint-md) {
-		padding: $spacing-md;
+		border-radius: $border-radius-lg;
 	}
 }
 
@@ -17,7 +18,14 @@
 	padding-bottom: $spacing-lg;
 
 	@media (max-width: $breakpoint-md) {
+		padding: $spacing-md;
 		margin-bottom: $spacing-lg;
+		padding-bottom: $spacing-md;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: 14px;
+		margin-bottom: 12px;
 	}
 }
 
@@ -40,4 +48,13 @@
 
 .cardContent {
 	padding: 0 $spacing-xl $spacing-xl;
+	min-width: 0;
+
+	@media (max-width: $breakpoint-md) {
+		padding: 0 $spacing-md $spacing-md;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: 0 14px 14px;
+	}
 }

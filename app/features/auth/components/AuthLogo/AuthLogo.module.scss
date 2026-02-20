@@ -7,6 +7,10 @@
 	gap: $spacing-sm;
 	margin-bottom: $spacing-2xl;
 	pointer-events: none;
+
+	@media (max-width: $breakpoint-xs) {
+		margin-bottom: $spacing-lg;
+	}
 }
 
 .logoIcon {
@@ -18,10 +22,19 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	@media (max-width: $breakpoint-xs) {
+		width: 42px;
+		height: 42px;
+	}
 }
 
 .logoText {
 	font-size: $font-size-xl;
 	font-weight: $font-weight-bold;
 	color: var(--color-text-primary);
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-lg;
+	}
 }

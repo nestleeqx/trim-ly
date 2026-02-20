@@ -23,6 +23,7 @@
 	justify-content: center;
 
 	@media (max-width: $breakpoint-sm) {
+		margin-bottom: $spacing-2xl;
 		width: 260px;
 		height: 160px;
 	}
@@ -195,7 +196,7 @@
 	margin: 0 0 $spacing-md 0;
 
 	@media (max-width: $breakpoint-sm) {
-		font-size: $font-size-2xl;
+		font-size: $font-size-xl;
 	}
 }
 
@@ -227,7 +228,9 @@
 .actionBtn {
 	max-height: 53px;
 	@media (max-width: $breakpoint-sm) {
-		width: 100%;
-		justify-content: center;
+		& > button {
+			font-size: $font-size-base;
+			width: 264px;
+		}
 	}
 }

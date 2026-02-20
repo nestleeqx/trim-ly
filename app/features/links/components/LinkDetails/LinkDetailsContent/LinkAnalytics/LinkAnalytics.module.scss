@@ -3,9 +3,19 @@
 .sideCharts {
 	display: flex;
 	gap: $spacing-lg;
+	flex-wrap: nowrap;
 
 	> * {
 		width: 100%;
+	}
+
+	@media (max-width: $breakpoint-lg) {
+		flex-direction: column;
+		gap: $spacing-md;
+	}
+
+	@media (max-width: 320px) {
+		gap: $spacing-sm;
 	}
 }
 

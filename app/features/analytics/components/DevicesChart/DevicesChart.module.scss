@@ -29,6 +29,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	z-index: 0;
 
 	@media (max-width: $breakpoint-md) {
 		width: 180px;
@@ -125,9 +126,7 @@
 	transition: $transition-base;
 	outline: none;
 
-	&:hover,
-	&.active,
-	&:focus {
+	&:hover {
 		background-color: var(--color-bg-secondary);
 	}
 

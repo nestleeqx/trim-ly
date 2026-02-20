@@ -2,22 +2,32 @@
 
 .card {
 	width: 100%;
-	width: 470px;
 	max-width: 470px;
 	background: var(--color-bg);
 	border: 1px solid var(--color-border);
 	border-radius: $border-radius-xl;
 	padding: $spacing-2xl;
 	margin-bottom: $spacing-xl;
+	box-sizing: border-box;
 
 	@media (max-width: $breakpoint-sm) {
 		padding: $spacing-xl;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: $spacing-lg $spacing-md;
+		border-radius: $border-radius-lg;
+		margin-bottom: $spacing-md;
 	}
 }
 
 .cardHeader {
 	text-align: center;
 	margin-bottom: $spacing-2xl;
+
+	@media (max-width: $breakpoint-xs) {
+		margin-bottom: $spacing-lg;
+	}
 }
 
 .cardTitle {
@@ -25,10 +35,19 @@
 	font-weight: $font-weight-bold;
 	color: var(--color-text-primary);
 	margin: 0 0 $spacing-sm 0;
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xl;
+	}
 }
 
 .cardSubtitle {
 	font-size: $font-size-sm;
 	color: var(--color-text-secondary);
 	margin: 0;
+	line-height: 1.5;
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
+	}
 }

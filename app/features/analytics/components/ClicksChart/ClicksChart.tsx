@@ -1,8 +1,6 @@
-'use client'
+﻿'use client'
 
-import {
-	AnalyticsChartSkeleton
-} from '@/app/components/ui/AnalyticsSkeleton/AnalyticsSkeleton'
+import { AnalyticsChartSkeleton } from '@/app/components/ui/AnalyticsSkeleton/AnalyticsSkeleton'
 import ChartLoadingOverlay from '@/app/components/ui/ChartLoadingOverlay/ChartLoadingOverlay'
 import ChartSummaryStats from '@/app/components/ui/ChartSummaryStats/ChartSummaryStats'
 import PeriodSelector, {
@@ -37,6 +35,7 @@ export default function ClicksChart() {
 		isRefetching,
 		error,
 		chartData,
+		chartPeriod,
 		stats,
 		showDatePicker,
 		startDate,
@@ -61,7 +60,10 @@ export default function ClicksChart() {
 					: maxValue <= 500
 						? 50
 						: 500
-		const max = Math.max(step * 2, Math.ceil((maxValue * 1.1) / step) * step)
+		const max = Math.max(
+			step * 2,
+			Math.ceil((maxValue * 1.1) / step) * step
+		)
 		return {
 			yAxisMax: max,
 			yAxisTicks: Array.from({ length: 5 }, (_, i) =>
@@ -97,7 +99,9 @@ export default function ClicksChart() {
 					}
 					disabled={isLoading}
 					getLabel={option =>
-						option.key === 'custom' ? getCustomLabel() : option.label
+						option.key === 'custom'
+							? getCustomLabel()
+							: option.label
 					}
 				/>
 			</div>
@@ -131,6 +135,7 @@ export default function ClicksChart() {
 					data={chartData}
 					yAxisMax={yAxisMax}
 					yAxisTicks={yAxisTicks}
+					isHourly={chartPeriod === '24h'}
 				/>
 			</div>
 

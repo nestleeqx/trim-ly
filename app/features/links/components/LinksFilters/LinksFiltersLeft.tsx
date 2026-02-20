@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { Filter, X } from 'lucide-react'
 import CountryFilter from './CountryFilter/CountryFilter'
@@ -125,6 +125,7 @@ export default function LinksFiltersLeft({
 
 			{hasActiveFilters ? (
 				<button
+					type='button'
 					className={styles.clearBtn}
 					onClick={onClearFilters}
 				>

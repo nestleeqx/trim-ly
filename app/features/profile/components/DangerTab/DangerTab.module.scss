@@ -21,6 +21,15 @@
 	display: flex;
 	gap: $spacing-md;
 	align-items: flex-start;
+
+	@media (max-width: $breakpoint-sm) {
+		padding: $spacing-sm;
+		gap: $spacing-sm;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		flex-direction: column;
+	}
 }
 
 .iconWrap {
@@ -43,6 +52,10 @@
 	margin: 0;
 	color: var(--color-text-secondary);
 	font-size: $font-size-sm;
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
+	}
 }
 
 .section {
@@ -51,6 +64,12 @@
 	align-items: center;
 	gap: $spacing-md;
 	padding: $spacing-xl;
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-md;
+		flex-direction: column;
+		align-items: flex-start;
+	}
 }
 
 .sectionInfo {
@@ -67,12 +86,29 @@
 	margin: 0;
 	color: var(--color-text-secondary);
 	font-size: $font-size-sm;
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
+	}
 }
 
 .sectionAction {
 	flex: 0 0 220px;
 	display: flex;
 	justify-content: flex-end;
+
+	@media (max-width: $breakpoint-md) {
+		flex: 1 1 auto;
+		width: 100%;
+		justify-content: flex-start;
+
+		:global(button) {
+			width: 100%;
+			justify-content: center;
+			white-space: normal;
+			text-align: center;
+		}
+	}
 }
 
 .deleteBtn {
@@ -94,13 +130,17 @@
 
 @media (max-width: $breakpoint-sm) {
 	.section {
-		flex-direction: column;
-		align-items: flex-start;
+		padding: $spacing-md;
 	}
 
 	.sectionAction {
 		width: 100%;
 		justify-content: flex-start;
+	}
+
+	.demoWrap {
+		width: 100%;
+		flex-wrap: wrap;
 	}
 }
 

@@ -40,6 +40,17 @@
 	gap: $spacing-md;
 	width: 100%;
 	justify-content: center;
+
+	@media (max-width: $breakpoint-sm) {
+		flex-direction: column-reverse;
+	}
+
+	:global(button) {
+		@media (max-width: $breakpoint-sm) {
+			width: 100%;
+			justify-content: center;
+		}
+	}
 }
 
 .confirmButton {
@@ -75,5 +86,9 @@
 	&:disabled {
 		opacity: 0.6;
 		cursor: not-allowed;
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		font-size: $font-size-base;
 	}
 }

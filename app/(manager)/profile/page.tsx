@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import styles from '@/app/(manager)/profile/page.module.scss'
 import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
@@ -13,13 +13,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useMemo } from 'react'
 
 type Tab = 'profile' | 'security' | 'preferences' | 'billing' | 'danger'
-const TAB_KEYS: Tab[] = [
-	'profile',
-	'security',
-	'preferences',
-	'billing',
-	'danger'
-]
+const TAB_KEYS: Tab[] = ['profile', 'security', 'preferences', 'billing', 'danger']
 
 function isTab(value: string | null): value is Tab {
 	return !!value && TAB_KEYS.includes(value as Tab)
@@ -39,9 +33,7 @@ export default function SettingsPage() {
 		(tab: Tab) => {
 			const params = new URLSearchParams(searchParams.toString())
 			params.set('tab', tab)
-			router.replace(`${pathname}?${params.toString()}`, {
-				scroll: false
-			})
+			router.replace(`${pathname}?${params.toString()}`, { scroll: false })
 		},
 		[pathname, router, searchParams]
 	)
@@ -90,47 +82,44 @@ export default function SettingsPage() {
 							{tabs.map(tab => {
 								const Icon = tab.icon
 								return (
-									<li
-										key={tab.key}
-										className={cn({
-											[styles.active]:
-												activeTab === tab.key,
-											[styles.danger]: tab.danger
-										})}
-										onClick={() => setTab(tab.key)}
-										role='button'
-										tabIndex={0}
-										onKeyDown={e => {
-											if (
-												e.key === 'Enter' ||
-												e.key === ' '
-											) {
-												setTab(tab.key)
-											}
-										}}
-									>
-										<Icon size={19} />
-										<span>{tab.label}</span>
+									<li key={tab.key}>
+										<button
+											type='button'
+											className={cn(styles.tabButton, {
+												[styles.active]: activeTab === tab.key,
+												[styles.danger]: tab.danger
+											})}
+											onClick={() => setTab(tab.key)}
+										>
+											<Icon size={19} />
+											<span>{tab.label}</span>
+										</button>
 									</li>
 								)
 							})}
 						</ul>
 					</aside>
+
 					<div className={styles.mobileTabs}>
-						<select
-							value={activeTab}
-							onChange={e => setTab(e.target.value as Tab)}
-							className={styles.select}
-						>
-							{tabs.map(tab => (
-								<option
-									key={tab.key}
-									value={tab.key}
-								>
-									{tab.label}
-								</option>
-							))}
-						</select>
+						<div className={styles.mobileTabsScroll}>
+							{tabs.map(tab => {
+								const Icon = tab.icon
+								return (
+									<button
+										type='button'
+										key={tab.key}
+										className={cn(styles.mobileTabButton, {
+											[styles.active]: activeTab === tab.key,
+											[styles.danger]: tab.danger
+										})}
+										onClick={() => setTab(tab.key)}
+									>
+										<Icon size={16} />
+										<span>{tab.label}</span>
+									</button>
+								)
+							})}
+						</div>
 					</div>
 
 					<div className={styles.content}>{renderContent()}</div>

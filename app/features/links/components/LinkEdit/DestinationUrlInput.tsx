@@ -1,7 +1,11 @@
 ﻿'use client'
 
 import FormField from '@/app/components/ui/FormField'
-import { normalizeUrl, validateUrl } from '@/utils/validation'
+import {
+	MAX_TARGET_URL_LENGTH,
+	normalizeUrl,
+	validateUrl
+} from '@/utils/validation'
 import { Link2 } from 'lucide-react'
 import React, { useCallback } from 'react'
 import styles from './LinkEdit.module.scss'
@@ -56,6 +60,7 @@ export default function DestinationUrlInput({
 			className={styles.formGroup}
 			labelClassName={styles.label}
 			inputClassName={styles.input}
+			inputProps={{ maxLength: MAX_TARGET_URL_LENGTH }}
 		/>
 	)
 }

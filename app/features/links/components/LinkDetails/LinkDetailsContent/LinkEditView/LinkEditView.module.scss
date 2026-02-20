@@ -2,10 +2,22 @@
 
 .editLayout {
 	display: grid;
-	grid-template-columns: 800px 1fr;
+	grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr);
 	gap: $spacing-lg;
+
+	@media (max-width: 1200px) {
+		grid-template-columns: 1fr;
+	}
 
 	@media (max-width: $breakpoint-lg) {
 		grid-template-columns: 1fr;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		gap: $spacing-md;
+	}
+
+	@media (max-width: 320px) {
+		gap: $spacing-sm;
 	}
 }

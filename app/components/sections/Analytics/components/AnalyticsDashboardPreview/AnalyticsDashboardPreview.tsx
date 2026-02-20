@@ -21,15 +21,17 @@ export default function AnalyticsDashboardPreview({
 	return (
 		<motion.div
 			className={styles.left}
-			initial={{ opacity: 0, x: -30 }}
-			whileInView={{ opacity: 1, x: 0 }}
+			initial={{ opacity: 0, y: 16 }}
+			whileInView={{ opacity: 1, y: 0 }}
 			viewport={{ once: true, amount: 0.3 }}
 			transition={{ duration: 0.6 }}
 		>
 			<div className={styles.dashboard}>
 				<div className={styles.dashboardHeader}>
 					<div>
-						<h4 className={styles.dashboardTitle}>Источник трафика</h4>
+						<h4 className={styles.dashboardTitle}>
+							Источник трафика
+						</h4>
 						<p className={styles.dashboardSubtitle}>
 							{currentData.subtitle}
 						</p>
@@ -48,11 +50,11 @@ export default function AnalyticsDashboardPreview({
 				<div className={styles.dashboardFooter}>
 					<span className={styles.footerLabel}>Топ локация</span>
 					<span className={styles.footerValue}>
-						{currentData.topLocation} ({currentData.topLocationPercent}%)
+						{currentData.topLocation} (
+						{currentData.topLocationPercent}%)
 					</span>
 				</div>
 			</div>
 		</motion.div>
 	)
 }
-

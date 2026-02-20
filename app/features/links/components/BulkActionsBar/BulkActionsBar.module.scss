@@ -8,7 +8,6 @@
 	padding: $spacing-md $spacing-lg;
 	background: var(--color-primary);
 	border-radius: $border-radius-lg;
-	margin-bottom: $spacing-md;
 	animation: slideDown 0.2s ease-out;
 
 	@media (max-width: $breakpoint-md) {
@@ -25,6 +24,7 @@
 		padding-bottom: calc($spacing-md + env(safe-area-inset-bottom, 0));
 		z-index: 1000;
 		box-shadow: $shadow-lg;
+		margin-bottom: 0;
 	}
 }
 

@@ -3,10 +3,15 @@
 .header {
 	text-align: center;
 	margin-bottom: $spacing-3xl;
-	max-width: 700px;
+	max-width: 760px;
+	margin-inline: auto;
 
 	@media (max-width: $breakpoint-md) {
 		margin-bottom: $spacing-2xl;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		margin-bottom: $spacing-xl;
 	}
 }
 
@@ -28,6 +33,13 @@
 .subtitle {
 	font-size: $font-size-base;
 	color: var(--color-text-secondary);
-	margin: 0 0 $spacing-xl 0;
+	margin: 0 auto;
 	line-height: 1.6;
+	max-width: 619px;
+	text-align: center;
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-sm;
+		margin-bottom: $spacing-lg;
+	}
 }

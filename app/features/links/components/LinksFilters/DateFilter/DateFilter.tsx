@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { DatePreset } from '@/types/filterLinks'
 import { formatDateRange } from '@/utils/formatters'
@@ -82,7 +82,7 @@ export default function DateFilter({
 					onClick={() => handlePresetSelect('custom')}
 				>
 					<Calendar size={14} />
-					Выбрать период...
+					Выбрать период
 				</button>
 			</FilterDropdown>
 

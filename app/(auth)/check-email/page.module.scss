@@ -12,12 +12,29 @@
 	align-items: center;
 	justify-content: center;
 	margin: 0 auto $spacing-xl;
+
+	@media (max-width: $breakpoint-sm) {
+		& > svg {
+			width: 40px;
+			height: 40px;
+		}
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		width: 64px;
+		height: 64px;
+		margin-bottom: $spacing-md;
+	}
 }
 
 .actions {
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-lg;
+
+	@media (max-width: $breakpoint-xs) {
+		gap: $spacing-md;
+	}
 }
 
 .submitBtn {

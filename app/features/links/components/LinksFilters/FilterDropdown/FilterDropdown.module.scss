@@ -2,6 +2,10 @@
 
 .filterWrapper {
 	position: relative;
+
+	@media (max-width: $breakpoint-md) {
+		width: 100%;
+	}
 }
 
 .filterBtn {
@@ -19,6 +23,8 @@
 	border-radius: $border-radius-lg;
 	cursor: pointer;
 	transition: $transition-fast;
+	min-height: 40px;
+	white-space: nowrap;
 
 	&:hover {
 		border-color: var(--color-text-secondary);
@@ -34,6 +40,10 @@
 		background-color: rgba(var(--color-primary), 0.1);
 		border-color: var(--color-primary);
 		color: var(--color-primary);
+	}
+
+	@media (max-width: $breakpoint-md) {
+		width: 100%;
 	}
 }
 

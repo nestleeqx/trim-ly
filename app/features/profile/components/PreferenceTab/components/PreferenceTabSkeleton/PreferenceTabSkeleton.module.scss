@@ -4,26 +4,46 @@
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-xs) {
+		gap: $spacing-sm;
+	}
 }
 
 .cards {
 	display: flex;
 	gap: $spacing-md;
 	align-items: stretch;
+	flex-wrap: wrap;
 }
 
 .card {
 	display: flex;
 	flex-direction: column;
-	gap: $spacing-sm;
+	gap: $spacing-md;
+	max-width: 100%;
+
+	& > .rect {
+		min-width: 220px;
+		height: 119px;
+	}
+
+	& > .text {
+		min-width: 56px;
+		height: 12px;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		width: 100%;
+	}
 }
 
 .notice {
 	margin-top: $spacing-xs;
 }
 
-@media (max-width: $breakpoint-md) {
-	.cards {
-		grid-template-columns: 1fr;
-	}
-}
+// @media (max-width: $breakpoint-md) {
+// 	.cards {
+// 		flex-direction: column;
+// 	}
+// }

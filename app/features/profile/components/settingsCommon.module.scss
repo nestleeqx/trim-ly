@@ -8,6 +8,11 @@
 	& > div {
 		flex-grow: 1;
 	}
+
+	@media (max-width: $breakpoint-md) {
+		flex-direction: column;
+		gap: $spacing-sm;
+	}
 }
 
 .formSingle {
@@ -59,5 +64,9 @@
 		button {
 			width: 100%;
 		}
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		margin-top: $spacing-md;
 	}
 }

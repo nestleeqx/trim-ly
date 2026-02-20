@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import MobileSearchOverlay from '@/app/components/layout/DashboardHeader/components/MobileSearchOverlay/MobileSearchOverlay'
 import NotificationBell from '@/app/components/layout/DashboardHeader/components/NotificationBell/NotificationBell'
@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react'
 import styles from './DashboardHeader.module.scss'
 import { SearchConfig } from './types'
 
-const BREAKPOINT_MD = 768
+const BREAKPOINT_DESKTOP_SEARCH = 1024
 
 interface DashboardHeaderProps {
 	title: string
@@ -21,6 +21,7 @@ interface DashboardHeaderProps {
 	actions?: React.ReactNode
 	backHref?: string
 	showCreateButton?: boolean
+	hideBackButtonOnMobile?: boolean
 }
 
 export default function DashboardHeader({
@@ -29,14 +30,25 @@ export default function DashboardHeader({
 	search,
 	actions,
 	backHref,
-	showCreateButton = true
+	showCreateButton = true,
+	hideBackButtonOnMobile = false
 }: DashboardHeaderProps) {
 	const router = useRouter()
 	const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false)
 
+	const handleOpenMobileSearch = () => {
+		if (search?.mobileScrollTargetId) {
+			const target = document.getElementById(search.mobileScrollTargetId)
+			target?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+		}
+		setIsMobileSearchOpen(true)
+	}
+
 	useEffect(() => {
 		const handleResize = () => {
-			if (window.innerWidth > BREAKPOINT_MD) setIsMobileSearchOpen(false)
+			if (window.innerWidth > BREAKPOINT_DESKTOP_SEARCH) {
+				setIsMobileSearchOpen(false)
+			}
 		}
 
 		window.addEventListener('resize', handleResize)
@@ -57,11 +69,17 @@ export default function DashboardHeader({
 	return (
 		<>
 			<header className={styles.header}>
-				<div className={styles.titleSection}>
+				<div
+					className={`${styles.titleSection} ${!backHref ? styles.titleSectionNoBack : ''} ${
+						hideBackButtonOnMobile ? styles.titleSectionNoBackMobile : ''
+					}`}
+				>
 					{backHref && (
 						<Link
 							href={backHref}
-							className={styles.backButton}
+							className={`${styles.backButton} ${
+								hideBackButtonOnMobile ? styles.backButtonHiddenMobile : ''
+							}`}
 						>
 							<ArrowLeft size={20} />
 						</Link>
@@ -90,7 +108,7 @@ export default function DashboardHeader({
 						<button
 							type='button'
 							className={styles.searchMobileBtn}
-							onClick={() => setIsMobileSearchOpen(true)}
+							onClick={handleOpenMobileSearch}
 							aria-label='Открыть поиск'
 						>
 							<SearchIcon size={18} />
@@ -108,8 +126,10 @@ export default function DashboardHeader({
 							<span>Создать ссылку</span>
 						</Button>
 					)}
-					<NotificationBell />
-					<UserMenu />
+					<div className={styles.menuMainWrapper}>
+						<NotificationBell />
+						<UserMenu />
+					</div>
 				</div>
 			</header>
 			{search && isMobileSearchOpen && (

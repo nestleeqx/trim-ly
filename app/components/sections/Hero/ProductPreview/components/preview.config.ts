@@ -12,17 +12,6 @@ export interface ChartDataPoint {
 
 export type PreviewTab = 'links' | 'analytics'
 
-interface TabConfig {
-	id: PreviewTab
-	label: string
-	scrollToSection?: string
-}
-
-export const previewTabs: TabConfig[] = [
-	{ id: 'links', label: 'Ссылки' },
-	{ id: 'analytics', label: 'Аналитика', scrollToSection: 'analytics' }
-]
-
 export const mockLinks: PreviewLink[] = [
 	{
 		title: 'Запуск продукта',

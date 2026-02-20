@@ -3,6 +3,7 @@
 .tableRow {
 	display: grid;
 	grid-template-columns: 2fr 1fr 1fr 1fr;
+	min-width: 640px;
 	border-bottom: 1px solid var(--color-border);
 
 	&:last-child {
@@ -11,6 +12,10 @@
 
 	@media (max-width: $breakpoint-md) {
 		grid-template-columns: 1.5fr 1fr 1fr 1fr;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		min-width: 560px;
 	}
 }
 
@@ -37,5 +42,9 @@
 	@media (max-width: $breakpoint-md) {
 		padding: $spacing-md;
 		font-size: $font-size-xs;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: $spacing-sm;
 	}
 }

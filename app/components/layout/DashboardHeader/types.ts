@@ -5,4 +5,5 @@ export interface SearchConfig {
 	placeholder?: string
 	autoSubmit?: boolean
 	debounceMs?: number
+	mobileScrollTargetId?: string
 }

@@ -12,6 +12,7 @@ interface ShortLinkInputProps {
 	initialValue: string
 	aliasChecking: boolean
 	aliasAvailable: boolean
+	aliasSuggestions: string[]
 	isEditMode: boolean
 	onChange: (value: string) => void
 }
@@ -22,6 +23,7 @@ export default function ShortLinkInput({
 	initialValue,
 	aliasChecking,
 	aliasAvailable,
+	aliasSuggestions,
 	isEditMode,
 	onChange
 }: ShortLinkInputProps) {
@@ -29,8 +31,7 @@ export default function ShortLinkInput({
 
 	const handleChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
-			const newValue = e.target.value
-			onChange(newValue)
+			onChange(e.target.value)
 		},
 		[onChange]
 	)
@@ -44,9 +45,7 @@ export default function ShortLinkInput({
 					[styles.success]: aliasAvailable
 				})}
 			>
-				<span className={styles.shortLinkPrefix}>
-					{SHORT_LINK_DOMAIN}
-				</span>
+				<span className={styles.shortLinkPrefix}>{SHORT_LINK_DOMAIN}</span>
 				<input
 					type='text'
 					name='shortLink'
@@ -74,6 +73,23 @@ export default function ShortLinkInput({
 					<AlertCircle size={12} />
 					{error}
 				</span>
+			)}
+			{!aliasChecking && error && aliasSuggestions.length > 0 && (
+				<div className={styles.aliasSuggestions}>
+					<span className={styles.hint}>Попробуйте варианты:</span>
+					<div className={styles.aliasSuggestionButtons}>
+						{aliasSuggestions.map(suggestion => (
+							<button
+								key={suggestion}
+								type='button'
+								className={styles.aliasSuggestionBtn}
+								onClick={() => onChange(suggestion)}
+							>
+								{suggestion}
+							</button>
+						))}
+					</div>
+				</div>
 			)}
 			<span className={styles.hint}>
 				Используйте латиницу: a-z, 0-9, &quot;-&quot; и &quot;_&quot;.

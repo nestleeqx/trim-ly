@@ -4,15 +4,29 @@
 	display: flex;
 	align-items: center;
 	gap: $spacing-sm;
+	white-space: nowrap;
+
+	@media (max-width: $breakpoint-md) {
+		width: 100%;
+		justify-content: space-between;
+	}
 }
 
 .showLabel {
 	font-size: $font-size-sm;
 	color: var(--color-text-secondary);
+
+	@media (max-width: $breakpoint-xs) {
+		display: none;
+	}
 }
 
 .dropdown {
 	position: relative;
+
+	@media (max-width: $breakpoint-md) {
+		margin-left: auto;
+	}
 }
 
 .dropdownBtn {
@@ -46,6 +60,11 @@
 	box-shadow: $shadow-lg;
 	padding: $spacing-xs;
 	z-index: 100;
+
+	@media (max-width: $breakpoint-md) {
+		left: auto;
+		right: 0;
+	}
 }
 
 .dropdownItem {

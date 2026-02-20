@@ -78,27 +78,65 @@ export async function POST(req: Request) {
 	}
 
 	if (action === 'restore') {
-		const affected = await prisma.$transaction(async tx => {
-			const result = await tx.link.updateMany({
-				where: {
-					id: { in: ids },
-					userId,
-					deletedAt: { not: null }
-				},
-				data: { deletedAt: null, status: 'active' }
+		try {
+			const affected = await prisma.$transaction(async tx => {
+				const userWithPlan = await tx.user.findUnique({
+					where: { id: userId },
+					select: { plan: { select: { linksLimit: true } } }
+				})
+				if (!userWithPlan?.plan) return 0
+
+				const result = await tx.link.updateMany({
+					where: {
+						id: { in: ids },
+						userId,
+						deletedAt: { not: null }
+					},
+					data: { deletedAt: null, status: 'active' }
+				})
+
+				if (result.count > 0) {
+					await tx.userUsage.upsert({
+						where: { userId },
+						create: {
+							userId,
+							linksCreated: 0,
+							clicksTotal: 0
+						},
+						update: {}
+					})
+
+					const reserveSlots = await tx.userUsage.updateMany({
+						where: {
+							userId,
+							linksCreated: {
+								lte: userWithPlan.plan.linksLimit - result.count
+							}
+						},
+						data: { linksCreated: { increment: result.count } }
+					})
+
+					if (reserveSlots.count === 0) {
+						throw new Error('Links limit reached')
+					}
+				}
+
+				return result.count
 			})
 
-			if (result.count > 0) {
-				await tx.userUsage.update({
-					where: { userId },
-					data: { linksCreated: { increment: result.count } }
-				})
+			return NextResponse.json({ ok: true, affected })
+		} catch (error) {
+			if (
+				error instanceof Error &&
+				error.message === 'Links limit reached'
+			) {
+				return NextResponse.json(
+					{ error: 'Links limit reached' },
+					{ status: 403 }
+				)
 			}
-
-			return result.count
-		})
-
-		return NextResponse.json({ ok: true, affected })
+			throw error
+		}
 	}
 
 	const now = new Date()
@@ -109,9 +147,14 @@ export async function POST(req: Request) {
 		})
 
 		if (result.count > 0) {
-			await tx.userUsage.update({
+			await tx.userUsage.upsert({
 				where: { userId },
-				data: { linksCreated: { decrement: result.count } }
+				create: {
+					userId,
+					linksCreated: 0,
+					clicksTotal: 0
+				},
+				update: { linksCreated: { decrement: result.count } }
 			})
 		}
 

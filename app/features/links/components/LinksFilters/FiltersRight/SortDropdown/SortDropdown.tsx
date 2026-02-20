@@ -1,9 +1,9 @@
-'use client'
+﻿'use client'
 
 import { useClickOutside } from '@/hooks/useClickOutside'
 import { SortField, SortState } from '@/types/filterLinks'
 import cn from 'classnames'
-import { ArrowUp, ChevronDown } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import MainMenu from './MainMenu'
 import { getSortLabel } from './sortConfig'
@@ -43,13 +43,15 @@ export default function SortDropdown({
 				ref={dropdownRef}
 			>
 				<button
+					type='button'
 					className={cn(styles.filterBtn, {
 						[styles.open]: isOpen
 					})}
 					onClick={open}
 				>
-					<ArrowUp size={14} />
-					{getSortLabel(sort.field, sort.order)}
+					<span className={styles.valueLabel}>
+						{getSortLabel(sort.field, sort.order)}
+					</span>
 					<ChevronDown size={14} />
 				</button>
 

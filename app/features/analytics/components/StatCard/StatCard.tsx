@@ -11,7 +11,6 @@ interface StatCardProps {
 	value: string
 	label: string
 	change: number
-	iconBgColor: string
 	filterKey: string
 	clickable?: boolean
 }
@@ -21,7 +20,6 @@ export default function StatCard({
 	value,
 	label,
 	change,
-	iconBgColor,
 	filterKey,
 	clickable = true
 }: StatCardProps) {

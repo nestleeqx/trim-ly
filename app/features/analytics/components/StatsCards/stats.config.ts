@@ -10,7 +10,6 @@ interface StatCardConfig {
 	id: string
 	icon: LucideIcon
 	label: string
-	iconBgColor: string
 	filterKey: string
 }
 
@@ -19,28 +18,24 @@ export const statsConfig: StatCardConfig[] = [
 		id: 'clicks',
 		icon: MousePointerClick,
 		label: 'Количество кликов (24ч)',
-		iconBgColor: '#eef2ff',
 		filterKey: 'clicks'
 	},
 	{
 		id: 'links',
 		icon: LinkIcon,
 		label: 'Количество активных ссылок',
-		iconBgColor: '#f0fdf4',
 		filterKey: 'links'
 	},
 	{
 		id: 'top',
 		icon: TrendingUp,
 		label: 'Топ клики по ссылке',
-		iconBgColor: '#eff6ff',
 		filterKey: 'top'
 	},
 	{
 		id: 'qr',
 		icon: QrCode,
 		label: 'Количество QR сканирований',
-		iconBgColor: '#faf5ff',
 		filterKey: 'qr'
 	}
 ]

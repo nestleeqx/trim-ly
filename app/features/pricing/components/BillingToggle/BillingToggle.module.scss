@@ -17,6 +17,11 @@
 	border-radius: $border-radius-xl;
 	padding: 6px;
 	gap: 5px;
+
+	@media (max-width: $breakpoint-xs) {
+		width: 100%;
+		max-width: 320px;
+	}
 }
 
 .toggleOption {
@@ -41,6 +46,10 @@
 
 	&.active {
 		color: var(--color-text-primary);
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
 	}
 }
 

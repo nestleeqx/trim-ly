@@ -15,6 +15,7 @@ interface LinksPageContentProps {
 	loadError: string | null
 	clearLoadError: () => void
 	filtersUiKey: number
+	isClearingFilters: boolean
 	canPauseBulk: boolean
 	canResumeBulk: boolean
 	canRestoreBulk: boolean
@@ -47,6 +48,7 @@ export default function LinksPageContent({
 	loadError,
 	clearLoadError,
 	filtersUiKey,
+	isClearingFilters,
 	canPauseBulk,
 	canResumeBulk,
 	canRestoreBulk,
@@ -65,6 +67,7 @@ export default function LinksPageContent({
 				isRefetching={isRefetching}
 				isLoadingTags={isLoadingTags}
 				filtersUiKey={filtersUiKey}
+				isClearingFilters={isClearingFilters}
 				canPauseBulk={canPauseBulk}
 				canResumeBulk={canResumeBulk}
 				canRestoreBulk={canRestoreBulk}

@@ -22,9 +22,7 @@ export default function PlanCard({
 				[styles.popular]: plan.popular
 			})}
 		>
-			{plan.popular ? (
-				<span className={styles.badge}>ПОПУЛЯРНЫЙ</span>
-			) : null}
+			{plan.popular ? <span className={styles.badge}>ПОПУЛЯРНЫЙ</span> : null}
 
 			<div className={styles.cardHeader}>
 				<h3 className={styles.planName}>{plan.name}</h3>

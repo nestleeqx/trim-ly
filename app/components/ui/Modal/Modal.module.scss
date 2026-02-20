@@ -13,6 +13,8 @@
 	justify-content: center;
 	z-index: 1000;
 	padding: $spacing-md;
+	overflow: hidden;
+	overscroll-behavior: contain;
 	animation: fadeIn 0.2s ease-out;
 
 	@media (max-width: $breakpoint-sm) {
@@ -25,20 +27,25 @@
 	border-radius: $border-radius-xl;
 	box-shadow: $shadow-xl;
 	max-width: 450px;
-	width: 100%;
-	max-height: 90vh;
+	width: min(100%, 450px);
+	max-height: calc(100dvh - (#{$spacing-md} * 2));
 	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 	animation: slideUp 0.3s ease-out;
 	border: 1px solid var(--color-border);
 
 	@media (max-width: $breakpoint-md) {
 		max-width: 100%;
-		max-height: 85vh;
+		width: min(100%, 680px);
+		max-height: calc(100dvh - (#{$spacing-md} * 2));
 		animation: slideUpMobile 0.3s ease-out;
 	}
 
 	@media (max-width: $breakpoint-sm) {
-		max-height: 85vh;
+		width: 100%;
+		max-height: calc(100dvh - (#{$spacing-sm} * 2));
+		border-radius: $border-radius-lg;
 	}
 }
 
@@ -98,8 +105,17 @@
 
 .content {
 	padding: $spacing-lg;
+	overflow-y: auto;
+	overflow-x: hidden;
+	min-height: 0;
+	-webkit-overflow-scrolling: touch;
+	min-width: 0;
 
 	@media (max-width: $breakpoint-sm) {
 		padding: $spacing-md;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: 14px;
 	}
 }

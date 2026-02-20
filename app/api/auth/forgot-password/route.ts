@@ -18,7 +18,7 @@ export async function POST(req: Request) {
 		.toLowerCase()
 
 	if (!emailRaw) {
-		return NextResponse.json({ error: 'Email required' }, { status: 400 })
+		return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
 	}
 
 	const ip = getRequestIp()

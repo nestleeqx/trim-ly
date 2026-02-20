@@ -2,12 +2,19 @@ import Button from '@/app/components/ui/Button/Button'
 import { signIn } from 'next-auth/react'
 import styles from './SocialAuthButtons.module.scss'
 
-export default function SocialAuthButtons() {
+interface SocialAuthButtonsProps {
+	disabled?: boolean
+}
+
+export default function SocialAuthButtons({
+	disabled = false
+}: SocialAuthButtonsProps) {
 	return (
 		<div className={styles.socialButtons}>
 			<Button
 				variant='ghost'
 				className={styles.socialBtn}
+				disabled={disabled}
 				aria-label='Продолжить с Google'
 				title='Продолжить с Google'
 				onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
@@ -35,9 +42,11 @@ export default function SocialAuthButtons() {
 				</svg>
 				Google
 			</Button>
+
 			<Button
 				variant='ghost'
 				className={styles.socialBtn}
+				disabled={disabled}
 				aria-label='Продолжить с Яндекс'
 				title='Продолжить с Яндекс'
 				onClick={() => signIn('yandex', { callbackUrl: '/dashboard' })}

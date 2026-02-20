@@ -16,7 +16,7 @@ export default function BillingTabSkeleton() {
 							/>
 							<Skeleton
 								variant='text'
-								width={180}
+								width={150}
 								height={22}
 								radius={7}
 							/>

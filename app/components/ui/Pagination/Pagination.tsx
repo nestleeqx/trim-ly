@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { getPageNumbers } from '@/utils/pagination'
 import cn from 'classnames'
@@ -39,9 +39,10 @@ export default function Pagination({
 		<div className={styles.pagination}>
 			<div className={styles.info}>
 				<span className={styles.showing}>
-					Показано <strong>{startItem}</strong> —{' '}
-					<strong>{endItem}</strong> из <strong>{totalItems}</strong>{' '}
-					ссылок
+					<strong>
+						{startItem}–{endItem}
+					</strong>{' '}
+					из <strong>{totalItems}</strong>
 				</span>
 
 				<ItemsPerPageDropdown
@@ -54,9 +55,7 @@ export default function Pagination({
 				<button
 					type='button'
 					className={styles.navBtn}
-					onClick={() =>
-						onPageChange(Math.max(safeCurrentPage - 1, 1))
-					}
+					onClick={() => onPageChange(Math.max(safeCurrentPage - 1, 1))}
 					disabled={safeCurrentPage === 1}
 					aria-label='Предыдущая страница'
 				>
@@ -90,11 +89,7 @@ export default function Pagination({
 				<button
 					type='button'
 					className={styles.navBtn}
-					onClick={() =>
-						onPageChange(
-							Math.min(safeCurrentPage + 1, safeTotalPages)
-						)
-					}
+					onClick={() => onPageChange(Math.min(safeCurrentPage + 1, safeTotalPages))}
 					disabled={safeCurrentPage === safeTotalPages}
 					aria-label='Следующая страница'
 				>

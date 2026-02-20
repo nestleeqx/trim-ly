@@ -1,15 +1,13 @@
 import styles from '@/app/[slug]/page.module.scss'
 import Logo from '@/app/components/ui/Logo/Logo'
-import ErrorState from '@/app/features/slug/components/ErrorState'
 import ExpiredState from '@/app/features/slug/components/ExpiredState'
-import NotFoundState from '@/app/features/slug/components/NotFoundState'
 import PasswordState from '@/app/features/slug/components/PasswordState'
 import PausedState from '@/app/features/slug/components/PausedState'
 import { registerPublicClick, resolvePublicLink } from '@/lib/links/publicLink'
 import { ShieldCheck } from 'lucide-react'
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 
 interface SlugPageProps {
 	params: Promise<{
@@ -31,7 +29,10 @@ export const metadata: Metadata = {
 	}
 }
 
-export default async function SlugPage({ params, searchParams }: SlugPageProps) {
+export default async function SlugPage({
+	params,
+	searchParams
+}: SlugPageProps) {
 	const { slug } = await params
 	const { src } = await searchParams
 
@@ -39,18 +40,11 @@ export default async function SlugPage({ params, searchParams }: SlugPageProps) 
 	try {
 		resolved = await resolvePublicLink(slug)
 	} catch {
-		return (
-			<div className={styles.page}>
-				<div className={styles.logo}>
-					<Logo />
-				</div>
-				<ErrorState />
-				<div className={styles.footer}>
-					<ShieldCheck size={14} />
-					<span>Защищено trim.ly</span>
-				</div>
-			</div>
-		)
+		notFound()
+	}
+
+	if (resolved.state === 'not-found') {
+		notFound()
 	}
 
 	if (resolved.state === 'redirect') {
@@ -73,12 +67,9 @@ export default async function SlugPage({ params, searchParams }: SlugPageProps) 
 				<Logo />
 			</div>
 
-			{resolved.state === 'password' ? (
-				<PasswordState slug={slug} />
-			) : null}
+			{resolved.state === 'password' ? <PasswordState slug={slug} /> : null}
 			{resolved.state === 'paused' ? <PausedState /> : null}
 			{resolved.state === 'expired' ? <ExpiredState /> : null}
-			{resolved.state === 'not-found' ? <NotFoundState /> : null}
 
 			<div className={styles.footer}>
 				<ShieldCheck size={14} />

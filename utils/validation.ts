@@ -1,3 +1,5 @@
+export const MAX_TARGET_URL_LENGTH = 2048
+
 const isValidUrl = (url: string): boolean => {
 	try {
 		new URL(url)
@@ -21,6 +23,9 @@ export const normalizeUrl = (url: string): string => {
 export const validateUrl = (url: string): string | undefined => {
 	if (!url) return 'URL обязателен для заполнения'
 	const normalized = normalizeUrl(url)
+	if (normalized.length > MAX_TARGET_URL_LENGTH) {
+		return `URL не должен превышать ${MAX_TARGET_URL_LENGTH} символов`
+	}
 	if (!isValidUrl(normalized)) return 'Некорректный URL'
 	return undefined
 }

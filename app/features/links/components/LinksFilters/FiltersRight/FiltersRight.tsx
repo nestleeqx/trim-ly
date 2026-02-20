@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import Button from '@/app/components/ui/Button/Button'
 import { SortState } from '@/types/filterLinks'
@@ -39,10 +39,12 @@ export default function FiltersRight({
 				onSortChange={onSortChange}
 			/>
 
-			<ViewToggle
-				viewMode={viewMode}
-				onViewModeChange={onViewModeChange}
-			/>
+			<div className={styles.viewToggleWrap}>
+				<ViewToggle
+					viewMode={viewMode}
+					onViewModeChange={onViewModeChange}
+				/>
+			</div>
 
 			<Button
 				variant='ghost'

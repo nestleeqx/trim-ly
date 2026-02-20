@@ -1,11 +1,27 @@
 @use 'variables' as *;
 
 .content {
+	width: min(100%, $dashboard-max-width);
+	margin: 0 auto;
 	padding: $spacing-lg;
-	max-width: $dashboard-max-width;
+	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-lg;
+
+	@media (max-width: $breakpoint-lg) {
+		padding: $spacing-md;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		padding: $spacing-sm;
+		gap: $spacing-md;
+	}
+
+	@media (max-width: 320px) {
+		padding: 8px;
+		gap: $spacing-sm;
+	}
 }
 
 .tabs {
@@ -14,6 +30,13 @@
 	margin-top: $spacing-md;
 	border-bottom: 1px solid var(--color-border);
 	margin-bottom: $spacing-md;
+
+	@media (max-width: $breakpoint-md) {
+		overflow-x: auto;
+		overflow-y: hidden;
+		white-space: nowrap;
+		-webkit-overflow-scrolling: touch;
+	}
 }
 
 .tab {
@@ -27,5 +50,17 @@
 	&.active {
 		border-bottom-color: var(--color-primary);
 		color: var(--color-primary);
+	}
+
+	@media (max-width: $breakpoint-md) {
+		flex: 0 0 auto;
+	}
+}
+
+.mobileBackAction {
+	display: none;
+
+	@media (max-width: $breakpoint-xs) {
+		display: inline-flex;
 	}
 }

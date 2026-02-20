@@ -46,10 +46,19 @@
 		color: var(--color-text-secondary);
 		cursor: not-allowed;
 	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: 10px $spacing-sm;
+		font-size: $font-size-xs;
+	}
 }
 
 .inputWithAdornment {
 	padding-right: 44px;
+
+	@media (max-width: $breakpoint-xs) {
+		padding-right: 40px;
+	}
 }
 
 .passwordToggle {

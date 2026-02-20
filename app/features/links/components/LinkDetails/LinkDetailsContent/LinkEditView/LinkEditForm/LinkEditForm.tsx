@@ -88,6 +88,7 @@ export default function LinkEditForm({
 				initialData={initialData}
 				aliasChecking={aliasChecking}
 				aliasAvailable={!!aliasAvailable}
+				aliasSuggestions={aliasCheck.suggestions}
 				isCreateMode={isCreateMode}
 				onFieldChange={handleFieldChange}
 				onDestinationError={handleDestinationError}

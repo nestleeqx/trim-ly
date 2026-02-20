@@ -233,27 +233,55 @@
 	align-items: center;
 	margin-bottom: $spacing-md;
 
+	.analyticsLink {
+		display: flex;
+		align-items: center;
+		gap: $spacing-xs;
+		transition:
+			transform 0.2s ease,
+			box-shadow 0.2s ease;
+
+		& > span {
+			font-size: $font-size-xs;
+			color: var(--color-primary);
+			font-weight: $font-weight-medium;
+			transition: $transition-base;
+		}
+	}
+
+	.analyticsCtaIcon {
+		transition: transform 0.2s ease;
+		stroke: $color-primary;
+	}
+
+	.analyticsLink:hover .analyticsCtaIcon {
+		transform: translateX(3px);
+	}
+
 	span {
 		font-size: $font-size-sm;
 		font-weight: $font-weight-semibold;
 		color: var(--color-text-primary);
 	}
 
-	a {
-		font-size: $font-size-xs;
-		color: var(--color-primary);
-		font-weight: $font-weight-medium;
-		transition: $transition-base;
-
-		&:hover {
-			color: var(--color-primary-hover);
-		}
-	}
-
 	@media (max-width: $breakpoint-sm) {
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: flex-start;
+	}
+}
+
+.tableHeader,
+.linkInfo,
+.linkClicks,
+.linkStatus,
+.chartHeader > span {
+	pointer-events: none;
+}
+
+.analyticsChart {
+	:global(.recharts-wrapper *:focus) {
+		outline: none !important;
 	}
 }
 

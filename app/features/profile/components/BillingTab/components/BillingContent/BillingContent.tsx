@@ -70,6 +70,7 @@ export default function BillingContent({ data }: Props) {
 		<>
 			<div className={styles.topGrid}>
 				<CurrentPlanCard
+					planId={data.plan.id}
 					planName={normalizePlanName(data.plan.id, data.plan.name)}
 					status={normalizeSubscriptionStatus(data.plan.status)}
 				/>

@@ -52,6 +52,7 @@ html {
 	overflow-x: hidden;
 	scroll-behavior: smooth;
 	scroll-padding-top: 90px;
+	scrollbar-gutter: stable;
 }
 
 html,
@@ -100,7 +101,7 @@ textarea::-moz-placeholder {
 
 .container {
 	width: 100%;
-	max-width: $container-max-width;
+	max-width: $dashboard-max-width;
 	margin: 0 auto;
 	padding: 0 $spacing-lg;
 

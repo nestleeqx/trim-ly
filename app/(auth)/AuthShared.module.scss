@@ -6,22 +6,41 @@
 	flex-direction: column;
 	background: var(--color-bg);
 	padding: $spacing-2xl $spacing-md $spacing-xl;
+
+	@media (max-width: $breakpoint-xs) {
+		padding: $spacing-lg $spacing-sm $spacing-lg;
+	}
+
+	@media (max-width: 320px) {
+		padding: $spacing-md 8px $spacing-md;
+	}
 }
 
 .pageContent {
 	margin: 0 auto;
+	width: 100%;
+	max-width: 470px;
+	min-width: 0;
 }
 
 .form {
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-lg;
+
+	@media (max-width: $breakpoint-xs) {
+		gap: $spacing-md;
+	}
 }
 
 .row {
 	display: flex;
 	align-items: center;
 	gap: $spacing-sm;
+
+	@media (max-width: $breakpoint-xs) {
+		align-items: flex-start;
+	}
 }
 
 .checkbox {
@@ -70,6 +89,11 @@
 	font-size: $font-size-sm;
 	color: var(--color-text-secondary);
 	text-align: center;
+	line-height: 1.5;
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
+	}
 }
 
 .link {
@@ -86,4 +110,8 @@
 	font-size: $font-size-sm;
 	line-height: 1.2;
 	color: var(--color-danger);
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
+	}
 }

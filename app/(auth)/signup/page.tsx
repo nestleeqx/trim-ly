@@ -100,6 +100,7 @@ export default function SignupPage() {
 							clearFieldError('fullName')
 						}}
 						autoComplete='name'
+						disabled={isLoading}
 						error={fieldErrors.fullName}
 					/>
 
@@ -114,6 +115,7 @@ export default function SignupPage() {
 							clearFieldError('email')
 						}}
 						autoComplete='email'
+						disabled={isLoading}
 						error={fieldErrors.email}
 					/>
 
@@ -127,6 +129,7 @@ export default function SignupPage() {
 							clearFieldError('password')
 						}}
 						autoComplete='new-password'
+						disabled={isLoading}
 						error={fieldErrors.password}
 					/>
 
@@ -175,12 +178,13 @@ export default function SignupPage() {
 						variant='primary'
 						size='lg'
 						type='submit'
+						disabled={isLoading}
 					>
 						{isLoading ? 'Создаём…' : 'Создать аккаунт'}
 					</Button>
 
 					<AuthDivider text='Или присоединиться через' />
-					<SocialAuthButtons />
+					<SocialAuthButtons disabled={isLoading} />
 
 					<p className={styles.footerText}>
 						Уже есть аккаунт?{' '}

@@ -33,7 +33,6 @@ export default function LinkStatsCards({
 						value={value}
 						label={config.label}
 						change={statData.change}
-						iconBgColor={config.iconBgColor}
 						filterKey={config.id}
 					/>
 				)

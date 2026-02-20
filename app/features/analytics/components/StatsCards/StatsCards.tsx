@@ -26,7 +26,6 @@ export default function StatsCards({
 						value={statData.value}
 						label={config.label}
 						change={statData.change}
-						iconBgColor={config.iconBgColor}
 						filterKey={config.filterKey}
 						clickable={clickable}
 					/>

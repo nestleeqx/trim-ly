@@ -4,8 +4,18 @@
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+	min-width: 0;
+
+	@media (max-width: $breakpoint-md) {
+		gap: $spacing-md;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		gap: 10px;
+	}
 }
 
 .contentArea {
 	position: relative;
+	min-width: 0;
 }

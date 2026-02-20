@@ -17,6 +17,17 @@ import { useToast } from '@/hooks/useToast'
 import { useRouter } from 'next/navigation'
 import { useCallback, useState } from 'react'
 
+const REQUEST_TIMEOUT_MS = 15000
+
+function createTimeoutSignal(timeoutMs: number) {
+	const controller = new AbortController()
+	const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs)
+	return {
+		signal: controller.signal,
+		clear: () => window.clearTimeout(timeoutId)
+	}
+}
+
 export default function useCreateLinkPage() {
 	const router = useRouter()
 	const [isLoading, setIsLoading] = useState(false)
@@ -33,8 +44,15 @@ export default function useCreateLinkPage() {
 		const uniqueNames = [...new Set(tags.map(t => t.trim()).filter(Boolean))]
 		if (!uniqueNames.length) return [] as string[]
 
-		const results = await Promise.all(uniqueNames.map(name => createTag(name)))
-		return results.map(t => t.id)
+		const timeout = createTimeoutSignal(REQUEST_TIMEOUT_MS)
+		try {
+			const results = await Promise.all(
+				uniqueNames.map(name => createTag(name, { signal: timeout.signal }))
+			)
+			return results.map(t => t.id)
+		} finally {
+			timeout.clear()
+		}
 	}, [])
 
 	const handleSave = useCallback(
@@ -50,25 +68,34 @@ export default function useCreateLinkPage() {
 
 				const tagIds = await ensureTagIds(data.tags)
 
-				await createLink({
-					targetUrl: data.destinationUrl,
-					slug,
-					title: data.title?.trim() || undefined,
-					tagIds,
-					expiresAt: data.expirationDate || null,
-					password: data.passwordEnabled
-						? data.password?.trim() || undefined
-						: undefined
-				})
+				const timeout = createTimeoutSignal(REQUEST_TIMEOUT_MS)
+				try {
+					await createLink(
+						{
+							targetUrl: data.destinationUrl,
+							slug,
+							title: data.title?.trim() || undefined,
+							tagIds,
+							expiresAt: data.expirationDate || null,
+							password: data.passwordEnabled
+								? data.password?.trim() || undefined
+								: undefined
+						},
+						{ signal: timeout.signal }
+					)
+				} finally {
+					timeout.clear()
+				}
 
 				showToast('Ссылка успешно создана', 'success')
-				await new Promise(resolve => setTimeout(resolve, 1200))
 				router.push('/links')
 			} catch (e) {
 				const message =
-					e instanceof Error
-						? mapCreateLinkError(e.message)
-						: 'Не удалось создать ссылку.'
+					e instanceof DOMException && e.name === 'AbortError'
+						? 'Сервер не ответил вовремя. Проверьте базу данных/соединение.'
+						: e instanceof Error
+							? mapCreateLinkError(e.message)
+							: 'Не удалось создать ссылку.'
 				showToast(message, 'error')
 			} finally {
 				setIsLoading(false)

@@ -55,6 +55,7 @@ export default function ForgotPasswordPage() {
 						value={email}
 						onChange={e => setEmail(e.target.value)}
 						autoComplete='email'
+						disabled={isLoading}
 					/>
 					<AuthErrorBanner className={styles.errorText} />
 					{error && <p className={styles.errorText}>{error}</p>}
@@ -62,6 +63,7 @@ export default function ForgotPasswordPage() {
 						variant='primary'
 						size='lg'
 						type='submit'
+						disabled={isLoading}
 					>
 						{isLoading ? 'Отправляем…' : 'Отправить ссылку'}
 					</Button>

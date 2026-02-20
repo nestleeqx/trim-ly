@@ -94,6 +94,7 @@ export default function LoginPage() {
 							clearFieldError('email')
 						}}
 						autoComplete='email'
+						disabled={isLoading}
 						error={fieldErrors.email}
 					/>
 					<PasswordInput
@@ -106,6 +107,7 @@ export default function LoginPage() {
 							clearFieldError('password')
 						}}
 						autoComplete='current-password'
+						disabled={isLoading}
 						showForgotLink={true}
 						forgotLinkClassName={styles.forgotLink}
 						error={fieldErrors.password}
@@ -117,6 +119,7 @@ export default function LoginPage() {
 							type='checkbox'
 							className={styles.checkbox}
 							checked={remember}
+							disabled={isLoading}
 							onChange={e => setRemember(e.target.checked)}
 						/>
 						<label
@@ -137,11 +140,12 @@ export default function LoginPage() {
 						variant='primary'
 						size='lg'
 						type='submit'
+						disabled={isLoading}
 					>
 						{isLoading ? 'Входим…' : 'Войти'}
 					</Button>
 					<AuthDivider text='Или продолжить с' />
-					<SocialAuthButtons />
+					<SocialAuthButtons disabled={isLoading} />
 					<p className={styles.footerText}>
 						Нет аккаунта?{' '}
 						<Link

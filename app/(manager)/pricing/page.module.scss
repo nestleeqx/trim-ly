@@ -3,10 +3,21 @@
 .content {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	padding: $spacing-3xl 0;
+	align-items: stretch;
+	width: min(100%, 1200px);
+	margin: 0 auto;
+	padding: $spacing-3xl $spacing-lg $spacing-section;
+	box-sizing: border-box;
+
+	@media (max-width: $breakpoint-lg) {
+		padding: $spacing-2xl $spacing-md $spacing-3xl;
+	}
 
 	@media (max-width: $breakpoint-md) {
-		padding: $spacing-2xl 0;
+		padding: $spacing-xl $spacing-sm $spacing-2xl;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: $spacing-lg $spacing-sm $spacing-2xl;
 	}
 }

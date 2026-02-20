@@ -22,6 +22,10 @@
 	flex-shrink: 0;
 }
 
+.titleSectionNoBack {
+	width: auto;
+}
+
 .backButton {
 	display: flex;
 	align-items: center;
@@ -72,10 +76,18 @@
 	}
 }
 
+.menuMainWrapper {
+	display: flex;
+	align-items: center;
+	@media (min-width: $breakpoint-md) {
+		gap: $spacing-md;
+	}
+}
+
 .searchDesktop {
 	display: none;
 
-	@media (min-width: $breakpoint-md) {
+	@media (min-width: $breakpoint-lg) {
 		display: block;
 	}
 }
@@ -99,7 +111,7 @@
 		border-color: var(--color-primary);
 	}
 
-	@media (min-width: $breakpoint-md) {
+	@media (min-width: $breakpoint-lg) {
 		display: none;
 	}
 }
@@ -110,5 +122,101 @@
 		@media (min-width: $breakpoint-sm) {
 			display: inline;
 		}
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: $spacing-sm;
+		& > svg {
+			margin-right: 0;
+		}
+	}
+
+	@media (max-width: $breakpoint-md) {
+		border-radius: $border-radius-md;
+	}
+}
+
+@media (max-width: $breakpoint-xs) {
+	.header {
+		gap: $spacing-sm;
+		padding: $spacing-sm $spacing-sm;
+	}
+
+	.titleSection {
+		width: 100%;
+		order: 2;
+		display: grid;
+		grid-template-columns: 34px minmax(0, 1fr);
+		align-items: flex-start;
+		gap: $spacing-sm;
+		min-width: 0;
+	}
+
+	.backButton {
+		width: 34px;
+		height: 34px;
+		border-radius: $border-radius-md;
+	}
+
+	.title {
+		font-size: $font-size-lg;
+		line-height: 1.25;
+	}
+
+	.subtitle {
+		font-size: $font-size-xs;
+		line-height: 1.4;
+	}
+
+	.titleSection > div {
+		min-width: 0;
+	}
+
+	.titleSection.titleSectionNoBackMobile {
+		display: flex;
+		grid-template-columns: none;
+		align-items: flex-start;
+	}
+
+	.titleSectionNoBack {
+		display: flex;
+		width: 100%;
+	}
+
+	.actions {
+		width: 100%;
+		order: 1;
+		justify-content: space-between;
+		gap: $spacing-xs;
+		margin-top: 0;
+		flex-wrap: wrap;
+	}
+
+	.menuMainWrapper {
+		margin-left: auto;
+		gap: $spacing-sm;
+	}
+}
+
+.backButtonHiddenMobile {
+	@media (max-width: $breakpoint-xs) {
+		display: none;
+	}
+}
+
+@media (max-width: 320px) {
+	.header {
+		padding: 8px;
+	}
+
+	.actions {
+		gap: 6px;
+	}
+
+	.searchMobileBtn,
+	.backButton,
+	.createBtn {
+		width: 32px;
+		height: 32px;
 	}
 }

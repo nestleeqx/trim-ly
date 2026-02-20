@@ -3,15 +3,27 @@
 .resultsInfo {
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
 	gap: $spacing-md;
-	margin-bottom: $spacing-md;
 	padding: $spacing-sm $spacing-md;
 	border-radius: $border-radius-lg;
 	font-size: $font-size-sm;
 	color: var(--color-text-secondary);
+
+	@media (max-width: $breakpoint-sm) {
+		gap: $spacing-xs;
+		padding: $spacing-sm;
+		font-size: $font-size-xs;
+	}
 }
 
 .searchInfo {
 	color: var(--color-primary);
 	font-weight: $font-weight-medium;
+}
+
+.hideOnDesktopWhenSelected {
+	@media (min-width: $breakpoint-lg) {
+		display: none;
+	}
 }

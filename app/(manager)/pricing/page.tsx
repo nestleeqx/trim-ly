@@ -36,8 +36,7 @@ export default function PricingPage() {
 			try {
 				const billing = await getBilling()
 				if (!active) return
-				const id = billing.plan.id as PlanId
-				setCurrentPlanId(id)
+				setCurrentPlanId(billing.plan.id as PlanId)
 			} catch {
 				if (!active) return
 				setCurrentPlanId(null)
@@ -52,8 +51,7 @@ export default function PricingPage() {
 
 	const handleSelectPlan = useCallback(
 		async (planId: PlanId) => {
-			if (isUpdatingPlan) return
-			if (currentPlanId === planId) return
+			if (isUpdatingPlan || currentPlanId === planId) return
 
 			setIsUpdatingPlan(true)
 			try {
@@ -78,7 +76,7 @@ export default function PricingPage() {
 	return (
 		<>
 			<DashboardHeader
-				title='Pricing'
+				title='Тарифы'
 				subtitle='Обзор вашего аккаунта.'
 				showCreateButton
 			/>

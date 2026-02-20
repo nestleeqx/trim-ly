@@ -149,12 +149,18 @@ export function mapCreateLinkError(raw: string): string {
 			return 'Не удалось загрузить данные. Проверьте соединение.'
 		case 'Invalid target URL':
 			return 'Введите корректный целевой URL.'
+		case 'Target URL too long':
+			return 'URL слишком длинный (максимум 2048 символов).'
 		case 'Invalid slug':
 			return 'Некорректный короткий адрес.'
+		case 'Invalid title length':
+			return 'Заголовок должен быть от 3 до 120 символов.'
 		case 'Slug already taken':
 			return 'Этот короткий адрес уже занят.'
 		case 'Expiration date must be in the future':
 			return 'Дата истечения должна быть в будущем.'
+		case 'Invalid date range':
+			return 'Некорректный диапазон дат.'
 		case 'Invalid password length':
 			return 'Пароль должен быть от 6 до 128 символов.'
 		case 'Some tags are invalid':
@@ -191,6 +197,8 @@ export async function getLinks(params?: {
 	datePreset?: '7d' | '30d' | 'custom' | null
 	createdFrom?: string | null
 	createdTo?: string | null
+	includeTrend?: boolean
+	includeCounts?: boolean
 	signal?: AbortSignal
 }): Promise<GetLinksResponse> {
 	const searchParams = new URLSearchParams()
@@ -211,6 +219,8 @@ export async function getLinks(params?: {
 	}
 	if (params?.createdFrom) searchParams.set('createdFrom', params.createdFrom)
 	if (params?.createdTo) searchParams.set('createdTo', params.createdTo)
+	if (params?.includeTrend === false) searchParams.set('includeTrend', '0')
+	if (params?.includeCounts === false) searchParams.set('includeCounts', '0')
 	const qs = searchParams.toString()
 	const url = qs ? `/api/links?${qs}` : '/api/links'
 
@@ -244,12 +254,14 @@ export async function getLinks(params?: {
 }
 
 export async function createLink(
-	payload: CreateLinkPayload
+	payload: CreateLinkPayload,
+	options?: { signal?: AbortSignal }
 ): Promise<CreateLinkResponse> {
 	const res = await fetch('/api/links', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify(payload)
+		body: JSON.stringify(payload),
+		signal: options?.signal
 	})
 
 	const data = await res.json().catch(() => ({}))

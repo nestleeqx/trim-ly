@@ -10,12 +10,14 @@ import { ChartDataPoint } from '@/types/charts'
 import { useEffect, useMemo, useState } from 'react'
 
 type ChartState = {
+	period: AnalyticsClicksPeriod
 	points: ChartDataPoint[]
 	total: string
 	average: string
 }
 
 const EMPTY_CHART: ChartState = {
+	period: '24h',
 	points: [],
 	total: '0',
 	average: '0'
@@ -75,7 +77,12 @@ export function useAnalyticsClicks() {
 					signal: controller.signal
 				})
 				if (!active) return
-				setChart(data.chart)
+				setChart({
+					period: data.period,
+					points: data.chart.points,
+					total: data.chart.total,
+					average: data.chart.average
+				})
 				setHasLoadedOnce(true)
 			} catch (e) {
 				if (!active) return
@@ -170,6 +177,7 @@ export function useAnalyticsClicks() {
 		data: chart,
 		chartData: chart.points,
 		stats: { total: chart.total, average: chart.average },
+		chartPeriod: chart.period,
 		handlePeriodChange,
 		handleApplyCustomRange,
 		handleCancelDatePicker,

@@ -5,6 +5,10 @@
 	grid-template-columns: 1fr 1fr;
 	gap: $spacing-md;
 	margin-bottom: $spacing-lg;
+
+	@media (max-width: $breakpoint-md) {
+		grid-template-columns: 1fr;
+	}
 }
 
 .planCard {
@@ -15,6 +19,10 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+
+	@media (max-width: $breakpoint-xs) {
+		padding: $spacing-sm;
+	}
 }
 
 .planHeader {
@@ -41,16 +49,31 @@
 	border-radius: 999px;
 	font-size: $font-size-xs;
 	font-weight: $font-weight-medium;
+
+	@media (max-width: $breakpoint-xs) {
+		align-self: flex-start;
+	}
 }
 
 .planDesc {
 	color: var(--color-text-secondary);
 	font-size: $font-size-sm;
 	margin-top: $spacing-sm;
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
+	}
 }
 
 .planAction {
 	margin-top: $spacing-md;
+
+	@media (max-width: $breakpoint-xs) {
+		:global(button) {
+			width: 100%;
+			justify-content: center;
+		}
+	}
 }
 
 .usageCard {
@@ -61,6 +84,10 @@
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-sm;
+
+	@media (max-width: $breakpoint-xs) {
+		padding: $spacing-sm;
+	}
 }
 
 .usageLimitNotice {
@@ -79,16 +106,30 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+
+	@media (max-width: $breakpoint-xs) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 2px;
+	}
 }
 
 .usageLabel {
 	font-size: $font-size-sm;
 	color: var(--color-text-secondary);
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
+	}
 }
 
 .usageValue {
 	font-size: $font-size-sm;
 	color: var(--color-text-primary);
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
+	}
 }
 
 .progressBar {
@@ -119,15 +160,29 @@
 	border: 1px solid var(--color-border);
 	border-radius: $border-radius-lg;
 	padding: $spacing-md;
+
+	@media (max-width: $breakpoint-xs) {
+		padding: $spacing-sm;
+	}
 }
 
 .historyTitle {
 	margin: 0 0 $spacing-md 0;
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-base;
+	}
 }
 
 .invoiceTable {
 	width: 100%;
 	border-collapse: collapse;
+}
+
+.invoiceTableWrap {
+	width: 100%;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
 }
 
 .invoiceTable thead th {
@@ -152,6 +207,7 @@
 
 .colId {
 	font-weight: $font-weight-medium;
+	word-break: break-all;
 }
 
 .colAmount {
@@ -167,9 +223,18 @@
 	text-decoration: none;
 }
 
-@media (max-width: $breakpoint-sm) {
-	.topGrid {
-		grid-template-columns: 1fr;
+@media (max-width: $breakpoint-xs) {
+	.invoiceTable thead th,
+	.invoiceTable tbody td {
+		padding: $spacing-sm 0;
+		font-size: $font-size-xs;
+	}
+
+	.invoiceTable thead th:nth-child(1),
+	.invoiceTable tbody td:nth-child(1),
+	.invoiceTable thead th:nth-child(5),
+	.invoiceTable tbody td:nth-child(5) {
+		display: none;
 	}
 }
 
@@ -182,7 +247,6 @@
 	font-weight: $font-weight-medium;
 	background: color-mix(in srgb, var(--color-warning) 12%, transparent);
 	color: var(--color-warning);
-	border: 1px solid
-		color-mix(in srgb, var(--color-warning) 35%, transparent);
+	border: 1px solid color-mix(in srgb, var(--color-warning) 35%, transparent);
 	margin-bottom: $spacing-md;
 }

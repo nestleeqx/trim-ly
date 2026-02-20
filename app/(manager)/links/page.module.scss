@@ -2,13 +2,25 @@
 @use 'variables' as *;
 
 .content {
+	max-width: $dashboard-max-width;
+	width: 100%;
+	margin: 0 auto;
 	padding: $spacing-md $spacing-lg;
+	display: flex;
+	flex-direction: column;
+	gap: $spacing-md;
 
 	@media (max-width: $breakpoint-md) {
 		padding: $spacing-md;
+		gap: $spacing-sm;
 	}
 
 	@media (max-width: $breakpoint-sm) {
 		padding: $spacing-sm;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: 10px;
+		gap: 10px;
 	}
 }

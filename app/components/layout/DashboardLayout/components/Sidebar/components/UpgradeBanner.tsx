@@ -1,6 +1,8 @@
 import Button from '@/app/components/ui/Button/Button'
+import buttonStyles from '@/app/components/ui/Button/Button.module.scss'
+import cn from 'classnames'
 import { Zap } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import styles from '../Sidebar.module.scss'
 
 interface UpgradeBannerProps {
@@ -9,20 +11,21 @@ interface UpgradeBannerProps {
 	isLimitReached?: boolean
 }
 
+function getButtonLabel(isLimitReached: boolean, isPaidPlan: boolean) {
+	if (isLimitReached) return 'Обновить тариф'
+	if (isPaidPlan) return 'Управление тарифом'
+	return 'Перейти на Pro'
+}
+
 export default function UpgradeBanner({
 	planName = 'Бесплатный план',
 	onUpgradeClick,
 	isLimitReached = false
 }: UpgradeBannerProps) {
-	const router = useRouter()
 	const normalizedPlan = planName.trim().toLowerCase()
 	const isPaidPlan =
 		normalizedPlan.includes('pro') || normalizedPlan.includes('команда')
-
-	const handleClick = () => {
-		if (onUpgradeClick) return onUpgradeClick()
-		router.push('/pricing')
-	}
+	const label = getButtonLabel(isLimitReached, isPaidPlan)
 
 	return (
 		<>
@@ -31,21 +34,32 @@ export default function UpgradeBanner({
 					<span>Вы достигли лимита. Нужен тариф выше.</span>
 				</div>
 			)}
-			<Button
-				variant='primary'
-				size='lg'
-				onClick={handleClick}
-				className={styles.upgradeBtn}
-			>
-				<Zap className={styles.upgradeIcon} />
-				<span>
-					{isLimitReached
-						? 'Обновить тариф'
-						: isPaidPlan
-							? 'Управление тарифом'
-							: 'Перейти на Pro'}
-				</span>
-			</Button>
+
+			{onUpgradeClick ? (
+				<Button
+					variant='primary'
+					size='lg'
+					onClick={onUpgradeClick}
+					className={styles.upgradeBtn}
+				>
+					<Zap className={styles.upgradeIcon} />
+					<span>{label}</span>
+				</Button>
+			) : (
+				<Link
+					href='/pricing'
+					className={cn(
+						buttonStyles.button,
+						buttonStyles.primary,
+						buttonStyles.lg,
+						styles.upgradeBtn
+					)}
+				>
+					<Zap className={styles.upgradeIcon} />
+					<span>{label}</span>
+				</Link>
+			)}
+
 			<span className={styles.planText}>{planName}</span>
 		</>
 	)

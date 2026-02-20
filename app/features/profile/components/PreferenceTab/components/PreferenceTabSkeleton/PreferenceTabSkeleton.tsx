@@ -14,45 +14,39 @@ export default function PreferenceTabSkeleton() {
 			<div className={styles.cards}>
 				<div className={styles.card}>
 					<Skeleton
+						className={styles.rect}
 						variant='rect'
-						width={220}
-						height={119}
 						radius={14}
 					/>
 					<Skeleton
+						className={styles.text}
 						variant='text'
-						width={56}
-						height={12}
 						radius={7}
 					/>
 				</div>
 
 				<div className={styles.card}>
 					<Skeleton
+						className={styles.rect}
 						variant='rect'
-						width={220}
-						height={119}
 						radius={14}
 					/>
 					<Skeleton
+						className={styles.text}
 						variant='text'
-						width={48}
-						height={12}
 						radius={7}
 					/>
 				</div>
 
 				<div className={styles.card}>
 					<Skeleton
+						className={styles.rect}
 						variant='rect'
-						width={220}
-						height={119}
 						radius={14}
 					/>
 					<Skeleton
+						className={styles.text}
 						variant='text'
-						width={62}
-						height={12}
 						radius={7}
 					/>
 				</div>

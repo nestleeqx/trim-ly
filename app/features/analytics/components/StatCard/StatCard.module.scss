@@ -10,19 +10,10 @@
 
 	&:hover {
 		box-shadow: $shadow-md;
-		transform: translateY(-2px);
-	}
-
-	&:active {
-		transform: translateY(0);
 	}
 
 	@media (max-width: $breakpoint-md) {
 		gap: $spacing-sm;
-	}
-
-	@media (max-width: $breakpoint-sm) {
-		padding: $spacing-sm $spacing-md;
 	}
 }
 

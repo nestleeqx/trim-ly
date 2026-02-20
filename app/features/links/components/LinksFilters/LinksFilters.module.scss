@@ -1,15 +1,16 @@
-@use 'variables' as *;
+﻿@use 'variables' as *;
 
 .container {
-	display: flex;
-	flex-direction: column;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: start;
 	gap: $spacing-md;
 	padding: $spacing-md $spacing-lg;
 	background: var(--color-bg);
 	border-radius: $border-radius-xl;
 	border: 1px solid var(--color-border);
 	margin-top: $spacing-sm;
-	max-height: 69px;
+	max-width: 100%;
 
 	@media (max-width: $breakpoint-md) {
 		padding: $spacing-md;
@@ -19,10 +20,27 @@
 		padding: $spacing-sm;
 	}
 
-	@media (min-width: $breakpoint-lg) {
-		flex-direction: row;
-		align-items: center;
-		justify-content: space-between;
+	@media (max-width: $breakpoint-2xl) {
+		grid-template-columns: 1fr;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		padding: 10px;
+		gap: 10px;
+	}
+}
+
+.leftSection {
+	min-width: 0;
+}
+
+.rightSection {
+	display: flex;
+	justify-content: flex-end;
+	min-width: 0;
+
+	@media (max-width: $breakpoint-2xl) {
+		justify-content: flex-start;
 	}
 }
 
@@ -30,17 +48,41 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: $spacing-md;
+	gap: $spacing-sm;
 	position: relative;
+	min-width: 0;
+
+	& > *:not(.filtersLabel):not(.clearBtn) {
+		flex: 0 1 auto;
+		min-width: 0;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		& > *:not(.filtersLabel):not(.clearBtn) {
+			flex: 1 1 calc(50% - #{$spacing-sm});
+		}
+	}
+
+	@media (max-width: 520px) {
+		& > *:not(.filtersLabel):not(.clearBtn) {
+			flex-basis: 100%;
+		}
+	}
 }
 
 .filtersLabel {
-	display: flex;
+	display: inline-flex;
 	align-items: center;
 	gap: $spacing-sm;
 	font-size: $font-size-sm;
 	font-weight: $font-weight-medium;
 	color: var(--color-text-secondary);
+	margin-right: $spacing-xs;
+	white-space: nowrap;
+
+	@media (max-width: $breakpoint-xs) {
+		margin-bottom: $spacing-sm;
+	}
 }
 
 .clearBtn {
@@ -58,6 +100,7 @@
 	border-radius: $border-radius-lg;
 	cursor: pointer;
 	transition: $transition-fast;
+	white-space: nowrap;
 
 	&:hover {
 		background: var(--color-danger-bg);

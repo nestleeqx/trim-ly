@@ -17,6 +17,7 @@ function normalizeSlug(value: string) {
 
 const MIN_SLUG_LENGTH = 3
 const MAX_SLUG_LENGTH = 25
+const MAX_TARGET_URL_LENGTH = 2048
 const TREND_WINDOW_DAYS = 7
 type UiStatus = 'active' | 'paused' | 'expired' | 'deleted'
 type SortFieldApi =
@@ -54,6 +55,10 @@ function normalizeUrl(value: string) {
 function normalizeTitle(value: unknown) {
 	const title = String(value ?? '').trim()
 	return title ? title.slice(0, 120) : null
+}
+
+function isValidOptionalTitle(title: string | null) {
+	return title === null || title.length >= 3
 }
 
 function normalizeExpiresAt(value: unknown) {
@@ -155,6 +160,17 @@ function parsePageSize(req: Request) {
 	return [5, 10, 25, 50].includes(n) ? n : 10
 }
 
+function parseBooleanFlag(
+	req: Request,
+	key: string,
+	defaultValue: boolean
+): boolean {
+	const raw = (new URL(req.url).searchParams.get(key) || '').trim().toLowerCase()
+	if (raw === '1' || raw === 'true') return true
+	if (raw === '0' || raw === 'false') return false
+	return defaultValue
+}
+
 function parseSort(req: Request): { field: SortFieldApi; order: SortOrderApi } {
 	const url = new URL(req.url)
 	const fieldRaw = (url.searchParams.get('sort') || 'created_date').trim()
@@ -222,9 +238,21 @@ export async function GET(req: Request) {
 	const search = parseSearch(req)
 	const page = parsePage(req)
 	const pageSize = parsePageSize(req)
+	const includeTrend = parseBooleanFlag(req, 'includeTrend', true)
+	const includeCounts = parseBooleanFlag(req, 'includeCounts', true)
 	const { field: sortField, order: sortOrder } = parseSort(req)
 	const datePreset = parseDatePreset(req)
 	const createdRange = parseCreatedRange(req)
+	if (
+		createdRange.from &&
+		createdRange.to &&
+		createdRange.from.getTime() > createdRange.to.getTime()
+	) {
+		return NextResponse.json(
+			{ error: 'Invalid date range' },
+			{ status: 400 }
+		)
+	}
 	const now = new Date()
 	const createdAtFilter =
 		createdRange.from || createdRange.to
@@ -333,39 +361,44 @@ export async function GET(req: Request) {
 						: [{ createdAt: sortOrder }]
 
 	try {
-		const [links, totalAll, totalFiltered] = await withRetry(() =>
-			Promise.all([
-				prisma.link.findMany({
-					where,
-					orderBy,
-					skip: (page - 1) * pageSize,
-					take: pageSize,
-					select: {
-						id: true,
-						title: true,
-						slug: true,
-						targetUrl: true,
-						clicksTotal: true,
-						status: true,
-						createdAt: true,
-						expiresAt: true,
-						deletedAt: true,
-						passwordHash: true,
-						tags: {
-							select: {
-								tag: {
-									select: {
-										name: true
-									}
+		const links = await withRetry(() =>
+			prisma.link.findMany({
+				where,
+				orderBy,
+				skip: (page - 1) * pageSize,
+				take: pageSize,
+				select: {
+					id: true,
+					title: true,
+					slug: true,
+					targetUrl: true,
+					clicksTotal: true,
+					status: true,
+					createdAt: true,
+					expiresAt: true,
+					deletedAt: true,
+					passwordHash: true,
+					tags: {
+						select: {
+							tag: {
+								select: {
+									name: true
 								}
 							}
 						}
 					}
-				}),
-				prisma.link.count({ where: { userId } }),
-				prisma.link.count({ where })
-			])
+				}
+			})
 		)
+
+		const [totalAll, totalFiltered] = includeCounts
+			? await withRetry(() =>
+					Promise.all([
+						prisma.link.count({ where: { userId } }),
+						prisma.link.count({ where })
+					])
+				)
+			: [links.length, links.length]
 
 		const linkIds = links.map(link => link.id)
 		const nowDate = new Date()
@@ -376,7 +409,7 @@ export async function GET(req: Request) {
 			currentFrom.getTime() - TREND_WINDOW_DAYS * 24 * 60 * 60 * 1000
 		)
 
-		const [currentCounts, previousCounts] = linkIds.length
+		const [currentCounts, previousCounts] = includeTrend && linkIds.length
 			? await withRetry(() =>
 					Promise.all([
 						prisma.linkClickEvent.groupBy({
@@ -409,14 +442,20 @@ export async function GET(req: Request) {
 			previousCounts.map(item => [item.linkId, item._count._all])
 		)
 
-		const totalPages = Math.max(1, Math.ceil(totalFiltered / pageSize))
+		const totalPages = includeCounts
+			? Math.max(1, Math.ceil(totalFiltered / pageSize))
+			: 1
 
 		return NextResponse.json({
 			links: links.map(link => ({
-				trend: calculateTrendPercent(
-					currentMap.get(link.id) ?? 0,
-					previousMap.get(link.id) ?? 0
-				),
+				...(includeTrend
+					? {
+							trend: calculateTrendPercent(
+								currentMap.get(link.id) ?? 0,
+								previousMap.get(link.id) ?? 0
+							)
+						}
+					: {}),
 				id: link.id,
 				title: link.title || 'Без названия',
 				shortUrl: buildShortLink(link.slug),
@@ -475,6 +514,12 @@ export async function POST(req: Request) {
 			{ status: 400 }
 		)
 	}
+	if (targetUrl.length > MAX_TARGET_URL_LENGTH) {
+		return NextResponse.json(
+			{ error: 'Target URL too long' },
+			{ status: 400 }
+		)
+	}
 
 	if (
 		!slug ||
@@ -482,6 +527,9 @@ export async function POST(req: Request) {
 		slug.length > MAX_SLUG_LENGTH
 	) {
 		return NextResponse.json({ error: 'Invalid slug' }, { status: 400 })
+	}
+	if (!isValidOptionalTitle(title)) {
+		return NextResponse.json({ error: 'Invalid title length' }, { status: 400 })
 	}
 
 	if (expiresAt && expiresAt.getTime() <= Date.now()) {

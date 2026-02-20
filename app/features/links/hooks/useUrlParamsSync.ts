@@ -171,7 +171,7 @@ export const useUrlParamsSync = () => {
 			}
 
 			const queryString = newParams.toString()
-			router.push(queryString ? `?${queryString}` : '/links', {
+			router.replace(queryString ? `?${queryString}` : '/links', {
 				scroll: false
 			})
 		},
@@ -179,7 +179,7 @@ export const useUrlParamsSync = () => {
 	)
 
 	const clearAllParams = useCallback(() => {
-		router.push('/links', { scroll: false })
+		router.replace('/links', { scroll: false })
 	}, [router])
 
 	return {

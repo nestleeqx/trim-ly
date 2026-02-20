@@ -1,4 +1,4 @@
-@use 'variables' as *;
+﻿@use 'variables' as *;
 
 .card {
 	background: var(--color-bg);
@@ -11,10 +11,6 @@
 		padding: $spacing-md;
 		border-radius: $border-radius-lg;
 	}
-
-	@media (max-width: $breakpoint-sm) {
-		padding: $spacing-sm;
-	}
 }
 
 .header {
@@ -22,6 +18,12 @@
 	align-items: flex-start;
 	justify-content: space-between;
 	gap: $spacing-md;
+
+	@media (max-width: 1440px) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: $spacing-sm;
+	}
 
 	@media (max-width: $breakpoint-md) {
 		flex-direction: column;
@@ -72,9 +74,19 @@
 
 	@media (max-width: $breakpoint-sm) {
 		height: 160px;
-		margin-left: -$spacing-sm;
-		margin-right: -$spacing-sm;
-		width: calc(100% + #{$spacing-md});
+		width: 100%;
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		height: 150px;
+	}
+}
+
+.rechartWrapper {
+	:global(.recharts-wrapper *:focus) {
+		outline: none !important;
 	}
 }
 

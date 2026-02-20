@@ -1,3 +1,4 @@
+import { ArrowRight } from 'lucide-react'
 import {
 	CartesianGrid,
 	Line,
@@ -29,13 +30,19 @@ export default function ActivityChart({
 						e.preventDefault()
 						onAnalyticsClick()
 					}}
+					className={styles.analyticsLink}
 				>
-					Полная аналитика →
+					<span>Полная аналитика</span>
+					<ArrowRight
+						size={12}
+						className={styles.analyticsCtaIcon}
+					/>
 				</a>
 			</div>
 			<ResponsiveContainer
 				width='100%'
 				height={150}
+				className={styles.analyticsChart}
 			>
 				<LineChart
 					data={data}
@@ -57,7 +64,7 @@ export default function ActivityChart({
 						contentStyle={{
 							backgroundColor: 'var(--color-bg)',
 							border: '1px solid var(--color-border)',
-							borderRadius: '8px',
+							borderRadius: '10px',
 							color: 'var(--color-text-primary)'
 						}}
 					/>

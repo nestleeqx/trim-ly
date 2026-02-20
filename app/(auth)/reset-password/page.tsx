@@ -124,6 +124,7 @@ export default function ResetPasswordPage() {
 							clearFieldError('password')
 						}}
 						autoComplete='new-password'
+						disabled={isLoading}
 						error={fieldErrors.password}
 					/>
 					<PasswordInput
@@ -136,6 +137,7 @@ export default function ResetPasswordPage() {
 							clearFieldError('confirmPassword')
 						}}
 						autoComplete='new-password'
+						disabled={isLoading}
 						error={fieldErrors.confirmPassword}
 					/>
 					{error && <p className={styles.errorText}>{error}</p>}
@@ -143,6 +145,7 @@ export default function ResetPasswordPage() {
 						variant='primary'
 						size='lg'
 						type='submit'
+						disabled={isLoading}
 					>
 						{isLoading ? 'Сохраняем...' : 'Сохранить пароль'}
 					</Button>

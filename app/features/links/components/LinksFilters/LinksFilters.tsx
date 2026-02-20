@@ -61,43 +61,47 @@ export default function LinksFilters({
 
 	return (
 		<div className={styles.container}>
-			<LinksFiltersLeft
-				showCountry={showCountry}
-				showDevice={showDevice}
-				showDate={showDate}
-				showStatus={showStatus}
-				showTags={showTags}
-				showReferrer={showReferrer}
-				availableTags={availableTags}
-				tagsLoading={tagsLoading}
-				availableCountries={availableCountries}
-				availableDevices={availableDevices}
-				availableReferrers={availableReferrers}
-				hasActiveFilters={hasActiveFilters}
-				selectedTags={filtersState.selectedTags}
-				selectedStatuses={filtersState.selectedStatuses}
-				selectedCountry={filtersState.selectedCountry}
-				selectedDevice={filtersState.selectedDevice}
-				selectedReferrer={filtersState.selectedReferrer}
-				datePreset={filtersState.datePreset}
-				onTagsChange={handlers.setSelectedTags}
-				onStatusChange={handlers.setSelectedStatuses}
-				onCountryChange={handlers.setSelectedCountry}
-				onDeviceChange={handlers.setSelectedDevice}
-				onReferrerChange={handlers.setSelectedReferrer}
-				onDatePresetChange={handlers.setDatePreset}
-				onClearFilters={handlers.clearFilters}
-			/>
+			<div className={styles.leftSection}>
+				<LinksFiltersLeft
+					showCountry={showCountry}
+					showDevice={showDevice}
+					showDate={showDate}
+					showStatus={showStatus}
+					showTags={showTags}
+					showReferrer={showReferrer}
+					availableTags={availableTags}
+					tagsLoading={tagsLoading}
+					availableCountries={availableCountries}
+					availableDevices={availableDevices}
+					availableReferrers={availableReferrers}
+					hasActiveFilters={hasActiveFilters}
+					selectedTags={filtersState.selectedTags}
+					selectedStatuses={filtersState.selectedStatuses}
+					selectedCountry={filtersState.selectedCountry}
+					selectedDevice={filtersState.selectedDevice}
+					selectedReferrer={filtersState.selectedReferrer}
+					datePreset={filtersState.datePreset}
+					onTagsChange={handlers.setSelectedTags}
+					onStatusChange={handlers.setSelectedStatuses}
+					onCountryChange={handlers.setSelectedCountry}
+					onDeviceChange={handlers.setSelectedDevice}
+					onReferrerChange={handlers.setSelectedReferrer}
+					onDatePresetChange={handlers.setDatePreset}
+					onClearFilters={handlers.clearFilters}
+				/>
+			</div>
 
 			{!hideRight ? (
-				<FiltersRight
-					sort={filtersState.sort}
-					onSortChange={handlers.setSort}
-					viewMode={viewMode}
-					onViewModeChange={mode => onViewModeChange?.(mode)}
-					onExport={onExport}
-					exportLoading={exportLoading}
-				/>
+				<div className={styles.rightSection}>
+					<FiltersRight
+						sort={filtersState.sort}
+						onSortChange={handlers.setSort}
+						viewMode={viewMode}
+						onViewModeChange={mode => onViewModeChange?.(mode)}
+						onExport={onExport}
+						exportLoading={exportLoading}
+					/>
+				</div>
 			) : null}
 		</div>
 	)

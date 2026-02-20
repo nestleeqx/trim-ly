@@ -10,10 +10,19 @@
 	&:hover {
 		text-decoration: underline;
 	}
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: 11px;
+	}
 }
 
 .rememberLabel {
 	font-size: $font-size-sm;
 	color: var(--color-text-primary);
 	cursor: pointer;
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
+		line-height: 1.4;
+	}
 }

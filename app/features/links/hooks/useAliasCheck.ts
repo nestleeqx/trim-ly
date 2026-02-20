@@ -7,6 +7,7 @@ interface AliasCheckState {
 	checking: boolean
 	available: boolean | null
 	checkedAlias: string
+	suggestions: string[]
 }
 
 interface UseAliasCheckProps {
@@ -21,9 +22,35 @@ export const useAliasCheck = ({
 	const [aliasCheck, setAliasCheck] = useState<AliasCheckState>({
 		checking: false,
 		available: null,
-		checkedAlias: ''
+		checkedAlias: '',
+		suggestions: []
 	})
 	const aliasCheckTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+	const buildSuggestions = useCallback(
+		(alias: string) => {
+			const year = new Date().getFullYear()
+			const variants = [
+				`${alias}-1`,
+				`${alias}-${year}`,
+				`${alias}-app`,
+				`${alias}-link`,
+				`${alias}-new`
+			]
+
+			return [...new Set(variants)]
+				.map(item => item.toLowerCase().slice(0, 25))
+				.filter(
+					item =>
+						!!item &&
+						item !== alias &&
+						item !== initialAlias &&
+						!takenAliases.includes(item)
+				)
+				.slice(0, 3)
+		},
+		[initialAlias]
+	)
 
 	const checkAliasAvailability = useCallback(
 		(alias: string) => {
@@ -35,7 +62,8 @@ export const useAliasCheck = ({
 				setAliasCheck({
 					checking: false,
 					available: null,
-					checkedAlias: ''
+					checkedAlias: '',
+					suggestions: []
 				})
 				onError(undefined)
 				return
@@ -45,29 +73,33 @@ export const useAliasCheck = ({
 				setAliasCheck({
 					checking: false,
 					available: null,
-					checkedAlias: ''
+					checkedAlias: '',
+					suggestions: []
 				})
 				return
 			}
 
-			setAliasCheck(prev => ({ ...prev, checking: true }))
+			setAliasCheck(prev => ({ ...prev, checking: true, suggestions: [] }))
 
 			aliasCheckTimeout.current = setTimeout(() => {
 				const isTaken = takenAliases.includes(alias.toLowerCase())
+				const suggestions = isTaken ? buildSuggestions(alias) : []
+
 				setAliasCheck({
 					checking: false,
 					available: !isTaken,
-					checkedAlias: alias
+					checkedAlias: alias,
+					suggestions
 				})
 
 				if (isTaken) {
-					onError('Этот alias уже занят')
+					onError('Этот alias уже занят.')
 				} else {
 					onError(undefined)
 				}
 			}, 500)
 		},
-		[initialAlias, onError]
+		[initialAlias, onError, buildSuggestions]
 	)
 
 	useEffect(() => {

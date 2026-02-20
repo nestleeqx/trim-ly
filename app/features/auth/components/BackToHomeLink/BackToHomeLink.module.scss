@@ -14,4 +14,9 @@
 	&:hover {
 		color: var(--color-text-primary);
 	}
+
+	@media (max-width: $breakpoint-xs) {
+		font-size: $font-size-xs;
+		margin-bottom: $spacing-sm;
+	}
 }

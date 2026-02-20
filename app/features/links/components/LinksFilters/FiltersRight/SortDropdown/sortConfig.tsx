@@ -1,4 +1,4 @@
-import type { SortField, SortOrder } from '@/types/filterLinks'
+﻿import type { SortField, SortOrder } from '@/types/filterLinks'
 import {
 	ArrowDown,
 	ArrowUp,

@@ -4,12 +4,22 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-xs) {
+		grid-template-columns: 1fr;
+		gap: $spacing-sm;
+	}
 }
 
 .socialBtn {
 	padding: 12px;
 	font-size: $font-size-sm;
 	font-weight: $font-weight-medium;
+
+	@media (max-width: $breakpoint-xs) {
+		padding: 10px;
+		font-size: $font-size-xs;
+	}
 }
 
 .socialIcon {

@@ -29,6 +29,14 @@
 	@media (max-width: $breakpoint-sm) {
 		padding: $spacing-lg;
 	}
+
+	@media (max-width: $breakpoint-xs) {
+		border-radius: $border-radius-lg;
+
+		&:hover {
+			transform: none;
+		}
+	}
 }
 
 .badge {
@@ -60,6 +68,8 @@
 .priceWrapper {
 	display: flex;
 	align-items: baseline;
+	flex-wrap: wrap;
+	gap: 2px;
 	margin-bottom: $spacing-sm;
 }
 
@@ -105,7 +115,7 @@
 
 .feature {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	gap: $spacing-sm;
 	font-size: $font-size-sm;
 	color: var(--color-text-primary);

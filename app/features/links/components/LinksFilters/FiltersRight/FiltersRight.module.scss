@@ -1,13 +1,32 @@
-@use 'variables' as *;
+﻿@use 'variables' as *;
 
 .container {
 	display: flex;
 	align-items: center;
-	gap: $spacing-md;
+	gap: $spacing-sm;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	min-width: 0;
+
+	@media (max-width: $breakpoint-2xl) {
+		justify-content: flex-start;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		width: 100%;
+	}
+}
+
+.viewToggleWrap {
+	@media (max-width: $breakpoint-xs) {
+		display: none;
+	}
 }
 
 .exportBtn {
 	font-size: $font-size-sm;
+	flex-shrink: 0;
+	min-height: 40px;
 
 	&:disabled {
 		opacity: 0.5;
@@ -42,6 +61,13 @@
 		display: none;
 
 		@media (min-width: $breakpoint-sm) {
+			display: inline;
+		}
+	}
+
+	@media (max-width: $breakpoint-xs) {
+		margin: 0 auto;
+		span {
 			display: inline;
 		}
 	}

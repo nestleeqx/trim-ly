@@ -7,32 +7,56 @@
 	margin-top: $spacing-lg;
 	margin-bottom: $spacing-lg;
 
-	& > img,
-	.avatarFallback {
-		width: 80px;
-		height: 80px;
-		min-width: 80px;
-		min-height: 80px;
-		overflow: hidden;
-		border-radius: 50%;
-		border: 1px solid var(--color-primary);
-		flex-shrink: 0;
-		pointer-events: none;
+	@media (max-width: $breakpoint-sm) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: $spacing-sm;
+	}
+}
 
-		@media (max-width: $breakpoint-sm) {
-			width: 60px;
-			height: 60px;
-		}
+.avatarImgWrap {
+	width: 80px;
+	height: 80px;
+	min-width: 80px;
+	min-height: 80px;
+	overflow: hidden;
+	border-radius: 50%;
+	border: 1px solid var(--color-primary);
+	flex-shrink: 0;
+	pointer-events: none;
+
+	@media (max-width: $breakpoint-sm) {
+		width: 60px;
+		height: 60px;
+		min-width: 60px;
+		min-height: 60px;
 	}
 }
 
 .avatarFallback {
+	width: 80px;
+	height: 80px;
+	min-width: 80px;
+	min-height: 80px;
+	overflow: hidden;
+	border-radius: 50%;
+	border: 1px solid var(--color-primary);
+	flex-shrink: 0;
+	pointer-events: none;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: $font-size-2xl;
 	color: var(--color-bg-secondary);
 	background-color: var(--color-primary);
+
+	@media (max-width: $breakpoint-sm) {
+		width: 60px;
+		height: 60px;
+		min-width: 60px;
+		min-height: 60px;
+		font-size: $font-size-xl;
+	}
 }
 
 .avatarHints {
@@ -53,6 +77,13 @@
 .avatarLinks {
 	display: flex;
 	gap: $spacing-md;
+	align-items: center;
+
+	@media (max-width: $breakpoint-sm) {
+		flex-direction: column;
+		align-items: stretch;
+		gap: $spacing-sm;
+	}
 }
 
 .linkBtn {
@@ -69,5 +100,10 @@
 
 	&.remove {
 		color: var(--color-danger);
+	}
+
+	@media (max-width: $breakpoint-sm) {
+		width: 100%;
+		text-align: left;
 	}
 }

@@ -10,12 +10,10 @@ interface LinkDetailsHeaderProps {
 	linkId: string
 	currentTab: string
 	safeNavigate: (path: string) => void
-
 	handlePauseItem: (id: string) => void
 	handleResumeItem: (id: string) => void
 	handleRestoreItem: (id: string) => void
 	handleDeleteItem: (id: string) => void
-
 	setShowQrModal: (show: boolean) => void
 	handleCopy: (url: string) => void
 	hideEditButton: boolean
@@ -56,9 +54,7 @@ export default function LinkDetailsHeader({
 					className={cn(styles.tab, {
 						[styles.active]: currentTab === 'analytics'
 					})}
-					onClick={() =>
-						safeNavigate(`/links/${linkId}?tab=analytics`)
-					}
+					onClick={() => safeNavigate(`/links/${linkId}?tab=analytics`)}
 					role='tab'
 					aria-selected={currentTab === 'analytics'}
 				>

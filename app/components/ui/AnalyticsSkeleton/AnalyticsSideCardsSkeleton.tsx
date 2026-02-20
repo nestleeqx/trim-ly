@@ -12,7 +12,7 @@ export function AnalyticsSideCardsSkeleton({ className }: SkeletonBlockProps) {
 					className={styles.sideCard}
 				>
 					<Skeleton
-						width={170}
+						width='clamp(120px, 42vw, 170px)'
 						height={30}
 					/>
 					<div className={styles.sideCardContent}>

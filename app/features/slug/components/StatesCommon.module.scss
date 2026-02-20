@@ -43,23 +43,32 @@
 }
 
 .stateIconPurple {
-	background: rgba(var(--color-primary), 0.1);
+	background: color-mix(in srgb, var(--color-primary) 10%, transparent);
 	color: var(--color-primary);
+	border: 1px solid color-mix(in srgb, var(--color-primary) 32%, transparent);
 }
 
 .stateIconOrange {
-	background: rgba(var(--color-warning), 0.1);
+	background: color-mix(in srgb, var(--color-warning) 10%, transparent);
 	color: var(--color-warning);
+	border: 1px solid color-mix(in srgb, var(--color-warning) 32%, transparent);
 }
 
 .stateIconGray {
-	background: rgba(var(--color-text-secondary), 0.1);
+	background: color-mix(
+		in srgb,
+		var(--color-text-secondary) 10%,
+		transparent
+	);
 	color: var(--color-text-secondary);
+	border: 1px solid
+		color-mix(in srgb, var(--color-text-secondary) 32%, transparent);
 }
 
 .stateIconRed {
 	background: var(--color-danger-bg);
 	color: var(--color-danger);
+	border: 1px solid color-mix(in srgb, var(--color-danger) 32%, transparent);
 }
 
 .form {
@@ -95,7 +104,8 @@
 
 	&:focus {
 		border-color: var(--color-primary);
-		box-shadow: 0 0 0 3px rgba(var(--color-primary), 0.1);
+		box-shadow: 0 0 0 3px
+			color-mix(in srgb, var(--color-primary) 10%, transparent);
 	}
 }
 
@@ -118,8 +128,16 @@
 	}
 }
 
-.primaryBtn,
-.outlineBtn {
+.confirmBtn,
+.darkBtn > button,
+.primaryBtn > button,
+.buttonGroup > button {
+	@media (max-width: $breakpoint-md) {
+		font-size: $font-size-sm !important;
+	}
+}
+
+.primaryBtn {
 	width: 100%;
 	& > button {
 		width: 100%;
@@ -146,6 +164,10 @@
 	display: flex;
 	flex-direction: column;
 	gap: $spacing-md;
+
+	@media (max-width: $breakpoint-md) {
+		gap: $spacing-sm;
+	}
 }
 
 .goBackLink {

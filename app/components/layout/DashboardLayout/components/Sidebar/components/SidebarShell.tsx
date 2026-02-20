@@ -3,6 +3,7 @@
 import Logo from '@/app/components/ui/Logo/Logo'
 import cn from 'classnames'
 import { Menu, X } from 'lucide-react'
+import { useEffect } from 'react'
 import styles from '../Sidebar.module.scss'
 import SidebarNav from './SidebarNav'
 import StorageUsage from './StorageUsage'
@@ -27,6 +28,27 @@ export default function SidebarShell({
 	planName,
 	isLimitReached
 }: SidebarShellProps) {
+	useEffect(() => {
+		if (!isOpen) return
+
+		const body = document.body
+		const html = document.documentElement
+
+		const prevBodyOverflow = body.style.overflow
+		const prevHtmlOverflow = html.style.overflow
+		const prevHtmlOverscroll = html.style.overscrollBehavior
+
+		body.style.overflow = 'hidden'
+		html.style.overflow = 'hidden'
+		html.style.overscrollBehavior = 'none'
+
+		return () => {
+			body.style.overflow = prevBodyOverflow
+			html.style.overflow = prevHtmlOverflow
+			html.style.overscrollBehavior = prevHtmlOverscroll
+		}
+	}, [isOpen])
+
 	return (
 		<>
 			<div

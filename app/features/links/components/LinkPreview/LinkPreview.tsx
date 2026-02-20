@@ -30,8 +30,7 @@ export default function LinkPreview({
 		? `${SHORT_LINK_DOMAIN}${formData.shortLink}`
 		: `${SHORT_LINK_DOMAIN}********`
 
-	const tagsValue =
-		formData.tags.length > 0 ? formData.tags.join(', ') : 'Нет'
+	const tagsValue = formData.tags.length > 0 ? formData.tags.join(', ') : 'Нет'
 
 	const expirationValue = formData.expirationDate
 		? formatFullDate(formData.expirationDate)

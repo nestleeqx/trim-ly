@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import cn from 'classnames'
 import { Check, Tag } from 'lucide-react'
@@ -34,9 +34,7 @@ export default function TagsFilter({
 			hasSelection={selectedTags.length > 0}
 		>
 			{isLoading ? (
-				<div className={commonStyles.dropdownItem}>
-					Загрузка тегов...
-				</div>
+				<div className={commonStyles.dropdownItem}>Загрузка тегов...</div>
 			) : availableTags.length === 0 ? (
 				<div className={commonStyles.dropdownItem}>Теги не найдены</div>
 			) : (

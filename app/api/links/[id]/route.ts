@@ -12,6 +12,7 @@ type RouteContext = {
 
 const MIN_SLUG_LENGTH = 3
 const MAX_SLUG_LENGTH = 25
+const MAX_TARGET_URL_LENGTH = 2048
 
 function normalizeSlug(value: string) {
 	return value
@@ -36,6 +37,10 @@ function normalizeUrl(value: string) {
 function normalizeTitle(value: unknown) {
 	const title = String(value ?? '').trim()
 	return title ? title.slice(0, 120) : null
+}
+
+function isValidOptionalTitle(title: string | null) {
+	return title === null || title.length >= 3
 }
 
 function normalizeExpiresAt(value: unknown) {
@@ -155,6 +160,14 @@ export async function PATCH(req: Request, context: RouteContext) {
 
 		if (action === 'restore') {
 			const affected = await prisma.$transaction(async tx => {
+				const userWithPlan = await tx.user.findUnique({
+					where: { id: userId },
+					select: { plan: { select: { linksLimit: true } } }
+				})
+				if (!userWithPlan?.plan) {
+					return 0
+				}
+
 				const result = await tx.link.updateMany({
 					where: { id, userId, deletedAt: { not: null } },
 					data: { deletedAt: null, status: 'active' }
@@ -163,9 +176,24 @@ export async function PATCH(req: Request, context: RouteContext) {
 				if (result.count > 0) {
 					await tx.userUsage.upsert({
 						where: { userId },
-						create: { userId, linksCreated: result.count, clicksTotal: 0 },
-						update: { linksCreated: { increment: result.count } }
+						create: { userId, linksCreated: 0, clicksTotal: 0 },
+						update: {}
 					})
+
+					const reserveSlot = await tx.userUsage.updateMany({
+						where: {
+							userId,
+							linksCreated: {
+								lte:
+									userWithPlan.plan.linksLimit - result.count
+							}
+						},
+						data: { linksCreated: { increment: result.count } }
+					})
+
+					if (reserveSlot.count === 0) {
+						throw new Error('Links limit reached')
+					}
 				}
 
 				return result.count
@@ -202,8 +230,17 @@ export async function PATCH(req: Request, context: RouteContext) {
 	if (!targetUrl) {
 		return NextResponse.json({ error: 'Invalid target URL' }, { status: 400 })
 	}
+	if (targetUrl.length > MAX_TARGET_URL_LENGTH) {
+		return NextResponse.json(
+			{ error: 'Target URL too long' },
+			{ status: 400 }
+		)
+	}
 	if (!slug || slug.length < MIN_SLUG_LENGTH || slug.length > MAX_SLUG_LENGTH) {
 		return NextResponse.json({ error: 'Invalid slug' }, { status: 400 })
+	}
+	if (!isValidOptionalTitle(title)) {
+		return NextResponse.json({ error: 'Invalid title length' }, { status: 400 })
 	}
 	if (expiresAt && expiresAt.getTime() <= Date.now()) {
 		return NextResponse.json(
@@ -337,6 +374,12 @@ export async function PATCH(req: Request, context: RouteContext) {
 		})
 	} catch (error) {
 		if (error instanceof Error) {
+			if (error.message === 'Links limit reached') {
+				return NextResponse.json(
+					{ error: 'Links limit reached' },
+					{ status: 403 }
+				)
+			}
 			if (error.message === 'Invalid tag name') {
 				return NextResponse.json({ error: 'Invalid tag name' }, { status: 400 })
 			}
@@ -377,18 +420,11 @@ export async function DELETE(_: Request, context: RouteContext) {
 		})
 
 		if (result.count > 0) {
-			const usage = await tx.userUsage.findUnique({
-				where: { userId },
-				select: { linksCreated: true }
-			})
 			await tx.userUsage.upsert({
 				where: { userId },
 				create: { userId, linksCreated: 0, clicksTotal: 0 },
 				update: {
-					linksCreated: Math.max(
-						0,
-						(usage?.linksCreated ?? 0) - result.count
-					)
+					linksCreated: { decrement: result.count }
 				}
 			})
 		}

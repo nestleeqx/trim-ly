@@ -43,11 +43,15 @@ export async function getTags(): Promise<TagDto[]> {
 	return data.tags
 }
 
-export async function createTag(name: string): Promise<TagDto> {
+export async function createTag(
+	name: string,
+	options?: { signal?: AbortSignal }
+): Promise<TagDto> {
 	const res = await fetch('/api/tags', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ name })
+		body: JSON.stringify({ name }),
+		signal: options?.signal
 	})
 	const data = await parseJson<{ tag: TagDto }>(res)
 	return data.tag

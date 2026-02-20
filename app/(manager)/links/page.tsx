@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import DashboardHeader from '@/app/components/layout/DashboardHeader/DashboardHeader'
 import LinksPageContent from '@/app/features/links/components/LinksPageContent/LinksPageContent'
@@ -14,6 +14,7 @@ export default function LinksPage() {
 		loadError,
 		clearLoadError,
 		filtersUiKey,
+		isClearingFilters,
 		canPauseBulk,
 		canResumeBulk,
 		canRestoreBulk,
@@ -36,7 +37,8 @@ export default function LinksPage() {
 					onChange: handlers.setSearchQuery,
 					onSearch: handlers.handleSearch,
 					placeholder: 'Поиск по ссылкам...',
-					autoSubmit: true
+					autoSubmit: true,
+					mobileScrollTargetId: 'links-table-section'
 				}}
 			/>
 			<LinksPageContent
@@ -48,6 +50,7 @@ export default function LinksPage() {
 				loadError={loadError}
 				clearLoadError={clearLoadError}
 				filtersUiKey={filtersUiKey}
+				isClearingFilters={isClearingFilters}
 				canPauseBulk={canPauseBulk}
 				canResumeBulk={canResumeBulk}
 				canRestoreBulk={canRestoreBulk}

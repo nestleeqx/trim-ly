@@ -40,6 +40,7 @@ export default function FilterDropdown({
 			ref={dropdownRef}
 		>
 			<button
+				type='button'
 				className={cn(styles.filterBtn, className, {
 					[styles.open]: isOpen,
 					[styles.hasSelection]: hasSelection

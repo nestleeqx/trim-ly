@@ -9,18 +9,21 @@ interface LinksPageSkeletonProps {
 	showFilters?: boolean
 	showPagination?: boolean
 	embedded?: boolean
+	showMobileCards?: boolean
 }
 
 export default function LinksPageSkeleton({
 	rows = 8,
 	showFilters = true,
 	showPagination = true,
-	embedded = false
+	embedded = false,
+	showMobileCards = false
 }: LinksPageSkeletonProps) {
 	return (
 		<div
 			className={cn(styles.container, {
-				[styles.embedded]: embedded
+				[styles.embedded]: embedded,
+				[styles.mobileCardsEnabled]: showMobileCards
 			})}
 		>
 			{showFilters && (
@@ -97,6 +100,54 @@ export default function LinksPageSkeleton({
 					))}
 				</div>
 			</div>
+
+			{showMobileCards && (
+				<div className={styles.mobileCards}>
+					{Array.from({ length: Math.min(rows, 4) }, (_, i) => (
+						<div
+							key={`card-${i}`}
+							className={styles.mobileCard}
+						>
+							<div className={styles.mobileCardHeader}>
+								<Skeleton
+									width={16}
+									height={16}
+								/>
+								<Skeleton
+									className={styles.mobileCardTitle}
+									height={18}
+								/>
+							</div>
+							<Skeleton
+								className={styles.mobileCardLine}
+								height={14}
+							/>
+							<Skeleton
+								className={styles.mobileCardLine}
+								height={14}
+							/>
+							<Skeleton
+								className={styles.mobileCardLine}
+								height={14}
+							/>
+							<Skeleton
+								className={styles.mobileCardLine}
+								height={14}
+							/>
+							<div className={styles.mobileCardActions}>
+								<Skeleton
+									className={styles.mobileCardAction}
+									height={32}
+								/>
+								<Skeleton
+									className={styles.mobileCardAction}
+									height={32}
+								/>
+							</div>
+						</div>
+					))}
+				</div>
+			)}
 
 			{showPagination && (
 				<div className={styles.pagination}>

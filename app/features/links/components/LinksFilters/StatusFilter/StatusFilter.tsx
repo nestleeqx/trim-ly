@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 
 import { StatusFilter as StatusFilterType } from '@/types/filterLinks'
 import cn from 'classnames'
@@ -41,15 +41,12 @@ export default function StatusFilter({
 					type='button'
 					key={status}
 					className={cn(commonStyles.dropdownItem, {
-						[commonStyles.selected]:
-							selectedStatuses.includes(status)
+						[commonStyles.selected]: selectedStatuses.includes(status)
 					})}
 					onClick={() => toggleStatus(status)}
 				>
 					<span className={commonStyles.checkbox}>
-						{selectedStatuses.includes(status) && (
-							<Check size={12} />
-						)}
+						{selectedStatuses.includes(status) && <Check size={12} />}
 					</span>
 					{statusLabels[status]}
 				</button>

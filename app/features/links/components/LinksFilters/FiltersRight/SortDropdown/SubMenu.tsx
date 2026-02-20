@@ -1,4 +1,4 @@
-import { SortField, SortOrder, SortState } from '@/types/filterLinks'
+﻿import { SortField, SortOrder, SortState } from '@/types/filterLinks'
 import cn from 'classnames'
 import { Check, ChevronDown } from 'lucide-react'
 import styles from './SortDropdown.module.scss'
@@ -21,12 +21,13 @@ export default function SubMenu({
 
 	const selectOrder = (field: SortField, order: SortOrder) => {
 		onSortChange({ field, order })
-		close()
+		setSelectedField(null)
 	}
 
 	return selectedOption ? (
 		<>
 			<button
+				type='button'
 				className={cn(styles.dropdownItem, styles.sortBack)}
 				onClick={() => setSelectedField(null)}
 			>
@@ -41,17 +42,15 @@ export default function SubMenu({
 
 			{selectedOption.subOptions.map(sub => {
 				const isActive =
-					sort.field === selectedOption.field &&
-					sort.order === sub.order
+					sort.field === selectedOption.field && sort.order === sub.order
 				return (
 					<button
+						type='button'
 						key={sub.order}
 						className={cn(styles.dropdownItem, styles.sortSubItem, {
 							[styles.selected]: isActive
 						})}
-						onClick={() =>
-							selectOrder(selectedOption.field, sub.order)
-						}
+						onClick={() => selectOrder(selectedOption.field, sub.order)}
 					>
 						<span>{sub.label}</span>
 						{isActive && <Check size={12} />}

@@ -1,4 +1,4 @@
-@use 'variables' as *;
+﻿@use 'variables' as *;
 
 .wrapper {
 	display: flex;
@@ -32,6 +32,7 @@
 	border-radius: $border-radius-lg;
 	cursor: pointer;
 	transition: $transition-fast;
+	min-height: 40px;
 
 	&:hover {
 		border-color: var(--color-text-secondary);
@@ -42,6 +43,18 @@
 		border-color: var(--color-primary);
 		color: var(--color-text-primary);
 	}
+
+	@media (max-width: $breakpoint-md) {
+		width: 100%;
+		justify-content: space-between;
+	}
+}
+
+.valueLabel {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .dropdown {
@@ -185,20 +198,18 @@
 
 @media (max-width: $breakpoint-md) {
 	.wrapper {
+		width: 100%;
+
 		.sortLabel {
 			display: none;
 		}
 
 		.container {
-			.filterBtn {
-				span:not(.badge) {
-					display: none;
-				}
+			width: 100%;
 
-				&::before {
-					content: 'Сорт';
-					display: inline;
-				}
+			.filterBtn {
+				justify-content: center;
+				align-items: center;
 			}
 		}
 	}

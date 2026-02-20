@@ -1,7 +1,7 @@
 'use client'
 
-import LinkDetailsContent from '@/app/features/links/components/LinkDetails/LinkDetailsContent/LinkDetailsContent'
 import LinkAnalyticsSkeleton from '@/app/features/links/components/LinkDetails/LinkDetailsContent/LinkAnalytics/LinkAnalyticsSkeleton/LinkAnalyticsSkeleton'
+import LinkDetailsContent from '@/app/features/links/components/LinkDetails/LinkDetailsContent/LinkDetailsContent'
 import LinkEditViewSkeleton from '@/app/features/links/components/LinkDetails/LinkDetailsContent/LinkEditView/LinkEditViewSkeleton/LinkEditViewSkeleton'
 import LinkDetailsHeader from '@/app/features/links/components/LinkDetails/LinkDetailsHeader'
 import LinkDetailsHeaderSkeleton from '@/app/features/links/components/LinkDetails/LinkDetailsHeaderSkeleton/LinkDetailsHeaderSkeleton'
@@ -20,7 +20,9 @@ export default function LinkDetailsPageContent({
 			<>
 				<LinkDetailsHeaderSkeleton />
 				{vm.currentTab === 'edit' ? <LinkEditViewSkeleton /> : null}
-				{vm.currentTab === 'analytics' ? <LinkAnalyticsSkeleton /> : null}
+				{vm.currentTab === 'analytics' ? (
+					<LinkAnalyticsSkeleton />
+				) : null}
 			</>
 		)
 	}

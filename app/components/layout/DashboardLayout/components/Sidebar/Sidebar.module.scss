@@ -15,6 +15,7 @@
 	bottom: 0;
 	z-index: 100;
 	transition: transform 0.3s ease;
+	overscroll-behavior: contain;
 
 	@media (max-width: $breakpoint-lg) {
 		width: 280px;
@@ -35,6 +36,8 @@
 	overflow-y: auto;
 	flex: 1;
 	min-height: 0;
+	overscroll-behavior: contain;
+	-webkit-overflow-scrolling: touch;
 }
 
 .logoWrapper {
@@ -141,6 +144,8 @@
 }
 
 .upgradeBtn {
+	text-decoration: none;
+
 	& > span {
 		font-size: $font-size-sm;
 	}
