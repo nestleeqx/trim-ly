@@ -1,90 +1,209 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🌐 README доступна на нескольких языках:
 
-## Getting Started
+- [Русский](README.md)
+- [English](README.en.md)
 
-First, run the development server:
+# 🔗 trim.ly — URL Shortener & Analytics
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<p align="center">
+  <img src="readme-assets/banner-ru.png" width="1200" alt="trim.ly preview ru">
+</p>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`trim.ly` — это full-stack сервис сокращения ссылок с аналитикой, QR-кодами,
+управлением тарифами и личным кабинетом.  
+Проект реализован на Next.js (App Router) с PostgreSQL + Prisma и подходит как
+production-ready база для SaaS или как сильный portfolio-проект.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Live Demo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+🔗 https://\*
 
-## Learn More
+Демо-версия позволяет протестировать пользовательский интерфейс, логику работы
+ссылок, аналитику и структуру SaaS-приложения.
 
-To learn more about Next.js, take a look at the following resources:
+⚠️ Биллинг в демо-версии работает в режиме имитации (без реальных платежей).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📌 Обзор проекта
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+trim.ly — это современный сервис сокращения ссылок с расширенной аналитикой и
+системой тарифов. Пользователь может создавать короткие ссылки, отслеживать
+статистику кликов, управлять лимитами и работать с QR-кодами.
 
-## Deploy on Vercel
+Проект ориентирован на:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **SaaS-архитектуру**
+- **Безопасность и масштабируемость**
+- **Чистую структуру кода (feature-first)**
+- **Современный UI/UX**
+- **Production-подход к разработке**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ✨ Ключевые возможности
 
-## Deleted Links Cleanup
+### 🌍 Публичные короткие ссылки
 
-Deleted links use soft delete (`deletedAt`) so they can be restored.
-Non-restored links are automatically purged by cron.
+- **Переход по короткому slug (app/[slug])**
+- **Состояния ссылки:**
+    - активна
+    - на паузе
+    - истекла
+    - удалена
+- **Защита ссылок паролем 🔐**
+- **Корректный редирект на целевой URL**
+- **Сбор click-аналитики:**
+    - страна
+    - referrer
+    - source
+    - user-agent
+    - устройство
+    - timestamp
 
-- Endpoint: `/api/cron/links-purge`
-- Schedule: daily at `03:00` (configured in `vercel.json`)
-- Retention: `30` days by default
+### 👤 Кабинет пользователя
 
-Optional environment variables:
+- **Создание, редактирование и удаление ссылок**
+- **Soft delete + восстановление**
+- **Кастомный alias (slug) с проверкой доступности**
+- **Генерация и скачивание QR-кодов**
+- **Теги, фильтры, сортировки**
+- **Bulk-операции**
+- **Таблица и карточки ссылок**
+- **Пагинация и skeleton/loader-состояния**
 
-- `LINK_SOFT_DELETE_RETENTION_DAYS=30`
-- `CRON_SECRET=your_secret` (if set, send `Authorization: Bearer your_secret`)
+### 📊 Аналитика
 
-Manual local run example:
+- **По отдельной ссылке:**
+    - клики по времени
+    - топ стран
+    - устройства
+    - источники
+    - сырые события
+    - CSV-экспорт
+- **По аккаунту:**
+    - /dashboard — ключевые метрики
+    - /analytics — расширенная аналитика
+    - топ ссылок
+    - range-фильтры по периодам
+    - breakdown-блоки
 
-```bash
-curl -X POST http://localhost:3000/api/cron/links-purge \
-  -H "Authorization: Bearer your_secret"
-```
+### 💳 Профиль и биллинг
 
-## Local Database (when VPN is unavailable)
+- **Управление профилем**
+- **Безопасность аккаунта**
+- **Настройки предпочтений**
+- **Демонстрационный биллинг**
+- **Переключение тарифных планов**
+- **Лимиты по плану:**
+    - количество ссылок
+    - количество кликов
+    - отображение usage в sidebar и Billing
 
-If your remote Postgres is not reachable (for example, only HTTP proxy is available), run local Postgres in Docker for Prisma CLI (`migrate`, `studio`, `seed`).
+## 🧱 Используемые технологии
 
-1. Start local DB:
+Проект построен на современном full-stack стеке:
 
-```bash
-npm run db:up
-```
+⚙️ Основной стек:
 
-2. Use local connection in `.env.local` / `.env`:
+- Framework: **Next.js 16 (App Router)**
+- UI: **React 19 + SCSS Modules**
+- Language: **TypeScript**
+- Database: **PostgreSQL**
+- ORM: **Prisma 7**
+- Authentication: **NextAuth (Credentials + OAuth Google, Yandex)**
+
+## 🧩 Дополнительные библиотеки
+
+- Charts: **Recharts**
+- Forms & Validation: **react-hook-form + zod**
+- Animations: **framer-motion**
+- Email: **Resend**
+- QR-коды: **qrcode**
+- Linting: **ESLint**
+
+## 🔐 Переменные окружения
+
+Минимально необходимые:
 
 ```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/trimly?schema=public"
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_secret
+
+# DB
+DATABASE_URL=postgresql://postgres:postgres@localhost:5433/trimly?schema=public
+PRISMA_DATABASE_URL=
+
+# OAuth (опционально)
+GOOGLE_ID=
+GOOGLE_SECRET=
+YANDEX_ID=
+YANDEX_SECRET=
+
+# Email
+RESEND_API_KEY= EMAIL_FROM=
+
+# Service
+CRON_SECRET=
+IP_HASH_SALT=
+LINK_SOFT_DELETE_RETENTION_DAYS=30
+
+# Публичный домен коротких ссылок
+NEXT_PUBLIC_SHORT_LINK_DOMAIN=localhost:3000
+NEXT_PUBLIC_SHORT_LINK_PROTOCOL=http
 ```
 
-3. Keep `PRISMA_DATABASE_URL` (Accelerate) for app runtime if needed.
+## 💻 Локальный запуск
 
-4. Run Prisma commands:
+Чтобы запустить проект локально, выполните следующие шаги:
 
-```bash
-npm run prisma:generate
-npm run prisma:migrate
-npm run db:seed
-npm run prisma:studio
-```
+1.  **Клонируйте репозиторий**:
+    ```bash
+    git clone https://github.com/nestleeqx/trim-ly.git
+    cd trim-ly
+    ```
+2.  **Установите зависимости**:
+    ```bash
+    npm install
+    ```
+3.  **Поднять PostgreSQL в Docker**:
+    ```bash
+    npm run db:up
+    npm run db:logs
+    ```
+    По умолчанию база доступна на localhost:5433.
+4.  **Prisma**:
+    ```bash
+    npm run prisma:generate
+    npm run prisma:migrate
+    ```
+5.  **Seed тарифов**:
+    ```bash
+    npm run db:seed
+    ```
+6.  **Запустите сервер разработки**:
+    ```bash
+    npm run dev
+    ```
+    Откройте [http://localhost:3000](http://localhost:3000) в браузере, чтобы
+    увидеть приложение.
 
-5. Stop local DB:
+## 🧹 Soft Delete и очистка
 
-```bash
-npm run db:down
-```
+Удалённые ссылки хранятся через deletedAt и могут быть восстановлены.
+
+Фоновая очистка: `GET/POST /api/cron/links-purge`
+
+Авторизация: `Authorization: Bearer <CRON_SECRET>` либо
+`x-vercel-cron: 1 (для Vercel Cron)`
+
+## 🎨 UI и дополнительные особенности
+
+- **Поддержка светлой и тёмной темы 🌗**
+- **SEO/metadata на уровне layout и page**
+- **Production-ready архитектура**
+- **Подготовка к масштабированию**
+- **Чистый и модульный код**
+
+## 📄 Лицензия
+
+Проект распространяется по лицензии MIT — подробности см. в файле
+[LICENSE](LICENSE)
