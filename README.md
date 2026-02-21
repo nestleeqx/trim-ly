@@ -16,7 +16,7 @@ production-ready база для SaaS или как сильный portfolio-п�
 
 ## 🚀 Live Demo
 
-🔗 https://\*
+🔗 https://trimly-gamma.vercel.app
 
 Демо-версия позволяет протестировать пользовательский интерфейс, логику работы
 ссылок, аналитику и структуру SaaS-приложения.
@@ -132,6 +132,9 @@ NEXTAUTH_SECRET=your_secret
 DATABASE_URL=postgresql://postgres:postgres@localhost:5433/trimly?schema=public
 PRISMA_DATABASE_URL=
 
+# Blog хранилище
+BLOB_READ_WRITE_TOKEN=
+
 # OAuth (опционально)
 GOOGLE_ID=
 GOOGLE_SECRET=
@@ -139,7 +142,9 @@ YANDEX_ID=
 YANDEX_SECRET=
 
 # Email
-RESEND_API_KEY= EMAIL_FROM=
+RESEND_API_KEY=
+EMAIL_FROM=
+AUTH_EMAIL_DEMO_MODE=false
 
 # Service
 CRON_SECRET=
