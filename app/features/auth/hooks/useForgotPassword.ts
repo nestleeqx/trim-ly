@@ -33,14 +33,23 @@ export function useForgotPassword() {
 				throw new Error(mapped.message)
 			}
 
-			return { ok: true as const }
+			const demoResetUrl =
+				typeof data === 'object' &&
+				data !== null &&
+				'demoResetUrl' in data &&
+				typeof (data as { demoResetUrl: unknown }).demoResetUrl ===
+					'string'
+					? (data as { demoResetUrl: string }).demoResetUrl
+					: null
+
+			return { ok: true as const, demoResetUrl }
 		} catch (error: unknown) {
 			const message =
 				error instanceof Error
 					? error.message
 					: 'Не удалось отправить письмо. Попробуйте позже.'
 			setError(message)
-			return { ok: false as const }
+			return { ok: false as const, demoResetUrl: null }
 		} finally {
 			setIsLoading(false)
 		}

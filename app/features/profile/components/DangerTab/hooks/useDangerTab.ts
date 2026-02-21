@@ -7,6 +7,9 @@ import { useCallback, useState } from 'react'
 export default function useDangerTab() {
 	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 	const [password, setPassword] = useState('')
+	const [confirmationText, setConfirmationText] = useState('')
+	const [requiresPassword, setRequiresPassword] = useState(true)
+	const [isDeleteAuthModeLoading, setIsDeleteAuthModeLoading] = useState(false)
 	const [noticeKey, setNoticeKey] = useState(0)
 	const [deleteError, setDeleteError] = useState<string | null>(null)
 	const [isDeleting, setIsDeleting] = useState(false)
@@ -15,7 +18,24 @@ export default function useDangerTab() {
 	const openDeleteModal = useCallback(() => {
 		setDeleteError(null)
 		setPassword('')
+		setConfirmationText('')
+		setIsDeleteAuthModeLoading(true)
 		setIsDeleteModalOpen(true)
+
+		void fetch('/api/profile/delete-account', { method: 'GET' })
+			.then(async res => {
+				if (!res.ok) throw new Error('Failed to load delete auth mode')
+				return (await res.json()) as { requiresPassword?: boolean }
+			})
+			.then(data => {
+				setRequiresPassword(data.requiresPassword !== false)
+			})
+			.catch(() => {
+				setRequiresPassword(true)
+			})
+			.finally(() => {
+				setIsDeleteAuthModeLoading(false)
+			})
 	}, [])
 
 	const closeDeleteModal = useCallback(() => {
@@ -31,7 +51,7 @@ export default function useDangerTab() {
 			const res = await fetch('/api/profile/delete-account', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ password })
+				body: JSON.stringify({ password, confirmationText })
 			})
 
 			const data = await res.json().catch(() => ({}))
@@ -51,7 +71,7 @@ export default function useDangerTab() {
 		} finally {
 			setIsDeleting(false)
 		}
-	}, [password])
+	}, [password, confirmationText])
 
 	const showTransferDemo = useCallback(() => {
 		setDemoMessage('Функция передачи workspace работает в демо-режиме.')
@@ -61,10 +81,14 @@ export default function useDangerTab() {
 	return {
 		isDeleteModalOpen,
 		password,
+		confirmationText,
+		requiresPassword,
+		isDeleteAuthModeLoading,
 		deleteError,
 		isDeleting,
 		demoMessage,
 		setPassword,
+		setConfirmationText,
 		openDeleteModal,
 		closeDeleteModal,
 		handleDeleteAccount,

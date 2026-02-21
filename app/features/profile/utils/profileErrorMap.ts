@@ -78,6 +78,11 @@ export function mapProfileApiError(
 			return { field: 'password', message: 'Введите пароль.' }
 		case 'Invalid password':
 			return { field: 'password', message: 'Неверный пароль.' }
+		case 'Password authentication is not available for this account':
+			return {
+				field: 'password',
+				message: 'Для этого аккаунта удаление по паролю недоступно.'
+			}
 		case 'Invalid theme value':
 			return { field: 'theme', message: 'Некорректное значение темы.' }
 		case 'Too many requests. Try again later.':
@@ -86,3 +91,4 @@ export function mapProfileApiError(
 			return { message: rawError || fallback }
 	}
 }
+

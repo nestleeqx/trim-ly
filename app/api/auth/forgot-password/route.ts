@@ -71,7 +71,7 @@ export async function POST(req: Request) {
 		console.info(
 			`[auth][forgot-password][demo] Reset link for ${user.email}: ${resetUrl}`
 		)
-		return okResponse
+		return NextResponse.json({ ok: true, demoResetUrl: resetUrl })
 	}
 
 	try {

@@ -41,9 +41,13 @@ export default function DangerTab() {
 			<DeleteAccountModal
 				isOpen={vm.isDeleteModalOpen}
 				password={vm.password}
+				confirmationText={vm.confirmationText}
+				requiresPassword={vm.requiresPassword}
+				isDeleteAuthModeLoading={vm.isDeleteAuthModeLoading}
 				error={vm.deleteError}
 				isDeleting={vm.isDeleting}
 				onPasswordChange={vm.setPassword}
+				onConfirmationTextChange={vm.setConfirmationText}
 				onClose={vm.closeDeleteModal}
 				onConfirm={vm.handleDeleteAccount}
 			/>

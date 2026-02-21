@@ -15,12 +15,14 @@ export default function ForgotPasswordPage() {
 	const router = useRouter()
 
 	const [email, setEmail] = useState('')
+	const [demoResetUrl, setDemoResetUrl] = useState<string | null>(null)
 
 	const { submit, isLoading, error } = useForgotPassword()
 
 	const handleSubmit = useCallback(
 		async (e: React.FormEvent<HTMLFormElement>) => {
 			e.preventDefault()
+			setDemoResetUrl(null)
 
 			const fd = new FormData(e.currentTarget)
 			const emailFromForm = String(fd.get('email') ?? '')
@@ -28,6 +30,11 @@ export default function ForgotPasswordPage() {
 			const result = await submit(emailFromForm)
 
 			if (result.ok) {
+				if (result.demoResetUrl) {
+					setDemoResetUrl(result.demoResetUrl)
+					return
+				}
+
 				const normalizedEmail = emailFromForm.trim().toLowerCase()
 				router.push(
 					`/check-email?flow=forgot&email=${encodeURIComponent(normalizedEmail)}`
@@ -59,6 +66,14 @@ export default function ForgotPasswordPage() {
 					/>
 					<AuthErrorBanner className={styles.errorText} />
 					{error && <p className={styles.errorText}>{error}</p>}
+					{demoResetUrl && (
+						<p className={styles.footerText}>
+							Демо-режим: письмо не отправляется.{' '}
+							<Link href={demoResetUrl} className={styles.link}>
+								Открыть ссылку для сброса
+							</Link>
+						</p>
+					)}
 					<Button
 						variant='primary'
 						size='lg'

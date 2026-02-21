@@ -15,7 +15,8 @@ module.exports = {
 				hostname: 'avatars.yandex.net'
 			},
 			{ protocol: 'https', hostname: 'lh3.googleusercontent.com' },
-			{ protocol: 'https', hostname: 'cdn2.iconfinder.com' }
+			{ protocol: 'https', hostname: 'cdn2.iconfinder.com' },
+			{ protocol: 'https', hostname: '**.blob.vercel-storage.com' }
 		]
 	}
 }

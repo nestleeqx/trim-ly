@@ -46,6 +46,7 @@ export const useLinkForm = ({ link, onChange }: UseLinkFormProps) => {
 
 	const { aliasCheck, checkAliasAvailability } = useAliasCheck({
 		initialAlias: initialData.shortLink,
+		excludeId: link.id,
 		onError: error => setErrors(prev => ({ ...prev, shortLink: error }))
 	})
 

@@ -257,7 +257,7 @@ export async function POST(req: Request) {
 			previousAvatarURL: previous.avatarURL
 		})
 		return NextResponse.json({
-			avatarURL: '/api/profile/personal-data/avatar'
+			avatarURL: `/api/profile/personal-data/avatar?uid=${userId}`
 		})
 	}
 
@@ -285,7 +285,9 @@ export async function POST(req: Request) {
 		file: remote.file,
 		previousAvatarURL: previous.avatarURL
 	})
-	return NextResponse.json({ avatarURL: '/api/profile/personal-data/avatar' })
+	return NextResponse.json({
+		avatarURL: `/api/profile/personal-data/avatar?uid=${userId}`
+	})
 }
 
 export async function DELETE() {
@@ -353,7 +355,8 @@ export async function GET() {
 		status: 200,
 		headers: {
 			'Content-Type': blob.blob.contentType || 'application/octet-stream',
-			'Cache-Control': 'private, max-age=60'
+			'Cache-Control': 'private, no-store, max-age=0, must-revalidate',
+			Pragma: 'no-cache'
 		}
 	})
 }

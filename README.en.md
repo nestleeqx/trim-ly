@@ -21,7 +21,7 @@ project.
 The demo version allows you to explore the UI, link management logic, analytics
 system, and overall SaaS architecture.
 
-⚠️ Billing in the demo version works in simulation mode (no real payments).
+⚠️ Billing and sending emails work in simulation mode.
 
 ## 📌 Project Overview
 

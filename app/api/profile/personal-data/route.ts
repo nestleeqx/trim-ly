@@ -29,7 +29,9 @@ export async function GET() {
 
 	return NextResponse.json({
 		...user,
-		avatarURL: user.avatarURL ? '/api/profile/personal-data/avatar' : null
+		avatarURL: user.avatarURL
+			? `/api/profile/personal-data/avatar?uid=${userId}`
+			: null
 	})
 }
 
@@ -75,7 +77,7 @@ export async function PATCH(req: Request) {
 		return NextResponse.json({
 			...updated,
 			avatarURL: updated.avatarURL
-				? '/api/profile/personal-data/avatar'
+				? `/api/profile/personal-data/avatar?uid=${userId}`
 				: null
 		})
 	} catch (error) {

@@ -62,7 +62,9 @@ export const authOptions: NextAuthOptions = {
 					id: user.id,
 					email: user.email,
 					name: user.name ?? user.username ?? undefined,
-					image: user.avatarURL ?? undefined,
+					image: user.avatarURL
+						? `/api/profile/personal-data/avatar?uid=${user.id}`
+						: undefined,
 					dbId: user.id,
 					remember
 				}

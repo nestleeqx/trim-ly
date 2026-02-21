@@ -1,6 +1,5 @@
 'use client'
 
-import { takenAliases } from '@/app/features/links/components/LinkEdit/linkEdit.config'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface AliasCheckState {
@@ -12,11 +11,13 @@ interface AliasCheckState {
 
 interface UseAliasCheckProps {
 	initialAlias: string
+	excludeId?: string
 	onError: (error: string | undefined) => void
 }
 
 export const useAliasCheck = ({
 	initialAlias,
+	excludeId,
 	onError
 }: UseAliasCheckProps) => {
 	const [aliasCheck, setAliasCheck] = useState<AliasCheckState>({
@@ -25,37 +26,17 @@ export const useAliasCheck = ({
 		checkedAlias: '',
 		suggestions: []
 	})
+
 	const aliasCheckTimeout = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-	const buildSuggestions = useCallback(
-		(alias: string) => {
-			const year = new Date().getFullYear()
-			const variants = [
-				`${alias}-1`,
-				`${alias}-${year}`,
-				`${alias}-app`,
-				`${alias}-link`,
-				`${alias}-new`
-			]
-
-			return [...new Set(variants)]
-				.map(item => item.toLowerCase().slice(0, 25))
-				.filter(
-					item =>
-						!!item &&
-						item !== alias &&
-						item !== initialAlias &&
-						!takenAliases.includes(item)
-				)
-				.slice(0, 3)
-		},
-		[initialAlias]
-	)
+	const requestIdRef = useRef(0)
+	const requestAbortRef = useRef<AbortController | null>(null)
 
 	const checkAliasAvailability = useCallback(
 		(alias: string) => {
-			if (aliasCheckTimeout.current) {
-				clearTimeout(aliasCheckTimeout.current)
+			if (aliasCheckTimeout.current) clearTimeout(aliasCheckTimeout.current)
+			if (requestAbortRef.current) {
+				requestAbortRef.current.abort()
+				requestAbortRef.current = null
 			}
 
 			if (alias === initialAlias) {
@@ -76,37 +57,73 @@ export const useAliasCheck = ({
 					checkedAlias: '',
 					suggestions: []
 				})
+				onError(undefined)
 				return
 			}
 
 			setAliasCheck(prev => ({ ...prev, checking: true, suggestions: [] }))
 
 			aliasCheckTimeout.current = setTimeout(() => {
-				const isTaken = takenAliases.includes(alias.toLowerCase())
-				const suggestions = isTaken ? buildSuggestions(alias) : []
+				const requestId = ++requestIdRef.current
+				const controller = new AbortController()
+				requestAbortRef.current = controller
 
-				setAliasCheck({
-					checking: false,
-					available: !isTaken,
-					checkedAlias: alias,
-					suggestions
+				const params = new URLSearchParams({ slug: alias })
+				if (excludeId) params.set('excludeId', excludeId)
+
+				void fetch(`/api/links/check-slug?${params.toString()}`, {
+					method: 'GET',
+					signal: controller.signal,
+					cache: 'no-store'
 				})
+					.then(async res => {
+						if (!res.ok) throw new Error('Alias check failed')
+						return (await res.json()) as {
+							available: boolean
+							suggestions?: string[]
+						}
+					})
+					.then(data => {
+						if (requestId !== requestIdRef.current) return
 
-				if (isTaken) {
-					onError('Этот alias уже занят.')
-				} else {
-					onError(undefined)
-				}
+						const available = !!data.available
+						const suggestions = available
+							? []
+							: (data.suggestions ?? [])
+
+						setAliasCheck({
+							checking: false,
+							available,
+							checkedAlias: alias,
+							suggestions
+						})
+
+						onError(available ? undefined : 'Этот alias уже занят.')
+					})
+					.catch(error => {
+						if (
+							error instanceof DOMException &&
+							error.name === 'AbortError'
+						) {
+							return
+						}
+						if (requestId !== requestIdRef.current) return
+						setAliasCheck({
+							checking: false,
+							available: null,
+							checkedAlias: alias,
+							suggestions: []
+						})
+					})
 			}, 500)
 		},
-		[initialAlias, onError, buildSuggestions]
+		[initialAlias, excludeId, onError]
 	)
 
 	useEffect(() => {
 		return () => {
-			if (aliasCheckTimeout.current) {
-				clearTimeout(aliasCheckTimeout.current)
-			}
+			if (aliasCheckTimeout.current) clearTimeout(aliasCheckTimeout.current)
+			if (requestAbortRef.current) requestAbortRef.current.abort()
 		}
 	}, [])
 
@@ -115,3 +132,4 @@ export const useAliasCheck = ({
 		checkAliasAvailability
 	}
 }
+
