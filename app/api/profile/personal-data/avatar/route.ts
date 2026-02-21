@@ -1,11 +1,11 @@
 import { authOptions } from '@/auth'
 import prisma from '@/lib/prisma'
 import { del, get, put } from '@vercel/blob'
-import { lookup } from 'node:dns/promises'
-import { randomUUID } from 'node:crypto'
-import net from 'node:net'
 import { getServerSession } from 'next-auth'
 import { NextResponse } from 'next/server'
+import { randomUUID } from 'node:crypto'
+import { lookup } from 'node:dns/promises'
+import net from 'node:net'
 
 const ALLOWED_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp'])
 const MAX_AVATAR_SIZE_BYTES = 2 * 1024 * 1024
@@ -36,7 +36,8 @@ function isValidHttpUrl(value: string) {
 
 function isPrivateIpv4(ip: string) {
 	const parts = ip.split('.').map(Number)
-	if (parts.length !== 4 || parts.some(part => Number.isNaN(part))) return true
+	if (parts.length !== 4 || parts.some(part => Number.isNaN(part)))
+		return true
 	const [a, b] = parts
 	return (
 		a === 10 ||
@@ -67,14 +68,16 @@ function isPrivateAddress(address: string) {
 async function isSafePublicHost(hostname: string) {
 	const normalized = hostname.trim().toLowerCase()
 	if (!normalized) return false
-	if (normalized === 'localhost' || normalized.endsWith('.localhost')) return false
+	if (normalized === 'localhost' || normalized.endsWith('.localhost'))
+		return false
 
 	const literalIpFamily = net.isIP(normalized)
 	if (literalIpFamily) return !isPrivateAddress(normalized)
 
-	const addresses = await lookup(normalized, { all: true, verbatim: true }).catch(
-		() => []
-	)
+	const addresses = await lookup(normalized, {
+		all: true,
+		verbatim: true
+	}).catch(() => [])
 	if (!addresses.length) return false
 
 	return addresses.every(record => !isPrivateAddress(record.address))
@@ -149,7 +152,10 @@ async function createFileFromRemoteUrl(
 	}
 
 	const controller = new AbortController()
-	const timeout = setTimeout(() => controller.abort(), REMOTE_FETCH_TIMEOUT_MS)
+	const timeout = setTimeout(
+		() => controller.abort(),
+		REMOTE_FETCH_TIMEOUT_MS
+	)
 
 	const response = await fetch(avatarURL, {
 		method: 'GET',
@@ -169,7 +175,8 @@ async function createFileFromRemoteUrl(
 		return { error: 'Avatar file is too large' }
 	}
 
-	const contentType = response.headers.get('content-type')?.split(';')[0] || ''
+	const contentType =
+		response.headers.get('content-type')?.split(';')[0] || ''
 	if (!ALLOWED_MIME_TYPES.has(contentType)) {
 		return { error: 'Invalid avatar file type' }
 	}
@@ -188,13 +195,19 @@ async function createFileFromRemoteUrl(
 			void reader.cancel()
 			return { error: 'Avatar file is too large' }
 		}
-		// Ensure chunk buffer is a plain ArrayBuffer for File/Blob typing compatibility in build.
 		chunks.push(new Uint8Array(value))
+	}
+
+	const merged = new Uint8Array(total)
+	let offset = 0
+	for (const chunk of chunks) {
+		merged.set(chunk, offset)
+		offset += chunk.byteLength
 	}
 
 	const extension = getFileExtension(contentType)
 	const fileName = `remote-${Date.now()}.${extension}`
-	const file = new File(chunks, fileName, { type: contentType })
+	const file = new File([merged.buffer], fileName, { type: contentType })
 	return { file }
 }
 
