@@ -14,25 +14,12 @@ import {
 
 type FieldErrors = Partial<Record<'name' | 'username', string>>
 
-const MIN_AVATAR_SIZE = 80
-
-async function checkImageMinSize(url: string, min = MIN_AVATAR_SIZE) {
-	await new Promise<void>((resolve, reject) => {
-		const img = new window.Image()
-		img.onload = () => {
-			if (img.naturalWidth < min || img.naturalHeight < min) {
-				reject(
-					new Error(`Минимальный размер изображения ${min}x${min}px.`)
-				)
-				return
-			}
-			resolve()
-		}
-		img.onerror = () =>
-			reject(new Error('Не удалось прочитать изображение.'))
-		img.src = url
-	})
-}
+const ALLOWED_AVATAR_TYPES = new Set([
+	'image/jpeg',
+	'image/png',
+	'image/webp'
+])
+const MAX_AVATAR_SIZE_BYTES = 2 * 1024 * 1024
 
 export default function useProfileTab() {
 	const { update } = useSession()
@@ -41,8 +28,9 @@ export default function useProfileTab() {
 	const [username, setUsername] = useState('')
 	const [email, setEmail] = useState('')
 	const [avatarURL, setAvatarURL] = useState<string | null>(null)
+	const [avatarFile, setAvatarFile] = useState<File | null>(null)
+	const [avatarInputKey, setAvatarInputKey] = useState(0)
 
-	const [avatarInput, setAvatarInput] = useState('')
 	const [initialProfile, setInitialProfile] = useState({
 		name: '',
 		username: ''
@@ -108,7 +96,7 @@ export default function useProfileTab() {
 	}, [])
 
 	useEffect(() => {
-		loadProfile()
+		void loadProfile()
 	}, [loadProfile])
 
 	const handleSave = useCallback(async () => {
@@ -169,20 +157,29 @@ export default function useProfileTab() {
 		setError(null)
 		setSuccess(null)
 
-		const url = avatarInput.trim()
-		if (!url) {
-			setError('Введите ссылку на изображение.')
+		if (!avatarFile) {
+			setError('Выберите файл аватара.')
+			return
+		}
+
+		if (!ALLOWED_AVATAR_TYPES.has(avatarFile.type)) {
+			setError('Поддерживаются только JPG, PNG и WEBP.')
+			return
+		}
+
+		if (avatarFile.size > MAX_AVATAR_SIZE_BYTES) {
+			setError('Максимальный размер файла — 2MB.')
 			return
 		}
 
 		setIsAvatarSaving(true)
 		try {
-			await checkImageMinSize(url)
-			const res = await uploadAvatar(url)
+			const res = await uploadAvatar(avatarFile)
 			setAvatarURL(res.avatarURL)
 
 			await update({ image: res.avatarURL })
-			setAvatarInput('')
+			setAvatarFile(null)
+			setAvatarInputKey(prev => prev + 1)
 			setSuccess('Аватар обновлён.')
 		} catch (e) {
 			const mapped = mapProfileApiError(
@@ -193,7 +190,7 @@ export default function useProfileTab() {
 		} finally {
 			setIsAvatarSaving(false)
 		}
-	}, [avatarInput, update])
+	}, [avatarFile, update])
 
 	const handleRemoveAvatar = useCallback(async () => {
 		setError(null)
@@ -203,6 +200,8 @@ export default function useProfileTab() {
 		try {
 			await removeAvatar()
 			setAvatarURL(null)
+			setAvatarFile(null)
+			setAvatarInputKey(prev => prev + 1)
 			await update({ image: null })
 			setSuccess('Аватар удалён.')
 		} catch (e) {
@@ -225,9 +224,10 @@ export default function useProfileTab() {
 		avatar: {
 			avatarURL,
 			fallbackInitial,
-			avatarInput,
+			avatarFileName: avatarFile?.name ?? '',
+			avatarInputKey,
 			isAvatarSaving,
-			onAvatarInputChange: setAvatarInput,
+			onAvatarFileChange: setAvatarFile,
 			onSetAvatar: handleSetAvatar,
 			onRemoveAvatar: handleRemoveAvatar
 		},

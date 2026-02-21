@@ -58,13 +58,13 @@ export async function updateProfile(
 	return parseJson<ProfileDto>(res)
 }
 
-export async function uploadAvatar(
-	avatarURL: string
-): Promise<{ avatarURL: string }> {
+export async function uploadAvatar(file: File): Promise<{ avatarURL: string }> {
+	const formData = new FormData()
+	formData.append('file', file)
+
 	const res = await fetch('/api/profile/personal-data/avatar', {
 		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ avatarURL })
+		body: formData
 	})
 	return parseJson<{ avatarURL: string }>(res)
 }

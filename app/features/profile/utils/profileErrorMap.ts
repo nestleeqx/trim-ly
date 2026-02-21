@@ -37,16 +37,27 @@ export function mapProfileApiError(
 			}
 
 		case 'avatarURL is required':
+		case 'Avatar file is required':
 			return {
 				field: 'avatarURL',
-				message: 'Укажите ссылку на изображение.'
+				message: 'Выберите файл аватара.'
 			}
 
 		case 'Invalid avatar URL':
+		case 'Invalid avatar file type':
 			return {
 				field: 'avatarURL',
-				message: 'Некорректная ссылка на изображение.'
+				message: 'Поддерживаются только JPG, PNG и WEBP.'
 			}
+
+		case 'Avatar file is too large':
+			return {
+				field: 'avatarURL',
+				message: 'Максимальный размер файла — 2MB.'
+			}
+
+		case 'Blob storage is not configured':
+			return { message: 'Сервис хранения файлов не настроен.' }
 
 		case 'Invalid credentials':
 			return {
