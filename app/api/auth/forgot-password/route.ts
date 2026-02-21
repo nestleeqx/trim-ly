@@ -68,6 +68,9 @@ export async function POST(req: Request) {
 	const resetUrl = `${baseUrl}/reset-password?token=${rawToken}`
 
 	if (DEMO_EMAIL_MODE) {
+		console.info(
+			`[auth][forgot-password][demo] Reset link for ${user.email}: ${resetUrl}`
+		)
 		return okResponse
 	}
 
