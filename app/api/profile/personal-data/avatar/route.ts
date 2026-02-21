@@ -188,7 +188,8 @@ async function createFileFromRemoteUrl(
 			void reader.cancel()
 			return { error: 'Avatar file is too large' }
 		}
-		chunks.push(value)
+		// Ensure chunk buffer is a plain ArrayBuffer for File/Blob typing compatibility in build.
+		chunks.push(new Uint8Array(value))
 	}
 
 	const extension = getFileExtension(contentType)
