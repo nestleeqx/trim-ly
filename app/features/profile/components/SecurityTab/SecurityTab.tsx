@@ -20,7 +20,7 @@ export default function SecurityTab() {
 					<div className={stylesCommon.formSingle}>
 						<PasswordInput
 							id='currentPassword'
-							label='текущий пароль'
+							label='Текущий пароль'
 							labelStyle='secondary'
 							placeholder='Введите текущий пароль'
 							value={vm.currentPassword}
@@ -34,7 +34,7 @@ export default function SecurityTab() {
 					<div className={stylesCommon.formGroup}>
 						<PasswordInput
 							id='newPassword'
-							label='новый пароль'
+							label='Новый пароль'
 							labelStyle='secondary'
 							placeholder='Введите новый пароль'
 							value={vm.newPassword}
@@ -45,7 +45,7 @@ export default function SecurityTab() {
 
 						<PasswordInput
 							id='confirmPassword'
-							label='подтвердите пароль'
+							label='Подтвердите пароль'
 							labelStyle='secondary'
 							placeholder='Повторите новый пароль'
 							value={vm.confirmPassword}

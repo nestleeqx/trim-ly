@@ -135,7 +135,6 @@ export async function registerPublicClick(params: {
 	if (clicksTotal >= clicksLimit) return
 
 	await prisma.$transaction(async tx => {
-		// Best-effort dedupe for immediate retries (double submit/network retry).
 		if (ipHash || userAgent) {
 			const duplicate = await tx.linkClickEvent.findFirst({
 				where: {

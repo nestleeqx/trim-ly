@@ -1,11 +1,12 @@
 import { mapProfileApiError } from '@/app/features/profile/utils/profileErrorMap'
 import { useSession } from 'next-auth/react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
 	getProfile,
 	removeAvatar,
 	updateProfile,
-	uploadAvatar
+	uploadAvatar,
+	uploadAvatarByUrl
 } from '../../../api/profileApi'
 import {
 	normalizeUsername,
@@ -21,14 +22,25 @@ const ALLOWED_AVATAR_TYPES = new Set([
 ])
 const MAX_AVATAR_SIZE_BYTES = 2 * 1024 * 1024
 
+function isValidHttpUrl(value: string) {
+	try {
+		const url = new URL(value)
+		return url.protocol === 'http:' || url.protocol === 'https:'
+	} catch {
+		return false
+	}
+}
+
 export default function useProfileTab() {
 	const { update } = useSession()
+	const avatarVersionRef = useRef(0)
 
 	const [fullName, setFullName] = useState('')
 	const [username, setUsername] = useState('')
 	const [email, setEmail] = useState('')
 	const [avatarURL, setAvatarURL] = useState<string | null>(null)
 	const [avatarFile, setAvatarFile] = useState<File | null>(null)
+	const [avatarInput, setAvatarInput] = useState('')
 	const [avatarInputKey, setAvatarInputKey] = useState(0)
 
 	const [initialProfile, setInitialProfile] = useState({
@@ -42,6 +54,7 @@ export default function useProfileTab() {
 
 	const [error, setError] = useState<string | null>(null)
 	const [success, setSuccess] = useState<string | null>(null)
+	const [avatarError, setAvatarError] = useState<string | null>(null)
 	const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
 
 	const clearFieldError = useCallback((field: keyof FieldErrors) => {
@@ -51,6 +64,15 @@ export default function useProfileTab() {
 			delete next[field]
 			return next
 		})
+	}, [])
+
+	const withAvatarCacheBust = useCallback((url: string | null) => {
+		if (!url) return null
+		if (!url.startsWith('/api/profile/personal-data/avatar')) return url
+
+		avatarVersionRef.current += 1
+		const suffix = `v=${avatarVersionRef.current}`
+		return url.includes('?') ? `${url}&${suffix}` : `${url}?${suffix}`
 	}, [])
 
 	const fallbackInitial = useMemo(() => {
@@ -79,7 +101,7 @@ export default function useProfileTab() {
 			setFullName(nextName)
 			setUsername(nextUsername ? `@${nextUsername}` : '')
 			setEmail(data.email ?? '')
-			setAvatarURL(data.avatarURL ?? null)
+			setAvatarURL(withAvatarCacheBust(data.avatarURL ?? null))
 
 			setInitialProfile({
 				name: nextName.trim(),
@@ -93,7 +115,7 @@ export default function useProfileTab() {
 		} finally {
 			setIsLoading(false)
 		}
-	}, [])
+	}, [withAvatarCacheBust])
 
 	useEffect(() => {
 		void loadProfile()
@@ -105,7 +127,6 @@ export default function useProfileTab() {
 
 		const validation = validateProfile({ name: fullName, username })
 		setFieldErrors(validation.errors)
-
 		if (Object.keys(validation.errors).length > 0) return
 
 		setIsSaving(true)
@@ -117,11 +138,10 @@ export default function useProfileTab() {
 
 			const nextName = updated.name ?? ''
 			const nextUsername = updated.username ?? ''
-
 			setFullName(nextName)
 			setUsername(nextUsername ? `@${nextUsername}` : '')
 			setEmail(updated.email ?? '')
-			setAvatarURL(updated.avatarURL ?? null)
+			setAvatarURL(withAvatarCacheBust(updated.avatarURL ?? null))
 
 			setInitialProfile({
 				name: nextName.trim(),
@@ -131,16 +151,14 @@ export default function useProfileTab() {
 
 			await update({
 				name: nextName || undefined,
-				image: updated.avatarURL ?? undefined
+				image: withAvatarCacheBust(updated.avatarURL ?? null) ?? undefined
 			})
-
 			setSuccess('Профиль обновлён.')
 		} catch (e) {
 			const mapped = mapProfileApiError(
 				e instanceof Error ? e.message : '',
 				'Не удалось сохранить изменения.'
 			)
-
 			if (mapped.field === 'username') {
 				setFieldErrors(prev => ({ ...prev, username: mapped.message }))
 			} else if (mapped.field === 'name') {
@@ -151,59 +169,101 @@ export default function useProfileTab() {
 		} finally {
 			setIsSaving(false)
 		}
-	}, [fullName, update, username])
+	}, [fullName, update, username, withAvatarCacheBust])
 
-	const handleSetAvatar = useCallback(async () => {
+	const finalizeAvatarUpdate = useCallback(
+		async (nextAvatarURL: string | null, successMessage: string) => {
+			const avatarWithVersion = withAvatarCacheBust(nextAvatarURL)
+			setAvatarURL(avatarWithVersion)
+			setAvatarFile(null)
+			setAvatarInput('')
+			setAvatarInputKey(prev => prev + 1)
+			await update({ image: avatarWithVersion })
+			setSuccess(successMessage)
+		},
+		[update, withAvatarCacheBust]
+	)
+
+	const handleUploadAvatarFile = useCallback(async (): Promise<boolean> => {
 		setError(null)
 		setSuccess(null)
+		setAvatarError(null)
 
 		if (!avatarFile) {
-			setError('Выберите файл аватара.')
-			return
+			setAvatarError('Выберите файл аватара.')
+			return false
 		}
-
 		if (!ALLOWED_AVATAR_TYPES.has(avatarFile.type)) {
-			setError('Поддерживаются только JPG, PNG и WEBP.')
-			return
+			setAvatarError('Поддерживаются только JPG, PNG и WEBP.')
+			return false
 		}
-
 		if (avatarFile.size > MAX_AVATAR_SIZE_BYTES) {
-			setError('Максимальный размер файла — 2MB.')
-			return
+			setAvatarError('Максимальный размер файла — 2MB.')
+			return false
 		}
 
 		setIsAvatarSaving(true)
 		try {
 			const res = await uploadAvatar(avatarFile)
-			setAvatarURL(res.avatarURL)
-
-			await update({ image: res.avatarURL })
-			setAvatarFile(null)
-			setAvatarInputKey(prev => prev + 1)
-			setSuccess('Аватар обновлён.')
+			await finalizeAvatarUpdate(res.avatarURL, 'Аватар обновлён.')
+			return true
 		} catch (e) {
 			const mapped = mapProfileApiError(
 				e instanceof Error ? e.message : '',
 				'Не удалось обновить аватар.'
 			)
-			setError(mapped.message)
+			setAvatarError(mapped.message)
+			return false
 		} finally {
 			setIsAvatarSaving(false)
 		}
-	}, [avatarFile, update])
+	}, [avatarFile, finalizeAvatarUpdate])
+
+	const handleUploadAvatarByUrl = useCallback(
+		async (): Promise<boolean> => {
+			setError(null)
+			setSuccess(null)
+			setAvatarError(null)
+
+			const trimmedUrl = avatarInput.trim()
+			if (!trimmedUrl) {
+				setAvatarError('Вставьте ссылку на изображение.')
+				return false
+			}
+			if (!isValidHttpUrl(trimmedUrl)) {
+				setAvatarError('Некорректная ссылка на изображение.')
+				return false
+			}
+
+			setIsAvatarSaving(true)
+			try {
+				const res = await uploadAvatarByUrl(trimmedUrl)
+				await finalizeAvatarUpdate(res.avatarURL, 'Аватар обновлён.')
+				return true
+			} catch (e) {
+				const mapped = mapProfileApiError(
+					e instanceof Error ? e.message : '',
+					'Не удалось обновить аватар.'
+				)
+				setAvatarError(mapped.message)
+				return false
+			} finally {
+				setIsAvatarSaving(false)
+			}
+		},
+		[avatarInput, finalizeAvatarUpdate]
+	)
 
 	const handleRemoveAvatar = useCallback(async () => {
 		setError(null)
 		setSuccess(null)
+		setAvatarError(null)
 
 		setIsAvatarSaving(true)
 		try {
 			await removeAvatar()
-			setAvatarURL(null)
-			setAvatarFile(null)
-			setAvatarInputKey(prev => prev + 1)
-			await update({ image: null })
-			setSuccess('Аватар удалён.')
+			await finalizeAvatarUpdate(null, '')
+			setError('Аватар удалён.')
 		} catch (e) {
 			const mapped = mapProfileApiError(
 				e instanceof Error ? e.message : '',
@@ -213,25 +273,27 @@ export default function useProfileTab() {
 		} finally {
 			setIsAvatarSaving(false)
 		}
-	}, [update])
+	}, [finalizeAvatarUpdate])
 
 	return {
 		isLoading,
 		error,
 		success,
 		fieldErrors,
-
 		avatar: {
 			avatarURL,
 			fallbackInitial,
 			avatarFileName: avatarFile?.name ?? '',
+			avatarInput,
 			avatarInputKey,
+			avatarError,
 			isAvatarSaving,
 			onAvatarFileChange: setAvatarFile,
-			onSetAvatar: handleSetAvatar,
+			onAvatarInputChange: setAvatarInput,
+			onUploadAvatarFile: handleUploadAvatarFile,
+			onUploadAvatarByUrl: handleUploadAvatarByUrl,
 			onRemoveAvatar: handleRemoveAvatar
 		},
-
 		form: {
 			fullName,
 			username,
@@ -246,11 +308,10 @@ export default function useProfileTab() {
 				clearFieldError('username')
 			}
 		},
-
 		actions: {
 			isSaving,
 			isError: Object.keys(fieldErrors).length > 0,
-			hasProfileChanges: hasProfileChanges,
+			hasProfileChanges,
 			onSave: handleSave
 		}
 	}

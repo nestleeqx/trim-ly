@@ -1,5 +1,5 @@
-import prisma from '@/lib/prisma'
 import type { Prisma } from '@/app/generated/prisma/client'
+import prisma from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import type { NextAuthOptions, Profile } from 'next-auth'
 import type { JWT } from 'next-auth/jwt'
@@ -21,11 +21,13 @@ type JwtMeta = JWT & {
 	remember?: boolean
 }
 
-function getOAuthBaseName(profile: Profile | undefined, fallback: string): string {
+function getOAuthBaseName(
+	profile: Profile | undefined,
+	fallback: string
+): string {
 	const p = (profile ?? {}) as Record<string, unknown>
 	const login = typeof p.login === 'string' ? p.login : ''
-	const displayName =
-		typeof p.display_name === 'string' ? p.display_name : ''
+	const displayName = typeof p.display_name === 'string' ? p.display_name : ''
 
 	return login || displayName || fallback
 }
@@ -86,9 +88,7 @@ export const authOptions: NextAuthOptions = {
 
 			const pickBase = () => {
 				const baseFromOAuth =
-					provider === 'yandex'
-						? getOAuthBaseName(profile, '')
-						: ''
+					provider === 'yandex' ? getOAuthBaseName(profile, '') : ''
 				return (
 					baseFromOAuth ||
 					user.name ||
@@ -181,14 +181,17 @@ export const authOptions: NextAuthOptions = {
 			}
 
 			if (trigger === 'update' && session) {
-				if (typeof session.name === 'string') tokenWithMeta.name = session.name
+				if (typeof session.name === 'string')
+					tokenWithMeta.name = session.name
 				if (typeof session.image === 'string')
 					tokenWithMeta.picture = session.image
 				if (session.image === null) delete tokenWithMeta.picture
 			}
 
-			if (typeof tokenWithMeta.exp === 'number' && tokenWithMeta.exp < now) {
-				// ????? ????? ? ?????????? next-auth ??????? ?????? ??????????.
+			if (
+				typeof tokenWithMeta.exp === 'number' &&
+				tokenWithMeta.exp < now
+			) {
 				return {} as typeof token
 			}
 

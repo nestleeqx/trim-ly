@@ -137,9 +137,7 @@ export const useLinkActions = ({
 				fileName: `qr-${slug}.png`
 			})
 			setQrModalLink(null)
-		} catch {
-			// noop: keeping current modal open is enough fallback here
-		}
+		} catch {}
 	}, [qrModalLink])
 
 	const handleCopyQrUrl = useCallback(() => {

@@ -17,6 +17,7 @@ export default function UserMenu() {
 	)
 
 	const avatarUrl = session?.user?.image ?? ''
+	const isProtectedAvatar = avatarUrl.startsWith('/api/profile/personal-data/avatar')
 	const fallbackInitial = useMemo(() => {
 		const source = session?.user?.name || session?.user?.email || 'U'
 		return source.charAt(0).toUpperCase()
@@ -47,13 +48,25 @@ export default function UserMenu() {
 			>
 				<div className={styles.avatar}>
 					{avatarUrl ? (
-						<Image
-							src={avatarUrl}
-							alt='User avatar'
-							width={32}
-							height={32}
-							className={styles.avatarImage}
-						/>
+						isProtectedAvatar ? (
+							<img
+								key={avatarUrl}
+								src={avatarUrl}
+								alt='User avatar'
+								width={32}
+								height={32}
+								className={styles.avatarImage}
+							/>
+						) : (
+							<Image
+								key={avatarUrl}
+								src={avatarUrl}
+								alt='User avatar'
+								width={32}
+								height={32}
+								className={styles.avatarImage}
+							/>
+						)
 					) : (
 						<span className={styles.avatarFallback}>
 							{fallbackInitial}

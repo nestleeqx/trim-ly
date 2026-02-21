@@ -45,7 +45,6 @@ export default function LoginPage() {
 			e.preventDefault()
 			setError(null)
 
-			// ВАЖНО: читаем из формы, чтобы autofill не ломал state
 			const fd = new FormData(e.currentTarget)
 			const emailFromForm = String(fd.get('email') ?? '')
 			const passwordFromForm = String(fd.get('password') ?? '')

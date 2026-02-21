@@ -25,7 +25,7 @@ export default function ProfileFormSection({
 			<div className={stylesCommon.formGroup}>
 				<FormField
 					id='fullname'
-					label='полное имя'
+					label='Полное имя'
 					labelStyle='secondary'
 					type='text'
 					placeholder='Ваше имя'
@@ -36,7 +36,7 @@ export default function ProfileFormSection({
 				/>
 				<FormField
 					id='username'
-					label='имя пользователя'
+					label='Имя пользователя'
 					labelStyle='secondary'
 					type='text'
 					placeholder='Ваше @имя_пользователя'
@@ -50,7 +50,7 @@ export default function ProfileFormSection({
 			<div className={stylesCommon.formSingle}>
 				<FormField
 					id='email'
-					label='электронная почта'
+					label='Электронная почта'
 					labelStyle='secondary'
 					type='email'
 					placeholder='Ваша электронная почта'

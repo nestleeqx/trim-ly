@@ -19,7 +19,7 @@
 		"@hookform/resolvers": "^5.2.2",
 		"@prisma/adapter-pg": "7.4.0",
 		"@prisma/client": "7.4.0",
-		"@vercel/blob": "^2.2.0",
+		"@vercel/blob": "^2.3.0",
 		"bcryptjs": "^3.0.3",
 		"classnames": "^2.5.1",
 		"framer-motion": "^12.29.3",

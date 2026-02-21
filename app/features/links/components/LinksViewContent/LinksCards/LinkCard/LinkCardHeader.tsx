@@ -9,6 +9,7 @@ import { LinkActions } from '../../../LinksTable/LinkTableRow/types'
 import { getStatusClass } from '../../../LinksTable/shared'
 import { getStatusLabel } from '@/utils/link-helpers'
 import styles from './LinkCard.module.scss'
+import { useRef } from 'react'
 
 interface LinkCardHeaderProps {
 	link: LinkItemType
@@ -27,6 +28,8 @@ export default function LinkCardHeader({
 	stop,
 	actions
 }: LinkCardHeaderProps) {
+	const kebabAnchorRef = useRef<HTMLDivElement>(null)
+
 	return (
 		<div className={styles.cardHeader}>
 			<div className={styles.checkboxWrapper}>
@@ -47,7 +50,7 @@ export default function LinkCardHeader({
 			</span>
 
 			<div className={styles.kebabActions}>
-				<div className={sharedStyles.kebabWrapper}>
+				<div className={sharedStyles.kebabWrapper} ref={kebabAnchorRef}>
 					<button
 						type='button'
 						className={sharedStyles.actionBtn}
@@ -60,6 +63,7 @@ export default function LinkCardHeader({
 					<KebabMenuActions
 						link={link}
 						openKebabId={openKebabId}
+						anchorRef={kebabAnchorRef}
 						actions={{
 							closeKebabMenu: actions.closeKebabMenu,
 							handleEdit: actions.handleEdit,

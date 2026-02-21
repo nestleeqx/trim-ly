@@ -27,7 +27,10 @@ export async function GET() {
 		return NextResponse.json({ error: 'User not found' }, { status: 404 })
 	}
 
-	return NextResponse.json(user)
+	return NextResponse.json({
+		...user,
+		avatarURL: user.avatarURL ? '/api/profile/personal-data/avatar' : null
+	})
 }
 
 export async function PATCH(req: Request) {
@@ -69,7 +72,12 @@ export async function PATCH(req: Request) {
 			}
 		})
 
-		return NextResponse.json(updated)
+		return NextResponse.json({
+			...updated,
+			avatarURL: updated.avatarURL
+				? '/api/profile/personal-data/avatar'
+				: null
+		})
 	} catch (error) {
 		if (error instanceof Prisma.PrismaClientKnownRequestError) {
 			if (error.code === 'P2002') {

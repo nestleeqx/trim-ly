@@ -69,6 +69,17 @@ export async function uploadAvatar(file: File): Promise<{ avatarURL: string }> {
 	return parseJson<{ avatarURL: string }>(res)
 }
 
+export async function uploadAvatarByUrl(
+	avatarURL: string
+): Promise<{ avatarURL: string }> {
+	const res = await fetch('/api/profile/personal-data/avatar', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ avatarURL })
+	})
+	return parseJson<{ avatarURL: string }>(res)
+}
+
 export async function removeAvatar(): Promise<{ ok: true }> {
 	const res = await fetch('/api/profile/personal-data/avatar', {
 		method: 'DELETE'

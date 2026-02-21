@@ -1,16 +1,21 @@
+import Button from '@/app/components/ui/Button/Button'
 import cn from 'classnames'
-import Image from 'next/image'
-import stylesCommon from '../../../settingsCommon.module.scss'
+import { useCallback, useState } from 'react'
+import AvatarUploadModal from './AvatarUploadModal'
 import styles from './AvatarSection.module.scss'
 
 type Props = {
 	avatarURL: string | null
 	fallbackInitial: string
 	avatarFileName: string
+	avatarInput: string
 	avatarInputKey: number
+	avatarError: string | null
 	isAvatarSaving: boolean
 	onAvatarFileChange: (file: File | null) => void
-	onSetAvatar: () => void
+	onAvatarInputChange: (value: string) => void
+	onUploadAvatarFile: () => Promise<boolean>
+	onUploadAvatarByUrl: () => Promise<boolean>
 	onRemoveAvatar: () => void
 }
 
@@ -18,74 +23,92 @@ export default function AvatarSection({
 	avatarURL,
 	fallbackInitial,
 	avatarFileName,
+	avatarInput,
 	avatarInputKey,
+	avatarError,
 	isAvatarSaving,
 	onAvatarFileChange,
-	onSetAvatar,
+	onAvatarInputChange,
+	onUploadAvatarFile,
+	onUploadAvatarByUrl,
 	onRemoveAvatar
 }: Props) {
+	const [isModalOpen, setIsModalOpen] = useState(false)
 	const canRemoveAvatar = Boolean(avatarURL) && !isAvatarSaving
+
+	const handleCloseModal = useCallback(() => {
+		if (isAvatarSaving) return
+		setIsModalOpen(false)
+	}, [isAvatarSaving])
 
 	return (
 		<div className={styles.avatarRow}>
-			{avatarURL ? (
-				<div className={styles.avatarImgWrap}>
-					<Image
-						src={avatarURL}
-						alt='Аватар'
-						width={80}
-						height={80}
-						style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-					/>
-				</div>
-			) : (
-				<div className={styles.avatarFallback}>
-					<span>{fallbackInitial}</span>
-				</div>
-			)}
+			<div className={styles.avatarVisual}>
+				{avatarURL ? (
+					<div className={styles.avatarImgWrap}>
+						<img
+							key={avatarURL}
+							src={avatarURL}
+							alt='Аватар'
+							width={80}
+							height={80}
+							style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+						/>
+					</div>
+				) : (
+					<div className={styles.avatarFallback}>
+						<span>{fallbackInitial}</span>
+					</div>
+				)}
+				{isAvatarSaving && (
+					<div className={styles.avatarLoader} aria-hidden='true'>
+						<div className={styles.avatarSpinner} />
+					</div>
+				)}
+			</div>
 
 			<div className={styles.avatarActions}>
 				<div className={styles.avatarHints}>
 					<p>Аватар профиля</p>
-					<span>Поддерживаются JPG, PNG, WEBP. Максимум 2MB.</span>
+					<span>JPG, PNG, WEBP. Размер до 2MB.</span>
 				</div>
 
-				<div className={styles.avatarLinks}>
-					<input
-						key={avatarInputKey}
-						className={stylesCommon.input}
-						type='file'
-						accept='image/jpeg,image/png,image/webp'
+				<div className={styles.mainActions}>
+					<Button
+						variant='outline'
+						size='sm'
+						onClick={() => setIsModalOpen(true)}
 						disabled={isAvatarSaving}
-						onChange={e =>
-							onAvatarFileChange(e.target.files?.[0] ?? null)
-						}
-					/>
-					<span className={styles.fileName}>
-						{avatarFileName || 'Файл не выбран'}
-					</span>
-					<button
-						className={styles.linkBtn}
-						onClick={onSetAvatar}
-						disabled={isAvatarSaving}
-						type='button'
 					>
-						{isAvatarSaving ? 'Сохраняем...' : 'Загрузить'}
-					</button>
-					<button
-						className={cn(styles.linkBtn, styles.remove)}
-						onClick={() => {
-							if (!canRemoveAvatar) return
-							onRemoveAvatar()
-						}}
-						disabled={isAvatarSaving}
-						aria-disabled={!canRemoveAvatar}
-						type='button'
-					>
-						Удалить
-					</button>
+						Изменить аватар
+					</Button>
+					{canRemoveAvatar && (
+						<button
+							className={cn(styles.linkBtn, styles.remove)}
+							onClick={() => onRemoveAvatar()}
+							disabled={isAvatarSaving}
+							aria-disabled={!canRemoveAvatar}
+							type='button'
+						>
+							Удалить
+						</button>
+					)}
 				</div>
 			</div>
+
+			<AvatarUploadModal
+				isOpen={isModalOpen}
+				isAvatarSaving={isAvatarSaving}
+				avatarFileName={avatarFileName}
+				avatarInput={avatarInput}
+				avatarInputKey={avatarInputKey}
+				avatarError={avatarError}
+				onClose={handleCloseModal}
+				onAvatarFileChange={onAvatarFileChange}
+				onAvatarInputChange={onAvatarInputChange}
+				onUploadAvatarFile={onUploadAvatarFile}
+				onUploadAvatarByUrl={onUploadAvatarByUrl}
+			/>
 		</div>
 	)
 }

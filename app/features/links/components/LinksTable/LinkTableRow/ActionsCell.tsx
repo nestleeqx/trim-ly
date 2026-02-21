@@ -32,6 +32,8 @@ export default function ActionsCell({
 	onKebabClick,
 	kebabActions
 }: ActionsCellProps) {
+	const kebabAnchorRef = React.useRef<HTMLDivElement>(null)
+
 	return (
 		<td>
 			<div className={styles.actions}>
@@ -56,7 +58,7 @@ export default function ActionsCell({
 				>
 					<BarChart3 size={16} />
 				</button>
-				<div className={sharedStyles.kebabWrapper}>
+				<div className={sharedStyles.kebabWrapper} ref={kebabAnchorRef}>
 					<button
 						className={sharedStyles.actionBtn}
 						onClick={e => onKebabClick(link.id, e)}
@@ -67,6 +69,7 @@ export default function ActionsCell({
 					<KebabMenuActions
 						link={link}
 						openKebabId={openKebabId}
+						anchorRef={kebabAnchorRef}
 						actions={kebabActions}
 					/>
 				</div>

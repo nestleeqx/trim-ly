@@ -6,6 +6,7 @@ import crypto from 'crypto'
 import { NextResponse } from 'next/server'
 
 const TOKEN_TTL_MIN = 30
+const DEMO_EMAIL_MODE = process.env.AUTH_EMAIL_DEMO_MODE === 'true'
 
 function hashToken(token: string) {
 	return crypto.createHash('sha256').update(token).digest('hex')
@@ -59,14 +60,28 @@ export async function POST(req: Request) {
 	])
 
 	const baseUrl = process.env.NEXTAUTH_URL
-	if (!baseUrl) return okResponse
+	if (!baseUrl) {
+		console.warn('[auth][forgot-password] NEXTAUTH_URL is not configured')
+		return okResponse
+	}
 
 	const resetUrl = `${baseUrl}/reset-password?token=${rawToken}`
 
-	await sendPasswordResetEmail({
-		to: user.email,
-		resetUrl
-	})
+	if (DEMO_EMAIL_MODE) {
+		return okResponse
+	}
+
+	try {
+		await sendPasswordResetEmail({
+			to: user.email,
+			resetUrl
+		})
+	} catch (error) {
+		console.error(
+			'[auth][forgot-password] Failed to send reset email',
+			error
+		)
+	}
 
 	return okResponse
 }
