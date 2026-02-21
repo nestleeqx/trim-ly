@@ -95,11 +95,9 @@
 	outline: none;
 	transition: $transition-fast;
 	text-align: center;
-	letter-spacing: 4px;
 
 	&::placeholder {
 		color: color.adjust($color-border, $lightness: -10%);
-		letter-spacing: 4px;
 	}
 
 	&:focus {
